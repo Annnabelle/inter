@@ -1,0 +1,16 @@
+@mixin flex-center
+    display: flex
+    justify-content: center
+    align-items: center
+
+@mixin button-style($bg-color, $text-color, $border-radius)
+    background-color: $bg-color
+    color: $text-color
+    padding: 10px 20px
+    border-radius: $border-radius
+
+@mixin typography($fontSize, $fontWeight, $color)
+    font-family: "Inter", sans-serif
+    font-weight: $fontWeight
+    font-size: $fontSize
+    color: $color
