@@ -1,7 +1,10 @@
-@mixin flex-center
+@mixin flex-content($justify-content: null, $flex-direction: null)
     display: flex
-    justify-content: center
     align-items: center
+    @if $flex-direction != null
+        flex-direction: $flex-direction
+    @if $justify-content != null
+        justify-content: $justify-content
 
 @mixin button-style($bg-color, $text-color, $border-radius)
     background-color: $bg-color

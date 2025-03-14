@@ -1,0 +1,41 @@
+@use "sass:map"
+@use "../../styles/mixins.sass" as mix
+@use "../../styles/variables.sass" as vars
+.layout
+    height: 100vh
+    &-header
+        background: map.get(vars.$main, 'main')
+        &-items
+            color: white
+            width: 100%
+            @include mix.flex-content(space-between, row)
+        &-item
+            @include mix.flex-content(space-between, row)
+            column-gap: 40px
+        &-nav
+            width: 100%
+            padding: 30px 0
+            background: map.get(vars.$basic, 'white')
+            margin-bottom: 20px
+            .navigation
+                &-items
+                    @include mix.flex-content( row)
+                    column-gap: 20px
+                    &-item
+                        padding: 0 20px
+                        @include mix.flex-content(center, column)
+                        transition: all 0.5s ease
+                        &:hover
+                            .item-icon
+                                svg
+                                    color: map.get(vars.$main, 'main')
+                            .item-link
+                                &-text
+                                    color: map.get(vars.$main, 'main')
+                        .item-icon
+                            svg
+                                color: map.get(vars.$basic, 'black')
+                                font-size: 32px
+                        .item-link
+                            &-text
+                                +mix.typography(12px, 500, map.get(vars.$basic, 'black'))
