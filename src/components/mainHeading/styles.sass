@@ -1,0 +1,29 @@
+@use "sass:map"
+@use "../../styles/mixins.sass" as mix
+@use "../../styles/variables.sass" as vars
+
+.main-heading
+    margin-bottom: 20px
+    .heading
+        &-container
+            @include mix.flex-content(space-between, row)
+            background: map.get(vars.$basic, 'white')
+            border-radius: 6px
+            padding: 20px 30px
+        &-description
+            @include mix.flex-content(flex-start, column)
+            align-items: start
+            row-gap: 5px
+            width: 100%
+            .description-title
+                &-text
+                    +mix.typography(32px, 700, map.get(vars.$main, 'main'))
+            .description-subtitle
+                &-text
+                    +mix.typography(22px, 500, map.get(vars.$main, 'black'))
+        &-buttons
+            @include mix.flex-content(flex-end, row)
+            column-gap: 20px
+            width: 100%
+            .btn
+                max-width: 250px

@@ -3,6 +3,7 @@
 @use "../../styles/variables.sass" as vars
 .layout
     height: 100vh
+    background: #DFE5EE
     &-header
         background: map.get(vars.$main, 'main')
         &-items
@@ -18,11 +19,14 @@
             background: map.get(vars.$basic, 'white')
             margin-bottom: 20px
             .navigation
+                max-width: 100%
+                overflow: hidden
                 &-items
-                    @include mix.flex-content( row)
+                    @include mix.flex-content( flex-start, row)
                     column-gap: 20px
+                    flex-wrap: wrap
                     &-item
-                        padding: 0 20px
+                        margin: 0 10px
                         @include mix.flex-content(center, column)
                         transition: all 0.5s ease
                         &:hover
