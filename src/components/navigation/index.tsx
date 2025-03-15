@@ -10,7 +10,6 @@ import { FiSettings } from "react-icons/fi";
 
 const Navigation: React.FC = () => {
   return (
-    <div className='navigation'>
         <nav className="navigation-items">
             <Link to='/' className="navigation-items-item">
                 <div className="item-icon"><IoMdHome /></div>
@@ -43,7 +42,6 @@ const Navigation: React.FC = () => {
                 </div>
             </Link>
         </nav>
-    </div>
   )
 }
 

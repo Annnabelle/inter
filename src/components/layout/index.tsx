@@ -5,6 +5,7 @@ import './styles.sass'
 import Languages from '../languages';
 import UserInfo from '../userInfo';
 import Navigation from '../navigation';
+import MainHeading from '../mainHeading';
 
 const { Header, Content, Footer } = Layout;
 
@@ -38,6 +39,7 @@ const MainLayout: React.FC = () => {
         </div>
       </div>
       <Content style={{ padding: '0 48px' }}>
+        <MainHeading/>
         <div
           style={{
             background: colorBgContainer,
@@ -50,11 +52,6 @@ const MainLayout: React.FC = () => {
           Content
         </div>
       </Content>
-      <Footer style={{ textAlign: 'center' }}>
-        hello
-        <MdHome />
-
-      </Footer>
     </Layout>
   );
 };
