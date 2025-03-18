@@ -1,0 +1,76 @@
+@use 'sass:map'
+@use '../../styles/variables' as vars
+@use '../../styles/mixins' as mix
+.events
+    height: 100vh
+    &-heading
+        @include mix.flex-content(space-between, column)
+        margin-bottom: 20px
+        row-gap: 20px
+        &-goto
+            width: 100%
+            @include mix.flex-content(space-between, row)
+            &-content
+                @include mix.flex-content(center, row)
+                column-gap: 50px
+                .date
+                    +mix.typography(24px, 600, map.get(vars.$basic, 'black'))
+                &-btn
+                    cursor: pointer
+                    @include mix.flex-content(center, row)
+                    .text
+                        +mix.typography(16px, 500, map.get(vars.$basic, 'black'))
+                        transition: all 0.5s ease
+                        &:hover
+                            color: map.get(vars.$main, 'main')
+        &-btns
+            width: 100%
+            @include mix.flex-content(flex-end, row)
+            &-container
+                width: 100%
+                max-width: 650px
+                @include mix.flex-content(center, row)
+                column-gap: 20px
+    .rbc-calendar
+        border: 1px solid map.get(vars.$main, 'main')
+        border-radius: 6px
+        .rbc-time-view
+            // border: 1px solid map.get(vars.$main, 'main')
+            border-radius: 6px
+        .rbc-label
+            +mix.typography(14px, 600, map.get(vars.$basic, 'black'))
+        .rbc-time-header-cell
+            // border-bottom: 1px solid map.get(vars.$main, 'main')
+        .rbc-allday-cell
+            display: none
+        .rbc-time-header.rbc-overflowing
+            border-right: 1px solid map.get(vars.$main, 'main')
+            .rbc-time-header-content
+                border-left: 1px solid map.get(vars.$main, 'main')
+        .rbc-time-content
+            border-radius: 6px
+            border-top: 1px solid map.get(vars.$main, 'main')
+            .rbc-timeslot-group
+                border-bottom: 1px solid map.get(vars.$main, 'main')
+        .rbc-time-content > * + * > *
+            border-left: 1px solid map.get(vars.$main, 'main')
+        .rbc-header
+            border-left: 1px solid map.get(vars.$main, 'main')
+            .columnheader
+                +mix.typography(14px, 600, map.get(vars.$basic, 'black'))
+        .rbc-month-row
+            border-top: 1px solid map.get(vars.$main, 'main')
+            .rbc-day-bg:not(:last-child)
+                border-right: 1px solid map.get(vars.$main, 'main')
+            .rbc-date-cell
+                @include mix.flex-content(flex-end)
+                padding-top: 5px
+                .rbc-button-link
+                    @include mix.flex-content(flex-end)
+                    +mix.typography(14px, 600, map.get(vars.$basic, 'white'))
+                    background: map.get(vars.$main, 'main')
+                    padding: 5px 6px
+                    border-radius: 50px
+                    width: 100%
+                    max-width: 40px
+                    height: 20px

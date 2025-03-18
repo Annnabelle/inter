@@ -1,48 +1,38 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { IoMdHome } from "react-icons/io";
 import { BiWorld } from "react-icons/bi";
 import { GoGraph } from "react-icons/go";
 import { GrDocument } from "react-icons/gr";
 import { FiSettings } from "react-icons/fi";
 
-
-
 const Navigation: React.FC = () => {
-  return (
-        <nav className="navigation-items">
-            <Link to='/' className="navigation-items-item">
-                <div className="item-icon"><IoMdHome /></div>
-                <div className="item-link">
-                    <div className='item-link-text'>Главная</div>
-                </div>
-            </Link>
-            <Link to='/' className="navigation-items-item">
-                <div className="item-icon"><BiWorld /></div>
-                <div className="item-link">
-                    <div className='item-link-text'>Сотрудничество</div>
-                </div>
-            </Link>
-            <Link to='/' className="navigation-items-item">
-                <div className="item-icon"><GoGraph /></div>
-                <div className="item-link">
-                    <div className='item-link-text'>Статистика</div>
-                </div>
-            </Link>
-            <Link to='/' className="navigation-items-item">
-                <div className="item-icon"><GrDocument /></div>
-                <div className="item-link">
-                    <div className='item-link-text'>Отчеты</div>
-                </div>
-            </Link>
-            <Link to='/' className="navigation-items-item">
-                <div className="item-icon"><FiSettings /></div>
-                <div className="item-link">
-                    <div className='item-link-text'>Администрирование</div>
-                </div>
-            </Link>
-        </nav>
-  )
-}
+  const location = useLocation(); 
 
-export default Navigation
+  const navItems = [
+    { to: '/', icon: <IoMdHome />, text: 'Главная' },
+    { to: '/cooperation', icon: <BiWorld />, text: 'Сотрудничество' },
+    { to: '/statistics', icon: <GoGraph />, text: 'Статистика' },
+    { to: '/reports', icon: <GrDocument />, text: 'Отчеты' },
+    { to: '/admin', icon: <FiSettings />, text: 'Администрирование' },
+  ];
+
+  return (
+    <nav className="navigation-items">
+      {navItems.map(({ to, icon, text }) => (
+        <Link
+          key={to}
+          to={to}
+          className={`navigation-items-item ${location.pathname === to ? 'active' : ''}`}
+        >
+          <div className="item-icon">{icon}</div>
+          <div className="item-link">
+            <div className='item-link-text'>{text}</div>
+          </div>
+        </Link>
+      ))}
+    </nav>
+  );
+};
+
+export default Navigation;

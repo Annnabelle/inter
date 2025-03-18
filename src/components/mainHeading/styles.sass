@@ -26,4 +26,21 @@
             column-gap: 20px
             width: 100%
             .btn
-                max-width: 250px
+                max-width: 100%
+    .layout-events-heading-dropdown
+        position: relative
+        width: 100%
+        .event-dropdown
+            @include mix.flex-content(center, column)
+            margin-top: 5px
+            padding: 10px 15px
+            left: 0
+            right: 0
+            position: absolute
+            border-radius: 6px
+            box-shadow: 4px 4px 13px rgba(0, 0, 0, 0.12)
+            background: map.get(vars.$basic, 'white')
+            &-action
+                width: 100%
+                @include mix.flex-content(center, column)
+                row-gap: 12px

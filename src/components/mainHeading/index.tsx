@@ -1,27 +1,35 @@
-import React from 'react'
-import Button from '../button'
-import { FaPlus } from "react-icons/fa6";
-import './styles.sass'
+import React from "react";
+import "./styles.sass";
 
-const MainHeading = () => {
-  return (
-    <div className='main-heading'>
-        <div className="heading-container">
-            <div className="heading-description">
-                <div className="description-title">
-                    <h1 className="description-title-text">Главная</h1>
-                </div>
-                <div className="description-subtitle">
-                    <p className="description-subtitle-text">Подзаголовок</p>
-                </div>
-            </div>
-            <div className="heading-buttons">
-                <Button>Создать мероприятие <FaPlus /></Button>
-                <Button>Действия</Button>
-            </div>
-        </div>
-    </div>
-  )
+interface MainHeadingProps {
+  openEventModal?: () => void;
+  children?: React.ReactNode;
+  title: string; 
+  subtitle?: string; 
 }
 
-export default MainHeading
+const MainHeading: React.FC<MainHeadingProps> = ({ children, title, subtitle }) => {
+  return (
+    <div className="main-heading">
+      <div className="heading-container">
+        <div className="heading-description">
+          {title && (
+          <div className="description-title">
+            <h1 className="description-title-text">{title}</h1>
+          </div>
+          )}
+          {subtitle && ( 
+            <div className="description-subtitle">
+              <p className="description-subtitle-text">{subtitle}</p>
+            </div>
+          )}
+        </div>
+        <div className="heading-buttons">{children}</div>
+      </div>
+    </div>
+  );
+};
+
+export default MainHeading;
+
+

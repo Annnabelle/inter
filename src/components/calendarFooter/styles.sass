@@ -1,0 +1,25 @@
+@use 'sass:map'
+@use '../../styles/mixins' as mix
+@use '../../styles/variables' as vars
+.calendar-footer
+    height: 5%
+    display: flex
+    margin-top: 75px
+    .container-items
+        @include mix.flex-content(center, row)
+        gap: 20px
+        .item
+            @include mix.flex-content(center, row)
+            gap: 6px
+            &-circle
+                .circle
+                    width: 10px
+                    height: 10px
+                    border-radius: 50px
+                    background: map.get(vars.$main, 'main')
+            &-text
+                .text
+                    +mix.typography(14px, 500, map.get(vars.$basic, 'black'))
+            &-number
+                .number
+                    +mix.typography(14px, 500, map.get(vars.$basic, 'black'))
