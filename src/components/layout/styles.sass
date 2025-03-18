@@ -2,7 +2,7 @@
 @use "../../styles/mixins.sass" as mix
 @use "../../styles/variables.sass" as vars
 .layout
-    height: 100vh
+    height: 100%
     background: #DFE5EE
     &-header
         background: map.get(vars.$main, 'main')
@@ -17,7 +17,6 @@
             width: 100%
             padding: 30px 0
             background: map.get(vars.$basic, 'white')
-            margin-bottom: 20px
             .navigation
                 max-width: 100%
                 overflow: hidden
@@ -43,3 +42,20 @@
                         .item-link
                             &-text
                                 +mix.typography(12px, 500, map.get(vars.$basic, 'black'))
+                    .active
+                        color: map.get(vars.$main, 'main')
+                        .item-icon
+                            svg
+                                color: map.get(vars.$main, 'main')
+                                font-size: 32px
+                        .item-link
+                            &-text
+                                +mix.typography(12px, 500, map.get(vars.$main, 'main'))
+    .layout-content-container
+        height: 100%
+        padding: 24px
+        border-radius: 6px
+        display: flex
+        flex-direction: column
+        row-gap: 50px
+        justify-content: space-between

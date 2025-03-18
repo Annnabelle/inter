@@ -1,18 +1,13 @@
 import React from 'react';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import { MdHome } from "react-icons/md";
+import {Layout  } from 'antd';
 import './styles.sass'
 import Languages from '../languages';
 import UserInfo from '../userInfo';
 import Navigation from '../navigation';
-import MainHeading from '../mainHeading';
 
 const { Header, Content, Footer } = Layout;
 
-const MainLayout: React.FC = () => {
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
+const MainLayout: React.FC<{ children: React.ReactNode }>  = ({ children }) => {
 
   return (
     <Layout className='layout'>
@@ -38,19 +33,8 @@ const MainLayout: React.FC = () => {
           <Navigation/>
         </div>
       </div>
-      <Content style={{ padding: '0 48px' }}>
-        <MainHeading/>
-        <div
-          style={{
-            background: colorBgContainer,
-            minHeight: 280,
-
-            padding: 24,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          Content
-        </div>
+      <Content style={{ padding: '20px 48px 50px 48px' }}>
+         {children}
       </Content>
     </Layout>
   );
