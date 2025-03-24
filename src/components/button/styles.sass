@@ -29,3 +29,11 @@
     &-black
         @extend .outline
         color: map.get(vars.$basic, 'black')
+.danger
+    +mix.typography(16px, 400, map.get(vars.$basic, 'white'))
+    background: map.get(vars.$main, 'red')
+    border: 1px solid map.get(vars.$main, 'red')
+    &:hover
+        background: transparent
+        border: 1px solid map.get(vars.$main, 'red')
+        color: map.get(vars.$main, 'red')

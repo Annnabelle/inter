@@ -1,11 +1,11 @@
 import React from 'react';
 import {Layout  } from 'antd';
-import './styles.sass'
 import Languages from '../languages';
 import UserInfo from '../userInfo';
 import Navigation from '../navigation';
+import './styles.sass'
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 
 const MainLayout: React.FC<{ children: React.ReactNode }>  = ({ children }) => {
 

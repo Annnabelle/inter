@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import { Calendar, dateFnsLocalizer, View } from "react-big-calendar";
-import { Modal, Input, DatePicker, Form } from "antd";
+import { Form, Modal } from "antd";
 import { format, parse, startOfWeek, getDay, addDays, subDays } from "date-fns";
+import { CalendarComponentProps, EventType } from "../../types/events";
 import { ru } from "date-fns/locale";
+import ModalWindow from "../modalWindow";
+import AddEventForm from "../events/addEvent";
 import Button from "../button";
-import dayjs from "dayjs";
+import RetrieveEvent from "../events/retrieveEvent";
+import EditEvent from "../events/editEvent";
+import CalendarEventStyle from "./calendarEventStyle";
+import CalendarEvent from "./calendarEvent";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./styles.sass";
 
@@ -17,53 +23,75 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-type EventType = {
-  title: string;
-  start: Date;
-  end: Date;
-  allDay?: boolean;
-};
-
-type CalendarComponentProps = {
-  addEventModalOpen: boolean;
-  closeEventModal: () => void;
-};
-
 const initialEvents: EventType[] = [
   {
     title: "Совещание",
     start: new Date(2024, 2, 15, 10, 0),
     end: new Date(2024, 2, 15, 11, 0),
     allDay: false,
+    organizer: "Иван Иванов",
+    eventType: "Совещание",
+    countOfMembers: "5",
+    partnersOptions: "Партнеры X",
+    donorFormat: "Формат A",
   },
 ];
 
-const CalendarComponent: React.FC<CalendarComponentProps> = ({ addEventModalOpen, closeEventModal }) => {
+const CalendarComponent: React.FC<CalendarComponentProps> = (props) => {
   const [events, setEvents] = useState<EventType[]>(initialEvents);
   const [form] = Form.useForm();
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [view, setView] = useState<View>("month");
+  const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
+  const [eventModalOpen, setEventModalOpen] = useState<boolean>(false);
+  const [editEventModalOpen, setEditEventModalOpen] = useState<boolean>(false)
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
+  const handleSelectEvent = (event: EventType) => {
+    setSelectedEvent(event);
+    setEventModalOpen(true);
+  };
 
   const handleAddEvent = () => {
     form
       .validateFields()
       .then((values) => {
         const newEvent: EventType = {
-          title: values.title,
+          title: values.eventName,
           start: values.date[0].toDate(),
           end: values.date[1].toDate(),
           allDay: false,
+          organizer: values.organizer,
+          eventType: values.eventType,
+          countOfMembers: values.countOfMembers,
+          partnersOptions: values.partnersOptions,
+          donorFormat: values.donorFormat,
         };
         setEvents([...events, newEvent]);
-        closeEventModal();
+        props?.closeEventModal();
       })
       .catch((errorInfo) => console.log("Validation Failed:", errorInfo));
   };
+  
 
   const goToToday = () => setCurrentDate(new Date());
-  const goToNext = () => setCurrentDate(addDays(currentDate, view === "month" ? 30 : view === "week" ? 7 : 1));
-  const goToPrev = () => setCurrentDate(subDays(currentDate, view === "month" ? 30 : view === "week" ? 7 : 1));
+  const goToNext = () =>
+    setCurrentDate(addDays(currentDate, view === "month" ? 30 : view === "week" ? 7 : 1));
+  const goToPrev = () =>
+    setCurrentDate(subDays(currentDate, view === "month" ? 30 : view === "week" ? 7 : 1));
 
+  const eventDetails = selectedEvent
+  ? {
+      title: selectedEvent.title,
+      start: selectedEvent.start ? format(selectedEvent.start, "dd.MM.yyyy HH:mm") : "Не указано",
+      end: selectedEvent.end ? format(selectedEvent.end, "dd.MM.yyyy HH:mm") : "Не указано",
+      organizer: selectedEvent.organizer || "Не указан",
+      eventType: selectedEvent.eventType || "Не указан",
+      countOfMembers: selectedEvent.countOfMembers ?? 0,
+      partnersOptions: selectedEvent.partnersOptions || "Не указано",
+      donorFormat: selectedEvent.donorFormat || "Не указано",
+    }
+  : null;
+  
   return (
     <div className="events">
       <div className="events-heading">
@@ -91,7 +119,6 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ addEventModalOpen
           </div>
         </div>
       </div>
-
       <Calendar
         localizer={localizer}
         events={events}
@@ -103,43 +130,90 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ addEventModalOpen
         onView={(newView) => setView(newView)}
         style={{ height: "100%", background: "white" }}
         toolbar={false}
+        eventPropGetter={CalendarEventStyle}
+        onSelectEvent={handleSelectEvent}
+        components={{
+          event: CalendarEvent,
+        }}
       />
 
-      <Modal
-        title="Добавить событие"
-        open={addEventModalOpen}
-        onCancel={closeEventModal}
-        onOk={handleAddEvent}
-        okText="Добавить"
-        cancelText="Отмена"
+      <ModalWindow
+        title="Создание мероприятия"
+        openEventModal={props?.openEventModal}
+        closeEventModal={props?.closeEventModal}
       >
-        <Form form={form} layout="vertical">
-          <Form.Item
-            name="title"
-            label="Создание мероприятия"
-            rules={[{ required: true, message: "Введите название события" }]}
-          >
-            <Input placeholder="Введите название" />
-          </Form.Item>
-
-          <Form.Item
-            name="date"
-            label="Выберите дату и время"
-            rules={[{ required: true, message: "Выберите дату и время" }]}
-          >
-            <DatePicker.RangePicker
-              showTime
-              format="YYYY-MM-DD HH:mm"
-              defaultValue={[dayjs(), dayjs().add(1, "hour")]}
-              style={{ width: "100%" }}
+        <AddEventForm handleAddEvent={(values) => {
+          const newEvent: EventType = {
+            title: values.eventName,
+            start: values.date[0].toDate(),
+            end: values.date[1].toDate(),
+            allDay: false,
+            organizer: values.organizer,
+            eventType: values.eventType,
+            countOfMembers: String(values.countOfMembers),
+            partnersOptions: values.partnersOptions,
+            donorFormat: values.donorFormat,
+          };          
+          setEvents([...events, newEvent]);
+          props?.closeEventModal();
+        }} />
+      </ModalWindow>
+      <ModalWindow
+        title="Просмотр мероприятия"
+        openEventModal={eventModalOpen}
+        closeEventModal={() => setEventModalOpen(false)}
+        handleEdit={() => {
+          setEventModalOpen(false);
+          setTimeout(() => setEditEventModalOpen(true), 100);
+        }}
+      >
+        {selectedEvent && (
+          eventDetails && (
+            <RetrieveEvent event={eventDetails} />
+          )
+        )}
+      </ModalWindow>
+      <ModalWindow
+          title="Редактирование мероприятия"
+          openEventModal={editEventModalOpen}
+          closeEventModal={() => setEditEventModalOpen(false)}
+          handleDelete={() => {  setTimeout(() => setDeleteModalOpen(true), 0);
+            setDeleteModalOpen(true)}}
+        >
+          {selectedEvent && (
+            <EditEvent
+              initialValues={selectedEvent}
+              handleAddEvent={(values) => {
+                const updatedEvent: EventType = {
+                  ...selectedEvent,
+                  title: values.eventName,
+                  start: values.date[0].toDate(),
+                  end: values.date[1].toDate(),
+                  organizer: values.organizer,
+                  eventType: values.eventType,
+                  countOfMembers: String(values.countOfMembers),
+                  partnersOptions: values.partnersOptions,
+                  donorFormat: values.donorFormat,
+                };
+                setEvents(events.map((ev) => (ev === selectedEvent ? updatedEvent : ev)));
+                setEditEventModalOpen(false);
+              }}
             />
-          </Form.Item>
-        </Form>
-      </Modal>
+          )}
+        </ModalWindow>
+          <ModalWindow openEventModal={isDeleteModalOpen} title="Вы точно хотите удалить мероприятие?" className="modal-tight"
+            closeEventModal={() => setDeleteModalOpen(false)}>
+              <div className="modal-tight-container">
+                <Button onClick={() => setDeleteModalOpen(false)} className="outline">Cancel</Button>
+                <Button className="danger">Delete</Button>
+              </div>
+          </ModalWindow>
     </div>
   );
 };
 
 export default CalendarComponent;
+
+
 
 
