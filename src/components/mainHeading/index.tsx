@@ -2,7 +2,6 @@ import React from "react";
 import "./styles.sass";
 
 interface MainHeadingProps {
-  openEventModal?: () => void;
   children?: React.ReactNode;
   title: string; 
   subtitle?: string; 

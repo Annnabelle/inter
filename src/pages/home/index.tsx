@@ -1,29 +1,27 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Form } from "antd";
 import { FaPlus } from "react-icons/fa";
 import { theme } from "antd";
+import { HiOutlineDocumentDownload } from "react-icons/hi";
+import { IoPrintOutline } from "react-icons/io5";
 import CalendarComponent from "../../components/calendar";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
 import CalendarFooter from "../../components/calendarFooter";
 import Button from "../../components/button";
-import { HiOutlineDocumentDownload } from "react-icons/hi";
-import { IoPrintOutline } from "react-icons/io5";
 
 const MainEventsPage: React.FC = () => {
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
-
-    const [form] = Form.useForm();
-    const [addEventModalOpen, setAddEventModalOpen] = useState(false); 
+    const [addEventModalOpen, setAddEventModalOpen] = useState<boolean>(false); 
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const eventsDropdownRef = useRef<HTMLDivElement>(null);
     const handleClickOutside = useCallback((event: MouseEvent) => {
-    if (isOpen && eventsDropdownRef.current && !eventsDropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-    }
+        if (isOpen && eventsDropdownRef.current && !eventsDropdownRef.current.contains(event.target as Node)) {
+            setIsOpen(false);
+        }
     }, [isOpen]);
+
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
@@ -31,16 +29,17 @@ const MainEventsPage: React.FC = () => {
         };
     }, [handleClickOutside]);
 
-    const openEventModal = () => setAddEventModalOpen(true);
-    const closeEventModal = () => {
+    const showModal = () => {
+        setAddEventModalOpen(true);
+    };
+    const handleCancel = () => {
         setAddEventModalOpen(false);
-        form.resetFields();
     };
 
     return (
         <MainLayout>
-            <MainHeading openEventModal={openEventModal} title="Главная" subtitle="Подзаголоок">
-                 <Button onClick={openEventModal}>
+            <MainHeading title="Главная" subtitle="Подзаголоок">
+                 <Button onClick={showModal}>
                     Создать мероприятие <FaPlus />
                 </Button>
                 <div className="layout-events-heading-dropdown" ref={eventsDropdownRef}>
@@ -59,17 +58,12 @@ const MainEventsPage: React.FC = () => {
             <div
                 style={{
                     background: colorBgContainer,
-                    // minHeight: 280,
-                    // height: "100vh",
-                    // padding: 24,
-                    // borderRadius: borderRadiusLG,
                 }}
                 className="layout-content-container"
             >
                 <CalendarComponent
-                    closeEventModal={closeEventModal}
-                    // setAddEventModalOpen={setAddEventModalOpen}
-                    addEventModalOpen={addEventModalOpen} // Передаём проп, чтобы модальное окно могло корректно работать
+                    closeEventModal={handleCancel}
+                    openEventModal={addEventModalOpen} 
                 /> 
             <CalendarFooter/>
             </div>
