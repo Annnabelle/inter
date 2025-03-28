@@ -44,3 +44,45 @@
                 width: 100%
                 @include mix.flex-content(center, column)
                 row-gap: 12px
+    &-dropdown
+        position: relative
+        &-item
+            border: 1px solid map.get(vars.$main, 'main')
+            border-radius: 6px
+            padding: 12px 20px
+            @include mix.flex-content(space-between, row)
+            column-gap: 20px
+            cursor: pointer
+            .dropdown-text
+                .text
+                    +mix.typography(16px, 500, map.get(vars.$main, 'main'))
+            .dropdown-icon
+                @include mix.flex-content()
+                svg
+                    +mix.typography(16px, 500, map.get(vars.$main, "main"))
+        .dropdown-sort
+            position: absolute
+            top: 60px
+            z-index: 10
+            background: map.get(vars.$basic, 'white')
+            border: 1px solid map.get(vars.$main, 'grey')
+            border-radius: 6px
+            width: 100%
+            &-item
+                padding: 20px
+                cursor: pointer
+                background: map.get(vars.$basic, 'white')
+                transition: all 0.5s ease
+                .text
+                    transition: all 0.5s ease
+                    +mix.typography(16px, 500, map.get(vars.$basic, 'black'))
+                &:hover
+                    background: map.get(vars.$main, 'main')
+                    .text
+                        color: map.get(vars.$basic, 'white')
+                &:first-child
+                    border-radius: 6px 6px 0 0
+                &:last-child
+                    border-radius: 0 0 6px 6px
+            &-item:not(:last-child)
+                border-bottom: 1px solid map.get(vars.$main, 'grey')

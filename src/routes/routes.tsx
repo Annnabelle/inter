@@ -1,10 +1,10 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { lazy, Suspense } from "react";
-import MainLayout from "../components/layout";
 import MainEventsPage from "../pages/home";
 
 const Home = lazy(() => import("../pages/home"));
-const About = lazy(() => import("../pages/about"));
+const Cooperation = lazy(() => import("../pages/cooperation"));
+const Countries = lazy(() => import("../pages/countries"));
 
 const Router: React.FC = () => {
   return (
@@ -12,8 +12,9 @@ const Router: React.FC = () => {
       <Routes>
         <Route path="/" element={<MainEventsPage />}>
           <Route index element={<Home />} />
-          <Route path="about" element={<About />} />
         </Route>
+        <Route path="/cooperation" element={<Cooperation />} />
+        <Route path='/cooperation/countries' element={<Countries/>}/>
       </Routes>
     </Suspense>
   );
