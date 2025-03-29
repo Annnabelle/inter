@@ -1,0 +1,22 @@
+@use 'sass:map'
+@use '../../styles/mixins' as mix
+@use '../../styles/variables' as vars
+.countries-table
+    .ant-table-thead
+        .ant-table-cell
+            cursor: pointer
+            background: map.get(vars.$main, 'main')
+            +mix.typography(20px, 700, map.get(vars.$basic, 'white'))
+    .ant-table-tbody
+        .ant-table-cell
+            border-bottom: 1px solid map.get(vars.$main, 'main')
+        .ant-table-cell:first-child
+            border-left: 1px solid map.get(vars.$main, 'main')
+        .ant-table-cell:last-child
+            border-right: 1px solid map.get(vars.$main, 'main')
+    &-title
+        +mix.typography(20px, 700, map.get(vars.$basic, 'black'))
+    &-text
+        +mix.typography(20px, 400, map.get(vars.$basic, 'black'))
+    .clickable-row
+        cursor: pointer

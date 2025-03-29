@@ -41,7 +41,7 @@ const MainEventsPage: React.FC = () => {
             <MainHeading title="Главная" subtitle="Подзаголоок">
                  <Button onClick={showModal}>
                     Создать мероприятие <FaPlus />
-                </Button>
+                    </Button>
                 <div className="layout-events-heading-dropdown" ref={eventsDropdownRef}>
                     <Button  onClick={(e) => {e.stopPropagation(); setIsOpen((prev) => !prev);}}>Действия</Button>
                     {isOpen && (

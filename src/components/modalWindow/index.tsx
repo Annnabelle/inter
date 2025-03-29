@@ -2,7 +2,7 @@ import React from 'react'
 import { Modal } from 'antd'
 import { FaRegTrashAlt } from 'react-icons/fa'
 import { BiEditAlt } from "react-icons/bi";
-import { ModalProps } from '../../types/events';
+import { ModalProps } from '../../types';
 import './styles.sass'
 
 const ModalWindow: React.FC<ModalProps> = ({children, ...props}) => {
@@ -36,8 +36,8 @@ const ModalWindow: React.FC<ModalProps> = ({children, ...props}) => {
             </div>
         }
         className={`modal-window ${props?.className}`}
-        open={props?.openEventModal}
-        onCancel={props?.closeEventModal}
+        open={props?.openModal}
+        onCancel={props?.closeModal}
         footer={null} 
         >
         {children}
