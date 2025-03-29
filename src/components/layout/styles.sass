@@ -110,7 +110,6 @@
                     border: 4px solid map.get(vars.$main, 'main')
                     background: map.get(vars.$basic, 'white')
                     transition: all 0.5s ease
-
                     &-link
                         width: 100%
                         min-height: 230px
@@ -124,3 +123,21 @@
                         background: map.get(vars.$main, "main")
                         .cooperation-main-container-item-link-text
                             color: map.get(vars.$basic, 'white')
+        .countries-inner
+            &-title
+                .title
+                    +mix.typography(28px, 600, map.get(vars.$main, 'main'))
+            &-content
+                margin-top: 40px
+                &-title
+                    .title
+                        +mix.typography(28px, 600, map.get(vars.$basic, "black"))
+                &-subtitle
+                    .subtitle
+                        +mix.typography(20px, 600, map.get(vars.$main, "grey"))
+            &-table-container
+                &-heading
+                    @include mix.flex-content(space-between, row)
+                    margin-bottom: 20px
+                    .title
+                        +mix.typography(28px, 600, map.get(vars.$basic, "black"))

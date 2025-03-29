@@ -4,6 +4,7 @@
 .countries-table
     .ant-table-thead
         .ant-table-cell
+            cursor: pointer
             background: map.get(vars.$main, 'main')
             +mix.typography(20px, 700, map.get(vars.$basic, 'white'))
     .ant-table-tbody
@@ -17,3 +18,5 @@
         +mix.typography(20px, 700, map.get(vars.$basic, 'black'))
     &-text
         +mix.typography(20px, 400, map.get(vars.$basic, 'black'))
+    .clickable-row
+        cursor: pointer

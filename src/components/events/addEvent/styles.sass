@@ -12,6 +12,18 @@
         .input
             width: 100%
             margin-bottom: 0
+            &-upload
+                cursor: pointer
+                outline: none
+                caret-color: transparent
+            .ant-upload
+                width: 100%
+        &-new
+            cursor: pointer
+            width: 100%
+            @include mix.flex-content(end)
+            &-text
+                +mix.typography(16px, 500, map.get(vars.$main, "main"))
         .approval-container
             @include mix.flex-content(flex-start, column)
             row-gap: 10px
