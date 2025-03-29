@@ -13,19 +13,6 @@ export type EventType = {
     donorFormat: string
 };
 
-export interface ModalProps {
-    closeEventModal?: ()=> void,
-    openEventModal?: boolean,
-    children?: ReactNode,
-    title?: string,
-    handleAction?: () => void
-    handleDelete?: () => void,
-    handleEdit?: () => void
-    handleCancel?: () => void
-    className?: string
-    
-}
-
 export type CalendarComponentProps = {
     openEventModal: boolean;
     closeEventModal: () => void;

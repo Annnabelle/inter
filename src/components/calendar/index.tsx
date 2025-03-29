@@ -139,8 +139,8 @@ const CalendarComponent: React.FC<CalendarComponentProps> = (props) => {
 
       <ModalWindow
         title="Создание мероприятия"
-        openEventModal={props?.openEventModal}
-        closeEventModal={props?.closeEventModal}
+        openModal={props?.openEventModal}
+        closeModal={props?.closeEventModal}
       >
         <AddEventForm handleAddEvent={(values) => {
           const newEvent: EventType = {
@@ -160,8 +160,8 @@ const CalendarComponent: React.FC<CalendarComponentProps> = (props) => {
       </ModalWindow>
       <ModalWindow
         title="Просмотр мероприятия"
-        openEventModal={eventModalOpen}
-        closeEventModal={() => setEventModalOpen(false)}
+        openModal={eventModalOpen}
+        closeModal={() => setEventModalOpen(false)}
         handleEdit={() => {
           setEventModalOpen(false);
           setTimeout(() => setEditEventModalOpen(true), 100);
@@ -175,8 +175,8 @@ const CalendarComponent: React.FC<CalendarComponentProps> = (props) => {
       </ModalWindow>
       <ModalWindow
           title="Редактирование мероприятия"
-          openEventModal={editEventModalOpen}
-          closeEventModal={() => setEditEventModalOpen(false)}
+          openModal={editEventModalOpen}
+          closeModal={() => setEditEventModalOpen(false)}
           handleDelete={() => {  setTimeout(() => setDeleteModalOpen(true), 0);
             setDeleteModalOpen(true)}}
         >
@@ -201,11 +201,11 @@ const CalendarComponent: React.FC<CalendarComponentProps> = (props) => {
             />
           )}
         </ModalWindow>
-          <ModalWindow openEventModal={isDeleteModalOpen} title="Вы точно хотите удалить мероприятие?" className="modal-tight"
-            closeEventModal={() => setDeleteModalOpen(false)}>
+          <ModalWindow openModal={isDeleteModalOpen} title="Вы точно хотите удалить мероприятие?" className="modal-tight"
+            closeModal={() => setDeleteModalOpen(false)}>
               <div className="modal-tight-container">
-                <Button onClick={() => setDeleteModalOpen(false)} className="outline">Cancel</Button>
-                <Button className="danger">Delete</Button>
+                <Button onClick={() => setDeleteModalOpen(false)} className="outline">Отменить</Button>
+                <Button className="danger">Удалить</Button>
               </div>
           </ModalWindow>
     </div>
