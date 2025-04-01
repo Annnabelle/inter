@@ -8,6 +8,8 @@ const Cooperation = lazy(() => import("../pages/cooperation"));
 const Countries = lazy(() => import("../pages/countries"));
 const InternationalOrganizations = lazy(() => import("../pages/internationalOrganizations"))
 const InternationalNonGovernmentalOrganizations = lazy(() => import("../pages/internationalNonGovernmentalOrganizations"))
+const Experts = lazy(() => import("../pages/experts"))
+
 const Router: React.FC = () => {
   return (
     <Suspense fallback={<div>Загрузка...</div>}>
@@ -20,6 +22,7 @@ const Router: React.FC = () => {
         <Route path='/cooperation/countries/:id' element={<CountriesInner/>}/>
         <Route path="/cooperation/international-organizations" element={<InternationalOrganizations/>}/>
         <Route path='/cooperation/international-non-governmental-organizations' element={<InternationalNonGovernmentalOrganizations/>}/>
+        <Route path='/cooperation/experts' element={<Experts/>}/>
       </Routes>
     </Suspense>
   );

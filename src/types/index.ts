@@ -85,3 +85,12 @@ export interface CountriesInnerInternationalDocumentsDataType {
     additionalInformation?: string;
     files: string;
 }
+
+export interface ExpertsTableDataTypes{
+    key: string,
+    mainAreas: string,
+    fullName: string,
+    event: string,
+    date: string,
+    files: string
+}
