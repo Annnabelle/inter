@@ -18,6 +18,13 @@ export interface InternationalOrganizationChiefDataType {
     file?: string;
 }
 
+export interface InternationalOrganizationNonGovernmentChiefDataType {
+    key: string;
+    fullName: string;
+    additionalInformation?: string;
+    file?: string;
+}
+
 export interface InternationalOrganizationProjectDataType{
     key: string;
     projectName: string;
@@ -25,7 +32,24 @@ export interface InternationalOrganizationProjectDataType{
     file?: string;
 }
 
+export interface InternationalNonGovernmentOrganizationProjectDataType{
+    key: string;
+    projectName: string;
+    additionalInformation: string;
+    file?: string
+}
+
 export interface InternationalOrganizationsChronologyOfMeetingDataType{
+    key: string;
+    number: string;
+    data: string;
+    place?: string;
+    format?: string;
+    level: string;
+    nameOfMeeting: string
+}
+
+export interface InternationalNonGovernmentOrganizationsChronologyOfMeetingDataType{
     key: string;
     number: string;
     data: string;
