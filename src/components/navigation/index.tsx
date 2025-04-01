@@ -21,7 +21,7 @@ const Navigation: React.FC = () => {
         { to: '/cooperation/international-organizations', text: 'Международные организации' },
         { to: '/cooperation/international-non-governmental-organizations', text: 'Международные неправительственные организации' },
         { to: '/', text: 'Международные документы' },
-        { to: '/', text: 'Эксперты' },
+        { to: '/cooperation/experts', text: 'Эксперты' },
         { to: '/', text: 'Переводчики' }
       ]
     },

@@ -48,15 +48,15 @@ const CountriesInner: React.FC = () => {
     const handleEditOpen = () => {
         setModalState((prev) => ({
             ...prev,
-            retrieveDocument: false, // Закрываем текущее модальное окно
+            retrieveDocument: false, 
         }));
     
         setTimeout(() => {
             setModalState((prev) => ({
                 ...prev,
-                editDocument: true, // Открываем новое модальное окно
+                editDocument: true,
             }));
-        }, 0); // Короткая задержка для обновления состояния
+        }, 0); 
     };
     
 
