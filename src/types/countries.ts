@@ -3,7 +3,7 @@ import type { Dayjs } from "dayjs";
 
 export interface FileItem {
     id: number;
-    name: string;
+    name?: string;
     file: UploadFile | null;
   }
   

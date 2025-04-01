@@ -1,0 +1,302 @@
+import React, { useState } from 'react'
+import { theme, Form, Input, Upload } from "antd";
+import { IoIosArrowDown, IoMdAdd } from 'react-icons/io';
+import {FileItem } from '../../types/countries';
+import MainLayout from '../../components/layout'
+import MainHeading from '../../components/mainHeading'
+import ModalWindow from '../../components/modalWindow';
+import Button from '../../components/button';
+import FormComponent from '../../components/form';
+import InternationalOrganizationChiefTable from '../../components/tables/internationalOrganizationChiefTable';
+import InternationalOrganizationProjectTable from '../../components/tables/internationalOrganizationProjectTable';
+import InternationalOrganizationsChronologyOfMeeting from '../../components/tables/internationalOrganizationsChronologyOfMeetings';
+
+const InternationalOrganizations: React.FC = () => {
+    const {
+      token: { colorBgContainer, borderRadiusLG },
+    } = theme.useToken();
+    
+    const [openSortDropdown, setOpenSortDropdown] = useState(false);
+    const [form] = Form.useForm();
+    const [files, setFiles] = useState<FileItem[]>([{ id: 1, file: null }]);
+    const [modalState, setModalState] = useState({
+      chiefRetrieve: false,
+      chiefEdit: false,
+      chiefDelete: false,
+      addChief: false,
+      projectRetrieve: false,
+      projectEdit: false,
+      projectDelete: false,
+      addProject: false,
+    });
+    
+    const handleModal = (modalName: string, value: boolean) => {
+      setModalState((prev) => ({ ...prev, [modalName]: value }));
+    };
+    
+    const handleSortDropdown = () => {
+      setOpenSortDropdown((prev) => !prev);
+    };
+    
+    const addFileField = () => {
+      setFiles([...files, { id: files.length + 1, file: null }]);
+    };
+    
+    const handleRowClick = (type: 'chief' | 'project', action: 'Retrieve' | 'Edit' | 'Delete') => {
+      setModalState((prev) => ({
+        ...prev,
+        [`${type}${action}`]: true,
+      }));
+    };
+    
+    const handleEditOpen = (type: 'chief' | 'project') => {
+      setModalState((prev) => ({
+        ...prev,
+        [`${type}Retrieve`]: false,
+      }));
+      setTimeout(() => {
+        setModalState((prev) => ({ ...prev, [`${type}Edit`]: true }));
+      }, 10);
+    };
+    
+    const handleDeleteOpen = (type: 'chief' | 'project') => {
+      setModalState((prev) => ({
+        ...prev,
+        [`${type}Edit`]: false,
+      }));
+      setTimeout(() => {
+        setModalState((prev) => ({ ...prev, [`${type}Delete`]: true }));
+      }, 10);
+    };
+    
+    const onFinish = () => {
+      console.log('hello finish');
+    };
+
+  return (
+    <MainLayout>
+      <MainHeading title="Международные организации" subtitle='Подзаголовок'>
+        <div className="main-heading-dropdown">
+            <div className="main-heading-dropdown-item" onClick={() => handleSortDropdown()}>
+                <div className="dropdown-text">
+                    <p className="text">Сортировать по</p>
+                </div>
+                <div className="dropdown-icon">
+                    <IoIosArrowDown />
+                </div>
+            </div>
+            {openSortDropdown && (
+              <div className="dropdown-sort">
+                  <div className="dropdown-sort-item">
+                      <p className="text">По названию</p>
+                  </div>
+                  <div className="dropdown-sort-item">
+                      <p className="text">По встречам</p>
+                  </div>
+                  <div className="dropdown-sort-item">
+                      <p className="text">По визитам</p>
+                  </div>
+              </div>
+            )}
+        </div>
+      </MainHeading>
+      <div style={{background: colorBgContainer,}} className="layout-content-container">
+        <div className="international-organizations">
+          <div className="countries-inner-table-container">
+            <div className="countries-inner-table-container-heading">
+              <div className="heading-title">
+                <h3 className="title">
+                    Главы
+                </h3>
+              </div>
+              <div className="heading-btn">
+                <Button className="outline" onClick={() => handleModal('addChief', true)}>Добавить главу <IoMdAdd/></Button>
+              </div>
+            </div>
+            <InternationalOrganizationChiefTable onRowClick={() => handleRowClick('chief', "Retrieve")} />
+          </div>
+            <div className="countries-inner-table-container">
+                <div className="countries-inner-table-container-heading">
+                  <div className="heading-title">
+                    <h3 className="title">
+                        Совместные проекты
+                    </h3>
+                  </div>
+                    <div className="heading-btn">
+                        <Button className="outline" onClick={() => handleModal('addProject', true)}>Добавить проект <IoMdAdd/></Button>
+                    </div>
+                </div>
+                <InternationalOrganizationProjectTable onRowClick={() => handleRowClick('project', "Retrieve")}/>
+            </div>
+            <div className="countries-inner-table-container">
+                <div className="countries-inner-table-container-heading">
+                    <div className="heading-title">
+                        <h3 className="title">
+                            Хронология встреч
+                        </h3>
+                    </div>
+                </div>
+                <InternationalOrganizationsChronologyOfMeeting/>
+            </div>
+            <ModalWindow openModal={modalState.chiefRetrieve} title="Посмотреть главу" closeModal={() => handleModal('chiefRetrieve', false)} handleEdit={() => handleEditOpen('chief')}>
+              <FormComponent>
+                      <div className="form-inputs">
+                      <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите Ф.И.О"}]}>
+                          <Input disabled className="input" size='large' placeholder="Введите Ф.И.О"/>
+                      </Form.Item>
+                      <Form.Item className="input" name="additionalInfo" rules={[{required: true, message:"Выберите дополнительную информацию"}]}>
+                          <Input disabled className="input" size='large' placeholder="Дополнительная информация"/>
+                      </Form.Item>
+                  </div>
+                  {files.map((item) => (
+                    <div className="form-inputs" key={item?.id}>
+                      <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите CV"}]}>
+                          <Upload disabled>
+                              <Input disabled className="input input-upload" size='large' placeholder="Загрузить CV"/>
+                          </Upload>
+                      </Form.Item>
+                    </div>
+                  ))}
+              </FormComponent>
+            </ModalWindow>
+            <ModalWindow openModal={modalState.chiefEdit} title="Изменить главу" closeModal={() => handleModal('chiefEdit', false)} handleDelete={() => handleDeleteOpen('chief')}>
+              <FormComponent onFinish={onFinish} >
+                  <div className="form-inputs" >
+                      <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите Ф.И.О"}]}>
+                          <Input className="input" size='large' placeholder="Введите Ф.И.О"/>
+                      </Form.Item>
+                      <Form.Item className="input" name="additionalInfo" rules={[{required: true, message:"Выберите дополнительную информацию"}]}>
+                          <Input className="input" size='large' placeholder="Дополнительная информация"/>
+                      </Form.Item>
+                  </div>
+                {files.map((item) => (
+                  <div className="form-inputs" key={item?.id}>
+                    <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите CV"}]}>
+                      <Upload>
+                        <Input className="input input-upload" size='large' placeholder="Загрузить CV"/>
+                      </Upload>
+                    </Form.Item>
+                  </div>
+                ))}
+                  <div className="form-btn-new" onClick={addFileField}>
+                      <p className="form-btn-new-text">Добавить еще CV</p>
+                  </div>
+                  <Button>Применить</Button>
+              </FormComponent>
+            </ModalWindow>
+            <ModalWindow title="Добавить главу" openModal={modalState.addChief} closeModal={() => handleModal("addChief", false)}>
+                <FormComponent onFinish={onFinish}>
+                <div className="form-inputs" >
+                      <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите Ф.И.О"}]}>
+                          <Input className="input" size='large' placeholder="Введите Ф.И.О"/>
+                      </Form.Item>
+                      <Form.Item className="input" name="additionalInfo" rules={[{required: true, message:"Выберите дополнительную информацию"}]}>
+                          <Input className="input" size='large' placeholder="Дополнительная информация"/>
+                      </Form.Item>
+                  </div>
+                    {files.map((item) => (
+                        <div className="form-inputs" key={item?.id}>
+                             <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите CV"}]}>
+                                <Upload>
+                                    <Input className="input input-upload" size='large' placeholder="Загрузить CV"/>
+                                </Upload>
+                            </Form.Item>
+                        </div>
+                    ))}
+                    <div className="form-btn-new" onClick={addFileField}>
+                        <p className="form-btn-new-text">Добавить еще CV</p>
+                    </div>
+                    <Button>Создать</Button>
+                </FormComponent>
+            </ModalWindow>
+            <ModalWindow openModal={modalState.chiefDelete} title="Вы точно хотите удалить главу?" className="modal-tight" closeModal={() => handleModal("chiefDelete", false)}>
+                <div className="modal-tight-container">
+                    <Button onClick={() => handleModal("chiefDelete", false)} className="outline">Отменить</Button>
+                    <Button className="danger">Удалить</Button>
+                </div>
+            </ModalWindow>
+
+            <ModalWindow openModal={modalState.projectRetrieve} title="Посмотреть проект" closeModal={() => handleModal('projectRetrieve', false)} handleEdit={() => handleEditOpen('project')}>
+              <FormComponent>
+                      <div className="form-inputs">
+                      <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите Ф.И.О"}]}>
+                          <Input disabled className="input" size='large' placeholder="Введите Ф.И.О"/>
+                      </Form.Item>
+                      <Form.Item className="input" name="additionalInfo" rules={[{required: true, message:"Выберите дополнительную информацию"}]}>
+                          <Input disabled className="input" size='large' placeholder="Дополнительная информация"/>
+                      </Form.Item>
+                  </div>
+                  {files.map((item) => (
+                    <div className="form-inputs" key={item?.id}>
+                      <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите CV"}]}>
+                          <Upload disabled>
+                              <Input disabled className="input input-upload" size='large' placeholder="Загрузить CV"/>
+                          </Upload>
+                      </Form.Item>
+                    </div>
+                  ))}
+              </FormComponent>
+            </ModalWindow>
+            <ModalWindow openModal={modalState.projectEdit} title="Изменить проект" closeModal={() => handleModal('projectEdit', false)} handleDelete={() => handleDeleteOpen('project')}>
+              <FormComponent  onFinish={onFinish} >
+                  <div className="form-inputs" >
+                      <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите Ф.И.О"}]}>
+                          <Input className="input" size='large' placeholder="Введите Ф.И.О"/>
+                      </Form.Item>
+                      <Form.Item className="input" name="additionalInfo" rules={[{required: true, message:"Выберите дополнительную информацию"}]}>
+                          <Input className="input" size='large' placeholder="Дополнительная информация"/>
+                      </Form.Item>
+                  </div>
+                {files.map((item) => (
+                  <div className="form-inputs" key={item?.id}>
+                    <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите CV"}]}>
+                      <Upload>
+                        <Input className="input input-upload" size='large' placeholder="Загрузить CV"/>
+                      </Upload>
+                    </Form.Item>
+                  </div>
+                ))}
+                  <div className="form-btn-new" onClick={addFileField}>
+                      <p className="form-btn-new-text">Добавить еще CV</p>
+                  </div>
+                  <Button>Применить</Button>
+              </FormComponent>
+            </ModalWindow>
+            <ModalWindow title="Добавить проект" openModal={modalState.addProject} closeModal={() => handleModal('addProject', false)}>
+                <FormComponent onFinish={onFinish}>
+                        <div className="form-inputs">
+                            <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите Ф.И.О"}]}>
+                                <Input className="input" size='large' placeholder="Введите Ф.И.О"/>
+                            </Form.Item>
+                            <Form.Item className="input" name="additionalInfo" rules={[{required: true, message:"Выберите дополнительную информацию"}]}>
+                                <Input className="input" size='large' placeholder="Дополнительная информация"/>
+                            </Form.Item>
+                        </div>
+                    {files.map((item) => (
+                        <div className="form-inputs" key={item?.id}>
+                             <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите CV"}]}>
+                                <Upload>
+                                    <Input className="input input-upload" size='large' placeholder="Загрузить CV"/>
+                                </Upload>
+                            </Form.Item>
+                        </div>
+                    ))}
+                    <div className="form-btn-new" onClick={addFileField}>
+                        <p className="form-btn-new-text">Добавить еще CV</p>
+                    </div>
+                    <Button>Создать</Button>
+                </FormComponent>
+            </ModalWindow>
+            <ModalWindow openModal={modalState.projectDelete} title="Вы точно хотите удалить проект?" className="modal-tight" closeModal={() => handleModal('projectDelete', false)}>
+                <div className="modal-tight-container">
+                    <Button onClick={() => handleModal('projectDelete', false)} className="outline">Отменить</Button>
+                    <Button className="danger">Удалить</Button>
+                </div>
+            </ModalWindow>
+        </div>
+      </div>
+    </MainLayout>
+  )
+}
+
+export default InternationalOrganizations

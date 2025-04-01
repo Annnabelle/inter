@@ -1,7 +1,6 @@
 import React from "react";
 import { Table } from "antd";
 import type { TableProps } from "antd";
-import "./styles.sass";
 
 interface DataType {
   key: string;
@@ -19,19 +18,19 @@ const columns: TableProps<DataType>["columns"] = [
     title: "Страна",
     dataIndex: "countries",
     key: "countries",
-    render: (text) => <h1 className="countries-table-title">{text}</h1>,
+    render: (text) => <h1 className="table-title">{text}</h1>,
   },
   {
     title: "Встречи",
     dataIndex: "meeting",
     key: "meeting",
-    render: (text) => <p className="countries-table-text">{text}</p>,
+    render: (text) => <p className="table-text">{text}</p>,
   },
   {
     title: "Визиты",
     dataIndex: "visits",
     key: "visits",
-    render: (text) => <p className="countries-table-text">{text}</p>,
+    render: (text) => <p className="table-text">{text}</p>,
   },
 ];
 
@@ -59,7 +58,7 @@ const data: DataType[] = [
 const CountriesTable: React.FC<CountriesTableProps> = ({ onRowClick }) => {
   return (
     <Table<DataType>
-      className="countries-table"
+      className="table"
       columns={columns}
       dataSource={data}
       onRow={(record) => ({
