@@ -22,12 +22,12 @@ const Navigation: React.FC = () => {
         { to: '/cooperation/international-non-governmental-organizations', text: 'Международные неправительственные организации' },
         { to: '/', text: 'Международные документы' },
         { to: '/cooperation/experts', text: 'Эксперты' },
-        { to: '/', text: 'Переводчики' }
+        { to: '/cooperation/translators', text: 'Переводчики' }
       ]
     },
-    { to: '/statistics', icon: <GoGraph />, text: 'Статистика' },
-    { to: '/reports', icon: <GrDocument />, text: 'Отчеты' },
-    { to: '/admin', icon: <FiSettings />, text: 'Администрирование' },
+    { to: '/', icon: <GoGraph />, text: 'Статистика' },
+    { to: '/', icon: <GrDocument />, text: 'Отчеты' },
+    { to: '/', icon: <FiSettings />, text: 'Администрирование' },
   ];
 
   return (
