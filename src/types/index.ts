@@ -94,3 +94,10 @@ export interface ExpertsTableDataTypes{
     date: string,
     files: string
 }
+
+export interface TranslatorsTableDataTypes {
+    key: string,
+    name: string,
+    languages: string,
+    rating: string
+}
