@@ -1,11 +1,12 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { lazy, Suspense } from "react";
-import MainEventsPage from "../pages/home";
-import CountriesInner from "../pages/countriesInner";
 
 const Home = lazy(() => import("../pages/home"));
+const MainEventsPage = lazy(() => import("../pages/home") )
+const CountriesInner = lazy(() => import("../pages/countriesInner"))
 const Cooperation = lazy(() => import("../pages/cooperation"));
 const Countries = lazy(() => import("../pages/countries"));
+const InternationalOrganizations = lazy(() => import("../pages/internationalOrganizations"))
 
 const Router: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const Router: React.FC = () => {
         <Route path="/cooperation" element={<Cooperation />} />
         <Route path='/cooperation/countries' element={<Countries/>}/>
         <Route path='/cooperation/countries/:id' element={<CountriesInner/>}/>
+        <Route path="/cooperation/international-organizations" element={<InternationalOrganizations/>}/>
       </Routes>
     </Suspense>
   );

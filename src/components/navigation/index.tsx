@@ -18,7 +18,7 @@ const Navigation: React.FC = () => {
       text: 'Сотрудничество',
       dropdown: [
         { to: '/cooperation/countries', text: 'Страны' },
-        { to: '/cooperation/projects', text: 'Международные организации' },
+        { to: '/cooperation/international-organizations', text: 'Международные организации' },
         { to: '/', text: 'Международные неправительственные организации' },
         { to: '/', text: 'Международные документы' },
         { to: '/', text: 'Эксперты' },

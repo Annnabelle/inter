@@ -3,7 +3,8 @@ import { IoIosArrowDown } from "react-icons/io";
 import { theme } from "antd";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
-import CountriesTable from "../../components/countriesTable";
+import CountriesTable from "../../components/tables/countriesTable";
+import { useNavigate } from "react-router-dom";
 
 
 const Countries: React.FC = () => {
@@ -11,10 +12,14 @@ const Countries: React.FC = () => {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
     const [openSortDropdown, setOpenSortDropdown] = useState<boolean>(false);
-
+    const navigate = useNavigate()
     const handleSortDropdown = () => {
         setOpenSortDropdown((prev) => (!prev))
     }
+    const handleRowClick = (record: { key: string }) => {
+        navigate(`/cooperation/countries/${record.key}`)
+    }
+    
     return (
         <MainLayout>
             <MainHeading title="Страны" subtitle="Подзаголоок">
@@ -48,7 +53,7 @@ const Countries: React.FC = () => {
                 }}
                 className="layout-content-container"
             >
-               <CountriesTable/>
+               <CountriesTable onRowClick={handleRowClick}/>
             </div>
         </MainLayout>
     );
