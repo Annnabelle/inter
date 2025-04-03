@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { IoMdHome } from "react-icons/io";
+import { IoIosArrowForward, IoMdHome } from "react-icons/io";
 import { BiWorld } from "react-icons/bi";
 import { GoGraph } from "react-icons/go";
 import { GrDocument } from "react-icons/gr";
@@ -9,6 +9,7 @@ import { FiSettings } from "react-icons/fi";
 const Navigation: React.FC = () => {
   const location = useLocation();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [subHoveredItem, setSubHoveredItem] = useState<string | null>(null);
 
   const navItems = [
     { to: '/', icon: <IoMdHome />, text: 'Главная' },
@@ -18,9 +19,15 @@ const Navigation: React.FC = () => {
       text: 'Сотрудничество',
       dropdown: [
         { to: '/cooperation/countries', text: 'Страны' },
-        { to: '/cooperation/international-organizations', text: 'Международные организации' },
+        { 
+          to: '/cooperation/international-organizations', 
+          text: 'Международные организации',
+        },
         { to: '/cooperation/international-non-governmental-organizations', text: 'Международные неправительственные организации' },
-        { to: '/', text: 'Международные документы' },
+        { to: '/', text: 'Международные документы', icon:     <IoIosArrowForward/>,    subDropdown: [
+          { to: '/cooperation/international-treaties', text: 'Международные документы' },
+          { to: '/cooperation/international-organizations/eu', text: 'Международные договора' },
+        ] },
         { to: '/cooperation/experts', text: 'Эксперты' },
         { to: '/cooperation/translators', text: 'Переводчики' }
       ]
@@ -52,11 +59,33 @@ const Navigation: React.FC = () => {
 
             {dropdown && isHovered && (
               <div className="cooperation-dropdown">
-                {dropdown.map(({ to, text }) => (
-                  <Link key={to} to={to} className="cooperation-dropdown-item">
-                    <p className="cooperation-dropdown-item-link">{text}</p>
-                  </Link>
-                ))}
+                {dropdown.map(({ to, text, subDropdown, icon }) => {
+                  const isSubHovered = subHoveredItem === to;
+                  return (
+                    <div 
+                      key={to} 
+                      className="cooperation-dropdown-item"
+                      onMouseEnter={() => setSubHoveredItem(to)}
+                      onMouseLeave={() => setSubHoveredItem(null)}
+                    >
+                      <Link to={to} className="cooperation-dropdown-item-link">{text}</Link>
+                      {icon && (
+                        <div className="cooperation-dropdown-icon">
+                          {icon}
+                        </div>
+                      )}
+                      {subDropdown && isSubHovered && (
+                        <div className="sub-dropdown">
+                          {subDropdown.map(({ to, text }) => (
+                            <Link key={to} to={to} className="sub-dropdown-item">
+                              {text}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>
