@@ -101,3 +101,13 @@ export interface TranslatorsTableDataTypes {
     languages: string,
     rating: string
 }
+
+export interface InternationalTreatiesTableDataType{
+    key: string,
+    item: string,
+    nameOfTheContract: string,
+    date: string,
+    place: string,
+    files: string,
+    level: string
+}
