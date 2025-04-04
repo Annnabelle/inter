@@ -1,9 +1,7 @@
-import { FaPlus } from "react-icons/fa";
 import { theme } from "antd";
+import { Link } from "react-router-dom";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
-import Button from "../../components/button";
-import { Link } from "react-router-dom";
 
 const Cooperation: React.FC = () => {
     const {

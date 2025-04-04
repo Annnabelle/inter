@@ -1,14 +1,7 @@
-import React from "react";
-import { Table } from "antd";
-import type { TableProps } from "antd";
-import { CountriesInnerVisitsDataType } from "../../../types";
+import { TableProps } from "antd";
+import { CountriesInnerVisitsDataType } from "../types";
 
-
-interface CountriesInnerVisitsTableProps {
-  onRowClick?: (record: CountriesInnerVisitsDataType) => void;
-}
-
-const columns: TableProps<CountriesInnerVisitsDataType>["columns"] = [
+export const CountriesInnerVisitsColumns: TableProps<CountriesInnerVisitsDataType>["columns"] = [
     {
         title: "Период",
         dataIndex: "period",
@@ -41,7 +34,7 @@ const columns: TableProps<CountriesInnerVisitsDataType>["columns"] = [
     },
 ];
 
-const data: CountriesInnerVisitsDataType[] = [
+export const CountriesInnerVisitsData: CountriesInnerVisitsDataType[] = [
   {
     key: "1",
     period: "01/01/2025 - 01/01/2026",
@@ -68,19 +61,3 @@ const data: CountriesInnerVisitsDataType[] = [
     administrationСonsent: "05.08.2024 №01-55/78463дсп",
   },
 ];
-
-const CountriesInnerVisitsTable: React.FC<CountriesInnerVisitsTableProps> = ({ onRowClick }) => {
-  return (
-    <Table<CountriesInnerVisitsDataType>
-      className="table"
-      columns={columns}
-      dataSource={data}
-      onRow={(record) => ({
-        onClick: () => onRowClick && onRowClick(record),
-      })}
-      rowClassName="clickable-row"
-    />
-  );
-};
-
-export default CountriesInnerVisitsTable;

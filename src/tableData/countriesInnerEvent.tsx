@@ -1,14 +1,7 @@
-import React from "react";
-import { Table } from "antd";
-import type { TableProps } from "antd";
-import { CountriesInnerEventDataType } from "../../../types";
+import { TableProps } from "antd";
+import { CountriesInnerEventDataType } from "../types";
 
-
-interface CountriesInnerEventTableProps {
-  onRowClick?: (record: CountriesInnerEventDataType) => void;
-}
-
-const columns: TableProps<CountriesInnerEventDataType>["columns"] = [
+export const CountriesEventTableColumns: TableProps<CountriesInnerEventDataType>["columns"] = [
     {
         title: "Дата",
         dataIndex: "data",
@@ -41,7 +34,7 @@ const columns: TableProps<CountriesInnerEventDataType>["columns"] = [
     },
 ];
 
-const data: CountriesInnerEventDataType[] = [
+export const CountriesEventTableData: CountriesInnerEventDataType[] = [
   {
     key: "1",
     data: "01/01/2025",
@@ -68,19 +61,3 @@ const data: CountriesInnerEventDataType[] = [
     level: "Тест уровень",
   },
 ];
-
-const CountriesInnerEventTable: React.FC<CountriesInnerEventTableProps> = ({ onRowClick }) => {
-  return (
-    <Table<CountriesInnerEventDataType>
-      className="table"
-      columns={columns}
-      dataSource={data}
-      onRow={(record) => ({
-        onClick: () => onRowClick && onRowClick(record),
-      })}
-      rowClassName="clickable-row"
-    />
-  );
-};
-
-export default CountriesInnerEventTable;

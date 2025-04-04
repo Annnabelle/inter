@@ -1,15 +1,8 @@
-import React from "react";
-import { Table } from "antd";
-import type { TableProps } from "antd";
-import { CountriesInnerInternationalDocumentsDataType } from "../../../types";
+import { TableProps } from "antd";
+import { CountriesInnerInternationalDocumentsDataType } from "../types";
 import { Link } from "react-router-dom";
 
-
-interface CountriesInnerInternationalDocumentsTableProps {
-  onRowClick?: (record: CountriesInnerInternationalDocumentsDataType) => void;
-}
-
-const columns: TableProps<CountriesInnerInternationalDocumentsDataType>["columns"] = [
+export const CountriesInnerInternationalDocumentsColumns: TableProps<CountriesInnerInternationalDocumentsDataType>["columns"] = [
     {
         title: "Название",
         dataIndex: "name",
@@ -42,7 +35,7 @@ const columns: TableProps<CountriesInnerInternationalDocumentsDataType>["columns
     },
 ];
 
-const data: CountriesInnerInternationalDocumentsDataType[] = [
+export const CountriesInnerInternationalDocumentsData: CountriesInnerInternationalDocumentsDataType[] = [
   {
     key: "1",
     name: "Тест название",
@@ -69,19 +62,3 @@ const data: CountriesInnerInternationalDocumentsDataType[] = [
     files: "Посмотреть",
   },
 ];
-
-const CountriesInnerInternationalDocumentsTable: React.FC<CountriesInnerInternationalDocumentsTableProps> = ({ onRowClick }) => {
-  return (
-    <Table<CountriesInnerInternationalDocumentsDataType>
-      className="table"
-      columns={columns}
-      dataSource={data}
-      onRow={(record) => ({
-        onClick: () => onRowClick && onRowClick(record),
-      })}
-      rowClassName="clickable-row"
-    />
-  );
-};
-
-export default CountriesInnerInternationalDocumentsTable;

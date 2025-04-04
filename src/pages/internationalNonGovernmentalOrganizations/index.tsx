@@ -2,14 +2,16 @@ import React, { useState } from 'react'
 import { theme, Form, Input, Upload } from "antd";
 import { IoIosArrowDown, IoMdAdd } from 'react-icons/io';
 import {FileItem } from '../../types/countries';
+import { InternationalNonGovernmentOrganizationProjectDataType, InternationalNonGovernmentOrganizationsChronologyOfMeetingDataType, InternationalOrganizationNonGovernmentChiefDataType } from '../../types';
+import { InternationalOrganizationNonGovernmentChiefColumns, InternationalOrganizationNonGovernmentChiefData } from '../../tableData/internationalNonGovernmentOrganizationChief';
+import { InternationalNonGovernmentOrganizationsChronologyOfMeetingColumns, InternationalNonGovernmentOrganizationsChronologyOfMeetingData } from '../../tableData/internationalNonGovernmentOrganizationChronologyOfMeetings';
+import { InternationalNonGovernmentOrganizationProjectColumns, InternationalNonGovernmentOrganizationProjectData } from '../../tableData/internationalNonGovernmentOrganizationProject';
 import MainLayout from '../../components/layout'
 import MainHeading from '../../components/mainHeading'
 import ModalWindow from '../../components/modalWindow';
 import Button from '../../components/button';
 import FormComponent from '../../components/form';
-import InternationalOrganizationNonGovernmentChiefTable from '../../components/tables/internationalNonGovernmentOrganizationChiefTable';
-import InternationalNonGovernmentOrganizationProjectTable from '../../components/tables/internationalNonGovernmentOrganizationProjectTable';
-import InternationalNonGovernmentOrganizationsChronologyOfMeeting from '../../components/tables/internationalNonGovernmentOrganizationChronologyOfMeetings';
+import ComponentTable from '../../components/table';
 
 const InternationalNonGovernmentalOrganizations: React.FC = () => {
     const {
@@ -122,7 +124,7 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                 <Button className="outline" onClick={() => handleModal('addChief', true)}>Добавить главу <IoMdAdd/></Button>
               </div>
             </div>
-            <InternationalOrganizationNonGovernmentChiefTable onRowClick={() => handleRowClick('chief', "Retrieve")} />
+            <ComponentTable<InternationalOrganizationNonGovernmentChiefDataType> onRowClick={() => handleRowClick('chief', "Retrieve")} data={InternationalOrganizationNonGovernmentChiefData} columns={InternationalOrganizationNonGovernmentChiefColumns} />
           </div>
             <div className="countries-inner-table-container">
                 <div className="countries-inner-table-container-heading">
@@ -135,7 +137,7 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                         <Button className="outline" onClick={() => handleModal('addProject', true)}>Добавить проект <IoMdAdd/></Button>
                     </div>
                 </div>
-                <InternationalNonGovernmentOrganizationProjectTable onRowClick={() => handleRowClick('project', "Retrieve")}/>
+                <ComponentTable<InternationalNonGovernmentOrganizationProjectDataType> onRowClick={() => handleRowClick('project', "Retrieve")} columns={InternationalNonGovernmentOrganizationProjectColumns} data={InternationalNonGovernmentOrganizationProjectData}/>
             </div>
             <div className="countries-inner-table-container">
                 <div className="countries-inner-table-container-heading">
@@ -145,7 +147,7 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                         </h3>
                     </div>
                 </div>
-                <InternationalNonGovernmentOrganizationsChronologyOfMeeting/>
+                <ComponentTable<InternationalNonGovernmentOrganizationsChronologyOfMeetingDataType> data={InternationalNonGovernmentOrganizationsChronologyOfMeetingData} columns={InternationalNonGovernmentOrganizationsChronologyOfMeetingColumns} />
             </div>
             <ModalWindow title="Добавить главу" openModal={modalState.addChief} closeModal={() => handleModal("addChief", false)}>
                 <FormComponent onFinish={onFinish}>

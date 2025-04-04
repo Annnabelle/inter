@@ -1,13 +1,7 @@
-import React from "react";
-import { Table } from "antd";
-import type { TableProps } from "antd";
-import { TranslatorsTableDataTypes } from "../../../types";
+import { TableProps } from "antd";
+import { TranslatorsTableDataTypes } from "../types";
 
-interface TranslatorsTableProps {
-  onRowClick?: (record: TranslatorsTableDataTypes) => void;
-}
-
-const columns: TableProps<TranslatorsTableDataTypes>["columns"] = [
+export const TranslatorsColumns: TableProps<TranslatorsTableDataTypes>["columns"] = [
   {
     title: "Ф.И.О",
     dataIndex: "name",
@@ -28,7 +22,7 @@ const columns: TableProps<TranslatorsTableDataTypes>["columns"] = [
   },
 ];
 
-const data: TranslatorsTableDataTypes[] = [
+export const TranslatorsData: TranslatorsTableDataTypes[] = [
   {
     key: "1",
     name: "Фамилия имя отчетво",
@@ -48,19 +42,3 @@ const data: TranslatorsTableDataTypes[] = [
     rating: "5.5 балов",
   },
 ];
-
-const TranslatorsTable: React.FC<TranslatorsTableProps> = ({ onRowClick }) => {
-  return (
-    <Table<TranslatorsTableDataTypes>
-      className="table"
-      columns={columns}
-      dataSource={data}
-      onRow={(record) => ({
-        onClick: () => onRowClick && onRowClick(record),
-      })}
-      rowClassName="clickable-row"
-    />
-  );
-};
-
-export default TranslatorsTable;

@@ -1,13 +1,7 @@
-import React from "react";
-import { Table } from "antd";
-import type { TableProps } from "antd";
-import { ExpertsTableDataTypes } from "../../../types";
+import { TableProps } from "antd";
+import { ExpertsTableDataTypes } from "../types";
 
-interface ExpertsTableProps {
-  onRowClick?: (record: ExpertsTableDataTypes) => void;
-}
-
-const columns: TableProps<ExpertsTableDataTypes>["columns"] = [
+export const ExpertsColumns: TableProps<ExpertsTableDataTypes>["columns"] = [
   {
     title: "Основные сферы",
     dataIndex: "mainAreas",
@@ -40,7 +34,7 @@ const columns: TableProps<ExpertsTableDataTypes>["columns"] = [
   },
 ];
 
-const data: ExpertsTableDataTypes[] = [
+export const ExpertsData: ExpertsTableDataTypes[] = [
   {
     key: "1",
     mainAreas: "Недвижимость",
@@ -66,19 +60,3 @@ const data: ExpertsTableDataTypes[] = [
     files: "Просмотреть"
   },
 ];
-
-const ExpertsTable: React.FC<ExpertsTableProps> = ({ onRowClick }) => {
-  return (
-    <Table<ExpertsTableDataTypes>
-      className="table"
-      columns={columns}
-      dataSource={data}
-      onRow={(record) => ({
-        onClick: () => onRowClick && onRowClick(record),
-      })}
-      rowClassName="clickable-row"
-    />
-  );
-};
-
-export default ExpertsTable;

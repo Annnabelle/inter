@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { IoIosArrowDown, IoMdAdd } from "react-icons/io";
-import { theme, Form, Input, Upload, DatePicker, Select } from "antd";
+import { theme, Form, Input, Select } from "antd";
+import { TranslatorsColumns, TranslatorsData } from "../../tableData/translators";
+import { useNavigate } from "react-router-dom";
+import { TranslatorsTableDataTypes } from "../../types";
+import { FileItem } from "../../types/countries";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
-import { useNavigate } from "react-router-dom";
 import Button from "../../components/button";
 import ModalWindow from "../../components/modalWindow";
 import FormComponent from "../../components/form";
-import { ExpertsTableDataTypes, TranslatorsTableDataTypes } from "../../types";
-import { FileItem } from "../../types/countries";
-import TranslatorsTable from "../../components/tables/translatorsTable";
+import ComponentTable from "../../components/table";
 
 
 const Translators: React.FC = () => {
@@ -118,7 +119,7 @@ const Translators: React.FC = () => {
                 }}
                 className="layout-content-container"
             >
-               <TranslatorsTable onRowClick={(record) => handleRowClick('translator', 'Retrieve', record)}/>
+               <ComponentTable<TranslatorsTableDataTypes> onRowClick={(record) => handleRowClick('translator', 'Retrieve', record)} data={TranslatorsData} columns={TranslatorsColumns}/>
             </div>
             <ModalWindow title="Добавить переводчика" openModal={modalState.addTranslator} closeModal={() => handleModal('addTranslator', false)}>
                 <FormComponent  onFinish={onFinish}>

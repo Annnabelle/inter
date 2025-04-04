@@ -1,14 +1,7 @@
-import React from "react";
-import { Table } from "antd";
-import type { TableProps } from "antd";
-import { InternationalOrganizationsChronologyOfMeetingDataType } from "../../../types";
+import { TableProps } from "antd";
+import { InternationalNonGovernmentOrganizationsChronologyOfMeetingDataType } from "../types";
 
-
-interface InternationalOrganizationsChronologyOfMeetingTableProps {
-  onRowClick?: (record: InternationalOrganizationsChronologyOfMeetingDataType) => void;
-}
-
-const columns: TableProps<InternationalOrganizationsChronologyOfMeetingDataType>["columns"] = [
+export const InternationalNonGovernmentOrganizationsChronologyOfMeetingColumns: TableProps<InternationalNonGovernmentOrganizationsChronologyOfMeetingDataType>["columns"] = [
     {
         title: "№",
         dataIndex: "number",
@@ -47,7 +40,7 @@ const columns: TableProps<InternationalOrganizationsChronologyOfMeetingDataType>
     }
 ];
 
-const data: InternationalOrganizationsChronologyOfMeetingDataType[] = [
+export const InternationalNonGovernmentOrganizationsChronologyOfMeetingData: InternationalNonGovernmentOrganizationsChronologyOfMeetingDataType[] = [
   {
     key: "1",
     number: "1",
@@ -77,20 +70,3 @@ const data: InternationalOrganizationsChronologyOfMeetingDataType[] = [
     nameOfMeeting: "Тест названия встречи"
   },
 ];
-
-const InternationalOrganizationsChronologyOfMeeting: React.FC<InternationalOrganizationsChronologyOfMeetingTableProps> = ({ onRowClick }) => {
-  return (
-    <Table<InternationalOrganizationsChronologyOfMeetingDataType>
-      className="table"
-      columns={columns}
-      dataSource={data}
-      onRow={(record) => ({
-        onClick: () => onRowClick && onRowClick(record),
-      })}
-      rowClassName="clickable-row"
-    />
-  );
-};
-
-export default InternationalOrganizationsChronologyOfMeeting;
-

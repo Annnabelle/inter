@@ -1,14 +1,7 @@
-import React from "react";
-import { Table } from "antd";
-import type { TableProps } from "antd";
-import { InternationalOrganizationChiefDataType } from "../../../types";
+import { TableProps } from "antd";
+import { InternationalOrganizationNonGovernmentChiefDataType } from "../types";
 
-
-interface InternationalOrganizationChiefTableProps {
-  onRowClick?: (record: InternationalOrganizationChiefDataType) => void;
-}
-
-const columns: TableProps<InternationalOrganizationChiefDataType>["columns"] = [
+export const InternationalOrganizationNonGovernmentChiefColumns: TableProps<InternationalOrganizationNonGovernmentChiefDataType>["columns"] = [
   {
     title: "Ф.И.О Главы",
     dataIndex: "fullName",
@@ -29,7 +22,7 @@ const columns: TableProps<InternationalOrganizationChiefDataType>["columns"] = [
   },
 ];
 
-const data: InternationalOrganizationChiefDataType[] = [
+export const InternationalOrganizationNonGovernmentChiefData: InternationalOrganizationNonGovernmentChiefDataType[] = [
   {
     key: "1",
     fullName: "Reza Javad",
@@ -49,19 +42,3 @@ const data: InternationalOrganizationChiefDataType[] = [
     file: "Файлы",
   },
 ];
-
-const InternationalOrganizationChiefTable: React.FC<InternationalOrganizationChiefTableProps> = ({ onRowClick }) => {
-  return (
-    <Table<InternationalOrganizationChiefDataType>
-      className="table"
-      columns={columns}
-      dataSource={data}
-      onRow={(record) => ({
-        onClick: () => onRowClick && onRowClick(record),
-      })}
-      rowClassName="clickable-row"
-    />
-  );
-};
-
-export default InternationalOrganizationChiefTable;

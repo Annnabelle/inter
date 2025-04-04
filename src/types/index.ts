@@ -39,7 +39,7 @@ export interface InternationalNonGovernmentOrganizationProjectDataType{
     file?: string
 }
 
-export interface InternationalOrganizationsChronologyOfMeetingDataType{
+export interface InternationalOrganizationChronologyOfMeetingDataType{
     key: string;
     number: string;
     data: string;
@@ -119,4 +119,11 @@ export interface InternationalDocumentsTableDataType{
     date: string,
     place: string,
     files: string,
+}
+
+export interface CountriesTableDataType { 
+    key: string,
+    countries: string,
+    meeting: string,
+    visits: string
 }

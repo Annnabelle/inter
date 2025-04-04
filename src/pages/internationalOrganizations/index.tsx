@@ -2,14 +2,16 @@ import React, { useState } from 'react'
 import { theme, Form, Input, Upload } from "antd";
 import { IoIosArrowDown, IoMdAdd } from 'react-icons/io';
 import {FileItem } from '../../types/countries';
+import { InternationalOrganizationChiefDataType, InternationalOrganizationChronologyOfMeetingDataType, InternationalOrganizationProjectDataType } from '../../types';
+import { InternationalOrganizationChiefColumns, InternationalOrganizationChiefData } from '../../tableData/internationalOrganizationChiefTable';
+import { InternationalOrganizationProjectColumns, InternationalOrganizationProjectData } from '../../tableData/internationalOrganizationProject';
+import { InternationalOrganizationChronologyOfMeetingColumns, InternationalOrganizationChronologyOfMeetingData } from '../../tableData/internationalOgranizationChronologyOfMeeting';
 import MainLayout from '../../components/layout'
 import MainHeading from '../../components/mainHeading'
 import ModalWindow from '../../components/modalWindow';
 import Button from '../../components/button';
 import FormComponent from '../../components/form';
-import InternationalOrganizationChiefTable from '../../components/tables/internationalOrganizationChiefTable';
-import InternationalOrganizationProjectTable from '../../components/tables/internationalOrganizationProjectTable';
-import InternationalOrganizationsChronologyOfMeeting from '../../components/tables/internationalOrganizationsChronologyOfMeetings';
+import ComponentTable from '../../components/table';
 
 const InternationalOrganizations: React.FC = () => {
     const {
@@ -113,7 +115,7 @@ const InternationalOrganizations: React.FC = () => {
                 <Button className="outline" onClick={() => handleModal('addChief', true)}>Добавить главу <IoMdAdd/></Button>
               </div>
             </div>
-            <InternationalOrganizationChiefTable onRowClick={() => handleRowClick('chief', "Retrieve")} />
+            <ComponentTable<InternationalOrganizationChiefDataType> onRowClick={() => handleRowClick('chief', "Retrieve")} data={InternationalOrganizationChiefData} columns={InternationalOrganizationChiefColumns} />
           </div>
             <div className="countries-inner-table-container">
                 <div className="countries-inner-table-container-heading">
@@ -126,7 +128,7 @@ const InternationalOrganizations: React.FC = () => {
                         <Button className="outline" onClick={() => handleModal('addProject', true)}>Добавить проект <IoMdAdd/></Button>
                     </div>
                 </div>
-                <InternationalOrganizationProjectTable onRowClick={() => handleRowClick('project', "Retrieve")}/>
+                <ComponentTable<InternationalOrganizationProjectDataType> onRowClick={() => handleRowClick('project', "Retrieve")} data={InternationalOrganizationProjectData} columns={InternationalOrganizationProjectColumns}/>
             </div>
             <div className="countries-inner-table-container">
                 <div className="countries-inner-table-container-heading">
@@ -136,7 +138,7 @@ const InternationalOrganizations: React.FC = () => {
                         </h3>
                     </div>
                 </div>
-                <InternationalOrganizationsChronologyOfMeeting/>
+                <ComponentTable<InternationalOrganizationChronologyOfMeetingDataType> columns={InternationalOrganizationChronologyOfMeetingColumns} data={InternationalOrganizationChronologyOfMeetingData}/>
             </div>
             <ModalWindow openModal={modalState.chiefRetrieve} title="Посмотреть главу" closeModal={() => handleModal('chiefRetrieve', false)} handleEdit={() => handleEditOpen('chief')}>
               <FormComponent>
@@ -215,7 +217,6 @@ const InternationalOrganizations: React.FC = () => {
                     <Button className="danger">Удалить</Button>
                 </div>
             </ModalWindow>
-
             <ModalWindow openModal={modalState.projectRetrieve} title="Посмотреть проект" closeModal={() => handleModal('projectRetrieve', false)} handleEdit={() => handleEditOpen('project')}>
               <FormComponent>
                       <div className="form-inputs">
