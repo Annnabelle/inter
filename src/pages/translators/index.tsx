@@ -138,8 +138,8 @@ const Translators: React.FC = () => {
                                 </Form.Item>
                             </div>
                         ))}
-                        <div className="form-btn-new" onClick={addLanguagesField}>
-                            <p className="form-btn-new-text">Добавить язык</p>
+                        <div className="form-btn-new">
+                            <p className="form-btn-new-text" onClick={addLanguagesField}>Добавить язык</p>
                         </div>
                     <Button>Создать</Button>
                 </FormComponent>
@@ -180,8 +180,8 @@ const Translators: React.FC = () => {
                             </Form.Item>
                         </div>
                     ))}
-                    <div className="form-btn-new" onClick={addLanguagesField}>
-                        <p className="form-btn-new-text">Добавить язык</p>
+                    <div className="form-btn-new">
+                        <p className="form-btn-new-text" onClick={addLanguagesField}>Добавить язык</p>
                     </div>
                     <Button>Применить изменения</Button>
                 </FormComponent>

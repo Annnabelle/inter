@@ -168,8 +168,8 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                             </Form.Item>
                         </div>
                     ))}
-                    <div className="form-btn-new" onClick={addDocumentField}>
-                        <p className="form-btn-new-text">Добавить еще документ</p>
+                    <div className="form-btn-new">
+                        <p className="form-btn-new-text" onClick={addDocumentField}>Добавить еще документ</p>
                     </div>
                      {referenceField.map((item) => (
                         <div className="form-inputs" key={item?.id}>
@@ -180,8 +180,8 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                             </Form.Item>
                         </div>
                     ))}
-                    <div className="form-btn-new" onClick={addReferenceField}>
-                        <p className="form-btn-new-text">Добавить еще справку</p>
+                    <div className="form-btn-new">
+                        <p className="form-btn-new-text" onClick={addReferenceField}>Добавить еще справку</p>
                     </div>
                     <Button>Создать</Button>
                 </FormComponent>
@@ -235,8 +235,8 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                             </Form.Item>
                         </div>
                     ))}
-                    <div className="form-btn-new" onClick={addDocumentField}>
-                        <p className="form-btn-new-text">Добавить еще документ</p>
+                    <div className="form-btn-new">
+                        <p className="form-btn-new-text" onClick={addDocumentField}>Добавить еще документ</p>
                     </div>
                      {referenceField.map((item) => (
                         <div className="form-inputs" key={item?.id}>
@@ -247,8 +247,8 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                             </Form.Item>
                         </div>
                     ))}
-                  <div className="form-btn-new" onClick={addReferenceField}>
-                      <p className="form-btn-new-text">Добавить документ</p>
+                  <div className="form-btn-new">
+                      <p className="form-btn-new-text" onClick={addReferenceField}>Добавить документ</p>
                   </div>
                   <Button>Применить</Button>
               </FormComponent>
@@ -300,8 +300,8 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                             </Form.Item>
                         </div>
                     ))}
-                    <div className="form-btn-new" onClick={addReferenceDocumentField}>
-                        <p className="form-btn-new-text">Добавить еще документ</p>
+                    <div className="form-btn-new">
+                        <p className="form-btn-new-text" onClick={addReferenceDocumentField}>Добавить еще документ</p>
                     </div>
                   <Button>Применить</Button>
               </FormComponent>
@@ -325,8 +325,8 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                             </Form.Item>
                         </div>
                     ))}
-                    <div className="form-btn-new" onClick={addReferenceDocumentField}>
-                        <p className="form-btn-new-text">Добавить еще документ</p>
+                    <div className="form-btn-new">
+                        <p className="form-btn-new-text" onClick={addReferenceDocumentField}>Добавить еще документ</p>
                     </div>
                     <Button>Создать</Button>
                 </FormComponent>

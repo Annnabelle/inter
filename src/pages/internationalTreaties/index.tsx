@@ -148,8 +148,8 @@ const InternationalTreaties: React.FC = () => {
                                 </Form.Item>
                             </div>
                         ))}
-                        <div className="form-btn-new" onClick={addFileField}>
-                            <p className="form-btn-new-text">Добавить файл</p>
+                        <div className="form-btn-new">
+                            <p className="form-btn-new-text" onClick={addFileField}>Добавить файл</p>
                         </div>
                     <Button>Создать</Button>
                 </FormComponent>
@@ -210,8 +210,8 @@ const InternationalTreaties: React.FC = () => {
                             </Form.Item>
                         </div>
                     ))}
-                    <div className="form-btn-new" onClick={addFileField}>
-                        <p className="form-btn-new-text">Добавить файл</p>
+                    <div className="form-btn-new">
+                        <p className="form-btn-new-text" onClick={addFileField}>Добавить файл</p>
                     </div>
                     <Button>Применить изменения</Button>
                 </FormComponent>

@@ -3,7 +3,7 @@ import { Form, Select, DatePicker, Input, Checkbox } from "antd";
 import { AddEventFormProps, EventFormValues } from "../../../types/events";
 import dayjs from "dayjs";
 import Button from "../../button";
-import './styles.sass'
+import FormComponent from "../../form";
 
 const eventOptions = [
   { value: "Конференции/Форумы", label: "Конференции/Форумы" },
@@ -38,7 +38,7 @@ const AddEventForm: React.FC<AddEventFormProps> = ({ handleAddEvent }) => {
   };
 
   return (
-    <Form form={form} layout="vertical" onFinish={onFinish} className="form">
+    <FormComponent onFinish={onFinish}>
       <div className="form-inputs">
         <Form.Item
           name="eventName"
@@ -184,7 +184,7 @@ const AddEventForm: React.FC<AddEventFormProps> = ({ handleAddEvent }) => {
       </div>
 
       <Button type="submit">Submit</Button>
-    </Form>
+    </FormComponent>
   );
 };
 

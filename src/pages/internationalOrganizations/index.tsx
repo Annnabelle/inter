@@ -180,8 +180,8 @@ const InternationalOrganizations: React.FC = () => {
                     </Form.Item>
                   </div>
                 ))}
-                  <div className="form-btn-new" onClick={addFileField}>
-                      <p className="form-btn-new-text">Добавить еще CV</p>
+                  <div className="form-btn-new">
+                      <p className="form-btn-new-text" onClick={addFileField}>Добавить еще CV</p>
                   </div>
                   <Button>Применить</Button>
               </FormComponent>
@@ -205,8 +205,8 @@ const InternationalOrganizations: React.FC = () => {
                             </Form.Item>
                         </div>
                     ))}
-                    <div className="form-btn-new" onClick={addFileField}>
-                        <p className="form-btn-new-text">Добавить еще CV</p>
+                    <div className="form-btn-new">
+                        <p className="form-btn-new-text" onClick={addFileField}>Добавить еще CV</p>
                     </div>
                     <Button>Создать</Button>
                 </FormComponent>
@@ -257,8 +257,8 @@ const InternationalOrganizations: React.FC = () => {
                     </Form.Item>
                   </div>
                 ))}
-                  <div className="form-btn-new" onClick={addFileField}>
-                      <p className="form-btn-new-text">Добавить еще CV</p>
+                  <div className="form-btn-new">
+                      <p className="form-btn-new-text" onClick={addFileField}>Добавить еще CV</p>
                   </div>
                   <Button>Применить</Button>
               </FormComponent>
@@ -282,8 +282,8 @@ const InternationalOrganizations: React.FC = () => {
                             </Form.Item>
                         </div>
                     ))}
-                    <div className="form-btn-new" onClick={addFileField}>
-                        <p className="form-btn-new-text">Добавить еще CV</p>
+                    <div className="form-btn-new">
+                        <p className="form-btn-new-text" onClick={addFileField}>Добавить еще CV</p>
                     </div>
                     <Button>Создать</Button>
                 </FormComponent>
