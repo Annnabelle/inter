@@ -172,8 +172,8 @@ const CountriesInner: React.FC = () => {
                                     </Form.Item>
                                 </div>
                             ))}
-                            <div className="form-btn-new" onClick={addFileField}>
-                                <p className="form-btn-new-text">Добавить еще файл</p>
+                            <div className="form-btn-new">
+                                <p className="form-btn-new-text" onClick={addFileField}>Добавить еще файл</p>
                             </div>
                             {dates.map((item) => (
                                 <div className="form-inputs" key={item?.id}>
@@ -185,8 +185,8 @@ const CountriesInner: React.FC = () => {
                                     </Form.Item>
                                 </div>
                             ))}
-                            <div className="form-btn-new" onClick={addDateField}>
-                                <p className="form-btn-new-text">Добавить еще дату</p>
+                            <div className="form-btn-new">
+                                <p className="form-btn-new-text" onClick={addDateField}>Добавить еще дату</p>
                             </div>
                             <Button>Применить</Button>
                         </FormComponent>
@@ -205,8 +205,8 @@ const CountriesInner: React.FC = () => {
                                 </Form.Item>
                             </div>
                         ))}
-                        <div className="form-btn-new" onClick={addFileField}>
-                            <p className="form-btn-new-text">Добавить еще файл</p>
+                        <div className="form-btn-new">
+                            <p className="form-btn-new-text" onClick={addFileField}>Добавить еще файл</p>
                         </div>
                         {dates.map((item) => (
                             <div className="form-inputs" key={item?.id}>
@@ -218,8 +218,8 @@ const CountriesInner: React.FC = () => {
                                 </Form.Item>
                             </div>
                         ))}
-                        <div className="form-btn-new" onClick={addDateField}>
-                            <p className="form-btn-new-text">Добавить еще дату</p>
+                        <div className="form-btn-new">
+                            <p className="form-btn-new-text" onClick={addDateField}>Добавить еще дату</p>
                         </div>
                         <Button>Создать</Button>
                     </FormComponent>

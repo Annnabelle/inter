@@ -1,12 +1,12 @@
 import React from 'react'
 import { Form, Input, Checkbox } from "antd";
 import { EventDetailsProps } from '../../../types/events';
-import './styles.sass'
+import FormComponent from '../../form';
 
 const RetrieveEvent: React.FC<EventDetailsProps> = ({event}) => {
     const [form] = Form.useForm();
   return (
-    <div className="form">
+    <FormComponent>
       <div className="form-inputs">
         <Form.Item
           name="eventName"
@@ -154,7 +154,7 @@ const RetrieveEvent: React.FC<EventDetailsProps> = ({event}) => {
           </Checkbox>
         </div>
       </div>
-    </div>
+    </FormComponent>
   )
 }
 
