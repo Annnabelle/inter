@@ -11,14 +11,12 @@ const RetrieveEvent: React.FC<EventDetailsProps> = ({event}) => {
         <Form.Item
           name="eventName"
           className="input"
-          rules={[{ required: true, message: "Выберите мероприятие" }]}
         >
           <Input disabled className="input" size="large" placeholder={event.title} />
         </Form.Item>
         <Form.Item
           name="organizer"
           className="input"
-          rules={[{ required: true, message: "Введите организатора" }]}
         >
           <Input disabled className="input" size="large"  placeholder={event?.organizer}  />
         </Form.Item>
@@ -27,14 +25,12 @@ const RetrieveEvent: React.FC<EventDetailsProps> = ({event}) => {
         <Form.Item
           name="eventType"
           className="input"
-          rules={[{ required: true, message: "Выберите Формат" }]}
         >
           <Input disabled className="input" size="large"  placeholder={event?.eventType} />
         </Form.Item>
         <Form.Item
           name="countOfMembers"
           className="input"
-          rules={[{ required: true, message: "Введите кол-во участников" }]}
         >
           <Input disabled className="input" size="large"  placeholder={event?.countOfMembers}/>
         </Form.Item>
@@ -43,14 +39,12 @@ const RetrieveEvent: React.FC<EventDetailsProps> = ({event}) => {
         <Form.Item
           name="partnersOptions"
           className="input"
-          rules={[{ required: true, message: "Выберите партнера" }]}
         >
           <Input disabled className="input" size="large"  placeholder={event?.partnersOptions} />
         </Form.Item>
         <Form.Item
           name="donorFormat"
           className="input"
-          rules={[{ required: true, message: "Выберите Донора" }]}
         >
           <Input disabled className="input" size="large"  placeholder={event?.donorFormat} />
         </Form.Item>
@@ -58,7 +52,6 @@ const RetrieveEvent: React.FC<EventDetailsProps> = ({event}) => {
       <div className="form-inputs">
         <Form.Item
           name="date"
-          rules={[{ required: true, message: "Выберите дату и время" }]}
           style={{width: '100%'}}
         >
           <Input
@@ -70,7 +63,6 @@ const RetrieveEvent: React.FC<EventDetailsProps> = ({event}) => {
         </Form.Item>
         <Form.Item
           name="date"
-          rules={[{ required: true, message: "Выберите дату и время" }]}
           style={{width: '100%'}}
         >
           <Input

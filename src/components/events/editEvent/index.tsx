@@ -47,14 +47,12 @@ const EditEvent: React.FC<EditEventProps> = ({handleAddEvent, initialValues}) =>
           <Form.Item
             name="eventName"
             className="input"
-            rules={[{ required: true, message: "Выберите мероприятие" }]}
           >
             <Select className="input" size="large" options={eventOptions} placeholder="Выберите мероприятие" />
           </Form.Item>
           <Form.Item
             name="organizer"
             className="input"
-            rules={[{ required: true, message: "Введите организатора" }]}
           >
             <Input className="input" size="large"  placeholder="Введите организатора"  />
           </Form.Item>
@@ -63,14 +61,12 @@ const EditEvent: React.FC<EditEventProps> = ({handleAddEvent, initialValues}) =>
           <Form.Item
             name="eventType"
             className="input"
-            rules={[{ required: true, message: "Выберите Формат" }]}
           >
             <Select className="input" size="large" options={eventFormat} placeholder="Выберите формат" />
           </Form.Item>
           <Form.Item
             name="countOfMembers"
             className="input"
-            rules={[{ required: true, message: "Введите кол-во участников" }]}
           >
             <Input className="input" size="large"  placeholder="Кол-во учасников" type="number" />
           </Form.Item>
@@ -79,14 +75,12 @@ const EditEvent: React.FC<EditEventProps> = ({handleAddEvent, initialValues}) =>
           <Form.Item
             name="partnersOptions"
             className="input"
-            rules={[{ required: true, message: "Выберите партнера" }]}
           >
             <Select className="input" size="large" options={partnersOptions} placeholder="Выберите партнера" />
           </Form.Item>
           <Form.Item
             name="donorFormat"
             className="input"
-            rules={[{ required: true, message: "Выберите Донора" }]}
           >
             <Select className="input" size="large" options={donorFormat} placeholder="Выберите Донора" />
           </Form.Item>
@@ -94,7 +88,6 @@ const EditEvent: React.FC<EditEventProps> = ({handleAddEvent, initialValues}) =>
         <div className="form-inputs">
           <Form.Item
             name="date"
-            rules={[{ required: true, message: "Выберите дату и время" }]}
             style={{width: '100%'}}
           >
             <DatePicker.RangePicker
