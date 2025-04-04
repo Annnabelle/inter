@@ -1,15 +1,10 @@
 import React from 'react'
-import { Form, Select, DatePicker, Input, Checkbox } from "antd";
-import dayjs from "dayjs";
-import './styles.sass'
+import { Form, Input, Checkbox } from "antd";
 import { EventDetailsProps } from '../../../types/events';
-import { Value } from 'sass';
+import './styles.sass'
 
 const RetrieveEvent: React.FC<EventDetailsProps> = ({event}) => {
     const [form] = Form.useForm();
-    console.log('====================================');
-    console.log("title", event.title);
-    console.log('====================================');
   return (
     <div className="form">
       <div className="form-inputs">

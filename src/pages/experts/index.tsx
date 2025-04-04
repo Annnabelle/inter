@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { IoIosArrowDown, IoMdAdd } from "react-icons/io";
 import { theme, Form, Input, Upload, DatePicker, Select } from "antd";
-import MainLayout from "../../components/layout";
-import MainHeading from "../../components/mainHeading";
+import { ExpertsColumns, ExpertsData } from "../../tableData/experts";
 import { useNavigate } from "react-router-dom";
-import Button from "../../components/button";
-import ExpertsTable from "../../components/tables/expertsTable";
-import ModalWindow from "../../components/modalWindow";
-import FormComponent from "../../components/form";
 import { ExpertsTableDataTypes } from "../../types";
 import { FileItem } from "../../types/countries";
+import MainLayout from "../../components/layout";
+import MainHeading from "../../components/mainHeading";
+import Button from "../../components/button";
+import ModalWindow from "../../components/modalWindow";
+import FormComponent from "../../components/form";
+import ComponentTable from "../../components/table";
 
 
 const Experts: React.FC = () => {
@@ -118,7 +119,7 @@ const Experts: React.FC = () => {
                 }}
                 className="layout-content-container"
             >
-               <ExpertsTable onRowClick={(record) => handleRowClick('expert', 'Retrieve', record)}/>
+               <ComponentTable<ExpertsTableDataTypes> onRowClick={(record) => handleRowClick('expert', 'Retrieve', record)} data={ExpertsData} columns={ExpertsColumns}/>
             </div>
             <ModalWindow title="Добавить эксперта" openModal={modalState.addExpert} closeModal={() => handleModal('addExpert', false)}>
                 <FormComponent  onFinish={onFinish}>

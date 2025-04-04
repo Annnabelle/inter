@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 import { theme } from "antd";
+import { CountriesTableDataType } from "../../types";
+import { CountriesTableColumns, CountriesTableData } from "../../tableData/countriesTable";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
-import CountriesTable from "../../components/tables/countriesTable";
-import { useNavigate } from "react-router-dom";
+import ComponentTable from "../../components/table";
 
 
 const Countries: React.FC = () => {
@@ -53,7 +55,7 @@ const Countries: React.FC = () => {
                 }}
                 className="layout-content-container"
             >
-               <CountriesTable onRowClick={handleRowClick}/>
+               <ComponentTable<CountriesTableDataType> onRowClick={handleRowClick} columns={CountriesTableColumns} data={CountriesTableData}/>
             </div>
         </MainLayout>
     );

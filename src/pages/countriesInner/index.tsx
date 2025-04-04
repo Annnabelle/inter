@@ -3,16 +3,16 @@ import { useParams } from "react-router-dom";
 import { IoMdAdd } from "react-icons/io";
 import { theme, Form, Input, Upload, DatePicker } from "antd";
 import { DateItem, FileItem } from "../../types/countries";
+import { CountriesEventTableColumns, CountriesEventTableData } from "../../tableData/countriesInnerEvent";
+import { CountriesInnerInternationalDocumentsColumns, CountriesInnerInternationalDocumentsData } from "../../tableData/countriesInnerInternationalDocuments";
+import { CountriesInnerVisitsColumns, CountriesInnerVisitsData } from "../../tableData/countriesInnerVisitTable";
+import { CountriesInnerEventDataType, CountriesInnerInternationalDocumentsDataType, CountriesInnerVisitsDataType } from "../../types";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
 import Button from "../../components/button";
-import CountriesTable from "../../components/tables/countriesTable";
 import ModalWindow from "../../components/modalWindow";
 import FormComponent from "../../components/form";
-import CountriesInnerEventTable from "../../components/tables/countriesInnerEventTable";
-import CountriesInnerVisitsTable from "../../components/tables/countriesInnerVisitsTable";
-import CountriesInnerInternationalDocumentsTable from "../../components/tables/countriesInnerInternationalDocumentsTable";
-import { CountriesInnerInternationalDocumentsDataType } from "../../types";
+import ComponentTable from "../../components/table";
 
 const CountriesInner: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -109,7 +109,7 @@ const CountriesInner: React.FC = () => {
                             Мероприятия
                         </h3>
                     </div>
-                    <CountriesInnerEventTable />
+                    <ComponentTable<CountriesInnerEventDataType> columns={CountriesEventTableColumns} data={CountriesEventTableData} />
                 </div>
                 <div className="countries-inner-table-container">
                     <div className="countries-inner-table-container-heading">
@@ -117,7 +117,7 @@ const CountriesInner: React.FC = () => {
                             Визиты
                         </h3>
                     </div>
-                    <CountriesInnerVisitsTable/>
+                    <ComponentTable<CountriesInnerVisitsDataType> data={CountriesInnerVisitsData} columns={CountriesInnerVisitsColumns}/>
                 </div>
                 <div className="countries-inner-table-container">
                     <div className="countries-inner-table-container-heading">
@@ -130,7 +130,7 @@ const CountriesInner: React.FC = () => {
                             <Button className="outline" onClick={() => handleModal('addDocument', true)}>Добавить документ <IoMdAdd/></Button>
                         </div>
                     </div>
-                    <CountriesInnerInternationalDocumentsTable onRowClick={(record) => handleRowClick('document', 'Retrieve', record)}/>
+                    <ComponentTable<CountriesInnerInternationalDocumentsDataType> onRowClick={(record) => handleRowClick('document', 'Retrieve', record)} data={CountriesInnerInternationalDocumentsData} columns={CountriesInnerInternationalDocumentsColumns} />
                 </div>
                 <ModalWindow openModal={modalState.retrieveDocument} title="Посмотреть документ" closeModal={() => handleModal('retrieveDocument', false)} handleEdit={() => handleEditOpen()}>
                     <FormComponent>

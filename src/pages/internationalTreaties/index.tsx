@@ -8,7 +8,7 @@ import { FileItem } from "../../types/countries";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
 import Button from "../../components/button";
-import ComponentTable from "../../components/tables/InternationalTreatiesTable";
+import ComponentTable from "../../components/table";
 import ModalWindow from "../../components/modalWindow";
 import FormComponent from "../../components/form";
 

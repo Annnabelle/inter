@@ -1,14 +1,7 @@
-import React from "react";
-import { Table } from "antd";
-import type { TableProps } from "antd";
-import { InternationalOrganizationProjectDataType } from "../../../types";
+import { TableProps } from "antd";
+import { InternationalNonGovernmentOrganizationProjectDataType } from "../types";
 
-
-interface InternationalOrganizationProjectTableProps {
-  onRowClick?: (record: InternationalOrganizationProjectDataType) => void;
-}
-
-const columns: TableProps<InternationalOrganizationProjectDataType>["columns"] = [
+export const InternationalNonGovernmentOrganizationProjectColumns: TableProps<InternationalNonGovernmentOrganizationProjectDataType>["columns"] = [
   {
     title: "Название проекта",
     dataIndex: "projectName",
@@ -29,7 +22,7 @@ const columns: TableProps<InternationalOrganizationProjectDataType>["columns"] =
   },
 ];
 
-const data: InternationalOrganizationProjectDataType[] = [
+export const InternationalNonGovernmentOrganizationProjectData: InternationalNonGovernmentOrganizationProjectDataType[] = [
   {
     key: "1",
     projectName: "Название проекта",
@@ -49,19 +42,3 @@ const data: InternationalOrganizationProjectDataType[] = [
     file: "Файлы",
   },
 ];
-
-const InternationalOrganizationProjectTable: React.FC<InternationalOrganizationProjectTableProps> = ({ onRowClick }) => {
-  return (
-    <Table<InternationalOrganizationProjectDataType>
-      className="table"
-      columns={columns}
-      dataSource={data}
-      onRow={(record) => ({
-        onClick: () => onRowClick && onRowClick(record),
-      })}
-      rowClassName="clickable-row"
-    />
-  );
-};
-
-export default InternationalOrganizationProjectTable;

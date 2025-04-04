@@ -1,7 +1,7 @@
-import moment from "moment";
 import React from "react";
 import { EventProps } from "react-big-calendar";
 import { IoMdTime } from "react-icons/io";
+import moment from "moment";
 import './styles.sass'
 
 const CalendarEvent: React.FC<EventProps> = ({ event }) => {

@@ -1,5 +1,5 @@
-import moment from "moment";
 import { EventType } from "../../types/events";
+import moment from "moment";
 
 const CalendarEventStyle = (event: EventType) => {
   const hour = moment(event.start).hour();
