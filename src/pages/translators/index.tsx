@@ -124,7 +124,7 @@ const Translators: React.FC = () => {
             <ModalWindow title="Добавить переводчика" openModal={modalState.addTranslator} closeModal={() => handleModal('addTranslator', false)}>
                 <FormComponent  onFinish={onFinish}>
                         <div className="form-inputs">
-                            <Form.Item className="input" name="name" >
+                            <Form.Item className="input" name="fullName" >
                                 <Input className="input" size='large' placeholder="Ф.И.О"/>
                             </Form.Item>
                         </div>
@@ -147,7 +147,7 @@ const Translators: React.FC = () => {
             <ModalWindow title="Просмотреть переводчика" openModal={modalState.retrieveTranslator} closeModal={() => handleModal('retrieveTranslator', false)} handleEdit={() => handleEditOpen('Translator')}>
                 <FormComponent>
                     <div className="form-inputs">
-                        <Form.Item className="input" name="name" >
+                        <Form.Item className="input" name="fullName" >
                             <Input disabled className="input" size='large' placeholder="Ф.И.О"/>
                         </Form.Item>
                     </div>
@@ -166,7 +166,7 @@ const Translators: React.FC = () => {
             <ModalWindow title="Изменить переводчика" openModal={modalState.editTranslator} closeModal={() => handleModal('editTranslator', false)} handleDelete={() => handleDeleteOpen('Translator')}>
                 <FormComponent>
                     <div className="form-inputs">
-                        <Form.Item className="input" name="name" >
+                        <Form.Item className="input" name="fullName" >
                             <Input className="input" size='large' placeholder="Ф.И.О"/>
                         </Form.Item>
                     </div>

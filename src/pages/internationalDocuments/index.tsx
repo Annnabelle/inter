@@ -142,7 +142,7 @@ const InternationalDocuments: React.FC = () => {
                         </Form.Item>
                     </div>
                     <div className="form-inputs">
-                        <Form.Item className="input" name="place" >
+                        <Form.Item className="input" name="country" >
                             <Select className="input" size="large" options={countryOptions} placeholder="Страна" />
                         </Form.Item>
                     </div>  
@@ -203,7 +203,7 @@ const InternationalDocuments: React.FC = () => {
                         </Form.Item>
                     </div>
                     <div className="form-inputs">
-                        <Form.Item className="input" name="place">
+                        <Form.Item className="input" name="country">
                             <Select disabled className="input" size="large" options={countryOptions} placeholder="Страна" />
                         </Form.Item>
                     </div>  
@@ -253,7 +253,7 @@ const InternationalDocuments: React.FC = () => {
                         </Form.Item>
                     </div>
                     <div className="form-inputs">
-                        <Form.Item className="input" name="place" >
+                        <Form.Item className="input" name="country" >
                             <Select className="input" size="large" options={countryOptions} placeholder="Страна" />
                         </Form.Item>
                     </div>  

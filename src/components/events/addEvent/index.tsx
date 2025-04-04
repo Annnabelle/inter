@@ -104,8 +104,14 @@ const AddEventForm: React.FC<AddEventFormProps> = ({ handleAddEvent }) => {
                    <p className="label">Письмо в МИД</p>
                  </div>
                  <div style={{ display: "flex", gap: 8 }}>
+                  <Form.Item name="dateMidLetter"
+                    style={{width: '100%'}}>
                    <DatePicker size="large" format="DD.MM.YYYY"   style={{ width: "100%" }}/>
+                  </Form.Item>
+                  <Form.Item name="numberMidLetter"
+                    style={{width: '100%'}}>
                    <Input size="large" placeholder="Номер" style={{ width: "100%" }} />
+                  </Form.Item>
                  </div>
                </div>
                <div className="approval-container-item">
@@ -113,8 +119,16 @@ const AddEventForm: React.FC<AddEventFormProps> = ({ handleAddEvent }) => {
                    <p className="label">Ответ МИД</p>
                  </div>
                  <div style={{ display: "flex", gap: 8 }}>
+                  <Form.Item 
+                    name="dateMidResponse"
+                    style={{width: '100%'}}>
                    <DatePicker size="large" format="DD.MM.YYYY" style={{ width: "100%" }} />
-                   <Input size="large" placeholder="Номер" style={{ width: "100%" }} />
+                  </Form.Item>
+                    <Form.Item 
+                      name="numberMidResponse"
+                      style={{width: '100%'}}>
+                      <Input size="large" placeholder="Номер" style={{ width: "100%" }} />
+                    </Form.Item>
                  </div>
                </div>  
              </div>
@@ -130,8 +144,16 @@ const AddEventForm: React.FC<AddEventFormProps> = ({ handleAddEvent }) => {
                    <p className="label">Письмо в СГБ</p>
                  </div>
                  <div style={{ display: "flex", gap: 8 }}>
+                  <Form.Item 
+                    name="dateSgbLetter"
+                    style={{width: '100%'}}>
                    <DatePicker size="large" format="DD.MM.YYYY"   style={{ width: "100%" }}/>
+                  </Form.Item>
+                  <Form.Item 
+                    name="numberSbgLetter"
+                    style={{width: '100%'}}>
                    <Input size="large" placeholder="Номер" style={{ width: "100%" }} />
+                  </Form.Item>
                  </div>
                </div>
                <div className="approval-container-item">
@@ -139,8 +161,16 @@ const AddEventForm: React.FC<AddEventFormProps> = ({ handleAddEvent }) => {
                    <p className="label">Ответ СГБ</p>
                  </div>
                  <div style={{ display: "flex", gap: 8 }}>
+                  <Form.Item 
+                    name="dateSgbResponse"
+                    style={{width: '100%'}}> 
                    <DatePicker size="large" format="DD.MM.YYYY" style={{ width: "100%" }} />
+                  </Form.Item>
+                    <Form.Item 
+                    name="numberSgbResponse"
+                    style={{width: '100%'}}>  
                    <Input size="large" placeholder="Номер" style={{ width: "100%" }} />
+                  </Form.Item>
                  </div>
                </div>  
              </div>
@@ -176,7 +206,7 @@ const AddEventForm: React.FC<AddEventFormProps> = ({ handleAddEvent }) => {
         </div>
       </div>
 
-      <Button type="submit">Submit</Button>
+      <Button type="submit">Создать</Button>
     </FormComponent>
   );
 };

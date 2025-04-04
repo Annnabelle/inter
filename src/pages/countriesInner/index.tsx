@@ -136,10 +136,10 @@ const CountriesInner: React.FC = () => {
                     <FormComponent>
                         {files.map((item) => (
                             <div className="form-inputs" key={item?.id}>
-                                <Form.Item className="input" name="name" >
+                                <Form.Item className="input" name="documentName" >
                                     <Input className="input" size='large' placeholder="название" disabled/>
                                 </Form.Item>
-                                <Form.Item className="input" name="name" >
+                                <Form.Item className="input" name="documentFile" >
                                     <Upload disabled>
                                         <Input className="input input-upload" size='large' placeholder="файл" disabled/>
                                     </Upload>
@@ -162,10 +162,10 @@ const CountriesInner: React.FC = () => {
                         <FormComponent onFinish={onFinish}>
                             {files.map((item) => (
                                 <div className="form-inputs" key={item?.id}>
-                                    <Form.Item className="input" name="name" >
+                                    <Form.Item className="input" name="documentName" >
                                         <Input className="input" size='large' placeholder="Введите название"/>
                                     </Form.Item>
-                                    <Form.Item className="input" name="name" >
+                                    <Form.Item className="input" name="documentFile" >
                                         <Upload>
                                             <Input className="input input-upload" size='large' placeholder="Загрузить файл"/>
                                         </Upload>
@@ -195,10 +195,10 @@ const CountriesInner: React.FC = () => {
                     <FormComponent  onFinish={onFinish}>
                         {files.map((item) => (
                             <div className="form-inputs" key={item?.id}>
-                                <Form.Item className="input" name="name" >
+                                <Form.Item className="input" name="documentName" >
                                     <Input className="input" size='large' placeholder="Введите название"/>
                                 </Form.Item>
-                                <Form.Item className="input" name="name" >
+                                <Form.Item className="input" name="documentFile" >
                                     <Upload>
                                         <Input className="input input-upload" size='large' placeholder="Загрузить файл"/>
                                     </Upload>
