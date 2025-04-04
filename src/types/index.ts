@@ -111,3 +111,12 @@ export interface InternationalTreatiesTableDataType{
     files: string,
     level: string
 }
+
+export interface InternationalDocumentsTableDataType{
+    key: string,
+    item: string,
+    nameOfTheDocument: string,
+    date: string,
+    place: string,
+    files: string,
+}

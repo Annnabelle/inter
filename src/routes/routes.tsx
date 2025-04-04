@@ -11,6 +11,7 @@ const InternationalNonGovernmentalOrganizations = lazy(() => import("../pages/in
 const Experts = lazy(() => import("../pages/experts"))
 const Translators = lazy(() => import("../pages/translators"))
 const InternationalTreaties = lazy(() => import("../pages/internationalTreaties"))
+const InternationalDocuments = lazy(()=> import('../pages/internationalDocuments'))
 
 const Router: React.FC = () => {
   return (
@@ -27,6 +28,7 @@ const Router: React.FC = () => {
         <Route path='/cooperation/experts' element={<Experts/>}/>
         <Route path='/cooperation/translators' element={<Translators/>}/>
         <Route path='/cooperation/international-treaties' element={<InternationalTreaties/>}/>
+        <Route path="/cooperation/international-documents" element={<InternationalDocuments/>}/>
       </Routes>
     </Suspense>
   );
