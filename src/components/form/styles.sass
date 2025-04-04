@@ -32,11 +32,13 @@
                     .label
                         +mix.typography(12px, 500, map.get(vars.$main, 'main'))
     &-btn-new
-        cursor: pointer
         width: 100%
         @include mix.flex-content(end)
         &-text
+            cursor: pointer
             +mix.typography(16px, 500, map.get(vars.$main, "main"))
+    &-btn-another-input
+        margin-top: -20px
     &-btn
         width: 100%
         margin-top: 10px

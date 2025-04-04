@@ -25,8 +25,8 @@ const Navigation: React.FC = () => {
         },
         { to: '/cooperation/international-non-governmental-organizations', text: 'Международные неправительственные организации' },
         { to: '/', text: 'Международные документы', icon:     <IoIosArrowForward/>,    subDropdown: [
-          { to: '/cooperation/international-treaties', text: 'Международные документы' },
-          { to: '/cooperation/international-organizations/eu', text: 'Международные договора' },
+          { to: '/cooperation/international-documents', text: 'Международные документы' },
+          { to: '/cooperation/international-treaties', text: 'Международные договора' },
         ] },
         { to: '/cooperation/experts', text: 'Эксперты' },
         { to: '/cooperation/translators', text: 'Переводчики' }
