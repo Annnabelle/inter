@@ -136,10 +136,10 @@ const CountriesInner: React.FC = () => {
                     <FormComponent>
                         {files.map((item) => (
                             <div className="form-inputs" key={item?.id}>
-                                <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите название"}]}>
+                                <Form.Item className="input" name="documentName" >
                                     <Input className="input" size='large' placeholder="название" disabled/>
                                 </Form.Item>
-                                <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите название"}]}>
+                                <Form.Item className="input" name="documentFile" >
                                     <Upload disabled>
                                         <Input className="input input-upload" size='large' placeholder="файл" disabled/>
                                     </Upload>
@@ -148,10 +148,10 @@ const CountriesInner: React.FC = () => {
                         ))}
                         {dates.map((item) => (
                             <div className="form-inputs" key={item?.id}>
-                                <Form.Item className="input" name="place" rules={[{required: true, message: "Введите место проведения"}]}>
+                                <Form.Item className="input" name="place" >
                                     <Input size='large' className="input" placeholder="Место подписания" disabled/>
                                 </Form.Item>
-                                <Form.Item className="input" name="date" rules={[{required: true, message: "Введите дату подписания"}]}>
+                                <Form.Item className="input" name="date" >
                                     <DatePicker size="large" className="input" disabled/>
                                 </Form.Item>
                             </div>
@@ -162,10 +162,10 @@ const CountriesInner: React.FC = () => {
                         <FormComponent onFinish={onFinish}>
                             {files.map((item) => (
                                 <div className="form-inputs" key={item?.id}>
-                                    <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите название"}]}>
+                                    <Form.Item className="input" name="documentName" >
                                         <Input className="input" size='large' placeholder="Введите название"/>
                                     </Form.Item>
-                                    <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите название"}]}>
+                                    <Form.Item className="input" name="documentFile" >
                                         <Upload>
                                             <Input className="input input-upload" size='large' placeholder="Загрузить файл"/>
                                         </Upload>
@@ -177,10 +177,10 @@ const CountriesInner: React.FC = () => {
                             </div>
                             {dates.map((item) => (
                                 <div className="form-inputs" key={item?.id}>
-                                    <Form.Item className="input" name="place" rules={[{required: true, message: "Введите место проведения"}]}>
+                                    <Form.Item className="input" name="place" >
                                         <Input size='large' className="input" placeholder="Место подписания"/>
                                     </Form.Item>
-                                    <Form.Item className="input" name="date" rules={[{required: true, message: "Введите дату подписания"}]}>
+                                    <Form.Item className="input" name="date" >
                                         <DatePicker size="large" className="input"/>
                                     </Form.Item>
                                 </div>
@@ -195,10 +195,10 @@ const CountriesInner: React.FC = () => {
                     <FormComponent  onFinish={onFinish}>
                         {files.map((item) => (
                             <div className="form-inputs" key={item?.id}>
-                                <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите название"}]}>
+                                <Form.Item className="input" name="documentName" >
                                     <Input className="input" size='large' placeholder="Введите название"/>
                                 </Form.Item>
-                                <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите название"}]}>
+                                <Form.Item className="input" name="documentFile" >
                                     <Upload>
                                         <Input className="input input-upload" size='large' placeholder="Загрузить файл"/>
                                     </Upload>
@@ -210,10 +210,10 @@ const CountriesInner: React.FC = () => {
                         </div>
                         {dates.map((item) => (
                             <div className="form-inputs" key={item?.id}>
-                                <Form.Item className="input" name="place" rules={[{required: true, message: "Введите место проведения"}]}>
+                                <Form.Item className="input" name="place" >
                                     <Input size='large' className="input" placeholder="Место подписания"/>
                                 </Form.Item>
-                                <Form.Item className="input" name="date" rules={[{required: true, message: "Введите дату подписания"}]}>
+                                <Form.Item className="input" name="date" >
                                     <DatePicker size="large" className="input"/>
                                 </Form.Item>
                             </div>

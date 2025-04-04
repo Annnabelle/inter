@@ -47,14 +47,12 @@ const EditEvent: React.FC<EditEventProps> = ({handleAddEvent, initialValues}) =>
           <Form.Item
             name="eventName"
             className="input"
-            rules={[{ required: true, message: "Выберите мероприятие" }]}
           >
             <Select className="input" size="large" options={eventOptions} placeholder="Выберите мероприятие" />
           </Form.Item>
           <Form.Item
             name="organizer"
             className="input"
-            rules={[{ required: true, message: "Введите организатора" }]}
           >
             <Input className="input" size="large"  placeholder="Введите организатора"  />
           </Form.Item>
@@ -63,14 +61,12 @@ const EditEvent: React.FC<EditEventProps> = ({handleAddEvent, initialValues}) =>
           <Form.Item
             name="eventType"
             className="input"
-            rules={[{ required: true, message: "Выберите Формат" }]}
           >
             <Select className="input" size="large" options={eventFormat} placeholder="Выберите формат" />
           </Form.Item>
           <Form.Item
             name="countOfMembers"
             className="input"
-            rules={[{ required: true, message: "Введите кол-во участников" }]}
           >
             <Input className="input" size="large"  placeholder="Кол-во учасников" type="number" />
           </Form.Item>
@@ -79,14 +75,12 @@ const EditEvent: React.FC<EditEventProps> = ({handleAddEvent, initialValues}) =>
           <Form.Item
             name="partnersOptions"
             className="input"
-            rules={[{ required: true, message: "Выберите партнера" }]}
           >
             <Select className="input" size="large" options={partnersOptions} placeholder="Выберите партнера" />
           </Form.Item>
           <Form.Item
             name="donorFormat"
             className="input"
-            rules={[{ required: true, message: "Выберите Донора" }]}
           >
             <Select className="input" size="large" options={donorFormat} placeholder="Выберите Донора" />
           </Form.Item>
@@ -94,7 +88,6 @@ const EditEvent: React.FC<EditEventProps> = ({handleAddEvent, initialValues}) =>
         <div className="form-inputs">
           <Form.Item
             name="date"
-            rules={[{ required: true, message: "Выберите дату и время" }]}
             style={{width: '100%'}}
           >
             <DatePicker.RangePicker
@@ -107,85 +100,115 @@ const EditEvent: React.FC<EditEventProps> = ({handleAddEvent, initialValues}) =>
           </Form.Item>
         </div>
         <div className="form-inputs">
-          <div className="approval-container">
-            {isMIDChecked && (
-              <div className="approval-container-items">
-                 <div className="approval-container-item">
-                   <div className="approval-letter-label">
-                     <p className="label">Письмо в МИД</p>
-                   </div>
-                   <div style={{ display: "flex", gap: 8 }}>
-                     <DatePicker size="large" format="DD.MM.YYYY"   style={{ width: "100%" }}/>
-                     <Input size="large" placeholder="Номер" style={{ width: "100%" }} />
-                   </div>
-                 </div>
-                 <div className="approval-container-item">
-                   <div className="approval-letter-label">
-                     <p className="label">Ответ МИД</p>
-                   </div>
-                   <div style={{ display: "flex", gap: 8 }}>
-                     <DatePicker size="large" format="DD.MM.YYYY" style={{ width: "100%" }} />
-                     <Input size="large" placeholder="Номер" style={{ width: "100%" }} />
-                   </div>
-                 </div>  
-               </div>
-            )}
-            <Checkbox checked={isMIDChecked} onChange={(e) => setIsMIDChecked(e.target.checked)}>
-               Согласование от МИД
-            </Checkbox>
-  
-            {isSGBChecked && (
-              <div className="approval-container-items">
-                 <div className="approval-container-item">
-                   <div className="approval-letter-label">
-                     <p className="label">Письмо в СГБ</p>
-                   </div>
-                   <div style={{ display: "flex", gap: 8 }}>
-                     <DatePicker size="large" format="DD.MM.YYYY"   style={{ width: "100%" }}/>
-                     <Input size="large" placeholder="Номер" style={{ width: "100%" }} />
-                   </div>
-                 </div>
-                 <div className="approval-container-item">
-                   <div className="approval-letter-label">
-                     <p className="label">Ответ СГБ</p>
-                   </div>
-                   <div style={{ display: "flex", gap: 8 }}>
-                     <DatePicker size="large" format="DD.MM.YYYY" style={{ width: "100%" }} />
-                     <Input size="large" placeholder="Номер" style={{ width: "100%" }} />
-                   </div>
-                 </div>  
-               </div>
-            )}
-            <Checkbox checked={isSGBChecked} onChange={(e) => setIsSGBChecked(e.target.checked)}>
-               Согласование от СГБ
-            </Checkbox>
-            {isAdminChecked && (
-              <div className="approval-container-items">
-                 <div className="approval-container-item">
-                   <div className="approval-letter-label">
-                     <p className="label">Письмо в Администрацию</p>
-                   </div>
-                   <div style={{ display: "flex", gap: 8 }}>
-                     <DatePicker size="large" format="DD.MM.YYYY"   style={{ width: "100%" }}/>
-                     <Input size="large" placeholder="Номер" style={{ width: "100%" }} />
-                   </div>
-                 </div>
-                 <div className="approval-container-item">
-                   <div className="approval-letter-label">
-                     <p className="label">Ответ Администрации</p>
-                   </div>
-                   <div style={{ display: "flex", gap: 8 }}>
-                     <DatePicker size="large" format="DD.MM.YYYY" style={{ width: "100%" }} />
-                     <Input size="large" placeholder="Номер" style={{ width: "100%" }} />
-                   </div>
-                 </div>  
-               </div>
-            )}
-            <Checkbox checked={isAdminChecked} onChange={(e) => setIsAdminChecked(e.target.checked)}>
-              Согласование от Администрации
-            </Checkbox>
-          </div>
-        </div>
+                <div className="approval-container">
+                  {isMIDChecked && (
+                    <div className="approval-container-items">
+                       <div className="approval-container-item">
+                         <div className="approval-letter-label">
+                           <p className="label">Письмо в МИД</p>
+                         </div>
+                         <div style={{ display: "flex", gap: 8 }}>
+                          <Form.Item name="dateMidLetter"
+                            style={{width: '100%'}}>
+                           <DatePicker size="large" format="DD.MM.YYYY"   style={{ width: "100%" }}/>
+                          </Form.Item>
+                          <Form.Item name="numberMidLetter"
+                            style={{width: '100%'}}>
+                           <Input size="large" placeholder="Номер" style={{ width: "100%" }} />
+                          </Form.Item>
+                         </div>
+                       </div>
+                       <div className="approval-container-item">
+                         <div className="approval-letter-label">
+                           <p className="label">Ответ МИД</p>
+                         </div>
+                         <div style={{ display: "flex", gap: 8 }}>
+                          <Form.Item 
+                            name="dateMidResponse"
+                            style={{width: '100%'}}>
+                           <DatePicker size="large" format="DD.MM.YYYY" style={{ width: "100%" }} />
+                          </Form.Item>
+                            <Form.Item 
+                              name="numberMidResponse"
+                              style={{width: '100%'}}>
+                              <Input size="large" placeholder="Номер" style={{ width: "100%" }} />
+                            </Form.Item>
+                         </div>
+                       </div>  
+                     </div>
+                  )}
+                  <Checkbox checked={isMIDChecked} onChange={(e) => setIsMIDChecked(e.target.checked)}>
+                     Согласование от МИД
+                  </Checkbox>
+        
+                  {isSGBChecked && (
+                    <div className="approval-container-items">
+                       <div className="approval-container-item">
+                         <div className="approval-letter-label">
+                           <p className="label">Письмо в СГБ</p>
+                         </div>
+                         <div style={{ display: "flex", gap: 8 }}>
+                          <Form.Item 
+                            name="dateSgbLetter"
+                            style={{width: '100%'}}>
+                           <DatePicker size="large" format="DD.MM.YYYY"   style={{ width: "100%" }}/>
+                          </Form.Item>
+                          <Form.Item 
+                            name="numberSbgLetter"
+                            style={{width: '100%'}}>
+                           <Input size="large" placeholder="Номер" style={{ width: "100%" }} />
+                          </Form.Item>
+                         </div>
+                       </div>
+                       <div className="approval-container-item">
+                         <div className="approval-letter-label">
+                           <p className="label">Ответ СГБ</p>
+                         </div>
+                         <div style={{ display: "flex", gap: 8 }}>
+                          <Form.Item 
+                            name="dateSgbResponse"
+                            style={{width: '100%'}}> 
+                           <DatePicker size="large" format="DD.MM.YYYY" style={{ width: "100%" }} />
+                          </Form.Item>
+                            <Form.Item 
+                            name="numberSgbResponse"
+                            style={{width: '100%'}}>  
+                           <Input size="large" placeholder="Номер" style={{ width: "100%" }} />
+                          </Form.Item>
+                         </div>
+                       </div>  
+                     </div>
+                  )}
+                  <Checkbox checked={isSGBChecked} onChange={(e) => setIsSGBChecked(e.target.checked)}>
+                     Согласование от СГБ
+                  </Checkbox>
+                  {isAdminChecked && (
+                    <div className="approval-container-items">
+                       <div className="approval-container-item">
+                         <div className="approval-letter-label">
+                           <p className="label">Письмо в Администрацию</p>
+                         </div>
+                         <div style={{ display: "flex", gap: 8 }}>
+                           <DatePicker size="large" format="DD.MM.YYYY"   style={{ width: "100%" }}/>
+                           <Input size="large" placeholder="Номер" style={{ width: "100%" }} />
+                         </div>
+                       </div>
+                       <div className="approval-container-item">
+                         <div className="approval-letter-label">
+                           <p className="label">Ответ Администрации</p>
+                         </div>
+                         <div style={{ display: "flex", gap: 8 }}>
+                           <DatePicker size="large" format="DD.MM.YYYY" style={{ width: "100%" }} />
+                           <Input size="large" placeholder="Номер" style={{ width: "100%" }} />
+                         </div>
+                       </div>  
+                     </div>
+                  )}
+                  <Checkbox checked={isAdminChecked} onChange={(e) => setIsAdminChecked(e.target.checked)}>
+                    Согласование от Администрации
+                  </Checkbox>
+                </div>
+              </div>
   
         <Button type="submit">Submit</Button>
       </FormComponent>

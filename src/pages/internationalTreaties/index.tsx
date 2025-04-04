@@ -124,24 +124,24 @@ const InternationalTreaties: React.FC = () => {
             <ModalWindow title="Добавить договор" openModal={modalState.addTreaties} closeModal={() => handleModal('addTreaties', false)}>
                 <FormComponent  onFinish={onFinish}>
                         <div className="form-inputs">
-                            <Form.Item className="input" name="nameOfTreaties" rules={[{required: true, message:"Введите основные сферы"}]}>
+                            <Form.Item className="input" name="nameOfTreaties" >
                                 <Input className="input" size='large' placeholder="Название договора"/>
                             </Form.Item>
-                            <Form.Item className="input" name="date" rules={[{required: true, message:"Выберите дату"}]}>
+                            <Form.Item className="input" name="date" >
                                 <DatePicker size="large" className="input"/>
                             </Form.Item>
                         </div>
                         <div className="form-inputs">
-                            <Form.Item className="input" name="place" rules={[{required: true, message:"Введите мероприятие"}]}>
+                            <Form.Item className="input" name="place" >
                                 <Input className="input" size='large' placeholder="Место"/>
                             </Form.Item>
-                            <Form.Item className="input" name="level" rules={[{required: true, message:"Выберите привлекающую организацию"}]}>
+                            <Form.Item className="input" name="level" >
                                 <Input className="input" size='large' placeholder="Уровень подписания"/>
                             </Form.Item>
                         </div>  
                         {files.map((item) => (
                             <div className="form-inputs" key={item?.id}>
-                                <Form.Item className="input" name="file" rules={[{required: true, message:"Выберите файл"}]}>
+                                <Form.Item className="input" name="file" >
                                     <Upload>
                                         <Input className="input input-upload" size='large' placeholder="Загрузить файл"/>
                                     </Upload>
@@ -157,24 +157,24 @@ const InternationalTreaties: React.FC = () => {
             <ModalWindow title="Просмотреть договор" openModal={modalState.retrieveTreaties} closeModal={() => handleModal('retrieveTreaties', false)} handleEdit={() => handleEditOpen('Treaties')}>
                 <FormComponent>
                 <div className="form-inputs">
-                            <Form.Item className="input" name="nameOfTreaties" rules={[{required: true, message:"Введите основные сферы"}]}>
+                            <Form.Item className="input" name="nameOfTreaties" >
                                 <Input disabled className="input" size='large' placeholder="Название договора"/>
                             </Form.Item>
-                            <Form.Item className="input" name="date" rules={[{required: true, message:"Выберите дату"}]}>
+                            <Form.Item className="input" name="date" >
                                 <DatePicker disabled size="large" className="input"/>
                             </Form.Item>
                         </div>
                         <div className="form-inputs">
-                            <Form.Item className="input" name="place" rules={[{required: true, message:"Введите мероприятие"}]}>
+                            <Form.Item className="input" name="place" >
                                 <Input disabled className="input" size='large' placeholder="Место"/>
                             </Form.Item>
-                            <Form.Item className="input" name="level" rules={[{required: true, message:"Выберите привлекающую организацию"}]}>
+                            <Form.Item className="input" name="level" >
                                 <Input disabled className="input" size='large' placeholder="Уровень подписания"/>
                             </Form.Item>
                         </div>  
                         {files.map((item) => (
                             <div className="form-inputs" key={item?.id}>
-                                <Form.Item className="input" name="file" rules={[{required: true, message:"Выберите файл"}]}>
+                                <Form.Item className="input" name="file" >
                                     <Upload disabled>
                                         <Input disabled className="input input-upload" size='large' placeholder="Загрузить файл"/>
                                     </Upload>
@@ -186,24 +186,24 @@ const InternationalTreaties: React.FC = () => {
             <ModalWindow title="Изменить договор" openModal={modalState.editTreaties} closeModal={() => handleModal('editTreaties', false)} handleDelete={() => handleDeleteOpen('Treaties')}>
                 <FormComponent>
                     <div className="form-inputs">
-                        <Form.Item className="input" name="nameOfTreaties" rules={[{required: true, message:"Введите основные сферы"}]}>
+                        <Form.Item className="input" name="nameOfTreaties" >
                             <Input className="input" size='large' placeholder="Название договора"/>
                         </Form.Item>
-                        <Form.Item className="input" name="date" rules={[{required: true, message:"Выберите дату"}]}>
+                        <Form.Item className="input" name="date" >
                             <DatePicker size="large" className="input"/>
                         </Form.Item>
                     </div>
                     <div className="form-inputs">
-                        <Form.Item className="input" name="place" rules={[{required: true, message:"Введите мероприятие"}]}>
+                        <Form.Item className="input" name="place" >
                             <Input className="input" size='large' placeholder="Место"/>
                         </Form.Item>
-                        <Form.Item className="input" name="level" rules={[{required: true, message:"Выберите привлекающую организацию"}]}>
+                        <Form.Item className="input" name="level" >
                             <Input className="input" size='large' placeholder="Уровень подписания"/>
                         </Form.Item>
                     </div>  
                     {files.map((item) => (
                         <div className="form-inputs" key={item?.id}>
-                            <Form.Item className="input" name="file" rules={[{required: true, message:"Выберите файл"}]}>
+                            <Form.Item className="input" name="file" >
                                 <Upload>
                                     <Input className="input input-upload" size='large' placeholder="Загрузить файл"/>
                                 </Upload>

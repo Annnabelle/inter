@@ -124,24 +124,24 @@ const Experts: React.FC = () => {
             <ModalWindow title="Добавить эксперта" openModal={modalState.addExpert} closeModal={() => handleModal('addExpert', false)}>
                 <FormComponent  onFinish={onFinish}>
                         <div className="form-inputs">
-                            <Form.Item className="input" name="mainAreas" rules={[{required: true, message:"Введите основные сферы"}]}>
+                            <Form.Item className="input" name="mainAreas" >
                                 <Input className="input" size='large' placeholder="Основные сферы"/>
                             </Form.Item>
-                            <Form.Item className="input" name="date" rules={[{required: true, message:"Выберите дату"}]}>
+                            <Form.Item className="input" name="date" >
                                 <DatePicker size="large" className="input"/>
                             </Form.Item>
                         </div>
                         <div className="form-inputs">
-                            <Form.Item className="input" name="eventName" rules={[{required: true, message:"Введите мероприятие"}]}>
+                            <Form.Item className="input" name="eventName" >
                                 <Input className="input" size='large' placeholder="Мероприятие"/>
                             </Form.Item>
-                            <Form.Item className="input" name="organization" rules={[{required: true, message:"Выберите привлекающую организацию"}]}>
+                            <Form.Item className="input" name="organization" >
                                 <Select className="input" size="large" options={organizationOption} placeholder="Привлекающая организация" />
                             </Form.Item>
                         </div>  
                         {files.map((item) => (
                             <div className="form-inputs" key={item?.id}>
-                                <Form.Item className="input" name="file" rules={[{required: true, message:"Выберите файл"}]}>
+                                <Form.Item className="input" name="file" >
                                     <Upload>
                                         <Input className="input input-upload" size='large' placeholder="Загрузить файл"/>
                                     </Upload>
@@ -157,24 +157,24 @@ const Experts: React.FC = () => {
             <ModalWindow title="Просмотреть эксперта" openModal={modalState.retrieveExpert} closeModal={() => handleModal('retrieveExpert', false)} handleEdit={() => handleEditOpen('Expert')}>
                 <FormComponent>
                         <div className="form-inputs">
-                            <Form.Item className="input" name="mainAreas" rules={[{required: true, message:"Введите основные сферы"}]}>
+                            <Form.Item className="input" name="mainAreas" >
                                 <Input disabled className="input" size='large' placeholder="Основные сферы"/>
                             </Form.Item>
-                            <Form.Item className="input" name="date" rules={[{required: true, message:"Выберите дату"}]}>
+                            <Form.Item className="input" name="date" >
                                 <DatePicker disabled size="large" className="input"/>
                             </Form.Item>
                         </div>
                         <div className="form-inputs">
-                            <Form.Item className="input" name="eventName" rules={[{required: true, message:"Введите мероприятие"}]}>
+                            <Form.Item className="input" name="eventName" >
                                 <Input disabled className="input" size='large' placeholder="Мероприятие"/>
                             </Form.Item>
-                            <Form.Item className="input" name="organization" rules={[{required: true, message:"Выберите привлекающую организацию"}]}>
+                            <Form.Item className="input" name="organization" >
                                 <Select disabled className="input" size="large" options={organizationOption} placeholder="Привлекающая организация" />
                             </Form.Item>
                         </div>  
                         {files.map((item) => (
                             <div className="form-inputs" key={item?.id}>
-                                <Form.Item className="input" name="file" rules={[{required: true, message:"Выберите файл"}]}>
+                                <Form.Item className="input" name="file" >
                                     <Upload disabled>
                                         <Input disabled className="input input-upload" size='large' placeholder="Загрузить файл"/>
                                     </Upload>
@@ -186,24 +186,24 @@ const Experts: React.FC = () => {
             <ModalWindow title="Изменить эксперта" openModal={modalState.editExpert} closeModal={() => handleModal('editExpert', false)} handleDelete={() => handleDeleteOpen('Expert')}>
                 <FormComponent>
                         <div className="form-inputs">
-                            <Form.Item className="input" name="mainAreas" rules={[{required: true, message:"Введите основные сферы"}]}>
+                            <Form.Item className="input" name="mainAreas" >
                                 <Input  className="input" size='large' placeholder="Основные сферы"/>
                             </Form.Item>
-                            <Form.Item className="input" name="date" rules={[{required: true, message:"Выберите дату"}]}>
+                            <Form.Item className="input" name="date" >
                                 <DatePicker  size="large" className="input"/>
                             </Form.Item>
                         </div>
                         <div className="form-inputs">
-                            <Form.Item className="input" name="eventName" rules={[{required: true, message:"Введите мероприятие"}]}>
+                            <Form.Item className="input" name="eventName" >
                                 <Input  className="input" size='large' placeholder="Мероприятие"/>
                             </Form.Item>
-                            <Form.Item className="input" name="organization" rules={[{required: true, message:"Выберите привлекающую организацию"}]}>
+                            <Form.Item className="input" name="organization" >
                                 <Select  className="input" size="large" options={organizationOption} placeholder="Привлекающая организация" />
                             </Form.Item>
                         </div>  
                         {files.map((item) => (
                             <div className="form-inputs" key={item?.id}>
-                                <Form.Item className="input" name="file" rules={[{required: true, message:"Выберите файл"}]}>
+                                <Form.Item className="input" name="file" >
                                     <Upload disabled>
                                         <Input  className="input input-upload" size='large' placeholder="Загрузить файл"/>
                                     </Upload>

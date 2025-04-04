@@ -143,16 +143,16 @@ const InternationalOrganizations: React.FC = () => {
             <ModalWindow openModal={modalState.chiefRetrieve} title="Посмотреть главу" closeModal={() => handleModal('chiefRetrieve', false)} handleEdit={() => handleEditOpen('chief')}>
               <FormComponent>
                       <div className="form-inputs">
-                      <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите Ф.И.О"}]}>
+                      <Form.Item className="input" name="fullName" >
                           <Input disabled className="input" size='large' placeholder="Введите Ф.И.О"/>
                       </Form.Item>
-                      <Form.Item className="input" name="additionalInfo" rules={[{required: true, message:"Выберите дополнительную информацию"}]}>
+                      <Form.Item className="input" name="additionalInfo" >
                           <Input disabled className="input" size='large' placeholder="Дополнительная информация"/>
                       </Form.Item>
                   </div>
                   {files.map((item) => (
                     <div className="form-inputs" key={item?.id}>
-                      <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите CV"}]}>
+                      <Form.Item className="input" name="addCVFile" >
                           <Upload disabled>
                               <Input disabled className="input input-upload" size='large' placeholder="Загрузить CV"/>
                           </Upload>
@@ -164,16 +164,16 @@ const InternationalOrganizations: React.FC = () => {
             <ModalWindow openModal={modalState.chiefEdit} title="Изменить главу" closeModal={() => handleModal('chiefEdit', false)} handleDelete={() => handleDeleteOpen('chief')}>
               <FormComponent onFinish={onFinish} >
                   <div className="form-inputs" >
-                      <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите Ф.И.О"}]}>
+                      <Form.Item className="input" name="fullName" >
                           <Input className="input" size='large' placeholder="Введите Ф.И.О"/>
                       </Form.Item>
-                      <Form.Item className="input" name="additionalInfo" rules={[{required: true, message:"Выберите дополнительную информацию"}]}>
+                      <Form.Item className="input" name="additionalInfo" >
                           <Input className="input" size='large' placeholder="Дополнительная информация"/>
                       </Form.Item>
                   </div>
                 {files.map((item) => (
                   <div className="form-inputs" key={item?.id}>
-                    <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите CV"}]}>
+                    <Form.Item className="input" name="addCVFile" >
                       <Upload>
                         <Input className="input input-upload" size='large' placeholder="Загрузить CV"/>
                       </Upload>
@@ -188,17 +188,17 @@ const InternationalOrganizations: React.FC = () => {
             </ModalWindow>
             <ModalWindow title="Добавить главу" openModal={modalState.addChief} closeModal={() => handleModal("addChief", false)}>
                 <FormComponent onFinish={onFinish}>
-                <div className="form-inputs" >
-                      <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите Ф.И.О"}]}>
-                          <Input className="input" size='large' placeholder="Введите Ф.И.О"/>
-                      </Form.Item>
-                      <Form.Item className="input" name="additionalInfo" rules={[{required: true, message:"Выберите дополнительную информацию"}]}>
-                          <Input className="input" size='large' placeholder="Дополнительная информация"/>
-                      </Form.Item>
-                  </div>
+                  <div className="form-inputs" >
+                        <Form.Item className="input" name="fullName" >
+                            <Input className="input" size='large' placeholder="Введите Ф.И.О"/>
+                        </Form.Item>
+                        <Form.Item className="input" name="additionalInfo" >
+                            <Input className="input" size='large' placeholder="Дополнительная информация"/>
+                        </Form.Item>
+                    </div>
                     {files.map((item) => (
                         <div className="form-inputs" key={item?.id}>
-                             <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите CV"}]}>
+                             <Form.Item className="input" name="addCVFile" >
                                 <Upload>
                                     <Input className="input input-upload" size='large' placeholder="Загрузить CV"/>
                                 </Upload>
@@ -220,16 +220,16 @@ const InternationalOrganizations: React.FC = () => {
             <ModalWindow openModal={modalState.projectRetrieve} title="Посмотреть проект" closeModal={() => handleModal('projectRetrieve', false)} handleEdit={() => handleEditOpen('project')}>
               <FormComponent>
                       <div className="form-inputs">
-                      <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите Ф.И.О"}]}>
+                      <Form.Item className="input" name="fullName" >
                           <Input disabled className="input" size='large' placeholder="Введите Ф.И.О"/>
                       </Form.Item>
-                      <Form.Item className="input" name="additionalInfo" rules={[{required: true, message:"Выберите дополнительную информацию"}]}>
+                      <Form.Item className="input" name="additionalInfo" >
                           <Input disabled className="input" size='large' placeholder="Дополнительная информация"/>
                       </Form.Item>
                   </div>
                   {files.map((item) => (
                     <div className="form-inputs" key={item?.id}>
-                      <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите CV"}]}>
+                      <Form.Item className="input" name="addCVFile" >
                           <Upload disabled>
                               <Input disabled className="input input-upload" size='large' placeholder="Загрузить CV"/>
                           </Upload>
@@ -241,16 +241,16 @@ const InternationalOrganizations: React.FC = () => {
             <ModalWindow openModal={modalState.projectEdit} title="Изменить проект" closeModal={() => handleModal('projectEdit', false)} handleDelete={() => handleDeleteOpen('project')}>
               <FormComponent  onFinish={onFinish} >
                   <div className="form-inputs" >
-                      <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите Ф.И.О"}]}>
+                      <Form.Item className="input" name="fullName" >
                           <Input className="input" size='large' placeholder="Введите Ф.И.О"/>
                       </Form.Item>
-                      <Form.Item className="input" name="additionalInfo" rules={[{required: true, message:"Выберите дополнительную информацию"}]}>
+                      <Form.Item className="input" name="additionalInfo" >
                           <Input className="input" size='large' placeholder="Дополнительная информация"/>
                       </Form.Item>
                   </div>
                 {files.map((item) => (
                   <div className="form-inputs" key={item?.id}>
-                    <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите CV"}]}>
+                    <Form.Item className="input" name="addCVFile" >
                       <Upload>
                         <Input className="input input-upload" size='large' placeholder="Загрузить CV"/>
                       </Upload>
@@ -266,16 +266,16 @@ const InternationalOrganizations: React.FC = () => {
             <ModalWindow title="Добавить проект" openModal={modalState.addProject} closeModal={() => handleModal('addProject', false)}>
                 <FormComponent onFinish={onFinish}>
                         <div className="form-inputs">
-                            <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите Ф.И.О"}]}>
+                            <Form.Item className="input" name="fullName" >
                                 <Input className="input" size='large' placeholder="Введите Ф.И.О"/>
                             </Form.Item>
-                            <Form.Item className="input" name="additionalInfo" rules={[{required: true, message:"Выберите дополнительную информацию"}]}>
+                            <Form.Item className="input" name="additionalInfo" >
                                 <Input className="input" size='large' placeholder="Дополнительная информация"/>
                             </Form.Item>
                         </div>
                     {files.map((item) => (
                         <div className="form-inputs" key={item?.id}>
-                             <Form.Item className="input" name="name" rules={[{required: true, message:"Выберите CV"}]}>
+                             <Form.Item className="input" name="addCVFile" >
                                 <Upload>
                                     <Input className="input input-upload" size='large' placeholder="Загрузить CV"/>
                                 </Upload>

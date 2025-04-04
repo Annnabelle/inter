@@ -134,21 +134,21 @@ const InternationalDocuments: React.FC = () => {
             <ModalWindow title="Добавить документ" openModal={modalState.addDocument} closeModal={() => handleModal('addDocument', false)}>
                 <FormComponent  onFinish={onFinish}>
                     <div className="form-inputs">
-                        <Form.Item className="input" name="nameOfDocument" rules={[{required: true, message:"Введите название документа"}]}>
+                        <Form.Item className="input" name="nameOfDocument" >
                             <Input className="input" size='large' placeholder="Название документа"/>
                         </Form.Item>
-                        <Form.Item className="input" name="date" rules={[{required: true, message:"Выберите дату"}]}>
+                        <Form.Item className="input" name="date" >
                             <DatePicker size="large" className="input"/>
                         </Form.Item>
                     </div>
                     <div className="form-inputs">
-                        <Form.Item className="input" name="place" rules={[{required: true, message:"Выберите страну"}]}>
+                        <Form.Item className="input" name="country" >
                             <Select className="input" size="large" options={countryOptions} placeholder="Страна" />
                         </Form.Item>
                     </div>  
                     {isAnotherCountry && (
                         <div className="form-inputs">
-                                <Form.Item className="input" name="anotherCountry" rules={[{required: true, message:"Введите название страны"}]}>
+                                <Form.Item className="input" name="anotherCountry" >
                                     <Input className="input" size='large' placeholder="Название страны"/>
                                 </Form.Item>
                         </div>
@@ -158,13 +158,13 @@ const InternationalDocuments: React.FC = () => {
                     </div>
 
                     <div className="form-inputs">
-                        <Form.Item className="input" name="government" rules={[{required: true, message:"Выберите Гос.орган"}]}>
+                        <Form.Item className="input" name="government" >
                             <Select className="input" size="large" options={countryOptions} placeholder="Гос.орган" />
                         </Form.Item>
                     </div>  
                     {isAnotherGovernment && (
                         <div className="form-inputs">
-                                <Form.Item className="input" name="anotherGovernment" rules={[{required: true, message:"Введите название Гос.органа"}]}>
+                                <Form.Item className="input" name="anotherGovernment" >
                                     <Input className="input" size='large' placeholder="Название Гос.органа"/>
                                 </Form.Item>
                         </div>
@@ -173,13 +173,13 @@ const InternationalDocuments: React.FC = () => {
                         <p className="form-btn-new-text" onClick={handleAnotherGovernment}>Другаой Гос.орган</p>
                     </div>
                     <div className="form-inputs">
-                        <Form.Item className="input" name="administrationPermission" rules={[{required: true, message:"Выберите Разрешение администрации"}]}>
+                        <Form.Item className="input" name="administrationPermission" >
                             <Input className="input" size='large' placeholder="Разрешение администрации"/>
                         </Form.Item>
                     </div>  
                     {files.map((item) => (
                         <div className="form-inputs" key={item?.id}>
-                            <Form.Item className="input" name="file" rules={[{required: true, message:"Выберите файл"}]}>
+                            <Form.Item className="input" name="file" >
                                 <Upload>
                                     <Input className="input input-upload" size='large' placeholder="Загрузить файл"/>
                                 </Upload>
@@ -195,45 +195,45 @@ const InternationalDocuments: React.FC = () => {
             <ModalWindow title="Просмотреть документ" openModal={modalState.retrieveDocument} closeModal={() => handleModal('retrieveDocument', false)} handleEdit={() => handleEditOpen('Document')}>
                 <FormComponent>
                     <div className="form-inputs">
-                        <Form.Item className="input" name="nameOfDocument" rules={[{required: true, message:"Введите название документа"}]}>
+                        <Form.Item className="input" name="nameOfDocument" >
                             <Input disabled className="input" size='large' placeholder="Название документа"/>
                         </Form.Item>
-                        <Form.Item className="input" name="date" rules={[{required: true, message:"Выберите дату"}]}>
+                        <Form.Item className="input" name="date" >
                             <DatePicker disabled size="large" className="input"/>
                         </Form.Item>
                     </div>
                     <div className="form-inputs">
-                        <Form.Item className="input" name="place" rules={[{required: true, message:"Выберите страну"}]}>
+                        <Form.Item className="input" name="country">
                             <Select disabled className="input" size="large" options={countryOptions} placeholder="Страна" />
                         </Form.Item>
                     </div>  
                     {isAnotherCountry && (
                         <div className="form-inputs">
-                            <Form.Item className="input" name="anotherCountry" rules={[{required: true, message:"Введите название страны"}]}>
+                            <Form.Item className="input" name="anotherCountry" >
                                 <Input disabled className="input" size='large' placeholder="Название страны"/>
                             </Form.Item>
                         </div>
                     )}
                     <div className="form-inputs">
-                        <Form.Item className="input" name="government" rules={[{required: true, message:"Выберите Гос.орган"}]}>
+                        <Form.Item className="input" name="government" >
                             <Select disabled className="input" size="large" options={countryOptions} placeholder="Гос.орган" />
                         </Form.Item>
                     </div>  
                     {isAnotherGovernment && (
                         <div className="form-inputs">
-                            <Form.Item className="input" name="anotherGovernment" rules={[{required: true, message:"Введите название Гос.органа"}]}>
+                            <Form.Item className="input" name="anotherGovernment" >
                                 <Input disabled className="input" size='large' placeholder="Название Гос.органа"/>
                             </Form.Item>
                         </div>
                     )}
                     <div className="form-inputs">
-                        <Form.Item className="input" name="administrationPermission" rules={[{required: true, message:"Выберите Разрешение администрации"}]}>
+                        <Form.Item className="input" name="administrationPermission" >
                             <Input disabled className="input" size='large' placeholder="Разрешение администрации"/>
                         </Form.Item>
                     </div>  
                     {files.map((item) => (
                         <div className="form-inputs" key={item?.id}>
-                            <Form.Item className="input" name="file" rules={[{required: true, message:"Выберите файл"}]}>
+                            <Form.Item className="input" name="file" >
                                 <Upload>
                                     <Input disabled className="input input-upload" size='large' placeholder="Загрузить файл"/>
                                 </Upload>
@@ -245,21 +245,21 @@ const InternationalDocuments: React.FC = () => {
             <ModalWindow title="Изменить документ" openModal={modalState.editDocument} closeModal={() => handleModal('editDocument', false)} handleDelete={() => handleDeleteOpen('Document')}>
                 <FormComponent>
                     <div className="form-inputs">
-                        <Form.Item className="input" name="nameOfDocument" rules={[{required: true, message:"Введите название документа"}]}>
+                        <Form.Item className="input" name="nameOfDocument" >
                             <Input className="input" size='large' placeholder="Название документа"/>
                         </Form.Item>
-                        <Form.Item className="input" name="date" rules={[{required: true, message:"Выберите дату"}]}>
+                        <Form.Item className="input" name="date" >
                             <DatePicker size="large" className="input"/>
                         </Form.Item>
                     </div>
                     <div className="form-inputs">
-                        <Form.Item className="input" name="place" rules={[{required: true, message:"Выберите страну"}]}>
+                        <Form.Item className="input" name="country" >
                             <Select className="input" size="large" options={countryOptions} placeholder="Страна" />
                         </Form.Item>
                     </div>  
                     {isAnotherCountry && (
                         <div className="form-inputs">
-                                <Form.Item className="input" name="anotherCountry" rules={[{required: true, message:"Введите название страны"}]}>
+                                <Form.Item className="input" name="anotherCountry" >
                                     <Input className="input" size='large' placeholder="Название страны"/>
                                 </Form.Item>
                         </div>
@@ -268,13 +268,13 @@ const InternationalDocuments: React.FC = () => {
                         <p className="form-btn-new-text" onClick={handleAnotherCountry}>Другая страна</p>
                     </div>
                     <div className="form-inputs">
-                        <Form.Item className="input" name="government" rules={[{required: true, message:"Выберите Гос.орган"}]}>
+                        <Form.Item className="input" name="government" >
                             <Select className="input" size="large" options={countryOptions} placeholder="Гос.орган" />
                         </Form.Item>
                     </div>  
                     {isAnotherGovernment && (
                         <div className="form-inputs">
-                                <Form.Item className="input" name="anotherGovernment" rules={[{required: true, message:"Введите название Гос.органа"}]}>
+                                <Form.Item className="input" name="anotherGovernment" >
                                     <Input className="input" size='large' placeholder="Название Гос.органа"/>
                                 </Form.Item>
                         </div>
@@ -283,13 +283,13 @@ const InternationalDocuments: React.FC = () => {
                         <p className="form-btn-new-text" onClick={handleAnotherGovernment}>Другаой Гос.орган</p>
                     </div>
                     <div className="form-inputs">
-                        <Form.Item className="input" name="administrationPermission" rules={[{required: true, message:"Выберите Разрешение администрации"}]}>
+                        <Form.Item className="input" name="administrationPermission" >
                             <Input className="input" size='large' placeholder="Разрешение администрации"/>
                         </Form.Item>
                     </div>  
                     {files.map((item) => (
                         <div className="form-inputs" key={item?.id}>
-                            <Form.Item className="input" name="file" rules={[{required: true, message:"Выберите файл"}]}>
+                            <Form.Item className="input" name="file" >
                                 <Upload>
                                     <Input className="input input-upload" size='large' placeholder="Загрузить файл"/>
                                 </Upload>

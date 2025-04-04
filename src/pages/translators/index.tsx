@@ -124,16 +124,16 @@ const Translators: React.FC = () => {
             <ModalWindow title="Добавить переводчика" openModal={modalState.addTranslator} closeModal={() => handleModal('addTranslator', false)}>
                 <FormComponent  onFinish={onFinish}>
                         <div className="form-inputs">
-                            <Form.Item className="input" name="name" rules={[{required: true, message:"Введите Ф.И.О"}]}>
+                            <Form.Item className="input" name="fullName" >
                                 <Input className="input" size='large' placeholder="Ф.И.О"/>
                             </Form.Item>
                         </div>
                         {languages.map((item) => (
                             <div className="form-inputs" key={item?.id}>
-                                <Form.Item className="input" name="language" rules={[{required: true, message:"Выберите язык"}]}>
+                                <Form.Item className="input" name="language" >
                                     <Select className="input" size="large" options={languageOption} placeholder="Выберите язык" />
                                 </Form.Item>
-                                <Form.Item className="input" name="points" rules={[{required: true, message:"Введите балов"}]}>
+                                <Form.Item className="input" name="points" >
                                     <Input className="input" size='large' placeholder="балы"/>
                                 </Form.Item>
                             </div>
@@ -147,16 +147,16 @@ const Translators: React.FC = () => {
             <ModalWindow title="Просмотреть переводчика" openModal={modalState.retrieveTranslator} closeModal={() => handleModal('retrieveTranslator', false)} handleEdit={() => handleEditOpen('Translator')}>
                 <FormComponent>
                     <div className="form-inputs">
-                        <Form.Item className="input" name="name" rules={[{required: true, message:"Введите Ф.И.О"}]}>
+                        <Form.Item className="input" name="fullName" >
                             <Input disabled className="input" size='large' placeholder="Ф.И.О"/>
                         </Form.Item>
                     </div>
                     {languages.map((item) => (
                         <div className="form-inputs" key={item?.id}>
-                            <Form.Item className="input" name="language" rules={[{required: true, message:"Выберите язык"}]}>
+                            <Form.Item className="input" name="language" >
                                 <Select disabled className="input" size="large" options={languageOption} placeholder="Выберите язык" />
                             </Form.Item>
-                            <Form.Item className="input" name="points" rules={[{required: true, message:"Введите балов"}]}>
+                            <Form.Item className="input" name="points" >
                                 <Input disabled className="input" size='large' placeholder="балы"/>
                             </Form.Item>
                         </div>
@@ -166,16 +166,16 @@ const Translators: React.FC = () => {
             <ModalWindow title="Изменить переводчика" openModal={modalState.editTranslator} closeModal={() => handleModal('editTranslator', false)} handleDelete={() => handleDeleteOpen('Translator')}>
                 <FormComponent>
                     <div className="form-inputs">
-                        <Form.Item className="input" name="name" rules={[{required: true, message:"Введите Ф.И.О"}]}>
+                        <Form.Item className="input" name="fullName" >
                             <Input className="input" size='large' placeholder="Ф.И.О"/>
                         </Form.Item>
                     </div>
                     {languages.map((item) => (
                         <div className="form-inputs" key={item?.id}>
-                            <Form.Item className="input" name="language" rules={[{required: true, message:"Выберите язык"}]}>
+                            <Form.Item className="input" name="language" >
                                 <Select className="input" size="large" options={languageOption} placeholder="Выберите язык" />
                             </Form.Item>
-                            <Form.Item className="input" name="points" rules={[{required: true, message:"Введите балов"}]}>
+                            <Form.Item className="input" name="points" >
                                 <Input className="input" size='large' placeholder="балы"/>
                             </Form.Item>
                         </div>
