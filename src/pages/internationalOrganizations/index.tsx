@@ -78,7 +78,7 @@ const InternationalOrganizations: React.FC = () => {
   return (
     <MainLayout>
       <MainHeading title="Международные организации" subtitle='Подзаголовок'>
-        <div className="main-heading-dropdown">
+        <div className="main-heading-dropdown main-heading-dropdown-single-btn">
             <div className="main-heading-dropdown-item" onClick={() => handleSortDropdown()}>
                 <div className="dropdown-text">
                     <p className="text">Сортировать по</p>

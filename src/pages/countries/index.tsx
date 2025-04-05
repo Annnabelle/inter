@@ -25,7 +25,7 @@ const Countries: React.FC = () => {
     return (
         <MainLayout>
             <MainHeading title="Страны" subtitle="Подзаголоок">
-                <div className="main-heading-dropdown">
+                <div className="main-heading-dropdown main-heading-dropdown-single-btn">
                 <div className="main-heading-dropdown-item" onClick={() => handleSortDropdown()}>
                     <div className="dropdown-text">
                         <p className="text">Сортировать по</p>
