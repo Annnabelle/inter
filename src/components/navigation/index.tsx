@@ -18,18 +18,18 @@ const Navigation: React.FC = () => {
       icon: <BiWorld />, 
       text: 'Сотрудничество',
       dropdown: [
-        { to: '/cooperation/countries', text: 'Страны' },
+        { to: '/countries', text: 'Страны' },
         { 
-          to: '/cooperation/international-organizations', 
+          to: '/international-organizations', 
           text: 'Международные организации',
         },
-        { to: '/cooperation/international-non-governmental-organizations', text: 'Международные неправительственные организации' },
+        { to: '/international-non-governmental-organizations', text: 'Международные неправительственные организации' },
         { to: '/', text: 'Международные документы', icon:     <IoIosArrowForward/>,    subDropdown: [
-          { to: '/cooperation/international-documents', text: 'Международные документы' },
-          { to: '/cooperation/international-treaties', text: 'Международные договора' },
+          { to: '/international-documents', text: 'Международные документы' },
+          { to: '/international-treaties', text: 'Международные договора' },
         ] },
-        { to: '/cooperation/experts', text: 'Эксперты' },
-        { to: '/cooperation/translators', text: 'Переводчики' }
+        { to: '/experts', text: 'Эксперты' },
+        { to: '/translators', text: 'Переводчики' }
       ]
     },
     { to: '/', icon: <GoGraph />, text: 'Статистика' },
