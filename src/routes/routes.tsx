@@ -21,14 +21,14 @@ const Router: React.FC = () => {
           <Route index element={<Home />} />
         </Route>
         <Route path="/cooperation" element={<Cooperation />} />
-        <Route path='/cooperation/countries' element={<Countries/>}/>
-        <Route path='/cooperation/countries/:id' element={<CountriesInner/>}/>
-        <Route path="/cooperation/international-organizations" element={<InternationalOrganizations/>}/>
-        <Route path='/cooperation/international-non-governmental-organizations' element={<InternationalNonGovernmentalOrganizations/>}/>
-        <Route path='/cooperation/experts' element={<Experts/>}/>
-        <Route path='/cooperation/translators' element={<Translators/>}/>
-        <Route path='/cooperation/international-treaties' element={<InternationalTreaties/>}/>
-        <Route path="/cooperation/international-documents" element={<InternationalDocuments/>}/>
+        <Route path='/countries' element={<Countries/>}/>
+        <Route path='/countries/:id' element={<CountriesInner/>}/>
+        <Route path="/international-organizations" element={<InternationalOrganizations/>}/>
+        <Route path='/international-non-governmental-organizations' element={<InternationalNonGovernmentalOrganizations/>}/>
+        <Route path='/experts' element={<Experts/>}/>
+        <Route path='/translators' element={<Translators/>}/>
+        <Route path='/international-treaties' element={<InternationalTreaties/>}/>
+        <Route path="/international-documents" element={<InternationalDocuments/>}/>
       </Routes>
     </Suspense>
   );
