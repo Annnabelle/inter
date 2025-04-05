@@ -40,23 +40,18 @@ const InternationalDocuments: React.FC = () => {
         setModalState((prev) => ({...prev, [modalName] : value}));
     }
 
-    const handleRowClick = (type: 'document', action: 'Retrieve' | 'Edit' | 'Delete', record: InternationalDocumentsTableDataType) => {
+    const handleRowClick = (type: 'Document', action: 'retrieve' | 'edit' | 'delete', record: InternationalDocumentsTableDataType) => {
         console.log(`Clicked on ${type}, action: ${action}, record:`, record);
-    
-        const modalKey = action === 'Retrieve' ? 'retrieveDocument' 
-                        : action === 'Edit' ? 'editDocument' 
-                        : 'deleteDocument';
-    
         setModalState((prev) => ({
             ...prev,
-            [modalKey]: true,
+            [`${action}${type}`]: true,
         }));
     };
 
     const handleEditOpen = (type: 'Document') => {
         setModalState((prev) => ({
             ...prev,
-            [`edit${type}`]: false,
+            [`retrieve${type}`]: false,
         }));
         setTimeout(() => {
             setModalState((prev) => ({ ...prev, [`edit${type}`]: true }));
@@ -66,7 +61,7 @@ const InternationalDocuments: React.FC = () => {
     const handleDeleteOpen = (type: 'Document') => {
         setModalState((prev) => ({
             ...prev,
-            [`delete${type}`]: false,
+            [`edit${type}`]: false,
         }));
         setTimeout(() => {
             setModalState((prev) => ({ ...prev, [`delete${type}`]: true }));
@@ -129,7 +124,7 @@ const InternationalDocuments: React.FC = () => {
                 }}
                 className="layout-content-container"
             >
-               <ComponentTable<InternationalDocumentsTableDataType> onRowClick={(record) => handleRowClick('document', 'Retrieve', record)} columns={InternationalDocumentsTableColumn} data={InternationalDocumentsTableData}/>
+               <ComponentTable<InternationalDocumentsTableDataType> onRowClick={(record) => handleRowClick('Document', 'retrieve', record)} columns={InternationalDocumentsTableColumn} data={InternationalDocumentsTableData}/>
             </div>
             <ModalWindow title="Добавить документ" openModal={modalState.addDocument} closeModal={() => handleModal('addDocument', false)}>
                 <FormComponent  onFinish={onFinish}>

@@ -40,23 +40,18 @@ const Translators: React.FC = () => {
         setModalState((prev) => ({...prev, [modalName] : value}));
     }
 
-    const handleRowClick = (type: 'translator', action: 'Retrieve' | 'Edit' | 'Delete', record: TranslatorsTableDataTypes) => {
+    const handleRowClick = (type: 'Translator', action: 'retrieve' | 'edit' | 'delete', record: TranslatorsTableDataTypes) => {
         console.log(`Clicked on ${type}, action: ${action}, record:`, record);
-    
-        const modalKey = action === 'Retrieve' ? 'retrieveTranslator' 
-                        : action === 'Edit' ? 'editTranslator' 
-                        : 'deleteTranslator';
-    
         setModalState((prev) => ({
             ...prev,
-            [modalKey]: true,
+            [`${action}${type}`]: true,
         }));
     };
 
     const handleEditOpen = (type: 'Translator') => {
         setModalState((prev) => ({
             ...prev,
-            [`edit${type}`]: false,
+            [`retrieve${type}`]: false,
         }));
         setTimeout(() => {
             setModalState((prev) => ({ ...prev, [`edit${type}`]: true }));
@@ -66,7 +61,7 @@ const Translators: React.FC = () => {
     const handleDeleteOpen = (type: 'Translator') => {
         setModalState((prev) => ({
             ...prev,
-            [`delete${type}`]: false,
+            [`edit${type}`]: false,
         }));
         setTimeout(() => {
             setModalState((prev) => ({ ...prev, [`delete${type}`]: true }));
@@ -119,7 +114,7 @@ const Translators: React.FC = () => {
                 }}
                 className="layout-content-container"
             >
-               <ComponentTable<TranslatorsTableDataTypes> onRowClick={(record) => handleRowClick('translator', 'Retrieve', record)} data={TranslatorsData} columns={TranslatorsColumns}/>
+               <ComponentTable<TranslatorsTableDataTypes> onRowClick={(record) => handleRowClick('Translator', 'retrieve', record)} data={TranslatorsData} columns={TranslatorsColumns}/>
             </div>
             <ModalWindow title="Добавить переводчика" openModal={modalState.addTranslator} closeModal={() => handleModal('addTranslator', false)}>
                 <FormComponent  onFinish={onFinish}>
