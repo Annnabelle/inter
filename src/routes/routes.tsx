@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
 const Home = lazy(() => import("../pages/home"));
@@ -12,6 +12,7 @@ const Experts = lazy(() => import("../pages/experts"))
 const Translators = lazy(() => import("../pages/translators"))
 const InternationalTreaties = lazy(() => import("../pages/internationalTreaties"))
 const InternationalDocuments = lazy(()=> import('../pages/internationalDocuments'))
+const Reports = lazy(() => import("../pages/reports"))
 
 const Router: React.FC = () => {
   return (
@@ -29,6 +30,7 @@ const Router: React.FC = () => {
         <Route path='/translators' element={<Translators/>}/>
         <Route path='/international-treaties' element={<InternationalTreaties/>}/>
         <Route path="/international-documents" element={<InternationalDocuments/>}/>
+        <Route path="/reports" element={<Reports/>}/>
       </Routes>
     </Suspense>
   );
