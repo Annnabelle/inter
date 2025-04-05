@@ -40,23 +40,19 @@ const InternationalTreaties: React.FC = () => {
         setModalState((prev) => ({...prev, [modalName] : value}));
     }
 
-    const handleRowClick = (type: 'treaties', action: 'Retrieve' | 'Edit' | 'Delete', record: InternationalTreatiesTableDataType) => {
+    const handleRowClick = (type: 'Treaties', action: 'retrieve' | 'edit' | 'delete', record: InternationalTreatiesTableDataType) => {
         console.log(`Clicked on ${type}, action: ${action}, record:`, record);
-    
-        const modalKey = action === 'Retrieve' ? 'retrieveTreaties' 
-                        : action === 'Edit' ? 'editTreaties' 
-                        : 'deleteTreaties';
-    
+
         setModalState((prev) => ({
             ...prev,
-            [modalKey]: true,
+            [`${action}${type}`]: true,
         }));
     };
 
     const handleEditOpen = (type: 'Treaties') => {
         setModalState((prev) => ({
             ...prev,
-            [`edit${type}`]: false,
+            [`retrieve${type}`]: false,
         }));
         setTimeout(() => {
             setModalState((prev) => ({ ...prev, [`edit${type}`]: true }));
@@ -66,7 +62,7 @@ const InternationalTreaties: React.FC = () => {
     const handleDeleteOpen = (type: 'Treaties') => {
         setModalState((prev) => ({
             ...prev,
-            [`delete${type}`]: false,
+            [`edit${type}`]: false,
         }));
         setTimeout(() => {
             setModalState((prev) => ({ ...prev, [`delete${type}`]: true }));
@@ -119,7 +115,7 @@ const InternationalTreaties: React.FC = () => {
                 }}
                 className="layout-content-container"
             >
-               <ComponentTable<InternationalTreatiesTableDataType> onRowClick={(record) => handleRowClick('treaties', 'Retrieve', record)} columns={InternationalTreatiesTableColumn} data={InternationalTreatiesTableData}/>
+               <ComponentTable<InternationalTreatiesTableDataType> onRowClick={(record) => handleRowClick('Treaties', 'retrieve', record)} columns={InternationalTreatiesTableColumn} data={InternationalTreatiesTableData}/>
             </div>
             <ModalWindow title="Добавить договор" openModal={modalState.addTreaties} closeModal={() => handleModal('addTreaties', false)}>
                 <FormComponent  onFinish={onFinish}>

@@ -40,23 +40,18 @@ const Experts: React.FC = () => {
         setModalState((prev) => ({...prev, [modalName] : value}));
     }
 
-    const handleRowClick = (type: 'expert', action: 'Retrieve' | 'Edit' | 'Delete', record: ExpertsTableDataTypes) => {
+    const handleRowClick = (type: 'Expert', action: 'retrieve' | 'edit' | 'delete', record: ExpertsTableDataTypes) => {
         console.log(`Clicked on ${type}, action: ${action}, record:`, record);
-    
-        const modalKey = action === 'Retrieve' ? 'retrieveExpert' 
-                        : action === 'Edit' ? 'editExpert' 
-                        : 'deleteExpert';
-    
         setModalState((prev) => ({
             ...prev,
-            [modalKey]: true,
+            [`${action}${type}`]: true,
         }));
     };
 
     const handleEditOpen = (type: 'Expert') => {
         setModalState((prev) => ({
             ...prev,
-            [`edit${type}`]: false,
+            [`retrieve${type}`]: false,
         }));
         setTimeout(() => {
             setModalState((prev) => ({ ...prev, [`edit${type}`]: true }));
@@ -66,7 +61,7 @@ const Experts: React.FC = () => {
     const handleDeleteOpen = (type: 'Expert') => {
         setModalState((prev) => ({
             ...prev,
-            [`delete${type}`]: false,
+            [`edit${type}`]: false,
         }));
         setTimeout(() => {
             setModalState((prev) => ({ ...prev, [`delete${type}`]: true }));
@@ -119,7 +114,7 @@ const Experts: React.FC = () => {
                 }}
                 className="layout-content-container"
             >
-               <ComponentTable<ExpertsTableDataTypes> onRowClick={(record) => handleRowClick('expert', 'Retrieve', record)} data={ExpertsData} columns={ExpertsColumns}/>
+               <ComponentTable<ExpertsTableDataTypes> onRowClick={(record) => handleRowClick('Expert', 'retrieve', record)} data={ExpertsData} columns={ExpertsColumns}/>
             </div>
             <ModalWindow title="Добавить эксперта" openModal={modalState.addExpert} closeModal={() => handleModal('addExpert', false)}>
                 <FormComponent  onFinish={onFinish}>
