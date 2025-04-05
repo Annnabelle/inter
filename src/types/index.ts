@@ -127,3 +127,12 @@ export interface CountriesTableDataType {
     meeting: string,
     visits: string
 }
+
+export interface ReportsTableDataType {
+    key: string,
+    nameOfReport: string,
+    typeOfReport: string,
+    responsibleForReport: string,
+    dateOfCreation: string,
+    actions: [string, string]
+}

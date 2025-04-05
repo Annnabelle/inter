@@ -190,5 +190,13 @@
             +mix.typography(20px, 700, map.get(vars.$basic, 'black'))
         &-text
             +mix.typography(20px, 400, map.get(vars.$basic, 'black'))
+        &-action
+            @include mix.flex-content(flex-start, row)
+            column-gap: 10px
+            &-text
+                +mix.typography(20px, 400, map.get(vars.$main, 'grey'))
+                transition: all 0.5s ease
+                &:hover
+                    color: map.get(vars.$main, "main")
         .clickable-row
             cursor: pointer
