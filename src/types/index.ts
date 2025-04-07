@@ -136,3 +136,12 @@ export interface ReportsTableDataType {
     dateOfCreation: string,
     actions: [string, string]
 }
+
+export interface AdministrationDataType {
+    key: string,
+    name: string, 
+    role: string, 
+    status: string,
+    lastVisit: string,
+    action: string
+}

@@ -13,6 +13,7 @@ const Translators = lazy(() => import("../pages/translators"))
 const InternationalTreaties = lazy(() => import("../pages/internationalTreaties"))
 const InternationalDocuments = lazy(()=> import('../pages/internationalDocuments'))
 const Reports = lazy(() => import("../pages/reports"))
+const Administration = lazy(() => import("../pages/administration"))
 
 const Router: React.FC = () => {
   return (
@@ -31,6 +32,7 @@ const Router: React.FC = () => {
         <Route path='/international-treaties' element={<InternationalTreaties/>}/>
         <Route path="/international-documents" element={<InternationalDocuments/>}/>
         <Route path="/reports" element={<Reports/>}/>
+        <Route path='/administrations' element={<Administration/>}/>
       </Routes>
     </Suspense>
   );
