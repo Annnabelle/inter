@@ -34,7 +34,7 @@ const Navigation: React.FC = () => {
     },
     { to: '/', icon: <GoGraph />, text: 'Статистика' },
     { to: '/reports', icon: <GrDocument />, text: 'Отчеты' },
-    { to: '/', icon: <FiSettings />, text: 'Администрирование' },
+    { to: '/administrations', icon: <FiSettings />, text: 'Администрирование' },
   ];
 
   return (
