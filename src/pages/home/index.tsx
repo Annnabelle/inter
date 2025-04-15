@@ -43,7 +43,7 @@ const MainEventsPage: React.FC = () => {
                     Создать мероприятие <FaPlus />
                     </Button>
                 <div className="layout-events-heading-dropdown" ref={eventsDropdownRef}>
-                    <Button  onClick={(e) => {e.stopPropagation(); setIsOpen((prev) => !prev);}}>Действия</Button>
+                    <Button  onClick={(e) => {e.stopPropagation(); setIsOpen((prev) => !prev);}} className="outline">Действия</Button>
                     {isOpen && (
                         <div className="event-dropdown">
                             <div className="event-dropdown-action">

@@ -233,3 +233,13 @@ export interface VisitStatisticsEmployeesDataTypes {
     agency: string,
     otherOrganizer: string
 }
+
+export interface VisitCountryStatisticsDataTypes {
+    key: string,
+    number: string,
+    name: string,
+    visitsAmount: string,
+    agency: string,
+    otherOrganizer: string,
+    country: string
+}

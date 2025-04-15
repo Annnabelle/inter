@@ -2,11 +2,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 import { Select, theme } from "antd";
-import {VisitStatisticsEmployeesDataTypes } from "../../types";
+import {VisitCountryStatisticsDataTypes, VisitStatisticsEmployeesDataTypes } from "../../types";
 import { VisitStatisticsEmployeesColumns, VisitStatisticsEmployeesData } from "../../tableData/visitStatistic";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
 import ComponentTable from "../../components/table";
+import { VisitCountryStatisticsColumns, VisitCountryStatisticsData } from "../../tableData/visitCountryStatistic";
 
 
 const StatisticsOfCountryVisits: React.FC = () => {
@@ -20,7 +21,7 @@ const StatisticsOfCountryVisits: React.FC = () => {
         setOpenSortDropdown((prev) => (!prev))
     }
     const handleRowClick = (record: { key: string }) => {
-        navigate(`/cooperation/countries/${record.key}`)
+        navigate(`/countries/${record.key}`)
     }
 
      const handleClickOutside = useCallback((event: MouseEvent) => {
@@ -51,9 +52,8 @@ const StatisticsOfCountryVisits: React.FC = () => {
     return (
         <MainLayout ref={sortDropdownRef}>
             <MainHeading title="Статистика визитов стран" subtitle="Подзаголоок">
-            <Select options={filterOptions} size="large" className="select" placeholder="Сортировать по"/>
-
-<Select options={yearsOptions} size="large" className="select" placeholder="Выбрать год"/>
+                <Select options={filterOptions} size="large" className="select" placeholder="Сортировать по"/>
+                <Select options={yearsOptions} size="large" className="select" placeholder="Выбрать год"/>
             </MainHeading>
             <div
                 style={{
@@ -66,7 +66,7 @@ const StatisticsOfCountryVisits: React.FC = () => {
                         <h1 className="title">Статистика визитов стран, за 2025 год:</h1>
                     </div>
                 </div>
-               <ComponentTable<VisitStatisticsEmployeesDataTypes> onRowClick={handleRowClick} columns={VisitStatisticsEmployeesColumns} data={VisitStatisticsEmployeesData}/>
+               <ComponentTable<VisitCountryStatisticsDataTypes> onRowClick={handleRowClick} columns={VisitCountryStatisticsColumns} data={VisitCountryStatisticsData}/>
             </div>
         </MainLayout>
     );
