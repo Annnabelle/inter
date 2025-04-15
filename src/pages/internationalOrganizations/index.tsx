@@ -104,8 +104,8 @@ const InternationalOrganizations: React.FC = () => {
       </MainHeading>
       <div style={{background: colorBgContainer,}} className="layout-content-container">
         <div className="international-organizations">
-          <div className="countries-inner-table-container">
-            <div className="countries-inner-table-container-heading">
+          <div className="page-inner-table-container">
+            <div className="page-inner-table-container-heading">
               <div className="heading-title">
                 <h3 className="title">
                     Главы
@@ -117,8 +117,8 @@ const InternationalOrganizations: React.FC = () => {
             </div>
             <ComponentTable<InternationalOrganizationChiefDataType> onRowClick={() => handleRowClick('chief', "Retrieve")} data={InternationalOrganizationChiefData} columns={InternationalOrganizationChiefColumns} />
           </div>
-            <div className="countries-inner-table-container">
-                <div className="countries-inner-table-container-heading">
+            <div className="page-inner-table-container">
+                <div className="page-inner-table-container-heading">
                   <div className="heading-title">
                     <h3 className="title">
                         Совместные проекты
@@ -130,8 +130,8 @@ const InternationalOrganizations: React.FC = () => {
                 </div>
                 <ComponentTable<InternationalOrganizationProjectDataType> onRowClick={() => handleRowClick('project', "Retrieve")} data={InternationalOrganizationProjectData} columns={InternationalOrganizationProjectColumns}/>
             </div>
-            <div className="countries-inner-table-container">
-                <div className="countries-inner-table-container-heading">
+            <div className="page-inner-table-container">
+                <div className="page-inner-table-container-heading">
                     <div className="heading-title">
                         <h3 className="title">
                             Хронология встреч

@@ -90,37 +90,37 @@ const CountriesInner: React.FC = () => {
                 }}
                 className="layout-content-container"
             >
-                <div className="countries-inner">
-                    <div className="countries-inner-title">
+                <div className="page-inner">
+                    <div className="page-inner-title">
                         <h1 className="title">Страна: Российская Федерация </h1>
                     </div>
-                    <div className="countries-inner-content">
-                        <div className="countries-inner-content-title">
+                    <div className="page-inner-content">
+                        <div className="page-inner-content-title">
                             <h2 className="title">Test Name</h2>
                         </div>
-                        <div className="countries-inner-content-subtitle">
+                        <div className="page-inner-content-subtitle">
                             <p className="subtitle">Тестовый текст который будет написан в таком формате</p>
                         </div>
                     </div>
                 </div>
-                <div className="countries-inner-table-container">
-                    <div className="countries-inner-table-container-heading">
+                <div className="page-inner-table-container">
+                    <div className="page-inner-table-container-heading">
                         <h3 className="title">
                             Мероприятия
                         </h3>
                     </div>
                     <ComponentTable<CountriesInnerEventDataType> columns={CountriesEventTableColumns} data={CountriesEventTableData} />
                 </div>
-                <div className="countries-inner-table-container">
-                    <div className="countries-inner-table-container-heading">
+                <div className="page-inner-table-container">
+                    <div className="page-inner-table-container-heading">
                         <h3 className="title">
                             Визиты
                         </h3>
                     </div>
                     <ComponentTable<CountriesInnerVisitsDataType> data={CountriesInnerVisitsData} columns={CountriesInnerVisitsColumns}/>
                 </div>
-                <div className="countries-inner-table-container">
-                    <div className="countries-inner-table-container-heading">
+                <div className="page-inner-table-container">
+                    <div className="page-inner-table-container-heading">
                         <div className="heading-title">
                             <h3 className="title">
                                 Международные документы

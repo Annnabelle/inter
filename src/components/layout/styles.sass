@@ -63,7 +63,8 @@
                                     color: map.get(vars.$main, 'main')
                             &-item:not(:last-child)
                                 border-bottom: 1px solid map.get(vars.$main, 'grey')
-
+                        .sub-dropdown-short
+                            right: -45%
                         .cooperation-dropdown
                             position: absolute
                             display: none
@@ -124,7 +125,7 @@
         border-radius: 6px
         display: flex
         flex-direction: column
-        row-gap: 50px
+        row-gap: 30px
         justify-content: space-between
         .cooperation-main
             &-container
@@ -155,7 +156,7 @@
                         background: map.get(vars.$main, "main")
                         .cooperation-main-container-item-link-text
                             color: map.get(vars.$basic, 'white')
-        .countries-inner
+        .page-inner
             &-title
                 .title
                     +mix.typography(28px, 600, map.get(vars.$main, 'main'))
@@ -173,6 +174,10 @@
                     margin-bottom: 20px
                     .title
                         +mix.typography(28px, 600, map.get(vars.$basic, "black"))
+            &-statistics
+                @include mix.flex-content(space-around, row)
+                gap: 50px
+
     .table
         .ant-table-thead
             .ant-table-cell

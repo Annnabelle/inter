@@ -128,7 +128,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = (props) => {
         onNavigate={(date) => setCurrentDate(date)}
         view={view}
         onView={(newView) => setView(newView)}
-        style={{ height: "100%", background: "white" }}
+        style={{ height: "100vh", background: "white" }}
         toolbar={false}
         eventPropGetter={CalendarEventStyle}
         onSelectEvent={handleSelectEvent}

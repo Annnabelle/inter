@@ -5,13 +5,16 @@ import { BiWorld } from "react-icons/bi";
 import { GoGraph } from "react-icons/go";
 import { GrDocument } from "react-icons/gr";
 import { FiSettings } from "react-icons/fi";
+import {  NavItem } from '../../types';
+
+
 
 const Navigation: React.FC = () => {
   const location = useLocation();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [subHoveredItem, setSubHoveredItem] = useState<string | null>(null);
 
-  const navItems = [
+  const navItems: NavItem[] = [
     { to: '/', icon: <IoMdHome />, text: 'Главная' },
     { 
       to: '/cooperation', 
@@ -32,7 +35,10 @@ const Navigation: React.FC = () => {
         { to: '/translators', text: 'Переводчики' }
       ]
     },
-    { to: '/', icon: <GoGraph />, text: 'Статистика' },
+    { icon: <GoGraph />, text: 'Статистика', dropdown: [{to: '/event-statistics', text: "Мероприятия"}, {to: "", text: 'Визиты',  icon: <IoIosArrowForward/>, className: 'sub-dropdown-short',  subDropdown: [
+      { to: '/statistics-of-country-visits', text: 'Страны' },
+      { to: '/visit-statistics-employee', text: 'Сотрудники' },
+    ] }] },
     { to: '/reports', icon: <GrDocument />, text: 'Отчеты' },
     { to: '/administrations', icon: <FiSettings />, text: 'Администрирование' },
   ];
@@ -40,42 +46,50 @@ const Navigation: React.FC = () => {
   return (
     <nav className="navigation-items">
       {navItems.map(({ to, icon, text, dropdown }) => {
-        const isActive = to === '/' ? location.pathname === '/' : location.pathname.startsWith(to);
-        const isHovered = hoveredItem === to;
+        const currentPath = location.pathname;
+        const isActive = to === '/' ? currentPath === '/' : (to ? currentPath.startsWith(to) : false);
+        const isHovered = hoveredItem === (to ?? text);
 
         return (
           <div 
-            key={to} 
+            key={to ?? text} 
             className={`navigation-items-item ${isActive ? 'active' : ''} ${isHovered ? 'dropdown-open' : ''}`} 
-            onMouseEnter={() => setHoveredItem(to)}
+            onMouseEnter={() => setHoveredItem(to ?? text)}
             onMouseLeave={() => setHoveredItem(null)}
           >
-            <Link to={to} className="nav-link">
-              <div className="item-icon">{icon}</div>
-              <div className="item-link">
-                <p className="item-link-text">{text}</p>
+            {to ? (
+              <Link to={to} className="nav-link">
+                <div className="item-icon">{icon}</div>
+                <div className="item-link">
+                  <p className="item-link-text">{text}</p>
+                </div>
+              </Link>
+            ) : (
+              <div className="nav-link">
+                <div className="item-icon">{icon}</div>
+                <div className="item-link">
+                  <p className="item-link-text">{text}</p>
+                </div>
               </div>
-            </Link>
+            )}
 
             {dropdown && isHovered && (
               <div className="cooperation-dropdown">
-                {dropdown.map(({ to, text, subDropdown, icon }) => {
-                  const isSubHovered = subHoveredItem === to;
+                {dropdown.map(({ to, text, subDropdown, icon, className }) => {
+                  const dropdownKey = to ?? text;
+                  const isSubHovered = subHoveredItem === dropdownKey;
+
                   return (
                     <div 
-                      key={to} 
+                      key={dropdownKey}
                       className="cooperation-dropdown-item"
-                      onMouseEnter={() => setSubHoveredItem(to)}
+                      onMouseEnter={() => setSubHoveredItem(dropdownKey)}
                       onMouseLeave={() => setSubHoveredItem(null)}
                     >
                       <Link to={to} className="cooperation-dropdown-item-link">{text}</Link>
-                      {icon && (
-                        <div className="cooperation-dropdown-icon">
-                          {icon}
-                        </div>
-                      )}
+                      {icon && <div className="cooperation-dropdown-icon">{icon}</div>}
                       {subDropdown && isSubHovered && (
-                        <div className="sub-dropdown">
+                        <div className={`sub-dropdown ${className}`}>
                           {subDropdown.map(({ to, text }) => (
                             <Link key={to} to={to} className="sub-dropdown-item">
                               {text}
