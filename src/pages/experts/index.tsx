@@ -80,31 +80,18 @@ const Experts: React.FC = () => {
         console.log('hello finish');
     }
 
+    const filterOptions = [
+        {value: 'byName',label:'По названию'},
+        {value: 'byVisit',label:'По визиту'},
+        {value: 'byMeeting',label:'По встрече'},
+        {value: 'all', label: 'Все'}
+    ]
+
     return (
         <MainLayout>
             <MainHeading title="Эксперты" subtitle="Подзаголоок">
                 <div className="main-heading-dropdown">
-                    <div className="main-heading-dropdown-item" onClick={() => handleSortDropdown()}>
-                        <div className="dropdown-text">
-                            <p className="text">Сортировать по</p>
-                        </div>
-                        <div className="dropdown-icon">
-                            <IoIosArrowDown />
-                        </div>
-                    </div>
-                    {openSortDropdown && (
-                        <div className="dropdown-sort">
-                            <div className="dropdown-sort-item">
-                                <p className="text">По названию</p>
-                            </div>
-                            <div className="dropdown-sort-item">
-                                <p className="text">По встречам</p>
-                            </div>
-                            <div className="dropdown-sort-item">
-                                <p className="text">По визитам</p>
-                            </div>
-                        </div>
-                    )}
+                    <Select options={filterOptions} size="large" className="select" placeholder="Сортировать по"/>
                 </div>
                     <Button onClick={() => handleModal('addExpert', true)}>Добавить эксперта <IoMdAdd /></Button>
             </MainHeading>

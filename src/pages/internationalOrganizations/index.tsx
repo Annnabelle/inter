@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { theme, Form, Input, Upload } from "antd";
+import { theme, Form, Input, Upload, Select } from "antd";
 import { IoIosArrowDown, IoMdAdd } from 'react-icons/io';
 import {FileItem } from '../../types/countries';
 import { InternationalOrganizationChiefDataType, InternationalOrganizationChronologyOfMeetingDataType, InternationalOrganizationProjectDataType } from '../../types';
@@ -75,31 +75,18 @@ const InternationalOrganizations: React.FC = () => {
       console.log('hello finish');
     };
 
+    const filterOptions = [
+      {value: 'byName',label:'По названию'},
+      {value: 'byVisit',label:'По визиту'},
+      {value: 'byMeeting',label:'По встрече'},
+      {value: 'all', label: 'Все'}
+  ]
+
   return (
     <MainLayout>
       <MainHeading title="Международные организации" subtitle='Подзаголовок'>
         <div className="main-heading-dropdown main-heading-dropdown-single-btn">
-            <div className="main-heading-dropdown-item" onClick={() => handleSortDropdown()}>
-                <div className="dropdown-text">
-                    <p className="text">Сортировать по</p>
-                </div>
-                <div className="dropdown-icon">
-                    <IoIosArrowDown />
-                </div>
-            </div>
-            {openSortDropdown && (
-              <div className="dropdown-sort">
-                  <div className="dropdown-sort-item">
-                      <p className="text">По названию</p>
-                  </div>
-                  <div className="dropdown-sort-item">
-                      <p className="text">По встречам</p>
-                  </div>
-                  <div className="dropdown-sort-item">
-                      <p className="text">По визитам</p>
-                  </div>
-              </div>
-            )}
+        <Select options={filterOptions} size="large" className="select" placeholder="Сортировать по"/>
         </div>
       </MainHeading>
       <div style={{background: colorBgContainer,}} className="layout-content-container">

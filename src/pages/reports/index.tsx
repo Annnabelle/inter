@@ -87,7 +87,7 @@ const Reports: React.FC = () => {
             <Button onClick={() => handleModal('addReport', true)}>Добавить отчет <IoMdAdd /></Button>
                 <div className="main-heading-dropdown">
                     <div className="layout-events-heading-dropdown" ref={eventsDropdownRef}>
-                        <Button  onClick={(e) => {e.stopPropagation(); setActionOpen((prev) => !prev);}}>Действия</Button>
+                        <Button className="outline"  onClick={(e) => {e.stopPropagation(); setActionOpen((prev) => !prev);}}>Действия</Button>
                         {isActionOpen && (
                             <div className="event-dropdown">
                                 <div className="event-dropdown-action">

@@ -211,3 +211,17 @@
                     color: map.get(vars.$main, "main")
         .clickable-row
             cursor: pointer
+    .select
+        width: 100%
+        border: 1px solid map.get(vars.$main, 'main')
+        border-radius: 6px
+        height: 44.8px
+        .ant-select-selector
+            +mix.typography(16px, 500, map.get(vars.$main, 'main'))
+            border: none
+            .ant-select-item
+                padding: 10px 0 !important
+        .ant-select-arrow
+            +mix.typography(16px, 500, map.get(vars.$main, 'main'))
+        .ant-select-selection-placeholder
+            +mix.typography(16px, 500, map.get(vars.$main, 'main'))

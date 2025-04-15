@@ -87,34 +87,18 @@ const InternationalDocuments: React.FC = () => {
         setIsAnotherGovernment((prev) => !prev)
     }
 
+    const filterOptions = [
+        {value: 'byName',label:'По названию'},
+        {value: 'byVisit',label:'По визиту'},
+        {value: 'byMeeting',label:'По встрече'},
+        {value: 'all', label: 'Все'}
+    ]
+
     return (
         <MainLayout>
             <MainHeading title="Международные документы" subtitle="Подзаголоок">
                 <div className="main-heading-dropdown">
-                    <div className="main-heading-dropdown-item" onClick={() => handleSortDropdown()}>
-                        <div className="dropdown-text">
-                            <p className="text">Сортировать по</p>
-                        </div>
-                        <div className="dropdown-icon">
-                            <IoIosArrowDown />
-                        </div>
-                    </div>
-                    {openSortDropdown && (
-                        <div className="dropdown-sort">
-                            <div className="dropdown-sort-item">
-                                <p className="text">По умолчанию</p>
-                            </div>
-                            <div className="dropdown-sort-item">
-                                <p className="text">По названию</p>
-                            </div>
-                            <div className="dropdown-sort-item">
-                                <p className="text">По дате</p>
-                            </div>
-                            <div className="dropdown-sort-item">
-                                <p className="text">По стране</p>
-                            </div>
-                        </div>
-                    )}
+                    <Select options={filterOptions} size="large" className="select" placeholder="Сортировать по"/>
                 </div>
                 <Button onClick={() => handleModal('addDocument', true)}>Добавить документ <IoMdAdd /></Button>
             </MainHeading>
