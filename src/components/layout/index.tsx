@@ -7,10 +7,10 @@ import './styles.sass'
 
 const { Header, Content } = Layout;
 
-const MainLayout: React.FC<{ children: React.ReactNode }>  = ({ children }) => {
+const MainLayout: React.FC<{ children: React.ReactNode, ref?: any }>  = ({ children, ref }) => {
 
   return (
-    <Layout className='layout'>
+    <Layout className='layout' >
       <Header className='layout-header'>
           <div className="layout-header-items">
             <div className="layout-header-item">
@@ -28,7 +28,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }>  = ({ children }) => {
             </div>
         </div>
       </Header>
-      <div className="layout-header-nav">
+      <div className="layout-header-nav" ref={ref}>
         <div className="container">
           <Navigation/>
         </div>

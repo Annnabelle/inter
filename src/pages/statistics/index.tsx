@@ -9,7 +9,7 @@ import MainHeading from "../../components/mainHeading";
 import ComponentTable from "../../components/table";
 
 
-const Countries: React.FC = () => {
+const Statistics: React.FC = () => {
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
@@ -19,12 +19,12 @@ const Countries: React.FC = () => {
         setOpenSortDropdown((prev) => (!prev))
     }
     const handleRowClick = (record: { key: string }) => {
-        navigate(`/countries/${record.key}`)
+        navigate(`/cooperation/countries/${record.key}`)
     }
     
     return (
         <MainLayout>
-            <MainHeading title="Страны" subtitle="Подзаголоок">
+            <MainHeading title="Статистика" subtitle="Подзаголоок">
                 <div className="main-heading-dropdown main-heading-dropdown-single-btn">
                 <div className="main-heading-dropdown-item" onClick={() => handleSortDropdown()}>
                     <div className="dropdown-text">
@@ -61,4 +61,4 @@ const Countries: React.FC = () => {
     );
 };
 
-export default Countries;
+export default Statistics;

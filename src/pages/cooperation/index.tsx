@@ -20,42 +20,42 @@ const Cooperation: React.FC = () => {
                 <div className="cooperation-main">
                     <div className="cooperation-main-container">
                         <div className="cooperation-main-container-item">
-                            <Link to='/' className="cooperation-main-container-item-link">
+                            <Link to='/countries' className="cooperation-main-container-item-link">
                                 <p className="cooperation-main-container-item-link-text">
                                 Страны
                                 </p>
                             </Link>
                         </div>
                         <div className="cooperation-main-container-item">
-                            <Link to='/' className="cooperation-main-container-item-link">
+                            <Link to='/international-organizations' className="cooperation-main-container-item-link">
                                 <p className="cooperation-main-container-item-link-text">
-                                Международные организации
+                                    Международные организации
                                 </p>
                             </Link>
                         </div>
                         <div className="cooperation-main-container-item">
-                            <Link to='/' className="cooperation-main-container-item-link">
+                            <Link to='/international-non-governmental-organizations' className="cooperation-main-container-item-link">
                                 <p className="cooperation-main-container-item-link-text">
                                 Международные неправительственные организации
                                 </p>
                             </Link>
                         </div>
                         <div className="cooperation-main-container-item">
-                            <Link to='/' className="cooperation-main-container-item-link">
+                            <Link to='/international-documents' className="cooperation-main-container-item-link">
                                 <p className="cooperation-main-container-item-link-text">
                                 Международные документы
                                 </p>
                             </Link>
                         </div>
                         <div className="cooperation-main-container-item">
-                            <Link to='/' className="cooperation-main-container-item-link">
+                            <Link to='/experts' className="cooperation-main-container-item-link">
                                 <p className="cooperation-main-container-item-link-text">
                                 Эксперты
                                 </p>
                             </Link>
                         </div>
                         <div className="cooperation-main-container-item">
-                            <Link to='/' className="cooperation-main-container-item-link">
+                            <Link to='/translators' className="cooperation-main-container-item-link">
                                 <p className="cooperation-main-container-item-link-text">
                                 Переводчики
                                 </p>

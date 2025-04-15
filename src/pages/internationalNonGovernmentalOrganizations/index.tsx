@@ -113,8 +113,8 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
       </MainHeading>
       <div style={{background: colorBgContainer,}} className="layout-content-container">
         <div className="international-organizations">
-          <div className="countries-inner-table-container">
-            <div className="countries-inner-table-container-heading">
+          <div className="page-inner-table-container">
+            <div className="page-inner-table-container-heading">
               <div className="heading-title">
                 <h3 className="title">
                     Главы
@@ -126,8 +126,8 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
             </div>
             <ComponentTable<InternationalOrganizationNonGovernmentChiefDataType> onRowClick={() => handleRowClick('chief', "Retrieve")} data={InternationalOrganizationNonGovernmentChiefData} columns={InternationalOrganizationNonGovernmentChiefColumns} />
           </div>
-            <div className="countries-inner-table-container">
-                <div className="countries-inner-table-container-heading">
+            <div className="page-inner-table-container">
+                <div className="page-inner-table-container-heading">
                   <div className="heading-title">
                     <h3 className="title">
                         Совместные проекты
@@ -139,8 +139,8 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                 </div>
                 <ComponentTable<InternationalNonGovernmentOrganizationProjectDataType> onRowClick={() => handleRowClick('project', "Retrieve")} columns={InternationalNonGovernmentOrganizationProjectColumns} data={InternationalNonGovernmentOrganizationProjectData}/>
             </div>
-            <div className="countries-inner-table-container">
-                <div className="countries-inner-table-container-heading">
+            <div className="page-inner-table-container">
+                <div className="page-inner-table-container-heading">
                     <div className="heading-title">
                         <h3 className="title">
                             Хронология встреч

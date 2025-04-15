@@ -1,4 +1,6 @@
+import { JSX } from '@emotion/react/jsx-runtime'
 import {ReactNode} from 'react'
+
 export interface ModalProps {
     closeModal?: ()=> void,
     openModal?: boolean,
@@ -10,6 +12,27 @@ export interface ModalProps {
     handleCancel?: () => void
     className?: string
 }
+
+export type SubDropdownItem = {
+    to: string;
+    text: string;
+  };
+  
+export type DropdownItem = {
+    to: string;
+    text: string;
+    icon?: React.ReactNode;
+    subDropdown?: SubDropdownItem[];
+    className?: string
+  };
+  
+export type NavItem = {
+    to?: string;
+    icon: React.ReactNode;
+    text: string;
+    dropdown?: DropdownItem[];
+  };
+  
 
 export interface InternationalOrganizationChiefDataType {
     key: string;
@@ -144,4 +167,69 @@ export interface AdministrationDataType {
     status: string,
     lastVisit: string,
     action: string
+}
+
+export interface EventSeminarDataType {
+    key: string,
+    name: string,
+    totalAmount: string,
+    agent: string,
+    otherOrganizer: string
+}
+
+export interface EventForumDataType{ 
+    key: string,
+    name: string,
+    totalAmount: string,
+    agent: string,
+    otherOrganizer: string
+}
+
+export interface EventMeetingDataType{
+    key: string,
+    name: string,
+    totalAmount: string,
+    agent: string,
+    otherOrganizer: string
+}
+
+export interface EventPartnersDataType{
+    key: string,
+    type: string;
+    countryOrOrg: JSX.Element;
+    seminarCount: number;
+    visitCount: number;
+}
+
+export interface ForeignVisitsDataType {
+    key: string,
+    name: string,
+    totalAmount: string,
+    agent: string,
+    otherOrganizer: string
+}
+
+export interface ReceptionOfTheDelegationDataType {
+    key: string,
+    name: string,
+    totalAmount: string,
+    agent: string,
+    otherOrganizer: string
+}
+
+export interface DiplomaticReceptionsDataType{
+    key: string,
+    name: string,
+    totalAmount: string,
+    agent: string,
+    otherOrganizer: string
+}
+
+export interface VisitStatisticsEmployeesDataTypes {
+    key: string,
+    number: string,
+    name: string,
+    visitsAmount: string,
+    agency: string,
+    otherOrganizer: string
 }

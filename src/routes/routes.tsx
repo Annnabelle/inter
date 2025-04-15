@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
+
 const Home = lazy(() => import("../pages/home"));
 const MainEventsPage = lazy(() => import("../pages/home") )
 const CountriesInner = lazy(() => import("../pages/countriesInner"))
@@ -14,6 +15,10 @@ const InternationalTreaties = lazy(() => import("../pages/internationalTreaties"
 const InternationalDocuments = lazy(()=> import('../pages/internationalDocuments'))
 const Reports = lazy(() => import("../pages/reports"))
 const Administration = lazy(() => import("../pages/administration"))
+const EventStatistics = lazy(() => import("../pages/eventStatistics"))
+const EventStatisticsInner = lazy(() => import( "../pages/eventStatisticsInner"))
+const EventVisitsEmployee = lazy(() => import ("../pages/visits-employees"))
+const StatisticsOfCountryVisits = lazy(() => import("../pages/statisticsOfCountryVisits") )
 
 const Router: React.FC = () => {
   return (
@@ -33,6 +38,10 @@ const Router: React.FC = () => {
         <Route path="/international-documents" element={<InternationalDocuments/>}/>
         <Route path="/reports" element={<Reports/>}/>
         <Route path='/administrations' element={<Administration/>}/>
+        <Route path='/event-statistics' element={<EventStatistics/>}/>
+        <Route path='/visit-statistics-employee' element={<EventVisitsEmployee/>}/>
+        <Route path='/event-statistics-inner' element={<EventStatisticsInner/>}/>
+        <Route path='/statistics-of-country-visits' element={<StatisticsOfCountryVisits/>}/>
       </Routes>
     </Suspense>
   );
