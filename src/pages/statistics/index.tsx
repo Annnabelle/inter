@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
-import { theme } from "antd";
+import { Select, theme } from "antd";
 import { CountriesTableDataType } from "../../types";
 import { CountriesTableColumns, CountriesTableData } from "../../tableData/countriesTable";
 import MainLayout from "../../components/layout";
@@ -21,32 +21,19 @@ const Statistics: React.FC = () => {
     const handleRowClick = (record: { key: string }) => {
         navigate(`/cooperation/countries/${record.key}`)
     }
+
+    const filterOptions = [
+        {value: '2025',label:'2025'},
+        {value: '2024',label:'2024'},
+        {value: '2023',label:'2023'},
+        {value: '2022', label: '2022'}
+    ]
     
     return (
         <MainLayout>
             <MainHeading title="Статистика" subtitle="Подзаголоок">
                 <div className="main-heading-dropdown main-heading-dropdown-single-btn">
-                <div className="main-heading-dropdown-item" onClick={() => handleSortDropdown()}>
-                    <div className="dropdown-text">
-                        <p className="text">Сортировать по</p>
-                    </div>
-                    <div className="dropdown-icon">
-                        <IoIosArrowDown />
-                    </div>
-                </div>
-            {openSortDropdown && (
-                <div className="dropdown-sort">
-                    <div className="dropdown-sort-item">
-                        <p className="text">По названию</p>
-                    </div>
-                    <div className="dropdown-sort-item">
-                        <p className="text">По встречам</p>
-                    </div>
-                    <div className="dropdown-sort-item">
-                        <p className="text">По визитам</p>
-                    </div>
-                </div>
-            )}
+                    <Select options={filterOptions} size="large" className="select" placeholder="Сортировать по"/>
                 </div>
             </MainHeading>
             <div
