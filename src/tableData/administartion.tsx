@@ -1,21 +1,21 @@
 import { TableProps, Tag } from "antd";
-import { AdministrationDataType, CountriesInnerEventDataType } from "../types";
-
-export const AdministrationTableColumns: TableProps<AdministrationDataType>["columns"] = [
+import { AdministrationDataType } from "../types";
+import {TFunction} from 'i18next'
+export const AdministrationTableColumns = (t: TFunction): TableProps<AdministrationDataType>["columns"] => [
     {
-        title: "Имя",
+        title: t('inputs.name'),
         dataIndex: "name",
         key: "name",
         render: (text) => <h1 className="table-title">{text}</h1>,
     },
     {
-        title: "Роль",
+        title:  t('inputs.role'),
         dataIndex: "role",
         key: "role",
         render: (text) => <p className="table-text">{text}</p>
     },
     {
-        title: "Статус",
+        title: t('inputs.status'),
         dataIndex: "status",
         key: "status",
         render: (text) => (
@@ -25,43 +25,43 @@ export const AdministrationTableColumns: TableProps<AdministrationDataType>["col
           )
     },
     {
-        title: "Последний вход",
+        title:  t('inputs.lastLogin'),
         dataIndex: "lastVisit",
         key: "lastVisit",
         render: (text) => <p className="table-text">{text}</p>,
     },
     {
-        title: "Действия",
+        title:  t('buttons.actions'),
         dataIndex: "action",
         key: "action",
         render: (text) => <div className="table-action"><p className="table-action-text">{text}</p></div>
     },
 ];
 
-export const AdministrationTableData: AdministrationDataType[] = [
+export const AdministrationTableData = (t: TFunction): AdministrationDataType[] => [
   {
     key: "1",
     name: "Test name",
     role: "Тест названия",
-    status: "Active",
+    status: t('buttons.active'),
     lastVisit: "01/01/2025",
-    action: "Редактировать",
+    action: t('buttons.edit'),
   },
   {
     key: "2",
     name: "Test name",
     role: "Тест названия",
-    status: "Active",
+    status: t('buttons.active'),
     lastVisit: "01/01/2025",
-    action: "Редактировать",
+    action: t('buttons.edit'),
 
   },
   {
     key: "3",
     name: "Test name",
     role: "Тест названия",
-    status: "Not active",
+    status: t('buttons.inactive'),
     lastVisit: "01/01/2025",
-    action: "Редактировать",
+    action: t('buttons.edit'),
   },
 ];

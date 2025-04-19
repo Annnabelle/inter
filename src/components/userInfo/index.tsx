@@ -5,8 +5,10 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import Button from "../button";
 
 import "./styles.sass";
+import { useTranslation } from "react-i18next";
 
 const UserInfo: React.FC = () => {
+  const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -38,7 +40,7 @@ const UserInfo: React.FC = () => {
             <p className="user-text-container-name">Mukhammad</p>
           </div>
           <div className="user-text-container">
-            <p className="user-text-container-role">Admin</p>
+            <p className="user-text-container-role">{t('titles.administrator')}</p>
           </div>
         </div>
         <div className="user-arrow">
@@ -48,7 +50,7 @@ const UserInfo: React.FC = () => {
       {isOpen && (
         <div className="user-dropdown">
           <div className="user-dropdown-action">
-            <Button>Logout</Button>
+            <Button>{t('buttons.logout')}</Button>
           </div>
         </div>
       )}

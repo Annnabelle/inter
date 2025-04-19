@@ -1,45 +1,45 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import {   useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { IoIosArrowDown } from "react-icons/io";
 import { Select, theme } from "antd";
-import {VisitCountryStatisticsDataTypes, VisitStatisticsEmployeesDataTypes } from "../../types";
-import { VisitStatisticsEmployeesColumns, VisitStatisticsEmployeesData } from "../../tableData/visitStatistic";
+import {VisitCountryStatisticsDataTypes } from "../../types";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
 import ComponentTable from "../../components/table";
 import { VisitCountryStatisticsColumns, VisitCountryStatisticsData } from "../../tableData/visitCountryStatistic";
+import { useTranslation } from "react-i18next";
 
 
 const StatisticsOfCountryVisits: React.FC = () => {
+    const { t } = useTranslation();
     const {
-        token: { colorBgContainer, borderRadiusLG },
+        token: { colorBgContainer },
     } = theme.useToken();
-    const [openSortDropdown, setOpenSortDropdown] = useState<boolean>(false);
+    // const [openSortDropdown, setOpenSortDropdown] = useState<boolean>(false);
     const navigate = useNavigate()
     const sortDropdownRef = useRef<HTMLDivElement>(null);
-    const handleSortDropdown = () => {
-        setOpenSortDropdown((prev) => (!prev))
-    }
+    // const handleSortDropdown = () => {
+    //     setOpenSortDropdown((prev) => (!prev))
+    // }
     const handleRowClick = (record: { key: string }) => {
         navigate(`/countries/${record.key}`)
     }
 
-     const handleClickOutside = useCallback((event: MouseEvent) => {
-         if (openSortDropdown && sortDropdownRef.current && !sortDropdownRef.current.contains(event.target as Node)) {
-            setOpenSortDropdown(false);
-         }
-       }, [openSortDropdown]);
-      useEffect(() => {
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-          document.addEventListener("mousedown", handleClickOutside);
-        }
-      }, [handleClickOutside])
-    const filterOptions = [
-        {value: 'byName',label:'По названию'},
-        {value: 'byVisit',label:'По визиту'},
-        {value: 'byMeeting',label:'По встрече'},
-        {value: 'all', label: 'Все'}
+    //  const handleClickOutside = useCallback((event: MouseEvent) => {
+    //      if (openSortDropdown && sortDropdownRef.current && !sortDropdownRef.current.contains(event.target as Node)) {
+    //         setOpenSortDropdown(false);
+    //      }
+    //    }, [openSortDropdown]);
+    //   useEffect(() => {
+    //     document.addEventListener("mousedown", handleClickOutside);
+    //     return () => {
+    //       document.addEventListener("mousedown", handleClickOutside);
+    //     }
+    //   }, [handleClickOutside])
+      const filterOptions = [
+        {value: 'byName',label: t('buttons.sort.byName')},
+        {value: 'byVisit',label: t('buttons.sort.byVisit')},
+        {value: 'byMeeting',label: t('buttons.sort.byMeeting')},
+        {value: 'all', label: t('buttons.sort.all')}
     ]
 
     const yearsOptions = [
@@ -51,9 +51,9 @@ const StatisticsOfCountryVisits: React.FC = () => {
     
     return (
         <MainLayout ref={sortDropdownRef}>
-            <MainHeading title="Статистика визитов стран" subtitle="Подзаголоок">
-                <Select options={filterOptions} size="large" className="select" placeholder="Сортировать по"/>
-                <Select options={yearsOptions} size="large" className="select" placeholder="Выбрать год"/>
+            <MainHeading title={`${t('titles.statisticsOfCountryVisits')}`} subtitle="Подзаголоок">
+                <Select options={filterOptions} size="large" className="select" placeholder={`${t('buttons.sort.sortBy')}`} />
+                <Select options={yearsOptions} size="large" className="select" placeholder={`${t('buttons.selectYear')}`}/>
             </MainHeading>
             <div
                 style={{
@@ -63,10 +63,10 @@ const StatisticsOfCountryVisits: React.FC = () => {
             >
                 <div className="page-inner">
                     <div className="page-inner-title">
-                        <h1 className="title">Статистика визитов стран, за 2025 год:</h1>
+                        <h1 className="title">{`${t('tablesName.countryVisitStatistics')}, ${t('tablesName.for')} 2025 ${t('tablesName.year')}`}</h1>
                     </div>
                 </div>
-               <ComponentTable<VisitCountryStatisticsDataTypes> onRowClick={handleRowClick} columns={VisitCountryStatisticsColumns} data={VisitCountryStatisticsData}/>
+               <ComponentTable<VisitCountryStatisticsDataTypes> onRowClick={handleRowClick} columns={VisitCountryStatisticsColumns(t)} data={VisitCountryStatisticsData}/>
             </div>
         </MainLayout>
     );

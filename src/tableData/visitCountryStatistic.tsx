@@ -1,7 +1,8 @@
 import { TableProps } from "antd";
 import {VisitCountryStatisticsDataTypes } from "../types";
+import { TFunction } from "i18next";
 
-export const VisitCountryStatisticsColumns: TableProps<VisitCountryStatisticsDataTypes>["columns"] = [
+export const VisitCountryStatisticsColumns = (t: TFunction): TableProps<VisitCountryStatisticsDataTypes>["columns"] => [
     {
         title: "№",
         dataIndex: "number",
@@ -9,31 +10,31 @@ export const VisitCountryStatisticsColumns: TableProps<VisitCountryStatisticsDat
         render: (text) => <h1 className="table-title">{text}</h1>,
     },
     {
-        title: 'Страна',
+        title:  t('tableTitles.countries'),
         dataIndex: 'country',
         key:'country',
         render: (text) => <h1 className="table-title">{text}</h1>
     },
     {
-        title: "Ф.И.О",
+        title:  t('tableTitles.fullName'),
         dataIndex: "name",
         key: "name",
         render: (text) => <h1 className="table-title">{text}</h1>,
     },
     {
-        title: "Количество визитов",
+        title:  t('tableTitles.numberOfVisits'),
         dataIndex: "visitsAmount",
         key: "visitsAmount",
         render: (text) => <p className="table-text">{text}</p>,
     },
     {
-        title: "Агентство",
+        title: t('buttons.sort.agency'),
         dataIndex: "agency",
         key: "agency",
         render: (text) => <p className="table-text">{text}</p>,
     },
     {
-        title: "Другой организатор",
+        title:  t('buttons.sort.otherOrganizer'),
         dataIndex: "otherOrganizer",
         key: "otherOrganizer",
         render: (text) => <p className="table-text">{text}</p>,

@@ -8,10 +8,12 @@ import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
 import CalendarFooter from "../../components/calendarFooter";
 import Button from "../../components/button";
+import { useTranslation } from "react-i18next";
 
 const MainEventsPage: React.FC = () => {
+    const { t } = useTranslation();
     const {
-        token: { colorBgContainer, borderRadiusLG },
+        token: { colorBgContainer },
     } = theme.useToken();
     const [addEventModalOpen, setAddEventModalOpen] = useState<boolean>(false); 
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -38,18 +40,18 @@ const MainEventsPage: React.FC = () => {
 
     return (
         <MainLayout>
-            <MainHeading title="Главная" subtitle="Подзаголоок">
+            <MainHeading title={`${t("titles.main")}` }subtitle="Подзаголовок">
                  <Button onClick={showModal}>
-                    Создать мероприятие <FaPlus />
+                    {t('buttons.create')} {t('crudNames.event')} <FaPlus />
                     </Button>
                 <div className="layout-events-heading-dropdown" ref={eventsDropdownRef}>
-                    <Button  onClick={(e) => {e.stopPropagation(); setIsOpen((prev) => !prev);}} className="outline">Действия</Button>
+                    <Button  onClick={(e) => {e.stopPropagation(); setIsOpen((prev) => !prev);}} className="outline">{t('buttons.actions')}</Button>
                     {isOpen && (
                         <div className="event-dropdown">
                             <div className="event-dropdown-action">
-                                <Button className="outline-black">Скачать Excel <HiOutlineDocumentDownload fontSize={24}/> </Button>
-                                <Button className="outline-black">Скачать World <HiOutlineDocumentDownload fontSize={24}/></Button>
-                                <Button className="outline-black">Печать <IoPrintOutline fontSize={24} /></Button>
+                                <Button className="outline-black">{t("buttons.excelDownload")}<HiOutlineDocumentDownload fontSize={24}/> </Button>
+                                <Button className="outline-black">{t("buttons.worldDownload")} <HiOutlineDocumentDownload fontSize={24}/></Button>
+                                <Button className="outline-black">{t("buttons.print")} <IoPrintOutline fontSize={24} /></Button>
                             </div>
                         </div>
                     )}

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
-import { theme } from "antd";
+import { Select, theme } from "antd";
 import { DiplomaticReceptionsDataType, EventMeetingDataType, EventPartnersDataType, EventSeminarDataType, ForeignVisitsDataType, ReceptionOfTheDelegationDataType } from "../../types";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
@@ -12,11 +12,13 @@ import { ReceptionOfTheDelegationTableColumns, ReceptionOfTheDelegationTableData
 import { DiplomaticReceptionsTableColumns, DiplomaticReceptionsTableData } from "../../tableData/diplomaticReceptions";
 import { EventPartnerColumns, EventPartnersData } from "../../tableData/eventPartners";
 import { EventSeminarTableColumns, EventSeminarTableData } from "../../tableData/eventSeminar";
+import { useTranslation } from "react-i18next";
 
 
 const EventStatisticsInner: React.FC = () => {
+    const { t } = useTranslation();
     const {
-        token: { colorBgContainer, borderRadiusLG },
+        token: { colorBgContainer },
     } = theme.useToken();
     const [openSortDropdown, setOpenSortDropdown] = useState<boolean>(false);
     const navigate = useNavigate()
@@ -26,29 +28,18 @@ const EventStatisticsInner: React.FC = () => {
     const handleRowClick = (record: { key: string }) => {
         navigate(`/cooperation/countries/${record.key}`)
     }
+
+    const filterOptions = [
+        {value: 'agency',label: t('buttons.sort.agency')},
+        {value: 'otherOrganizer',label: t('buttons.sort.otherOrganizer')},
+        {value: 'all',label:t('buttons.sort.all')},
+    ]
     
     return (
         <MainLayout>
-            <MainHeading title="Статистика мероприятий" subtitle="Подзаголоок">
+            <MainHeading title={`${t('titles.eventStatistics')}`} subtitle="Подзаголоок">
                 <div className="main-heading-dropdown main-heading-dropdown-single-btn">
-                <div className="main-heading-dropdown-item" onClick={() => handleSortDropdown()}>
-                    <div className="dropdown-text">
-                        <p className="text">Сортировать по</p>
-                    </div>
-                    <div className="dropdown-icon">
-                        <IoIosArrowDown />
-                    </div>
-                </div>
-            {openSortDropdown && (
-                <div className="dropdown-sort">
-                    <div className="dropdown-sort-item">
-                        <p className="text">Агенство</p>
-                    </div>
-                    <div className="dropdown-sort-item">
-                        <p className="text">Другой организхатор</p>
-                    </div>
-                </div>
-            )}
+                    <Select options={filterOptions} size="large" className="select" placeholder={`${t('buttons.sort.sortBy')}`} />
                 </div>
             </MainHeading>
             <div
@@ -59,41 +50,41 @@ const EventStatisticsInner: React.FC = () => {
             >
                 <div className="page-inner">
                     <div className="page-inner-title">
-                        <h1 className="title">Статистика Семинар/Тренинг</h1>
+                        <h1 className="title">{`${t('titles.statistics') + " " + t('events.seminar')}`}</h1>
                     </div>
                 </div>
-               <ComponentTable<EventSeminarDataType> onRowClick={handleRowClick} columns={EventSeminarTableColumns} data={EventSeminarTableData}/>
+               <ComponentTable<EventSeminarDataType> onRowClick={handleRowClick} columns={EventSeminarTableColumns(t)} data={EventSeminarTableData}/>
 
                <div className="page-inner">
                     <div className="page-inner-title">
-                        <h1 className="title">Статистика встреч</h1>
+                        <h1 className="title">{`${t('titles.statistics') + " " + t('events.meetings')}`}</h1>
                     </div>
                 </div>
-               <ComponentTable<EventMeetingDataType> onRowClick={handleRowClick} columns={EventMeetingTableColumns} data={EventMeetingTableData}/>
+               <ComponentTable<EventMeetingDataType> onRowClick={handleRowClick} columns={EventMeetingTableColumns(t)} data={EventMeetingTableData}/>
                <div className="page-inner">
                     <div className="page-inner-title">
-                        <h1 className="title">Партнеры</h1>
+                        <h1 className="title">{`${t('titles.statistics') + " " + t('events.partners')}`}</h1>
                     </div>
                 </div>
-               <ComponentTable<EventPartnersDataType> columns={EventPartnerColumns} data={EventPartnersData}/>
+               <ComponentTable<EventPartnersDataType> columns={EventPartnerColumns(t)} data={EventPartnersData(t)}/>
                <div className="page-inner">
                     <div className="page-inner-title">
-                        <h1 className="title">Статистика Зарубежные визиты</h1>
+                        <h1 className="title">{`${t('titles.statistics') + " " + t('events.foreignVisits')}`}</h1>
                     </div>
                 </div>
-               <ComponentTable<ForeignVisitsDataType> onRowClick={handleRowClick} columns={ForeignVisitsTableColumns} data={ForeignVisitsTableData}/>
+               <ComponentTable<ForeignVisitsDataType> onRowClick={handleRowClick} columns={ForeignVisitsTableColumns(t)} data={ForeignVisitsTableData}/>
                <div className="page-inner">
                     <div className="page-inner-title">
-                        <h1 className="title">Статистика Прием делегаций</h1>
+                        <h1 className="title">{`${t('titles.statistics') + " " + t('events.receptionOfDelegations')}`}</h1>
                     </div>
                 </div>
-               <ComponentTable<ReceptionOfTheDelegationDataType> onRowClick={handleRowClick} columns={ReceptionOfTheDelegationTableColumns} data={ReceptionOfTheDelegationTableData}/>
+               <ComponentTable<ReceptionOfTheDelegationDataType> onRowClick={handleRowClick} columns={ReceptionOfTheDelegationTableColumns(t)} data={ReceptionOfTheDelegationTableData}/>
                <div className="page-inner">
                     <div className="page-inner-title">
-                        <h1 className="title">Статистика Дипломатические приёмы</h1>
+                        <h1 className="title">{`${t('titles.statistics') + " " + t('events.diplomaticReceptions')}`}</h1>
                     </div>
                 </div>
-               <ComponentTable<DiplomaticReceptionsDataType> onRowClick={handleRowClick} columns={DiplomaticReceptionsTableColumns} data={DiplomaticReceptionsTableData}/>
+               <ComponentTable<DiplomaticReceptionsDataType> onRowClick={handleRowClick} columns={DiplomaticReceptionsTableColumns(t)} data={DiplomaticReceptionsTableData}/>
             </div>
         </MainLayout>
     );

@@ -1,31 +1,33 @@
 import React from 'react'
 import './styles.sass'
+import { useTranslation } from 'react-i18next'
 
 const CalendarFooter: React.FC = () => {
+    const { t } = useTranslation()
     const calendarFooterItem = [
         {
             id: 1,
-            text: 'Конференции/Форумы',
+            text: t('events.conferences'),
             number: 10
         },
         {
             id: 2,
-            text: 'Семинар/Тренинг',
+            text: t('events.seminar'),
             number: 10
         },
         {
             id: 3,
-            text: 'Встречи',
+            text: t('events.meetings'),
             number: 10
         },
         {
             id: 4,
-            text: 'Партнеры',
+            text: t('events.partners'),
             number: 10
         },
         {
             id: 5,
-            text: 'Другое',
+            text: t('events.other'),
             number: 10
         }
     ]

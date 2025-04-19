@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Calendar, dateFnsLocalizer, View } from "react-big-calendar";
-import { Form, Modal } from "antd";
 import { format, parse, startOfWeek, getDay, addDays, subDays } from "date-fns";
 import { CalendarComponentProps, EventType } from "../../types/events";
 import { ru } from "date-fns/locale";
@@ -13,6 +12,7 @@ import CalendarEventStyle from "./calendarEventStyle";
 import CalendarEvent from "./calendarEvent";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./styles.sass";
+import { useTranslation } from "react-i18next";
 
 const locales = { ru };
 const localizer = dateFnsLocalizer({
@@ -38,8 +38,9 @@ const initialEvents: EventType[] = [
 ];
 
 const CalendarComponent: React.FC<CalendarComponentProps> = (props) => {
+    const { t } = useTranslation();
   const [events, setEvents] = useState<EventType[]>(initialEvents);
-  const [form] = Form.useForm();
+  // const [form] = Form.useForm();
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [view, setView] = useState<View>("month");
   const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
@@ -51,26 +52,26 @@ const CalendarComponent: React.FC<CalendarComponentProps> = (props) => {
     setEventModalOpen(true);
   };
 
-  const handleAddEvent = () => {
-    form
-      .validateFields()
-      .then((values) => {
-        const newEvent: EventType = {
-          title: values.eventName,
-          start: values.date[0].toDate(),
-          end: values.date[1].toDate(),
-          allDay: false,
-          organizer: values.organizer,
-          eventType: values.eventType,
-          countOfMembers: values.countOfMembers,
-          partnersOptions: values.partnersOptions,
-          donorFormat: values.donorFormat,
-        };
-        setEvents([...events, newEvent]);
-        props?.closeEventModal();
-      })
-      .catch((errorInfo) => console.log("Validation Failed:", errorInfo));
-  };
+  // const handleAddEvent = () => {
+  //   form
+  //     .validateFields()
+  //     .then((values) => {
+  //       const newEvent: EventType = {
+  //         title: values.eventName,
+  //         start: values.date[0].toDate(),
+  //         end: values.date[1].toDate(),
+  //         allDay: false,
+  //         organizer: values.organizer,
+  //         eventType: values.eventType,
+  //         countOfMembers: values.countOfMembers,
+  //         partnersOptions: values.partnersOptions,
+  //         donorFormat: values.donorFormat,
+  //       };
+  //       setEvents([...events, newEvent]);
+  //       props?.closeEventModal();
+  //     })
+  //     .catch((errorInfo) => console.log("Validation Failed:", errorInfo));
+  // };
   
 
   const goToToday = () => setCurrentDate(new Date());
@@ -101,21 +102,21 @@ const CalendarComponent: React.FC<CalendarComponentProps> = (props) => {
           </div>
           <div className="events-heading-goto-content">
             <div className="events-heading-goto-content-btn" onClick={goToPrev}>
-              <p className="text">Назад</p>
+              <p className="text">{t('buttons.back')}</p>
             </div>
             <div className="events-heading-goto-content-btn" onClick={goToToday}>
-              <p className="text">Сегодня</p>
+              <p className="text">{t('buttons.today')}</p>
             </div>
             <div className="events-heading-goto-content-btn" onClick={goToNext}>
-              <p className="text">Вперёд</p>
+              <p className="text">{t('buttons.forward')}</p>
             </div>
           </div>
         </div>
         <div className="events-heading-btns">
           <div className="events-heading-btns-container">
-            <Button className="outline" onClick={() => setView("month")}>Месяц</Button>
-            <Button className="outline" onClick={() => setView("week")}>Неделя</Button>
-            <Button className="outline" onClick={() => setView("day")}>День</Button>
+            <Button className="outline" onClick={() => setView("month")}>{t('buttons.month')}</Button>
+            <Button className="outline" onClick={() => setView("week")}>{t('buttons.week')}</Button>
+            <Button className="outline" onClick={() => setView("day")}>{t('buttons.day')}</Button>
           </div>
         </div>
       </div>
@@ -138,7 +139,8 @@ const CalendarComponent: React.FC<CalendarComponentProps> = (props) => {
       />
 
       <ModalWindow
-        title="Создание мероприятия"
+        title={`${t('buttons.create')}` + " " 
+        +  `${t("crudNames.event")}`}
         openModal={props?.openEventModal}
         closeModal={props?.closeEventModal}
       >
@@ -159,7 +161,8 @@ const CalendarComponent: React.FC<CalendarComponentProps> = (props) => {
         }} />
       </ModalWindow>
       <ModalWindow
-        title="Просмотр мероприятия"
+        title={`${t('buttons.retrieve')}` + " " 
+        +  `${t("crudNames.event")}`}
         openModal={eventModalOpen}
         closeModal={() => setEventModalOpen(false)}
         handleEdit={() => {
@@ -174,7 +177,8 @@ const CalendarComponent: React.FC<CalendarComponentProps> = (props) => {
         )}
       </ModalWindow>
       <ModalWindow
-          title="Редактирование мероприятия"
+          title={`${t('buttons.edit')}` + " " 
+          +  `${t("crudNames.event")}`}
           openModal={editEventModalOpen}
           closeModal={() => setEditEventModalOpen(false)}
           handleDelete={() => {  setTimeout(() => setDeleteModalOpen(true), 0);
@@ -201,11 +205,11 @@ const CalendarComponent: React.FC<CalendarComponentProps> = (props) => {
             />
           )}
         </ModalWindow>
-          <ModalWindow openModal={isDeleteModalOpen} title="Вы точно хотите удалить мероприятие?" className="modal-tight"
+          <ModalWindow openModal={isDeleteModalOpen} title={`${t('titles.areYouSure')} ${t('crudNames.event')} ?`}  className="modal-tight"
             closeModal={() => setDeleteModalOpen(false)}>
               <div className="modal-tight-container">
-                <Button onClick={() => setDeleteModalOpen(false)} className="outline">Отменить</Button>
-                <Button className="danger">Удалить</Button>
+                <Button onClick={() => setDeleteModalOpen(false)} className="outline">{t('buttons.cancel')}</Button>
+                <Button className="danger">{t('buttons.delete')}</Button>
               </div>
           </ModalWindow>
     </div>

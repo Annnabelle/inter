@@ -2,9 +2,10 @@ import React from 'react'
 import { Form, Input, Checkbox } from "antd";
 import { EventDetailsProps } from '../../../types/events';
 import FormComponent from '../../form';
+import { useTranslation } from 'react-i18next';
 
 const RetrieveEvent: React.FC<EventDetailsProps> = ({event}) => {
-    const [form] = Form.useForm();
+    const { t } = useTranslation()
   return (
     <FormComponent>
       <div className="form-inputs">
@@ -78,71 +79,71 @@ const RetrieveEvent: React.FC<EventDetailsProps> = ({event}) => {
             <div className="approval-container-items">
                <div className="approval-container-item">
                  <div className="approval-letter-label">
-                   <p className="label">Письмо в МИД</p>
+                   <p className="label">{`${t('events.letterToMFA')}`}</p>
                  </div>
                  <div style={{ display: "flex", gap: 8 }}>
                    <Input size="large"    style={{ width: "100%" }} disabled/>
-                   <Input size="large" placeholder="Номер" style={{ width: "100%" }} disabled />
+                   <Input size="large" style={{ width: "100%" }} disabled />
                  </div>
                </div>
                <div className="approval-container-item">
                  <div className="approval-letter-label">
-                   <p className="label">Ответ МИД</p>
+                   <p className="label">{t('events.MFAResponse')}</p>
                  </div>
                  <div style={{ display: "flex", gap: 8 }}>
                    <Input size="large"  style={{ width: "100%" }} disabled />
-                   <Input size="large" placeholder="Номер" style={{ width: "100%" }} disabled />
+                   <Input size="large"  style={{ width: "100%" }} disabled />
                  </div>
                </div>  
              </div>
           <Checkbox checked={true} disabled>
-             Согласование от МИД
+          {t('events.approvalFromMFA')}
           </Checkbox>
             <div className="approval-container-items">
                <div className="approval-container-item">
                  <div className="approval-letter-label">
-                   <p className="label">Письмо в СГБ</p>
+                   <p className="label">{t('events.letterToSSS')}</p>
                  </div>
                  <div style={{ display: "flex", gap: 8 }}>
                    <Input size="large"  style={{ width: "100%" }}disabled/>
-                   <Input size="large" placeholder="Номер" style={{ width: "100%" }}disabled />
+                   <Input size="large" style={{ width: "100%" }}disabled />
                  </div>
                </div>
                <div className="approval-container-item">
                  <div className="approval-letter-label">
-                   <p className="label">Ответ СГБ</p>
+                   <p className="label">{t('events.SSSResponse')}</p>
                  </div>
                  <div style={{ display: "flex", gap: 8 }}>
                    <Input size="large"  style={{ width: "100%" }} disabled />
-                   <Input size="large" placeholder="Номер" style={{ width: "100%" }} disabled />
+                   <Input size="large"  style={{ width: "100%" }} disabled />
                  </div>
                </div>  
              </div>
           <Checkbox checked={true} disabled>
-             Согласование от СГБ
+          {t('events.approvalFromSSS')}
           </Checkbox>
             <div className="approval-container-items">
                <div className="approval-container-item">
                  <div className="approval-letter-label">
-                   <p className="label">Письмо в Администрацию</p>
+                   <p className="label">{t('events.letterToAdministration')}</p>
                  </div>
                  <div style={{ display: "flex", gap: 8 }}>
                    <Input size="large"    style={{ width: "100%" }} disabled/>
-                   <Input size="large" placeholder="Номер" style={{ width: "100%" }} disabled />
+                   <Input size="large"  style={{ width: "100%" }} disabled />
                  </div>
                </div>
                <div className="approval-container-item">
                  <div className="approval-letter-label">
-                   <p className="label">Ответ Администрации</p>
+                   <p className="label">{t('events.administrationResponse')}</p>
                  </div>
                  <div style={{ display: "flex", gap: 8 }}>
                    <Input size="large"  style={{ width: "100%" }} disabled />
-                   <Input size="large" placeholder="Номер" style={{ width: "100%" }} disabled />
+                   <Input size="large"  style={{ width: "100%" }} disabled />
                  </div>
                </div>  
              </div>
           <Checkbox checked={true} disabled>
-            Согласование от Администрации
+          {t('events.approvalFromAdministration')}
           </Checkbox>
         </div>
       </div>

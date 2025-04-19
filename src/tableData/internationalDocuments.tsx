@@ -1,7 +1,8 @@
 import { TableProps } from "antd";
 import { InternationalDocumentsTableDataType } from "../types";
+import { TFunction } from "i18next";
 
-export const InternationalDocumentsTableColumn: TableProps<InternationalDocumentsTableDataType>["columns"] = [
+export const InternationalDocumentsTableColumn = (t: TFunction): TableProps<InternationalDocumentsTableDataType>["columns"] => [
     {
       title: "№",
       dataIndex: "item",
@@ -9,25 +10,25 @@ export const InternationalDocumentsTableColumn: TableProps<InternationalDocument
       render: (text) => <h1 className="table-title">{text}</h1>,
     },
     {
-      title: "Название документа",
+      title: t('tableTitles.nameOfDocument'),
       dataIndex: "nameOfTheDocument",
       key: "nameOfTheContract",
       render: (text) => <p className="table-text">{text}</p>,
     },
     {
-      title: "Дата",
+      title: t('tableTitles.date'),
       dataIndex: "date",
       key: "date",
       render: (text) => <p className="table-text">{text}</p>,
     },
     {
-      title: "Место",
+      title: t('tableTitles.place'),
       dataIndex: "place",
       key: "place",
       render: (text) => <p className="table-text">{text}</p>,
     },
     {
-      title: "Файлы",
+      title: t('tableTitles.files'),
       dataIndex: "files",
       key: "files",
       render: (text) => <p className="table-text">{text}</p>,

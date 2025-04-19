@@ -1,44 +1,45 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRef  } from "react";
 import { useNavigate } from "react-router-dom";
-import { IoIosArrowDown } from "react-icons/io";
 import { Select, theme } from "antd";
 import {VisitStatisticsEmployeesDataTypes } from "../../types";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
 import ComponentTable from "../../components/table";
 import { VisitStatisticsEmployeesColumns, VisitStatisticsEmployeesData } from "../../tableData/visitStatistic";
+import { useTranslation } from "react-i18next";
 
 
 const EventVisitsEmployee: React.FC = () => {
+    const { t } = useTranslation();
     const {
-        token: { colorBgContainer, borderRadiusLG },
+        token: { colorBgContainer },
     } = theme.useToken();
-    const [openSortDropdown, setOpenSortDropdown] = useState<boolean>(false);
+    // const [openSortDropdown, setOpenSortDropdown] = useState<boolean>(false);
     const navigate = useNavigate()
     const sortDropdownRef = useRef<HTMLDivElement>(null);
-    const handleSortDropdown = () => {
-        setOpenSortDropdown((prev) => (!prev))
-    }
+    // const handleSortDropdown = () => {
+    //     setOpenSortDropdown((prev) => (!prev))
+    // }
     const handleRowClick = (record: { key: string }) => {
         navigate(`/cooperation/countries/${record.key}`)
     }
 
-     const handleClickOutside = useCallback((event: MouseEvent) => {
-            if (openSortDropdown && sortDropdownRef.current && !sortDropdownRef.current.contains(event.target as Node)) {
-            setOpenSortDropdown(false);
-            }
-        }, [openSortDropdown]);
-        useEffect(() => {
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.addEventListener("mousedown", handleClickOutside);
-        }
-        }, [handleClickOutside])
+    //  const handleClickOutside = useCallback((event: MouseEvent) => {
+    //         if (openSortDropdown && sortDropdownRef.current && !sortDropdownRef.current.contains(event.target as Node)) {
+    //         setOpenSortDropdown(false);
+    //         }
+    //     }, [openSortDropdown]);
+    //     useEffect(() => {
+    //     document.addEventListener("mousedown", handleClickOutside);
+    //     return () => {
+    //         document.addEventListener("mousedown", handleClickOutside);
+    //     }
+    //     }, [handleClickOutside])
         const filterOptions = [
-            {value: 'byName',label:'По названию'},
-            {value: 'byVisit',label:'По визиту'},
-            {value: 'byMeeting',label:'По встрече'},
-            {value: 'all', label: 'Все'}
+            {value: 'byName',label: t('buttons.sort.byName')},
+            {value: 'byVisit',label: t('buttons.sort.byVisit')},
+            {value: 'byMeeting',label: t('buttons.sort.byMeeting')},
+            {value: 'all', label: t('buttons.sort.all')}
         ]
 
         const yearsOptions = [
@@ -49,11 +50,11 @@ const EventVisitsEmployee: React.FC = () => {
         ]
     return (
         <MainLayout ref={sortDropdownRef}>
-            <MainHeading title="Статистика визитов сотрудников" subtitle="Подзаголоок">
+            <MainHeading title={`${t('titles.visitsEmployees')}`} subtitle="Подзаголоок">
 
-                <Select options={filterOptions} size="large" className="select" placeholder="Сортировать по"/>
+                <Select options={filterOptions} size="large" className="select" placeholder={`${t('buttons.sort.sortBy')}`} />
 
-                <Select options={yearsOptions} size="large" className="select" placeholder="Выбрать год"/>
+                <Select options={yearsOptions} size="large" className="select" placeholder={`${t('buttons.selectYear')}`}/>
             </MainHeading>
             <div
                 style={{
@@ -63,10 +64,10 @@ const EventVisitsEmployee: React.FC = () => {
             >
                 <div className="page-inner">
                     <div className="page-inner-title">
-                        <h1 className="title">Статистика визитов сотрудников, за 2025 год:</h1>
+                        <h1 className="title">{`${t('tablesName.staffVisitStatistics')}, ${t('tablesName.for')} 2025 ${t('tablesName.year')}`}</h1>
                     </div>
                 </div>
-               <ComponentTable<VisitStatisticsEmployeesDataTypes> onRowClick={handleRowClick} columns={VisitStatisticsEmployeesColumns} data={VisitStatisticsEmployeesData}/>
+               <ComponentTable<VisitStatisticsEmployeesDataTypes> onRowClick={handleRowClick} columns={VisitStatisticsEmployeesColumns(t)} data={VisitStatisticsEmployeesData}/>
             </div>
         </MainLayout>
     );

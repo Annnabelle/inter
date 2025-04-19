@@ -1,21 +1,22 @@
 import { TableProps } from "antd";
 import { TranslatorsTableDataTypes } from "../types";
+import { TFunction } from "i18next";
 
-export const TranslatorsColumns: TableProps<TranslatorsTableDataTypes>["columns"] = [
+export const TranslatorsColumns = (t: TFunction): TableProps<TranslatorsTableDataTypes>["columns"] => [
   {
-    title: "Ф.И.О",
+    title:  t('tableTitles.fullName'),
     dataIndex: "name",
     key: "name",
     render: (text) => <h1 className="table-title">{text}</h1>,
   },
   {
-    title: "Языки",
+    title:  t('tableTitles.languages'),
     dataIndex: "languages",
     key: "languages",
     render: (text) => <p className="table-text">{text}</p>,
   },
   {
-    title: "Рейтинг",
+    title: t('tableTitles.rating'),
     dataIndex: "rating",
     key: "rating",
     render: (text) => <p className="table-text">{text}</p>,

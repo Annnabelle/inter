@@ -2,15 +2,17 @@ import { theme } from "antd";
 import { Link } from "react-router-dom";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
+import { useTranslation } from "react-i18next";
 
 const Cooperation: React.FC = () => {
+    const { t } = useTranslation();
     const {
-        token: { colorBgContainer, borderRadiusLG },
+        token: { colorBgContainer },
     } = theme.useToken();
 
     return (
         <MainLayout>
-            <MainHeading title="Сотрудничество" subtitle="Подзаголоок"/>
+            <MainHeading title={`${t('titles.cooperation')}`} subtitle="Подзаголоок"/>
             <div
                 style={{
                     background: colorBgContainer,
@@ -22,42 +24,42 @@ const Cooperation: React.FC = () => {
                         <div className="cooperation-main-container-item">
                             <Link to='/countries' className="cooperation-main-container-item-link">
                                 <p className="cooperation-main-container-item-link-text">
-                                Страны
+                                {t('navigation.countries')}
                                 </p>
                             </Link>
                         </div>
                         <div className="cooperation-main-container-item">
                             <Link to='/international-organizations' className="cooperation-main-container-item-link">
                                 <p className="cooperation-main-container-item-link-text">
-                                    Международные организации
+                                    {t('navigation.internationalOrganizations')}
                                 </p>
                             </Link>
                         </div>
                         <div className="cooperation-main-container-item">
                             <Link to='/international-non-governmental-organizations' className="cooperation-main-container-item-link">
                                 <p className="cooperation-main-container-item-link-text">
-                                Международные неправительственные организации
+                                {t('navigation.internationalNonGovernmentalOrganizations')}
                                 </p>
                             </Link>
                         </div>
                         <div className="cooperation-main-container-item">
                             <Link to='/international-documents' className="cooperation-main-container-item-link">
                                 <p className="cooperation-main-container-item-link-text">
-                                Международные документы
+                                {t('navigation.internationalDocuments')}
                                 </p>
                             </Link>
                         </div>
                         <div className="cooperation-main-container-item">
                             <Link to='/experts' className="cooperation-main-container-item-link">
                                 <p className="cooperation-main-container-item-link-text">
-                                Эксперты
+                                {t('navigation.experts')}
                                 </p>
                             </Link>
                         </div>
                         <div className="cooperation-main-container-item">
                             <Link to='/translators' className="cooperation-main-container-item-link">
                                 <p className="cooperation-main-container-item-link-text">
-                                Переводчики
+                                {t('navigation.translators')}
                                 </p>
                             </Link>
                         </div>

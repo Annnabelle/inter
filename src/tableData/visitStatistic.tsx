@@ -1,7 +1,8 @@
 import { TableProps } from "antd";
 import {VisitStatisticsEmployeesDataTypes } from "../types";
+import { TFunction } from "i18next";
 
-export const VisitStatisticsEmployeesColumns: TableProps<VisitStatisticsEmployeesDataTypes>["columns"] = [
+export const VisitStatisticsEmployeesColumns  = (t: TFunction): TableProps<VisitStatisticsEmployeesDataTypes>["columns"] => [
     {
         title: "№",
         dataIndex: "number",
@@ -9,25 +10,25 @@ export const VisitStatisticsEmployeesColumns: TableProps<VisitStatisticsEmployee
         render: (text) => <h1 className="table-title">{text}</h1>,
     },
     {
-        title: "Ф.И.О",
+        title:  t('tableTitles.fullName'),
         dataIndex: "name",
         key: "name",
         render: (text) => <h1 className="table-title">{text}</h1>,
     },
     {
-        title: "Количество визитов",
+        title:  t('tableTitles.numberOfVisits'),
         dataIndex: "visitsAmount",
         key: "visitsAmount",
         render: (text) => <p className="table-text">{text}</p>,
     },
     {
-        title: "Агентство",
+        title:  t('tableTitles.agency'),
         dataIndex: "agency",
         key: "agency",
         render: (text) => <p className="table-text">{text}</p>,
     },
     {
-        title: "Другой организатор",
+        title:  t('tableTitles.otherOrganizer'),
         dataIndex: "otherOrganizer",
         key: "otherOrganizer",
         render: (text) => <p className="table-text">{text}</p>,

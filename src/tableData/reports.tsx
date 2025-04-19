@@ -1,33 +1,34 @@
 import { TableProps } from "antd";
 import { ReportsTableDataType } from "../types";
+import {TFunction} from 'i18next'
 
-export const ReportsColumns: TableProps<ReportsTableDataType>["columns"] = [
+export const ReportsColumns = (t: TFunction): TableProps<ReportsTableDataType>["columns"] => [
   {
-    title: "Название",
+    title: t('tableTitles.name'),
     dataIndex: "nameOfReport",
     key: "nameOfReport",
     render: (text) => <h1 className="table-title">{text}</h1>,
   },
   {
-    title: "Тип",
+    title:  t('tableTitles.type'),
     dataIndex: "typeOfReport",
     key: "typeOfReport",
     render: (text) => <p className="table-text">{text}</p>,
   },
   {
-    title: "Ответственный",
+    title:  t('tableTitles.responsiblePerson'),
     dataIndex: "responsibleForReport",
     key: "responsibleForReport",
     render: (text) => <p className="table-text">{text}</p>,
   },
   {
-    title: "Дата создания",
+    title:  t('tableTitles.creationDate'),
     dataIndex: "dateOfCreation",
     key: "dateOfCreation",
     render: (text) => <p className="table-text">{text}</p>,
   },
   {
-    title: "Действия",
+    title: t('tableTitles.actions'),
     dataIndex: "actions",
     key: "actions",
     render: (actions: string[]) => (
@@ -40,14 +41,14 @@ export const ReportsColumns: TableProps<ReportsTableDataType>["columns"] = [
   },
 ];
 
-export const ReportsData: ReportsTableDataType[] = [
+export const ReportsData = (t: TFunction): ReportsTableDataType[] => [
   {
     key: "1",
     nameOfReport: "Отчет за Февраль",
     typeOfReport: "docx",
     responsibleForReport: "Ким Эдуард",
     dateOfCreation: "01.01.2025 ",
-    actions: ["Редактировать", "Скачать"]
+    actions: [t('buttons.edit'), t('buttons.download')]
   },
   {
     key: "2",
@@ -55,7 +56,7 @@ export const ReportsData: ReportsTableDataType[] = [
     typeOfReport: "docx",
     responsibleForReport: "Ким Эдуард",
     dateOfCreation: "01.01.2025 ",
-    actions: ["Редактировать", "Скачать"]
+    actions: [t('buttons.edit'), t('buttons.download')]
   },
   {
     key: "3",
@@ -63,6 +64,6 @@ export const ReportsData: ReportsTableDataType[] = [
     typeOfReport: "docx",
     responsibleForReport: "Ким Эдуард",
     dateOfCreation: "01.01.2025 ",
-    actions: ["Редактировать", "Скачать"]
+    actions: [t('buttons.edit'), t('buttons.download')]
   },
 ];

@@ -9,13 +9,14 @@ import Button from "../../components/button";
 import ModalWindow from "../../components/modalWindow";
 import FormComponent from "../../components/form";
 import ComponentTable from "../../components/table";
+import { useTranslation } from "react-i18next";
 
 
 const Reports: React.FC = () => {
+    const { t } = useTranslation();
     const {
         token: { colorBgContainer },
     } = theme.useToken();
-    const [form] = Form.useForm();
     const [isActionOpen, setActionOpen] = useState<boolean>(false);
     const [modalState, setModalState] = useState({
         addReport: false,
@@ -57,11 +58,11 @@ const Reports: React.FC = () => {
     };
 
     const typeOfReportOption = [
-        { value: "Недельный", label: "Недельный" },
-        { value: "Месячный", label: "Месячный" },
-        { value: "Квартальный", label: "Квартальный" },
-        { value: "Полу-годовой", label: "Полу-годовой" },
-        { value: "Годовой", label: "Годовой" },
+        { value: "Недельный", label: t("typeOfReport.weekly") },
+        { value: "Месячный", label: t("typeOfReport.monthly") },
+        { value: "Квартальный", label: t("typeOfReport.quarterly") },
+        { value: "Полу-годовой", label: t("typeOfReport.semiAnnual") },
+        { value: "Годовой", label: t("typeOfReport.annual") },
     ];
 
     const eventsDropdownRef = useRef<HTMLDivElement>(null);
@@ -83,17 +84,17 @@ const Reports: React.FC = () => {
 
     return (
         <MainLayout>
-            <MainHeading title="Отчеты" subtitle="Подзаголоок">
-            <Button onClick={() => handleModal('addReport', true)}>Добавить отчет <IoMdAdd /></Button>
+            <MainHeading title={`${t('titles.reports')}`} subtitle="Подзаголоок">
+            <Button onClick={() => handleModal('addReport', true)}>{`${t('buttons.addReport')}`}<IoMdAdd /></Button>
                 <div className="main-heading-dropdown">
                     <div className="layout-events-heading-dropdown" ref={eventsDropdownRef}>
-                        <Button className="outline"  onClick={(e) => {e.stopPropagation(); setActionOpen((prev) => !prev);}}>Действия</Button>
+                        <Button className="outline"  onClick={(e) => {e.stopPropagation(); setActionOpen((prev) => !prev);}}>{`${t('buttons.actions')}`}</Button>
                         {isActionOpen && (
                             <div className="event-dropdown">
                                 <div className="event-dropdown-action">
-                                    <Button className="outline-black">Скачать Excel </Button>
-                                    <Button className="outline-black">Скачать World</Button>
-                                    <Button className="outline-black">Печать</Button>
+                                    <Button className="outline-black">{`${t('buttons.excelDownload')}`} </Button>
+                                    <Button className="outline-black">{`${t('buttons.worldDownload')}`}</Button>
+                                    <Button className="outline-black">{`${t('buttons.print')}`}</Button>
                                 </div>
                             </div>
                         )}
@@ -106,95 +107,95 @@ const Reports: React.FC = () => {
                 }}
                 className="layout-content-container"
             >
-               <ComponentTable<ReportsTableDataType> onRowClick={(record) => handleRowClick('Report', 'retrieve', record)} data={ReportsData} columns={ReportsColumns}/>
+               <ComponentTable<ReportsTableDataType> onRowClick={(record) => handleRowClick('Report', 'retrieve', record)} data={ReportsData(t)} columns={ReportsColumns(t)}/>
             </div>
-            <ModalWindow title="Добавить отчет" openModal={modalState.addReport} closeModal={() => handleModal('addReport', false)}>
+            <ModalWindow title={t('buttons.add') + " " + t('crudNames.report')}  openModal={modalState.addReport} closeModal={() => handleModal('addReport', false)}>
                 <FormComponent  onFinish={onFinish}>
                     <div className="form-inputs">
                         <Form.Item className="input" name="nameOfReport" >
-                            <Input className="input" size='large' placeholder="Название"/>
+                            <Input className="input" size='large' placeholder={`${t('inputs.title')}`} />
                         </Form.Item>
                         <Form.Item className="input" name="responsible" >
-                            <Input className="input" size='large' placeholder="Ответственный"/>
+                            <Input className="input" size='large' placeholder={`${t('inputs.responsible')}`}/>
                         </Form.Item>
                     </div>
                     <div className="form-inputs">
                         <Form.Item className="input" name="typeOfReport" >
-                            <Select className="input" size="large" options={typeOfReportOption} placeholder="Тип" />
+                            <Select className="input" size="large" options={typeOfReportOption} placeholder={`${t('tableTitles.type')}`} />
                         </Form.Item>
                         <Form.Item className="input" name="file" >
                                 <Upload>
-                                    <Input className="input input-upload" size='large' placeholder="Загрузить файл"/>
+                                    <Input className="input input-upload" size='large' placeholder={`${t('inputs.uploadFile')}`} />
                                 </Upload>
                             </Form.Item>
                     </div> 
                     <div className="form-inputs">
                         <Form.Item className="input" name="date" >
-                            <DatePicker size="large" className="input"/>
+                            <DatePicker size="large" className="input" placeholder={`${t('inputs.selectDate')}`}/>
                         </Form.Item>
                     </div> 
-                    <Button>Создать</Button>
+                    <Button>{t('buttons.create')}</Button>
                 </FormComponent>
             </ModalWindow>
-            <ModalWindow title="Просмотреть отчет" openModal={modalState.retrieveReport} closeModal={() => handleModal('retrieveReport', false)} handleEdit={() => handleEditOpen('Report')}>
+            <ModalWindow title={t('buttons.retrieve') + " " + t('crudNames.report')} openModal={modalState.retrieveReport} closeModal={() => handleModal('retrieveReport', false)} handleEdit={() => handleEditOpen('Report')}>
                 <FormComponent>
                     <div className="form-inputs">
                         <Form.Item className="input" name="nameOfReport" >
-                            <Input disabled className="input" size='large' placeholder="Название"/>
+                            <Input disabled className="input" size='large' />
                         </Form.Item>
                         <Form.Item className="input" name="responsible" >
-                            <Input disabled className="input" size='large' placeholder="Ответственный"/>
+                            <Input disabled className="input" size='large' />
                         </Form.Item>
                     </div>
                     <div className="form-inputs">
                         <Form.Item className="input" name="typeOfReport" >
-                            <Select disabled className="input" size="large" options={typeOfReportOption} placeholder="Тип" />
+                            <Select disabled className="input" size="large" options={typeOfReportOption}/>
                         </Form.Item>
                         <Form.Item className="input" name="file" >
                             <Upload disabled>
-                                <Input disabled className="input input-upload" size='large' placeholder="Загрузить файл"/>
+                                <Input disabled className="input input-upload" size='large' />
                             </Upload>
                         </Form.Item>
                     </div> 
                     <div className="form-inputs">
                         <Form.Item className="input" name="date" >
-                            <DatePicker disabled size="large" className="input"/>
+                            <DatePicker disabled size="large" className="input" placeholder=" "/>
                         </Form.Item>
                     </div> 
                 </FormComponent>
             </ModalWindow>
-            <ModalWindow title="Изменить отчет" openModal={modalState.editReport} closeModal={() => handleModal('editReport', false)} handleDelete={() => handleDeleteOpen('Report')}>
+            <ModalWindow title={t('buttons.edit') + " " + t('crudNames.report')} openModal={modalState.editReport} closeModal={() => handleModal('editReport', false)} handleDelete={() => handleDeleteOpen('Report')}>
                 <FormComponent>
                     <div className="form-inputs">
                         <Form.Item className="input" name="nameOfReport" >
-                            <Input className="input" size='large' placeholder="Название"/>
+                            <Input className="input" size='large' placeholder={`${t('inputs.title')}`}/>
                         </Form.Item>
                         <Form.Item className="input" name="responsible" >
-                            <Input className="input" size='large' placeholder="Ответственный"/>
+                            <Input className="input" size='large' placeholder={`${t('inputs.responsible')}`}/>
                         </Form.Item>
                     </div>
                     <div className="form-inputs">
                         <Form.Item className="input" name="typeOfReport" >
-                            <Select className="input" size="large" options={typeOfReportOption} placeholder="Тип" />
+                            <Select className="input" size="large" options={typeOfReportOption} placeholder={`${t('tableTitles.type')}`} />
                         </Form.Item>
                         <Form.Item className="input" name="file" >
                             <Upload>
-                                <Input className="input input-upload" size='large' placeholder="Загрузить файл"/>
+                                <Input className="input input-upload" size='large' placeholder={`${t('inputs.uploadFile')}`}/>
                             </Upload>
                         </Form.Item>
                     </div> 
                     <div className="form-inputs">
                         <Form.Item className="input" name="date" >
-                            <DatePicker size="large" className="input"/>
+                            <DatePicker size="large" className="input" placeholder={`${t('inputs.selectDate')}`}/>
                         </Form.Item>
                     </div> 
-                    <Button>Применить изменения</Button>
+                    <Button>{t('buttons.edit')}</Button>
                 </FormComponent>
             </ModalWindow>
-            <ModalWindow openModal={modalState.deleteReport} title="Вы точно хотите удалить отчет?" className="modal-tight" closeModal={() => handleModal('deleteReport', false)}>
+            <ModalWindow openModal={modalState.deleteReport} title={`${t('titles.areYouSure')} ${t('crudNames.report')} ?`}  className="modal-tight" closeModal={() => handleModal('deleteReport', false)}>
                     <div className="modal-tight-container">
-                        <Button onClick={() => handleModal('deleteReport', false)} className="outline">Отменить</Button>
-                        <Button className="danger">Удалить</Button>
+                        <Button onClick={() => handleModal('deleteReport', false)} className="outline">{t('buttons.cancel')}</Button>
+                        <Button className="danger">{t('buttons.delete')}</Button>
                     </div>
                 </ModalWindow>
         </MainLayout>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { theme, Form, Input, Upload, Select } from "antd";
-import { IoIosArrowDown, IoMdAdd } from 'react-icons/io';
+import { IoMdAdd } from 'react-icons/io';
 import {FileItem } from '../../types/countries';
 import { InternationalNonGovernmentOrganizationProjectDataType, InternationalNonGovernmentOrganizationsChronologyOfMeetingDataType, InternationalOrganizationNonGovernmentChiefDataType } from '../../types';
 import { InternationalOrganizationNonGovernmentChiefColumns, InternationalOrganizationNonGovernmentChiefData } from '../../tableData/internationalNonGovernmentOrganizationChief';
@@ -12,14 +12,16 @@ import ModalWindow from '../../components/modalWindow';
 import Button from '../../components/button';
 import FormComponent from '../../components/form';
 import ComponentTable from '../../components/table';
+import { useTranslation } from 'react-i18next';
 
 const InternationalNonGovernmentalOrganizations: React.FC = () => {
+    const { t } = useTranslation();
     const {
-      token: { colorBgContainer, borderRadiusLG },
+      token: { colorBgContainer },
     } = theme.useToken();
     
-    const [openSortDropdown, setOpenSortDropdown] = useState(false);
-    const [form] = Form.useForm();
+    // const [openSortDropdown, setOpenSortDropdown] = useState(false);
+    // const [form] = Form.useForm();
     const [documentField, setDocumentField] = useState<FileItem[]>([{ id: 1, file: null }]);
     const [referenceField, setReferenceField] = useState<FileItem[]>([{ id: 1, file: null }]);
     const [referenceDocumentField, setReferenceDocumentField] = useState<FileItem[]>([{ id: 1, file: null }]);
@@ -38,9 +40,9 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
       setModalState((prev) => ({ ...prev, [modalName]: value }));
     };
     
-    const handleSortDropdown = () => {
-      setOpenSortDropdown((prev) => !prev);
-    };
+    // const handleSortDropdown = () => {
+    //   setOpenSortDropdown((prev) => !prev);
+    // };
     
     const addDocumentField = () => {
       setDocumentField([...documentField, { id: documentField.length + 1, file: null }]);
@@ -85,17 +87,17 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
     };
 
     const filterOptions = [
-        {value: 'byName',label:'По названию'},
-        {value: 'byVisit',label:'По визиту'},
-        {value: 'byMeeting',label:'По встрече'},
-        {value: 'all', label: 'Все'}
+        {value: 'byName',label: t('buttons.sort.byName')},
+        {value: 'byVisit',label: t('buttons.sort.byVisit')},
+        {value: 'byMeeting',label: t('buttons.sort.byMeeting')},
+        {value: 'all', label: t('buttons.sort.all')}
     ]
 
   return (
     <MainLayout>
-      <MainHeading title="Международные не правительственные организации" subtitle='Подзаголовок'>
+      <MainHeading title={`${t('titles.internationalNonGovernmentalOrganizations')}`} subtitle='Подзаголовок'>
         <div className="main-heading-dropdown main-heading-dropdown-single-btn">
-            <Select options={filterOptions} size="large" className="select" placeholder="Сортировать по"/>
+            <Select options={filterOptions} size="large" className="select" placeholder={`${t('buttons.sort.sortBy')}`} />
         </div>
       </MainHeading>
       <div style={{background: colorBgContainer,}} className="layout-content-container">
@@ -104,11 +106,11 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
             <div className="page-inner-table-container-heading">
               <div className="heading-title">
                 <h3 className="title">
-                    Главы
+                {t('tablesName.leaders')}
                 </h3>
               </div>
               <div className="heading-btn">
-                <Button className="outline" onClick={() => handleModal('addChief', true)}>Добавить главу <IoMdAdd/></Button>
+                <Button className="outline" onClick={() => handleModal('addChief', true)}>{t('buttons.add')} {t('crudNames.head')} <IoMdAdd/></Button>
               </div>
             </div>
             <ComponentTable<InternationalOrganizationNonGovernmentChiefDataType> onRowClick={() => handleRowClick('chief', "Retrieve")} data={InternationalOrganizationNonGovernmentChiefData} columns={InternationalOrganizationNonGovernmentChiefColumns} />
@@ -117,11 +119,11 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                 <div className="page-inner-table-container-heading">
                   <div className="heading-title">
                     <h3 className="title">
-                        Совместные проекты
+                    {t('tablesName.jointProjects')}
                     </h3>
                   </div>
                     <div className="heading-btn">
-                        <Button className="outline" onClick={() => handleModal('addProject', true)}>Добавить проект <IoMdAdd/></Button>
+                        <Button className="outline" onClick={() => handleModal('addProject', true)}>{t('buttons.add')}  {t('crudNames.project')}<IoMdAdd/></Button>
                     </div>
                 </div>
                 <ComponentTable<InternationalNonGovernmentOrganizationProjectDataType> onRowClick={() => handleRowClick('project', "Retrieve")} columns={InternationalNonGovernmentOrganizationProjectColumns} data={InternationalNonGovernmentOrganizationProjectData}/>
@@ -130,64 +132,64 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                 <div className="page-inner-table-container-heading">
                     <div className="heading-title">
                         <h3 className="title">
-                            Хронология встреч
+                        {t('tablesName.meetingTimeline')}
                         </h3>
                     </div>
                 </div>
                 <ComponentTable<InternationalNonGovernmentOrganizationsChronologyOfMeetingDataType> data={InternationalNonGovernmentOrganizationsChronologyOfMeetingData} columns={InternationalNonGovernmentOrganizationsChronologyOfMeetingColumns} />
             </div>
-            <ModalWindow title="Добавить главу" openModal={modalState.addChief} closeModal={() => handleModal("addChief", false)}>
+            <ModalWindow title={t('buttons.add') + " " + t('crudNames.head')} openModal={modalState.addChief} closeModal={() => handleModal("addChief", false)}>
                 <FormComponent onFinish={onFinish}>
-                <div className="form-inputs" >
-                      <Form.Item className="input" name="fullName" >
-                          <Input className="input" size='large' placeholder="Введите Ф.И.О"/>
-                      </Form.Item>
-                      <Form.Item className="input" name="additionalInfo" >
-                          <Input className="input" size='large' placeholder="Дополнительная информация"/>
-                      </Form.Item>
-                  </div>
+                    <div className="form-inputs" >
+                        <Form.Item className="input" name="fullName" >
+                            <Input className="input" size='large' placeholder={t('inputs.enterFullName')}/>
+                        </Form.Item>
+                        <Form.Item className="input" name="additionalInfo" >
+                            <Input className="input" size='large' placeholder={t('inputs.additionalInformation')}/>
+                        </Form.Item>
+                    </div>
                     {documentField.map((item) => (
                         <div className="form-inputs" key={item?.id}>
                              <Form.Item className="input" name="chiefFile" >
                                 <Upload>
-                                    <Input className="input input-upload" size='large' placeholder="Загрузить сканер документа"/>
+                                    <Input className="input input-upload" size='large' placeholder={t('inputs.uploadScannedDocument')}/>
                                 </Upload>
                             </Form.Item>
                         </div>
                     ))}
                     <div className="form-btn-new">
-                        <p className="form-btn-new-text" onClick={addDocumentField}>Добавить еще документ</p>
+                        <p className="form-btn-new-text" onClick={addDocumentField}>{t('buttons.addAnotherDocument')}</p>
                     </div>
                      {referenceField.map((item) => (
                         <div className="form-inputs" key={item?.id}>
                              <Form.Item className="input" name="chiefReferenceFile" >
                                 <Upload>
-                                    <Input className="input input-upload" size='large' placeholder="Загрузите справку"/>
+                                    <Input className="input input-upload" size='large' placeholder={t('inputs.uploadCertificate')}/>
                                 </Upload>
                             </Form.Item>
                         </div>
                     ))}
                     <div className="form-btn-new">
-                        <p className="form-btn-new-text" onClick={addReferenceField}>Добавить еще справку</p>
+                        <p className="form-btn-new-text" onClick={addReferenceField}>{t('buttons.addAnotherCertificate')}</p>
                     </div>
-                    <Button>Создать</Button>
+                    <Button>{t('buttons.create')}</Button>
                 </FormComponent>
             </ModalWindow>
-            <ModalWindow openModal={modalState.chiefRetrieve} title="Посмотреть главу" closeModal={() => handleModal('chiefRetrieve', false)} handleEdit={() => handleEditOpen('chief')}>
+            <ModalWindow openModal={modalState.chiefRetrieve} title={t('buttons.retrieve') + " " + t('crudNames.head')} closeModal={() => handleModal('chiefRetrieve', false)} handleEdit={() => handleEditOpen('chief')}>
               <FormComponent>
                       <div className="form-inputs">
                       <Form.Item className="input" name="fullName" >
-                          <Input disabled className="input" size='large' placeholder="Введите Ф.И.О"/>
+                          <Input disabled className="input" size='large' />
                       </Form.Item>
                       <Form.Item className="input" name="additionalInfo" >
-                          <Input disabled className="input" size='large' placeholder="Дополнительная информация"/>
+                          <Input disabled className="input" size='large' />
                       </Form.Item>
                   </div>
                   {documentField.map((item) => (
                         <div className="form-inputs" key={item?.id}>
                              <Form.Item className="input" name="chiefDocumentFile" >
                                 <Upload disabled>
-                                    <Input disabled className="input input-upload" size='large' placeholder="Загрузить сканер документа"/>
+                                    <Input disabled className="input input-upload" size='large' />
                                 </Upload>
                             </Form.Item>
                         </div>
@@ -196,132 +198,132 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                         <div className="form-inputs" key={item?.id}>
                              <Form.Item className="input" name="chiefReferenceFile" >
                                 <Upload disabled>
-                                    <Input disabled className="input input-upload" size='large' placeholder="Загрузите справку"/>
+                                    <Input disabled className="input input-upload" size='large' />
                                 </Upload>
                             </Form.Item>
                         </div>
                     ))}
               </FormComponent>
             </ModalWindow>
-            <ModalWindow openModal={modalState.chiefEdit} title="Изменить главу" closeModal={() => handleModal('chiefEdit', false)} handleDelete={() => handleDeleteOpen('chief')}>
+            <ModalWindow openModal={modalState.chiefEdit} title={t('buttons.edit') + " " + t('crudNames.head')} closeModal={() => handleModal('chiefEdit', false)} handleDelete={() => handleDeleteOpen('chief')}>
               <FormComponent onFinish={onFinish} >
                   <div className="form-inputs" >
                       <Form.Item className="input" name="fullName" >
-                          <Input className="input" size='large' placeholder="Введите Ф.И.О"/>
+                          <Input className="input" size='large' placeholder={t('inputs.enterFullName')}/>
                       </Form.Item>
                       <Form.Item className="input" name="additionalInfo" >
-                          <Input className="input" size='large' placeholder="Дополнительная информация"/>
+                          <Input className="input" size='large' placeholder={t('inputs.additionalInformation')}/>
                       </Form.Item>
                   </div>
                     {documentField.map((item) => (
                         <div className="form-inputs" key={item?.id}>
                              <Form.Item className="input" name="chiefDocumentFile" >
                                 <Upload>
-                                    <Input className="input input-upload" size='large' placeholder="Сканер документа"/>
+                                    <Input className="input input-upload" size='large' placeholder={t('inputs.uploadScannedDocument')}/>
                                 </Upload>
                             </Form.Item>
                         </div>
                     ))}
                     <div className="form-btn-new">
-                        <p className="form-btn-new-text" onClick={addDocumentField}>Добавить еще документ</p>
+                        <p className="form-btn-new-text" onClick={addDocumentField}>{t('buttons.addAnotherDocument')}</p>
                     </div>
                      {referenceField.map((item) => (
                         <div className="form-inputs" key={item?.id}>
                              <Form.Item className="input" name="chiefReferenceFile" >
                                 <Upload>
-                                    <Input className="input input-upload" size='large' placeholder="Справки"/>
+                                    <Input className="input input-upload" size='large' placeholder={t('inputs.uploadCertificate')}/>
                                 </Upload>
                             </Form.Item>
                         </div>
                     ))}
                   <div className="form-btn-new">
-                      <p className="form-btn-new-text" onClick={addReferenceField}>Добавить документ</p>
+                      <p className="form-btn-new-text" onClick={addReferenceField}>{t('buttons.addAnotherCertificate')}</p>
                   </div>
-                  <Button>Применить</Button>
+                  <Button>{t('buttons.edit')}</Button>
               </FormComponent>
             </ModalWindow>
-            <ModalWindow openModal={modalState.chiefDelete} title="Вы точно хотите удалить главу?" className="modal-tight" closeModal={() => handleModal("chiefDelete", false)}>
+            <ModalWindow openModal={modalState.chiefDelete} title={`${t('titles.areYouSure')} ${t('crudNames.head')} ?`} className="modal-tight" closeModal={() => handleModal("chiefDelete", false)}>
                 <div className="modal-tight-container">
-                    <Button onClick={() => handleModal("chiefDelete", false)} className="outline">Отменить</Button>
-                    <Button className="danger">Удалить</Button>
+                    <Button onClick={() => handleModal("chiefDelete", false)} className="outline">{t('buttons.cancel')}</Button>
+                    <Button className="danger">{t('buttons.delete')}</Button>
                 </div>
             </ModalWindow>
 
-            <ModalWindow openModal={modalState.projectRetrieve} title="Посмотреть проект" closeModal={() => handleModal('projectRetrieve', false)} handleEdit={() => handleEditOpen('project')}>
+            <ModalWindow openModal={modalState.projectRetrieve} title={t('buttons.retrieve') + " " + t('crudNames.project')} closeModal={() => handleModal('projectRetrieve', false)} handleEdit={() => handleEditOpen('project')}>
               <FormComponent>
                       <div className="form-inputs">
                       <Form.Item className="input" name="fullName" >
-                          <Input disabled className="input" size='large' placeholder="Введите Ф.И.О"/>
+                          <Input disabled className="input" size='large' />
                       </Form.Item>
                       <Form.Item className="input" name="additionalInfo" >
-                          <Input disabled className="input" size='large' placeholder="Дополнительная информация"/>
+                          <Input disabled className="input" size='large' />
                       </Form.Item>
                   </div>
                   {referenceDocumentField.map((item) => (
                         <div className="form-inputs" key={item?.id}>
                             <Form.Item className="input" name="projectReferenceFile" >
                             <Upload disabled>
-                                <Input disabled className="input input-upload" size='large' placeholder="Загрузить сканер документа"/>
+                                <Input disabled className="input input-upload" size='large'/>
                             </Upload>
                             </Form.Item>
                         </div>
                     ))}
               </FormComponent>
             </ModalWindow>
-            <ModalWindow openModal={modalState.projectEdit} title="Изменить проект" closeModal={() => handleModal('projectEdit', false)} handleDelete={() => handleDeleteOpen('project')}>
+            <ModalWindow openModal={modalState.projectEdit} title={t('buttons.edit') + " " + t('crudNames.project')} closeModal={() => handleModal('projectEdit', false)} handleDelete={() => handleDeleteOpen('project')}>
               <FormComponent  onFinish={onFinish} >
                   <div className="form-inputs" >
                       <Form.Item className="input" name="fullName" >
-                          <Input className="input" size='large' placeholder="Введите Ф.И.О"/>
+                          <Input className="input" size='large' placeholder={t('inputs.enterFullName')}/>
                       </Form.Item>
                       <Form.Item className="input" name="additionalInfo" >
-                          <Input className="input" size='large' placeholder="Дополнительная информация"/>
+                          <Input className="input" size='large' placeholder={t('inputs.additionalInformation')}/>
                       </Form.Item>
                   </div>
                     {referenceDocumentField.map((item) => (
                         <div className="form-inputs" key={item?.id}>
                             <Form.Item className="input" name="projectReferenceFile" >
                             <Upload>
-                                <Input className="input input-upload" size='large' placeholder="Загрузить сканер документа"/>
+                                <Input className="input input-upload" size='large' placeholder={t('inputs.uploadScannedDocument')}/>
                             </Upload>
                             </Form.Item>
                         </div>
                     ))}
                     <div className="form-btn-new">
-                        <p className="form-btn-new-text" onClick={addReferenceDocumentField}>Добавить еще документ</p>
+                        <p className="form-btn-new-text" onClick={addReferenceDocumentField}>{t('buttons.addAnotherDocument')}</p>
                     </div>
-                  <Button>Применить</Button>
+                  <Button>{t('buttons.edit')}</Button>
               </FormComponent>
             </ModalWindow>
-            <ModalWindow title="Добавить проект" openModal={modalState.addProject} closeModal={() => handleModal('addProject', false)}>
+            <ModalWindow title={t('buttons.add') + " " + t('crudNames.project')} openModal={modalState.addProject} closeModal={() => handleModal('addProject', false)}>
                 <FormComponent onFinish={onFinish}>
                         <div className="form-inputs">
                             <Form.Item className="input" name="fullName" >
-                                <Input className="input" size='large' placeholder="Введите Ф.И.О"/>
+                                <Input className="input" size='large' placeholder={t('inputs.enterFullName')}/>
                             </Form.Item>
                             <Form.Item className="input" name="additionalInfo" >
-                                <Input className="input" size='large' placeholder="Дополнительная информация"/>
+                                <Input className="input" size='large' placeholder={t('inputs.additionalInformation')}/>
                             </Form.Item>
                         </div>
                         {referenceDocumentField.map((item) => (
                         <div className="form-inputs" key={item?.id}>
                             <Form.Item className="input" name="projectReferenceFile" >
                             <Upload>
-                                <Input className="input input-upload" size='large' placeholder="Загрузить сканер документа"/>
+                                <Input className="input input-upload" size='large' placeholder={t('inputs.uploadScannedDocument')}/>
                             </Upload>
                             </Form.Item>
                         </div>
                     ))}
                     <div className="form-btn-new">
-                        <p className="form-btn-new-text" onClick={addReferenceDocumentField}>Добавить еще документ</p>
+                        <p className="form-btn-new-text" onClick={addReferenceDocumentField}>{t('buttons.addAnotherDocument')}</p>
                     </div>
-                    <Button>Создать</Button>
+                    <Button>{t('buttons.create')}</Button>
                 </FormComponent>
             </ModalWindow>
-            <ModalWindow openModal={modalState.projectDelete} title="Вы точно хотите удалить проект?" className="modal-tight" closeModal={() => handleModal('projectDelete', false)}>
+            <ModalWindow openModal={modalState.projectDelete} title={`${t('titles.areYouSure')} ${t('crudNames.project')} ?`}className="modal-tight" closeModal={() => handleModal('projectDelete', false)}>
                 <div className="modal-tight-container">
-                    <Button onClick={() => handleModal('projectDelete', false)} className="outline">Отменить</Button>
-                    <Button className="danger">Удалить</Button>
+                    <Button onClick={() => handleModal('projectDelete', false)} className="outline">{t('buttons.cancel')}</Button>
+                    <Button className="danger">{t('buttons.delete')}</Button>
                 </div>
             </ModalWindow>
         </div>
