@@ -1,24 +1,25 @@
-import { useMemo } from "react";
+
 import { EventPartnersDataType } from "../types";
 import type { ColumnsType } from 'antd/es/table';
 import { Select } from "antd";
 import { Option } from "antd/es/mentions";
+import { TFunction } from "i18next";
 
-export const EventPartnerColumns: ColumnsType<EventPartnersDataType> = [
+export const EventPartnerColumns = (t: TFunction): ColumnsType<EventPartnersDataType> => [
         {
-          title: 'Общее количество',
+          title: t('tableTitles.totalNumber'),
           dataIndex: 'countryOrOrg',
           key: 'countryOrOrg',
         },
         {
-          title: 'Семинар/тренинг/конференция/форум',
+          title: t('tableTitles.totalEvents'),
           dataIndex: 'seminarCount',
           key: 'seminarCount',
           align: 'center',
           render: (count: number) => <strong>{count}</strong>,
         },
         {
-          title: 'Визиты',
+          title: t('tableTitles.visits'),
           dataIndex: 'visitCount',
           key: 'visitCount',
           align: 'center',
@@ -26,13 +27,13 @@ export const EventPartnerColumns: ColumnsType<EventPartnersDataType> = [
         }
   ];
 
-export const EventPartnersData: EventPartnersDataType[] = [
+export const EventPartnersData = (t: TFunction): EventPartnersDataType[] => [
     {
       key: '1',
       type: 'country',
       countryOrOrg: (
         <>
-          <div style={{ fontWeight: 600 }}>Страна</div>
+          <div style={{ fontWeight: 600 }}>{t('tableTitles.countries')}</div>
           <Select defaultValue="Казахстан" style={{ width: '100%' }}>
             <Option value="Казахстан">Казахстан</Option>
             <Option value="Узбекистан">Узбекистан</Option>
@@ -47,7 +48,7 @@ export const EventPartnersData: EventPartnersDataType[] = [
       type: 'organization',
       countryOrOrg: (
         <>
-          <div style={{ fontWeight: 600 }}>Международная организация</div>
+          <div style={{ fontWeight: 600 }}>{t('tableTitles.internationalOrganization')}</div>
           <Select defaultValue="Тест организация" style={{ width: '100%' }}>
             <Option value="Тест организация">Тест организация</Option>
             <Option value="ЮНЕСКО">ЮНЕСКО</Option>

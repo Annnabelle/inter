@@ -1,4 +1,4 @@
-import {ReactNode} from 'react'
+
 import dayjs from "dayjs";
 
 export type EventType = {

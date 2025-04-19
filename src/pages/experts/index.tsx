@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { IoIosArrowDown, IoMdAdd } from "react-icons/io";
+import { IoMdAdd } from "react-icons/io";
 import { theme, Form, Input, Upload, DatePicker, Select } from "antd";
 import { ExpertsColumns, ExpertsData } from "../../tableData/experts";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { ExpertsTableDataTypes } from "../../types";
 import { FileItem } from "../../types/countries";
 import MainLayout from "../../components/layout";
@@ -11,16 +11,18 @@ import Button from "../../components/button";
 import ModalWindow from "../../components/modalWindow";
 import FormComponent from "../../components/form";
 import ComponentTable from "../../components/table";
+import { useTranslation } from "react-i18next";
 
 
 const Experts: React.FC = () => {
+    const { t } = useTranslation();
     const {
-        token: { colorBgContainer, borderRadiusLG },
+        token: { colorBgContainer },
     } = theme.useToken();
-    const [form] = Form.useForm();
+    // const [form] = Form.useForm();
         const [files, setFiles] = useState<FileItem[]>([{ id: 1, name: "", file: null }]);
-    const [openSortDropdown, setOpenSortDropdown] = useState<boolean>(false);
-    const navigate = useNavigate();
+    // const [openSortDropdown, setOpenSortDropdown] = useState<boolean>(false);
+    // const navigate = useNavigate();
     const [modalState, setModalState] = useState({
         addExpert: false,
         editExpert: false,
@@ -32,9 +34,9 @@ const Experts: React.FC = () => {
         setFiles([...files, { id: files.length + 1, name: "", file: null }]);
     };
 
-    const handleSortDropdown = () => {
-        setOpenSortDropdown((prev) => (!prev))
-    }
+    // const handleSortDropdown = () => {
+    //     setOpenSortDropdown((prev) => (!prev))
+    // }
 
     const handleModal = (modalName: string, value: boolean) => {
         setModalState((prev) => ({...prev, [modalName] : value}));
@@ -81,19 +83,19 @@ const Experts: React.FC = () => {
     }
 
     const filterOptions = [
-        {value: 'byName',label:'По названию'},
-        {value: 'byVisit',label:'По визиту'},
-        {value: 'byMeeting',label:'По встрече'},
-        {value: 'all', label: 'Все'}
+        {value: 'byName',label: t('buttons.sort.byName')},
+        {value: 'byVisit',label: t('buttons.sort.byVisit')},
+        {value: 'byMeeting',label: t('buttons.sort.byMeeting')},
+        {value: 'all', label: t('buttons.sort.all')}
     ]
 
     return (
         <MainLayout>
-            <MainHeading title="Эксперты" subtitle="Подзаголоок">
+            <MainHeading title={`${t('titles.experts')}`} subtitle="Подзаголоок">
                 <div className="main-heading-dropdown">
-                    <Select options={filterOptions} size="large" className="select" placeholder="Сортировать по"/>
+                    <Select options={filterOptions} size="large" className="select" placeholder={`${t('buttons.sort.sortBy')}`} />
                 </div>
-                    <Button onClick={() => handleModal('addExpert', true)}>Добавить эксперта <IoMdAdd /></Button>
+                    <Button onClick={() => handleModal('addExpert', true)}>{t('buttons.add') + " " + t('crudNames.expert')} <IoMdAdd /></Button>
             </MainHeading>
             <div
                 style={{
@@ -101,107 +103,107 @@ const Experts: React.FC = () => {
                 }}
                 className="layout-content-container"
             >
-               <ComponentTable<ExpertsTableDataTypes> onRowClick={(record) => handleRowClick('Expert', 'retrieve', record)} data={ExpertsData} columns={ExpertsColumns}/>
+               <ComponentTable<ExpertsTableDataTypes> onRowClick={(record) => handleRowClick('Expert', 'retrieve', record)} data={ExpertsData} columns={ExpertsColumns(t)}/>
             </div>
-            <ModalWindow title="Добавить эксперта" openModal={modalState.addExpert} closeModal={() => handleModal('addExpert', false)}>
+            <ModalWindow title={t('buttons.add') + " " + t('crudNames.expert')}  openModal={modalState.addExpert} closeModal={() => handleModal('addExpert', false)}>
                 <FormComponent  onFinish={onFinish}>
                         <div className="form-inputs">
                             <Form.Item className="input" name="mainAreas" >
-                                <Input className="input" size='large' placeholder="Основные сферы"/>
+                                <Input className="input" size='large' placeholder={t('inputs.mainAreas')}/>
                             </Form.Item>
                             <Form.Item className="input" name="date" >
-                                <DatePicker size="large" className="input"/>
+                                <DatePicker size="large" className="input" placeholder={t('inputs.selectDate')}/>
                             </Form.Item>
                         </div>
                         <div className="form-inputs">
                             <Form.Item className="input" name="eventName" >
-                                <Input className="input" size='large' placeholder="Мероприятие"/>
+                                <Input className="input" size='large' placeholder={t('crudNames.event')}/>
                             </Form.Item>
                             <Form.Item className="input" name="organization" >
-                                <Select className="input" size="large" options={organizationOption} placeholder="Привлекающая организация" />
+                                <Select className="input" size="large" options={organizationOption} placeholder={t('inputs.invitingOrganization')}/>
                             </Form.Item>
                         </div>  
                         {files.map((item) => (
                             <div className="form-inputs" key={item?.id}>
                                 <Form.Item className="input" name="file" >
                                     <Upload>
-                                        <Input className="input input-upload" size='large' placeholder="Загрузить файл"/>
+                                        <Input className="input input-upload" size='large' placeholder={t('inputs.uploadFile')}/>
                                     </Upload>
                                 </Form.Item>
                             </div>
                         ))}
                         <div className="form-btn-new">
-                            <p className="form-btn-new-text" onClick={addFileField}>Добавить файл</p>
+                            <p className="form-btn-new-text" onClick={addFileField}>{t('buttons.addAnotherFile')}</p>
                         </div>
-                    <Button>Создать</Button>
+                    <Button>{t('buttons.create')}</Button>
                 </FormComponent>
             </ModalWindow>
-            <ModalWindow title="Просмотреть эксперта" openModal={modalState.retrieveExpert} closeModal={() => handleModal('retrieveExpert', false)} handleEdit={() => handleEditOpen('Expert')}>
+            <ModalWindow title={t('buttons.retrieve') + " " + t('crudNames.expert')}  openModal={modalState.retrieveExpert} closeModal={() => handleModal('retrieveExpert', false)} handleEdit={() => handleEditOpen('Expert')}>
                 <FormComponent>
                         <div className="form-inputs">
                             <Form.Item className="input" name="mainAreas" >
-                                <Input disabled className="input" size='large' placeholder="Основные сферы"/>
+                                <Input disabled className="input" size='large' />
                             </Form.Item>
                             <Form.Item className="input" name="date" >
-                                <DatePicker disabled size="large" className="input"/>
+                                <DatePicker disabled size="large" className="input" placeholder=" "/>
                             </Form.Item>
                         </div>
                         <div className="form-inputs">
                             <Form.Item className="input" name="eventName" >
-                                <Input disabled className="input" size='large' placeholder="Мероприятие"/>
+                                <Input disabled className="input" size='large' />
                             </Form.Item>
                             <Form.Item className="input" name="organization" >
-                                <Select disabled className="input" size="large" options={organizationOption} placeholder="Привлекающая организация" />
+                                <Select disabled className="input" size="large" options={organizationOption}  />
                             </Form.Item>
                         </div>  
                         {files.map((item) => (
                             <div className="form-inputs" key={item?.id}>
                                 <Form.Item className="input" name="file" >
                                     <Upload disabled>
-                                        <Input disabled className="input input-upload" size='large' placeholder="Загрузить файл"/>
+                                        <Input disabled className="input input-upload" size='large' />
                                     </Upload>
                                 </Form.Item>
                             </div>
                         ))}
                 </FormComponent>
             </ModalWindow>
-            <ModalWindow title="Изменить эксперта" openModal={modalState.editExpert} closeModal={() => handleModal('editExpert', false)} handleDelete={() => handleDeleteOpen('Expert')}>
+            <ModalWindow title={t('buttons.edit') + " " + t('crudNames.expert')}  openModal={modalState.editExpert} closeModal={() => handleModal('editExpert', false)} handleDelete={() => handleDeleteOpen('Expert')}>
                 <FormComponent>
                         <div className="form-inputs">
                             <Form.Item className="input" name="mainAreas" >
-                                <Input  className="input" size='large' placeholder="Основные сферы"/>
+                                <Input  className="input" size='large' placeholder={t('inputs.mainAreas')}/>
                             </Form.Item>
                             <Form.Item className="input" name="date" >
-                                <DatePicker  size="large" className="input"/>
+                                <DatePicker  size="large" className="input" placeholder={t('inputs.selectDate')}/>
                             </Form.Item>
                         </div>
                         <div className="form-inputs">
                             <Form.Item className="input" name="eventName" >
-                                <Input  className="input" size='large' placeholder="Мероприятие"/>
+                                <Input  className="input" size='large' placeholder={t('crudNames.event')}/>
                             </Form.Item>
                             <Form.Item className="input" name="organization" >
-                                <Select  className="input" size="large" options={organizationOption} placeholder="Привлекающая организация" />
+                                <Select  className="input" size="large" options={organizationOption} placeholder={t('inputs.invitingOrganization')} />
                             </Form.Item>
                         </div>  
                         {files.map((item) => (
                             <div className="form-inputs" key={item?.id}>
                                 <Form.Item className="input" name="file" >
                                     <Upload disabled>
-                                        <Input  className="input input-upload" size='large' placeholder="Загрузить файл"/>
+                                        <Input  className="input input-upload" size='large' placeholder={t('inputs.uploadFile')}/>
                                     </Upload>
                                 </Form.Item>
                             </div>
                         ))}
                         <div className="form-btn-new">
-                            <p className="form-btn-new-text" onClick={addFileField}>Добавить файл</p>
+                            <p className="form-btn-new-text" onClick={addFileField}>{t('buttons.addAnotherFile')}</p>
                         </div>
-                    <Button>Применить изменения</Button>
+                    <Button>{t('buttons.edit')}</Button>
                 </FormComponent>
             </ModalWindow>
-            <ModalWindow openModal={modalState.deleteExpert} title="Вы точно хотите удалить эксперта?" className="modal-tight" closeModal={() => handleModal('deleteExpert', false)}>
+            <ModalWindow openModal={modalState.deleteExpert} title={`${t('titles.areYouSure')} ${t('crudNames.expert')} ?`} className="modal-tight" closeModal={() => handleModal('deleteExpert', false)}>
                     <div className="modal-tight-container">
-                        <Button onClick={() => handleModal('deleteExpert', false)} className="outline">Отменить</Button>
-                        <Button className="danger">Удалить</Button>
+                        <Button onClick={() => handleModal('deleteExpert', false)} className="outline">{t('buttons.cancel')}</Button>
+                        <Button className="danger">{t('buttons.delete')}</Button>
                     </div>
                 </ModalWindow>
         </MainLayout>

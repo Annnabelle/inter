@@ -1,7 +1,8 @@
 import { TableProps } from "antd";
 import { InternationalOrganizationChronologyOfMeetingDataType } from "../types";
+import { TFunction } from "i18next";
 
-export const InternationalOrganizationChronologyOfMeetingColumns: TableProps<InternationalOrganizationChronologyOfMeetingDataType>["columns"] = [
+export const InternationalOrganizationChronologyOfMeetingColumns =  (t: TFunction): TableProps<InternationalOrganizationChronologyOfMeetingDataType>["columns"] => [
     {
         title: "№",
         dataIndex: "number",
@@ -9,31 +10,31 @@ export const InternationalOrganizationChronologyOfMeetingColumns: TableProps<Int
         render: (text) => <p className="table-text">{text}</p>
     },
     {
-        title: "Дата",
+        title: t('tableTitles.date'),
         dataIndex: "data",
         key: "data",
         render: (text) => <h1 className="table-title">{text}</h1>,
     },
     {
-        title: "Место",
+        title: t('tableTitles.place'),
         dataIndex: "place",
         key: "place",
         render: (text) => <p className="table-text">{text}</p>,
     },
     {
-        title: "Формат",
+        title: t('tableTitles.format'),
         dataIndex: "format",
         key: "format",
         render: (text) => <p className="table-text">{text}</p>,
     },
     {
-        title: "Уровень",
+        title: t('tableTitles.level'),
         dataIndex: "level",
         key: "level",
         render: (text) => <p className="table-text">{text}</p>
     },
     {
-        title: "Название встречи",
+        title: t('tableTitles.nameOfMeeting'),
         dataIndex: "nameOfMeeting",
         key: "nameOfMeeting",
         render: (text) => <p className="table-text">{text}</p>

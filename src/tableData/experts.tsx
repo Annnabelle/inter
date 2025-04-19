@@ -1,33 +1,34 @@
 import { TableProps } from "antd";
 import { ExpertsTableDataTypes } from "../types";
+import { TFunction } from "i18next";
 
-export const ExpertsColumns: TableProps<ExpertsTableDataTypes>["columns"] = [
+export const ExpertsColumns = (t: TFunction): TableProps<ExpertsTableDataTypes>["columns"] => [
   {
-    title: "Основные сферы",
+    title:  t('tableTitles.mainAreas'),
     dataIndex: "mainAreas",
     key: "mainAreas",
     render: (text) => <h1 className="table-title">{text}</h1>,
   },
   {
-    title: "Ф.И.О",
+    title: t('tableTitles.event'),
     dataIndex: "fullName",
     key: "fullName",
     render: (text) => <p className="table-text">{text}</p>,
   },
   {
-    title: "Мероприятие",
+    title: t('tableTitles.fullName'),
     dataIndex: "event",
     key: "event",
     render: (text) => <p className="table-text">{text}</p>,
   },
   {
-    title: "Дата",
+    title:  t('tableTitles.date'),
     dataIndex: "date",
     key: "date",
     render: (text) => <p className="table-text">{text}</p>,
   },
   {
-    title: "Файлы",
+    title:   t('tableTitles.files'),
     dataIndex: "files",
     key: "files",
     render: (text) => <p className="table-text">{text}</p>,

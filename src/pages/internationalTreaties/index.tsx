@@ -1,6 +1,6 @@
-import { useNavigate } from "react-router-dom";
+
 import { useState } from "react";
-import { IoIosArrowDown, IoMdAdd } from "react-icons/io";
+import { IoMdAdd } from "react-icons/io";
 import { theme, Form, Input, Upload, DatePicker, Select } from "antd";
 import { InternationalTreatiesTableDataType } from "../../types";
 import { InternationalTreatiesTableColumn, InternationalTreatiesTableData } from "../../tableData/internationalTreaties";
@@ -11,16 +11,18 @@ import Button from "../../components/button";
 import ComponentTable from "../../components/table";
 import ModalWindow from "../../components/modalWindow";
 import FormComponent from "../../components/form";
+import { useTranslation } from "react-i18next";
 
 
 const InternationalTreaties: React.FC = () => {
+    const { t } = useTranslation();
     const {
-        token: { colorBgContainer, borderRadiusLG },
+        token: { colorBgContainer },
     } = theme.useToken();
-    const [form] = Form.useForm();
-        const [files, setFiles] = useState<FileItem[]>([{ id: 1, name: "", file: null }]);
-    const [openSortDropdown, setOpenSortDropdown] = useState<boolean>(false);
-    const navigate = useNavigate();
+    // const [form] = Form.useForm();
+    const [files, setFiles] = useState<FileItem[]>([{ id: 1, name: "", file: null }]);
+    // const [openSortDropdown, setOpenSortDropdown] = useState<boolean>(false);
+    // const navigate = useNavigate();
     const [modalState, setModalState] = useState({
         addTreaties: false,
         editTreaties: false,
@@ -32,9 +34,9 @@ const InternationalTreaties: React.FC = () => {
         setFiles([...files, { id: files.length + 1, name: "", file: null }]);
     };
 
-    const handleSortDropdown = () => {
-        setOpenSortDropdown((prev) => (!prev))
-    }
+    // const handleSortDropdown = () => {
+    //     setOpenSortDropdown((prev) => (!prev))
+    // }
 
     const handleModal = (modalName: string, value: boolean) => {
         setModalState((prev) => ({...prev, [modalName] : value}));
@@ -69,32 +71,32 @@ const InternationalTreaties: React.FC = () => {
         }, 10);
     };
 
-    const organizationOption = [
-        { value: "test1", label: "test1" },
-        { value: "test2", label: "test2" },
-        { value: "test3", label: "test3" },
-        { value: "test4", label: "test4" },
-        { value: "test5", label: "test5" },
-      ];
+    // const organizationOption = [
+    //     { value: "test1", label: "test1" },
+    //     { value: "test2", label: "test2" },
+    //     { value: "test3", label: "test3" },
+    //     { value: "test4", label: "test4" },
+    //     { value: "test5", label: "test5" },
+    //   ];
 
     const onFinish = () => {
         console.log('hello finish');
     }
 
     const filterOptions = [
-        {value: 'byName',label:'По названию'},
-        {value: 'byVisit',label:'По визиту'},
-        {value: 'byMeeting',label:'По встрече'},
-        {value: 'all', label: 'Все'}
+        {value: 'byName',label: t('buttons.sort.byName')},
+        {value: 'byVisit',label: t('buttons.sort.byVisit')},
+        {value: 'byMeeting',label: t('buttons.sort.byMeeting')},
+        {value: 'all', label: t('buttons.sort.all')}
     ]
 
     return (
         <MainLayout>
-            <MainHeading title="Международные договора" subtitle="Подзаголоок">
+            <MainHeading title={`${t('titles.internationalsTreaties')}`}  subtitle="Подзаголоок">
                 <div className="main-heading-dropdown">
-                    <Select options={filterOptions} size="large" className="select" placeholder="Сортировать по"/>
+                    <Select options={filterOptions} size="large" className="select" placeholder={`${t('buttons.sort.sortBy')}`} />
                 </div>
-                <Button onClick={() => handleModal('addTreaties', true)}>Добавить договор <IoMdAdd /></Button>
+                <Button onClick={() => handleModal('addTreaties', true)}>{`${t('buttons.add')}`} {`${t('crudNames.agreement')}`} <IoMdAdd /></Button>
             </MainHeading>
             <div
                 style={{
@@ -102,107 +104,107 @@ const InternationalTreaties: React.FC = () => {
                 }}
                 className="layout-content-container"
             >
-               <ComponentTable<InternationalTreatiesTableDataType> onRowClick={(record) => handleRowClick('Treaties', 'retrieve', record)} columns={InternationalTreatiesTableColumn} data={InternationalTreatiesTableData}/>
+               <ComponentTable<InternationalTreatiesTableDataType> onRowClick={(record) => handleRowClick('Treaties', 'retrieve', record)} columns={InternationalTreatiesTableColumn(t)} data={InternationalTreatiesTableData}/>
             </div>
-            <ModalWindow title="Добавить договор" openModal={modalState.addTreaties} closeModal={() => handleModal('addTreaties', false)}>
+            <ModalWindow title={t('buttons.add') + " " + t('crudNames.agreement')} openModal={modalState.addTreaties} closeModal={() => handleModal('addTreaties', false)}>
                 <FormComponent  onFinish={onFinish}>
                         <div className="form-inputs">
                             <Form.Item className="input" name="nameOfTreaties" >
-                                <Input className="input" size='large' placeholder="Название договора"/>
+                                <Input className="input" size='large' placeholder={t('inputs.contractTitle')}/>
                             </Form.Item>
                             <Form.Item className="input" name="date" >
-                                <DatePicker size="large" className="input"/>
+                                <DatePicker size="large" className="input" placeholder={t('inputs.selectDate')}/>
                             </Form.Item>
                         </div>
                         <div className="form-inputs">
                             <Form.Item className="input" name="place" >
-                                <Input className="input" size='large' placeholder="Место"/>
+                                <Input className="input" size='large' placeholder={t('inputs.placeOfSigning')}/>
                             </Form.Item>
                             <Form.Item className="input" name="level" >
-                                <Input className="input" size='large' placeholder="Уровень подписания"/>
+                                <Input className="input" size='large' placeholder={t('inputs.levelOfSigning')}/>
                             </Form.Item>
                         </div>  
                         {files.map((item) => (
                             <div className="form-inputs" key={item?.id}>
                                 <Form.Item className="input" name="file" >
                                     <Upload>
-                                        <Input className="input input-upload" size='large' placeholder="Загрузить файл"/>
+                                        <Input className="input input-upload" size='large' placeholder={t('inputs.uploadFile')}/>
                                     </Upload>
                                 </Form.Item>
                             </div>
                         ))}
                         <div className="form-btn-new">
-                            <p className="form-btn-new-text" onClick={addFileField}>Добавить файл</p>
+                            <p className="form-btn-new-text" onClick={addFileField}>{t('buttons.addAnotherFile')}</p>
                         </div>
-                    <Button>Создать</Button>
+                    <Button>{t('buttons.create')}</Button>
                 </FormComponent>
             </ModalWindow>
-            <ModalWindow title="Просмотреть договор" openModal={modalState.retrieveTreaties} closeModal={() => handleModal('retrieveTreaties', false)} handleEdit={() => handleEditOpen('Treaties')}>
-                <FormComponent>
-                <div className="form-inputs">
-                            <Form.Item className="input" name="nameOfTreaties" >
-                                <Input disabled className="input" size='large' placeholder="Название договора"/>
-                            </Form.Item>
-                            <Form.Item className="input" name="date" >
-                                <DatePicker disabled size="large" className="input"/>
-                            </Form.Item>
-                        </div>
-                        <div className="form-inputs">
-                            <Form.Item className="input" name="place" >
-                                <Input disabled className="input" size='large' placeholder="Место"/>
-                            </Form.Item>
-                            <Form.Item className="input" name="level" >
-                                <Input disabled className="input" size='large' placeholder="Уровень подписания"/>
-                            </Form.Item>
-                        </div>  
-                        {files.map((item) => (
-                            <div className="form-inputs" key={item?.id}>
-                                <Form.Item className="input" name="file" >
-                                    <Upload disabled>
-                                        <Input disabled className="input input-upload" size='large' placeholder="Загрузить файл"/>
-                                    </Upload>
-                                </Form.Item>
-                            </div>
-                        ))}
-                </FormComponent>
-            </ModalWindow>
-            <ModalWindow title="Изменить договор" openModal={modalState.editTreaties} closeModal={() => handleModal('editTreaties', false)} handleDelete={() => handleDeleteOpen('Treaties')}>
+            <ModalWindow title={t('buttons.retrieve') + " " + t('crudNames.agreement')} openModal={modalState.retrieveTreaties} closeModal={() => handleModal('retrieveTreaties', false)} handleEdit={() => handleEditOpen('Treaties')}>
                 <FormComponent>
                     <div className="form-inputs">
                         <Form.Item className="input" name="nameOfTreaties" >
-                            <Input className="input" size='large' placeholder="Название договора"/>
+                            <Input disabled className="input" size='large' />
                         </Form.Item>
                         <Form.Item className="input" name="date" >
-                            <DatePicker size="large" className="input"/>
+                            <DatePicker disabled size="large" className="input" placeholder=" "/>
                         </Form.Item>
                     </div>
                     <div className="form-inputs">
                         <Form.Item className="input" name="place" >
-                            <Input className="input" size='large' placeholder="Место"/>
+                            <Input disabled className="input" size='large'/>
                         </Form.Item>
                         <Form.Item className="input" name="level" >
-                            <Input className="input" size='large' placeholder="Уровень подписания"/>
+                            <Input disabled className="input" size='large' />
+                        </Form.Item>
+                    </div>  
+                    {files.map((item) => (
+                        <div className="form-inputs" key={item?.id}>
+                            <Form.Item className="input" name="file" >
+                                <Upload disabled>
+                                    <Input disabled className="input input-upload" size='large'/>
+                                </Upload>
+                            </Form.Item>
+                        </div>
+                    ))}
+                </FormComponent>
+            </ModalWindow>
+            <ModalWindow title={t('buttons.edit') + " " + t('crudNames.agreement')} openModal={modalState.editTreaties} closeModal={() => handleModal('editTreaties', false)} handleDelete={() => handleDeleteOpen('Treaties')}>
+                <FormComponent>
+                    <div className="form-inputs">
+                        <Form.Item className="input" name="nameOfTreaties" >
+                            <Input className="input" size='large' placeholder={t('inputs.contractTitle')}/>
+                        </Form.Item>
+                        <Form.Item className="input" name="date" >
+                            <DatePicker size="large" className="input" placeholder={t('inputs.selectDate')}/>
+                        </Form.Item>
+                    </div>
+                    <div className="form-inputs">
+                        <Form.Item className="input" name="place" >
+                            <Input className="input" size='large' placeholder={t('inputs.placeOfSigning')}/>
+                        </Form.Item>
+                        <Form.Item className="input" name="level" >
+                            <Input className="input" size='large' placeholder={t('inputs.levelOfSigning')}/>
                         </Form.Item>
                     </div>  
                     {files.map((item) => (
                         <div className="form-inputs" key={item?.id}>
                             <Form.Item className="input" name="file" >
                                 <Upload>
-                                    <Input className="input input-upload" size='large' placeholder="Загрузить файл"/>
+                                    <Input className="input input-upload" size='large' placeholder={t('inputs.uploadFile')}/>
                                 </Upload>
                             </Form.Item>
                         </div>
                     ))}
                     <div className="form-btn-new">
-                        <p className="form-btn-new-text" onClick={addFileField}>Добавить файл</p>
+                        <p className="form-btn-new-text" onClick={addFileField}>{t('buttons.addAnotherFile')}</p>
                     </div>
-                    <Button>Применить изменения</Button>
+                    <Button>{t('buttons.edit')}</Button>
                 </FormComponent>
             </ModalWindow>
-            <ModalWindow openModal={modalState.deleteTreaties} title="Вы точно хотите удалить договор?" className="modal-tight" closeModal={() => handleModal('deleteTreaties', false)}>
+            <ModalWindow openModal={modalState.deleteTreaties} title= {`${t('titles.areYouSure')} ${t('crudNames.agreement')} ?`} className="modal-tight" closeModal={() => handleModal('deleteTreaties', false)}>
                 <div className="modal-tight-container">
-                    <Button onClick={() => handleModal('deleteTreaties', false)} className="outline">Отменить</Button>
-                    <Button className="danger">Удалить</Button>
+                    <Button onClick={() => handleModal('deleteTreaties', false)} className="outline">{t('buttons.cancel')}</Button>
+                    <Button className="danger">{t('buttons.delete')}</Button>
                 </div>
             </ModalWindow>
         </MainLayout>

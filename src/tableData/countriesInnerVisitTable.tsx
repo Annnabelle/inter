@@ -1,33 +1,34 @@
 import { TableProps } from "antd";
 import { CountriesInnerVisitsDataType } from "../types";
+import { TFunction } from "i18next";
 
-export const CountriesInnerVisitsColumns: TableProps<CountriesInnerVisitsDataType>["columns"] = [
+export const CountriesInnerVisitsColumns = (t: TFunction): TableProps<CountriesInnerVisitsDataType>["columns"] => [
     {
-        title: "Период",
+        title:  t('tableTitles.period'),
         dataIndex: "period",
         key: "period",
         render: (text) => <h1 className="table-title">{text}</h1>,
     },
     {
-      title: "Уровень",
+      title:  t('tableTitles.level'),
       dataIndex: "level",
       key: "level",
       render: (text) => <p className="table-text">{text}</p>
     },
     {
-        title: "Донор",
+        title:  t('tableTitles.donor'),
         dataIndex: "donor",
         key: "donor",
         render: (text) => <p className="table-text">{text}</p>,
     },
     {
-        title: "Организатор",
+        title:  t('tableTitles.organizer'),
         dataIndex: "organizer",
         key: "organizer",
         render: (text) => <p className="table-text">{text}</p>,
     },
     {
-        title: "Согласие администрации",
+        title: t('tableTitles.administrationsConsent'),
         dataIndex: "administrationСonsent",
         key: "administrationСonsent",
         render: (text) => <p className="table-text">{text}</p>

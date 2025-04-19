@@ -1,21 +1,22 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { IoIosArrowDown } from "react-icons/io";
+// import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
 import { Select, theme } from "antd";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
 import StatisticsCard from "../../components/statisticCard";
+import { useTranslation } from "react-i18next";
 
 
 const EventStatistics: React.FC = () => {
+    const { t } = useTranslation();
     const {
-        token: { colorBgContainer, borderRadiusLG },
+        token: { colorBgContainer  },
     } = theme.useToken();
-    const [openSortDropdown, setOpenSortDropdown] = useState<boolean>(false);
-    const navigate = useNavigate()
-    const handleSortDropdown = () => {
-        setOpenSortDropdown((prev) => (!prev))
-    }
+    // const [openSortDropdown, setOpenSortDropdown] = useState<boolean>(false);
+    // const navigate = useNavigate()
+    // const handleSortDropdown = () => {
+    //     setOpenSortDropdown((prev) => (!prev))
+    // }
 
     const filterOptions = [
         {value: '2025',label:'2025'},
@@ -26,9 +27,9 @@ const EventStatistics: React.FC = () => {
     
     return (
         <MainLayout>
-            <MainHeading title="Статистика мероприятий" subtitle="Подзаголоок">
+            <MainHeading title={`${t('titles.eventStatistics')}`} subtitle="Подзаголоок">
                 <div className="main-heading-dropdown main-heading-dropdown-single-btn">
-                    <Select options={filterOptions} size="large" className="select" placeholder="Сортировать по"/>
+                    <Select options={filterOptions} size="large" className="select" placeholder={`${t('buttons.sort.sortBy')}`} />
                 </div>
             </MainHeading>
             <div
@@ -39,24 +40,24 @@ const EventStatistics: React.FC = () => {
             >
                 <div className="page-inner">
                     <div className="page-inner-title">
-                        <h1 className="title">Статистика мероприятий, за 2025 год</h1>
+                        <h1 className="title">{t("titles.eventStatistics")}, за 2025 год</h1>
                     </div>
                 </div>
                 <div className="page-inner-statistics">
                     <StatisticsCard
-                        title="Семинар/Тренинг" 
+                        title={t('events.seminar')}
                         total={1231} 
                         agencyPercent={65} 
                         otherPercent={35} 
                     />
                     <StatisticsCard
-                        title="Конференция/Форум" 
+                        title={t('events.conferences')}
                         total={1231} 
                         agencyPercent={65} 
                         otherPercent={35} 
                     />
                     <StatisticsCard
-                        title="Встречи" 
+                        title={t('events.meetings')} 
                         total={1231} 
                         agencyPercent={65} 
                         otherPercent={35} 
@@ -64,19 +65,19 @@ const EventStatistics: React.FC = () => {
                 </div>
                 <div className="page-inner-statistics">
                     <StatisticsCard
-                        title="Зарубежные визиты" 
+                        title={t('events.foreignVisits')}
                         total={1231} 
                         agencyPercent={65} 
                         otherPercent={35} 
                     />
                     <StatisticsCard
-                        title="Прием делегаций" 
+                        title={t('events.receptionOfDelegations')}
                         total={1231} 
                         agencyPercent={65} 
                         otherPercent={35} 
                     />
                     <StatisticsCard
-                        title="Дипломатические приёмы" 
+                        title={t('events.diplomaticReceptions')}
                         total={1231} 
                         agencyPercent={65} 
                         otherPercent={35} 

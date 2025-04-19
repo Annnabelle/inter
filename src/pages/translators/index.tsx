@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { IoIosArrowDown, IoMdAdd } from "react-icons/io";
+import { IoMdAdd } from "react-icons/io";
 import { theme, Form, Input, Select } from "antd";
 import { TranslatorsColumns, TranslatorsData } from "../../tableData/translators";
-import { useNavigate } from "react-router-dom";
 import { TranslatorsTableDataTypes } from "../../types";
 import { FileItem } from "../../types/countries";
 import MainLayout from "../../components/layout";
@@ -11,16 +10,18 @@ import Button from "../../components/button";
 import ModalWindow from "../../components/modalWindow";
 import FormComponent from "../../components/form";
 import ComponentTable from "../../components/table";
+import { useTranslation } from "react-i18next";
 
 
 const Translators: React.FC = () => {
+    const { t } = useTranslation();
     const {
-        token: { colorBgContainer, borderRadiusLG },
+        token: { colorBgContainer },
     } = theme.useToken();
-    const [form] = Form.useForm();
-        const [languages, setLanguages] = useState<FileItem[]>([{ id: 1, name: "", file: null }]);
-    const [openSortDropdown, setOpenSortDropdown] = useState<boolean>(false);
-    const navigate = useNavigate();
+    // const [form] = Form.useForm();
+    const [languages, setLanguages] = useState<FileItem[]>([{ id: 1, name: "", file: null }]);
+    // const [openSortDropdown, setOpenSortDropdown] = useState<boolean>(false);
+    // const navigate = useNavigate();
     const [modalState, setModalState] = useState({
         addTranslator: false,
         editTranslator: false,
@@ -32,9 +33,9 @@ const Translators: React.FC = () => {
         setLanguages([...languages, { id: languages.length + 1, name: "", file: null }]);
     };
 
-    const handleSortDropdown = () => {
-        setOpenSortDropdown((prev) => (!prev))
-    }
+    // const handleSortDropdown = () => {
+    //     setOpenSortDropdown((prev) => (!prev))
+    // }
 
     const handleModal = (modalName: string, value: boolean) => {
         setModalState((prev) => ({...prev, [modalName] : value}));
@@ -81,19 +82,19 @@ const Translators: React.FC = () => {
     }
 
     const filterOptions = [
-        {value: 'byName',label:'По названию'},
-        {value: 'byVisit',label:'По визиту'},
-        {value: 'byMeeting',label:'По встрече'},
-        {value: 'all', label: 'Все'}
+        {value: 'byName',label: t('buttons.sort.byName')},
+        {value: 'byVisit',label: t('buttons.sort.byVisit')},
+        {value: 'byMeeting',label: t('buttons.sort.byMeeting')},
+        {value: 'all', label: t('buttons.sort.all')}
     ]
 
     return (
         <MainLayout>
-            <MainHeading title="Переводчики" subtitle="Подзаголоок">
+            <MainHeading title={`${t('titles.translators')}`} subtitle="Подзаголоок">
                 <div className="main-heading-dropdown">
-                    <Select options={filterOptions} size="large" className="select" placeholder="Сортировать по"/>
+                    <Select options={filterOptions} size="large" className="select" placeholder={`${t('buttons.sort.sortBy')}`} />
                 </div>
-                    <Button onClick={() => handleModal('addTranslator', true)}>Добавить переводчика <IoMdAdd /></Button>
+                    <Button onClick={() => handleModal('addTranslator', true)}>{`${t('buttons.add')}`} {`${t('crudNames.translator')}`} <IoMdAdd /></Button>
             </MainHeading>
             <div
                 style={{
@@ -101,77 +102,77 @@ const Translators: React.FC = () => {
                 }}
                 className="layout-content-container"
             >
-               <ComponentTable<TranslatorsTableDataTypes> onRowClick={(record) => handleRowClick('Translator', 'retrieve', record)} data={TranslatorsData} columns={TranslatorsColumns}/>
+               <ComponentTable<TranslatorsTableDataTypes> onRowClick={(record) => handleRowClick('Translator', 'retrieve', record)} data={TranslatorsData} columns={TranslatorsColumns(t)}/>
             </div>
-            <ModalWindow title="Добавить переводчика" openModal={modalState.addTranslator} closeModal={() => handleModal('addTranslator', false)}>
+            <ModalWindow title={t('buttons.add') + " " + t('crudNames.translator')}  openModal={modalState.addTranslator} closeModal={() => handleModal('addTranslator', false)}>
                 <FormComponent  onFinish={onFinish}>
                         <div className="form-inputs">
                             <Form.Item className="input" name="fullName" >
-                                <Input className="input" size='large' placeholder="Ф.И.О"/>
+                                <Input className="input" size='large' placeholder={t('inputs.enterFullName')}/>
                             </Form.Item>
                         </div>
                         {languages.map((item) => (
                             <div className="form-inputs" key={item?.id}>
                                 <Form.Item className="input" name="language" >
-                                    <Select className="input" size="large" options={languageOption} placeholder="Выберите язык" />
+                                    <Select className="input" size="large" options={languageOption} placeholder={t('inputs.selectLanguage')} />
                                 </Form.Item>
                                 <Form.Item className="input" name="points" >
-                                    <Input className="input" size='large' placeholder="балы"/>
+                                    <Input className="input" size='large' placeholder={t('inputs.points')}/>
                                 </Form.Item>
                             </div>
                         ))}
                         <div className="form-btn-new">
-                            <p className="form-btn-new-text" onClick={addLanguagesField}>Добавить язык</p>
+                            <p className="form-btn-new-text" onClick={addLanguagesField}>{t('buttons.addLang')}</p>
                         </div>
-                    <Button>Создать</Button>
+                    <Button>{t('buttons.create')}</Button>
                 </FormComponent>
             </ModalWindow>
-            <ModalWindow title="Просмотреть переводчика" openModal={modalState.retrieveTranslator} closeModal={() => handleModal('retrieveTranslator', false)} handleEdit={() => handleEditOpen('Translator')}>
+            <ModalWindow title={t('buttons.retrieve') + " " + t('crudNames.translator')} openModal={modalState.retrieveTranslator} closeModal={() => handleModal('retrieveTranslator', false)} handleEdit={() => handleEditOpen('Translator')}>
                 <FormComponent>
                     <div className="form-inputs">
                         <Form.Item className="input" name="fullName" >
-                            <Input disabled className="input" size='large' placeholder="Ф.И.О"/>
+                            <Input disabled className="input" size='large' />
                         </Form.Item>
                     </div>
                     {languages.map((item) => (
                         <div className="form-inputs" key={item?.id}>
                             <Form.Item className="input" name="language" >
-                                <Select disabled className="input" size="large" options={languageOption} placeholder="Выберите язык" />
+                                <Select disabled className="input" size="large" options={languageOption} />
                             </Form.Item>
                             <Form.Item className="input" name="points" >
-                                <Input disabled className="input" size='large' placeholder="балы"/>
+                                <Input disabled className="input" size='large'/>
                             </Form.Item>
                         </div>
                     ))}
                 </FormComponent>
             </ModalWindow>
-            <ModalWindow title="Изменить переводчика" openModal={modalState.editTranslator} closeModal={() => handleModal('editTranslator', false)} handleDelete={() => handleDeleteOpen('Translator')}>
+            <ModalWindow title={t('buttons.edit') + " " + t('crudNames.translator')}  openModal={modalState.editTranslator} closeModal={() => handleModal('editTranslator', false)} handleDelete={() => handleDeleteOpen('Translator')}>
                 <FormComponent>
                     <div className="form-inputs">
                         <Form.Item className="input" name="fullName" >
-                            <Input className="input" size='large' placeholder="Ф.И.О"/>
+                            <Input className="input" size='large' placeholder={t('inputs.enterFullName')}/>
                         </Form.Item>
                     </div>
                     {languages.map((item) => (
                         <div className="form-inputs" key={item?.id}>
                             <Form.Item className="input" name="language" >
-                                <Select className="input" size="large" options={languageOption} placeholder="Выберите язык" />
+                                <Select className="input" size="large" options={languageOption} placeholder={t('inputs.selectLanguage')} />
                             </Form.Item>
                             <Form.Item className="input" name="points" >
-                                <Input className="input" size='large' placeholder="балы"/>
+                                <Input className="input" size='large' placeholder={t('inputs.points')}/>
                             </Form.Item>
                         </div>
                     ))}
                     <div className="form-btn-new">
-                        <p className="form-btn-new-text" onClick={addLanguagesField}>Добавить язык</p>
+                        <p className="form-btn-new-text" onClick={addLanguagesField}>{t('buttons.addLang')}</p>
                     </div>
-                    <Button>Применить изменения</Button>
+                    <Button>{t('buttons.edit')}</Button>
                 </FormComponent>
             </ModalWindow>
-            <ModalWindow openModal={modalState.deleteTranslator} title="Вы точно хотите удалить переводчика?" className="modal-tight" closeModal={() => handleModal('deleteTranslator', false)}>
+            <ModalWindow openModal={modalState.deleteTranslator} title={`${t('titles.areYouSure')} ${t('crudNames.translator')} ?`} className="modal-tight" closeModal={() => handleModal('deleteTranslator', false)}>
                     <div className="modal-tight-container">
-                        <Button onClick={() => handleModal('deleteTranslator', false)} className="outline">Отменить</Button>
-                        <Button className="danger">Удалить</Button>
+                        <Button onClick={() => handleModal('deleteTranslator', false)} className="outline">{t('buttons.cancel')}</Button>
+                        <Button className="danger">{t('buttons.delete')}</Button>
                     </div>
                 </ModalWindow>
         </MainLayout>

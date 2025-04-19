@@ -6,6 +6,7 @@ import {
 import 'react-circular-progressbar/dist/styles.css';
 import './styles.sass';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface StatisticsCardProps {
   title: string;
@@ -23,6 +24,7 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
   thirdPercent,
 }) => {
 const navigate = useNavigate()
+const { t } = useTranslation()
   const handleNavigate = () => {
     navigate('/event-statistics-inner')
   }
@@ -30,7 +32,7 @@ const navigate = useNavigate()
     <div className="statistics-card" onClick={handleNavigate}>
       <div className="statistics-heading">
         <div className="statistics-subtitle">
-          <p className="subtitle">общая статистика</p>
+          <p className="subtitle">{t('titles.overallStatistics')}</p>
         </div>
         <div className="statistics-title">
           <h2 className="title">{title}</h2>
@@ -47,7 +49,7 @@ const navigate = useNavigate()
         >
           <div>
             <div className="total-label">
-              <p className="label">всего встреч</p>
+              <p className="label">{t('titles.totalMeetings')}</p>
             </div>
             <div className="total-value">
               <p className="value">{total.toLocaleString()}</p>
@@ -61,7 +63,7 @@ const navigate = useNavigate()
             <span className="statistics-items-dot-item dot-agency"></span>
           </div>
           <div className="statistics-items-dot-text">
-            <p className='text'>Агентство <span className='percent'> {agencyPercent}%</span></p>
+            <p className='text'>{t('titles.Agency')} <span className='percent'> {agencyPercent}%</span></p>
           </div>
         </div>
         <div className="statistics-items">
@@ -69,7 +71,7 @@ const navigate = useNavigate()
             <span className="statistics-items-dot-item dot-other"></span>
           </div>
           <div className="statistics-items-dot-text">
-            <p className="text">Другой организатор <span className='percent'>{otherPercent}%</span> </p>
+            <p className="text">{t('titles.otherOrganizer')} <span className='percent'>{otherPercent}%</span> </p>
           </div>
         </div>
         
@@ -79,7 +81,7 @@ const navigate = useNavigate()
               <span className="statistics-items-dot-item dot-third"></span>
             </div>
             <div className="statistics-items-dot-text">
-              <p className="text">Экспертный <span className='percent'>{thirdPercent}%</span> </p>
+              <p className="text">{t('titles.expertLevel')} <span className='percent'>{thirdPercent}%</span> </p>
             </div>
           </div>
         )}

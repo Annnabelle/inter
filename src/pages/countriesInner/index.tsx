@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
 import { IoMdAdd } from "react-icons/io";
 import { theme, Form, Input, Upload, DatePicker } from "antd";
 import { DateItem, FileItem } from "../../types/countries";
@@ -7,6 +6,7 @@ import { CountriesEventTableColumns, CountriesEventTableData } from "../../table
 import { CountriesInnerInternationalDocumentsColumns, CountriesInnerInternationalDocumentsData } from "../../tableData/countriesInnerInternationalDocuments";
 import { CountriesInnerVisitsColumns, CountriesInnerVisitsData } from "../../tableData/countriesInnerVisitTable";
 import { CountriesInnerEventDataType, CountriesInnerInternationalDocumentsDataType, CountriesInnerVisitsDataType } from "../../types";
+import { useTranslation } from "react-i18next";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
 import Button from "../../components/button";
@@ -15,9 +15,8 @@ import FormComponent from "../../components/form";
 import ComponentTable from "../../components/table";
 
 const CountriesInner: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
-    const [form] = Form.useForm();
-    const { token: { colorBgContainer, borderRadiusLG }} = theme.useToken();
+    const { t } = useTranslation();
+    const { token: { colorBgContainer }} = theme.useToken();
     const [files, setFiles] = useState<FileItem[]>([{ id: 1, name: "", file: null }]);
     const [dates, setDates] = useState<DateItem[]>([{ id: 1, place: "", date: null }]);
     const [modalState, setModalState] = useState({
@@ -82,7 +81,7 @@ const CountriesInner: React.FC = () => {
     
     return (
         <MainLayout>
-            <MainHeading title="Страны" subtitle="Подзаголоок">
+            <MainHeading title={`${t('titles.countries')}`} subtitle="Подзаголоок">
             </MainHeading>
             <div
                 style={{
@@ -92,7 +91,7 @@ const CountriesInner: React.FC = () => {
             >
                 <div className="page-inner">
                     <div className="page-inner-title">
-                        <h1 className="title">Страна: Российская Федерация </h1>
+                        <h1 className="title">{t('tableTitles.countries')}: Российская Федерация </h1>
                     </div>
                     <div className="page-inner-content">
                         <div className="page-inner-content-title">
@@ -106,42 +105,42 @@ const CountriesInner: React.FC = () => {
                 <div className="page-inner-table-container">
                     <div className="page-inner-table-container-heading">
                         <h3 className="title">
-                            Мероприятия
+                            {t('tablesName.events')}
                         </h3>
                     </div>
-                    <ComponentTable<CountriesInnerEventDataType> columns={CountriesEventTableColumns} data={CountriesEventTableData} />
+                    <ComponentTable<CountriesInnerEventDataType> columns={CountriesEventTableColumns(t)} data={CountriesEventTableData} />
                 </div>
                 <div className="page-inner-table-container">
                     <div className="page-inner-table-container-heading">
                         <h3 className="title">
-                            Визиты
+                            {t('tablesName.visits')}
                         </h3>
                     </div>
-                    <ComponentTable<CountriesInnerVisitsDataType> data={CountriesInnerVisitsData} columns={CountriesInnerVisitsColumns}/>
+                    <ComponentTable<CountriesInnerVisitsDataType> data={CountriesInnerVisitsData} columns={CountriesInnerVisitsColumns(t)}/>
                 </div>
                 <div className="page-inner-table-container">
                     <div className="page-inner-table-container-heading">
                         <div className="heading-title">
                             <h3 className="title">
-                                Международные документы
+                                {t('tablesName.internationalDocuments')}
                             </h3>
                         </div>
                         <div className="heading-btn">
-                            <Button className="outline" onClick={() => handleModal('addDocument', true)}>Добавить документ <IoMdAdd/></Button>
+                            <Button className="outline" onClick={() => handleModal('addDocument', true)}>{t('buttons.add')} {t('crudNames.document')} <IoMdAdd/></Button>
                         </div>
                     </div>
-                    <ComponentTable<CountriesInnerInternationalDocumentsDataType> onRowClick={(record) => handleRowClick('document', 'Retrieve', record)} data={CountriesInnerInternationalDocumentsData} columns={CountriesInnerInternationalDocumentsColumns} />
+                    <ComponentTable<CountriesInnerInternationalDocumentsDataType> onRowClick={(record) => handleRowClick('document', 'Retrieve', record)} data={CountriesInnerInternationalDocumentsData(t)} columns={CountriesInnerInternationalDocumentsColumns(t)} />
                 </div>
-                <ModalWindow openModal={modalState.retrieveDocument} title="Посмотреть документ" closeModal={() => handleModal('retrieveDocument', false)} handleEdit={() => handleEditOpen()}>
+                <ModalWindow openModal={modalState.retrieveDocument} title={`${t('buttons.retrieve')} ${t('crudNames.document')}`} closeModal={() => handleModal('retrieveDocument', false)} handleEdit={() => handleEditOpen()}>
                     <FormComponent>
                         {files.map((item) => (
                             <div className="form-inputs" key={item?.id}>
                                 <Form.Item className="input" name="documentName" >
-                                    <Input className="input" size='large' placeholder="название" disabled/>
+                                    <Input className="input" size='large' disabled/>
                                 </Form.Item>
                                 <Form.Item className="input" name="documentFile" >
                                     <Upload disabled>
-                                        <Input className="input input-upload" size='large' placeholder="файл" disabled/>
+                                        <Input className="input input-upload" size='large' disabled/>
                                     </Upload>
                                 </Form.Item>
                             </div>
@@ -149,85 +148,85 @@ const CountriesInner: React.FC = () => {
                         {dates.map((item) => (
                             <div className="form-inputs" key={item?.id}>
                                 <Form.Item className="input" name="place" >
-                                    <Input size='large' className="input" placeholder="Место подписания" disabled/>
+                                    <Input size='large' className="input" disabled/>
                                 </Form.Item>
                                 <Form.Item className="input" name="date" >
-                                    <DatePicker size="large" className="input" disabled/>
+                                    <DatePicker size="large" className="input" disabled placeholder=""/>
                                 </Form.Item>
                             </div>
                         ))}
                     </FormComponent>
                 </ModalWindow>
-                <ModalWindow openModal={modalState.editDocument} title="Изменить документ" closeModal={() => handleModal('editDocument', false)} handleDelete={() => handleDeleteOpen('Document')}>
+                <ModalWindow openModal={modalState.editDocument} title={`${t('buttons.edit')} ${t('crudNames.document')}`} closeModal={() => handleModal('editDocument', false)} handleDelete={() => handleDeleteOpen('Document')}>
                         <FormComponent onFinish={onFinish}>
                             {files.map((item) => (
                                 <div className="form-inputs" key={item?.id}>
                                     <Form.Item className="input" name="documentName" >
-                                        <Input className="input" size='large' placeholder="Введите название"/>
+                                        <Input className="input" size='large' placeholder= {t('inputs.title')}/>
                                     </Form.Item>
                                     <Form.Item className="input" name="documentFile" >
                                         <Upload>
-                                            <Input className="input input-upload" size='large' placeholder="Загрузить файл"/>
+                                            <Input className="input input-upload" size='large' placeholder= {t('inputs.uploadFile')}/>
                                         </Upload>
                                     </Form.Item>
                                 </div>
                             ))}
                             <div className="form-btn-new">
-                                <p className="form-btn-new-text" onClick={addFileField}>Добавить еще файл</p>
+                                <p className="form-btn-new-text" onClick={addFileField}>{t('buttons.addAnotherFile')}</p>
                             </div>
                             {dates.map((item) => (
                                 <div className="form-inputs" key={item?.id}>
                                     <Form.Item className="input" name="place" >
-                                        <Input size='large' className="input" placeholder="Место подписания"/>
+                                        <Input size='large' className="input" placeholder= {t('inputs.placeOfSigning')}/>
                                     </Form.Item>
                                     <Form.Item className="input" name="date" >
-                                        <DatePicker size="large" className="input"/>
+                                        <DatePicker size="large" className="input" placeholder= {t('inputs.selectDate')}/>
                                     </Form.Item>
                                 </div>
                             ))}
                             <div className="form-btn-new">
-                                <p className="form-btn-new-text" onClick={addDateField}>Добавить еще дату</p>
+                                <p className="form-btn-new-text" onClick={addDateField}>{t('buttons.addAnotherDate')}</p>
                             </div>
-                            <Button>Применить</Button>
+                            <Button>{t('buttons.edit')}</Button>
                         </FormComponent>
                     </ModalWindow>
-                <ModalWindow title="Добавить документ" openModal={modalState.addDocument} closeModal={() => handleModal('addDocument', false)}>
+                <ModalWindow title={`${t('buttons.add')} ${t('crudNames.document')}`} openModal={modalState.addDocument} closeModal={() => handleModal('addDocument', false)}>
                     <FormComponent  onFinish={onFinish}>
                         {files.map((item) => (
                             <div className="form-inputs" key={item?.id}>
                                 <Form.Item className="input" name="documentName" >
-                                    <Input className="input" size='large' placeholder="Введите название"/>
+                                    <Input className="input" size='large' placeholder={t('inputs.enterTitle')}/>
                                 </Form.Item>
                                 <Form.Item className="input" name="documentFile" >
                                     <Upload>
-                                        <Input className="input input-upload" size='large' placeholder="Загрузить файл"/>
+                                        <Input className="input input-upload" size='large' placeholder={t('inputs.uploadFile')}/>
                                     </Upload>
                                 </Form.Item>
                             </div>
                         ))}
                         <div className="form-btn-new">
-                            <p className="form-btn-new-text" onClick={addFileField}>Добавить еще файл</p>
+                            <p className="form-btn-new-text" onClick={addFileField}>{t('buttons.addAnotherFile')}</p>
                         </div>
                         {dates.map((item) => (
                             <div className="form-inputs" key={item?.id}>
                                 <Form.Item className="input" name="place" >
-                                    <Input size='large' className="input" placeholder="Место подписания"/>
+                                    <Input size='large' className="input" placeholder={t('inputs.placeOfSigning')}/>
                                 </Form.Item>
                                 <Form.Item className="input" name="date" >
-                                    <DatePicker size="large" className="input"/>
+                                    <DatePicker size="large" className="input" placeholder={t('inputs.selectDate')}/>
                                 </Form.Item>
                             </div>
                         ))}
                         <div className="form-btn-new">
-                            <p className="form-btn-new-text" onClick={addDateField}>Добавить еще дату</p>
+                            <p className="form-btn-new-text" onClick={addDateField}>{t('buttons.addAnotherDate')}</p>
                         </div>
-                        <Button>Создать</Button>
+                        <Button>{t('buttons.create')}</Button>
                     </FormComponent>
                 </ModalWindow>
-                <ModalWindow openModal={modalState.deleteDocument} title="Вы точно хотите удалить документ?" className="modal-tight" closeModal={() => handleModal('deleteDocument', false)}>
+                <ModalWindow openModal={modalState.deleteDocument} title={`${t('titles.areYouSure')} ${t('crudNames.document')} ?`} className="modal-tight" closeModal={() => handleModal('deleteDocument', false)}>
                     <div className="modal-tight-container">
-                        <Button onClick={() => handleModal('deleteDocument', false)} className="outline">Отменить</Button>
-                        <Button className="danger">Удалить</Button>
+                        <Button onClick={() => handleModal('deleteDocument', false)} className="outline">{t('buttons.cancel')}</Button>
+                        <Button className="danger">{t('buttons.delete')}</Button>
                     </div>
                 </ModalWindow>
             </div>
