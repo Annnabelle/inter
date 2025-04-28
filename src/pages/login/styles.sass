@@ -1,0 +1,26 @@
+@use 'sass:map'
+@use '../../styles/mixins' as mix
+@use '../../styles/variables' as vars
+.login-container
+    display: flex
+    height: 100vh
+    position: relative
+    width: 100%
+    &-left-section
+        position: relative
+    &-right-section
+        @include mix.flex-content(center, row)
+        width: 100%
+    &-form-container
+        width: 400px
+        background: map.get(vars.$basic, 'white')
+        border: 1px solid map.get(vars.$main, 'grey')
+        padding: 30px
+        border-radius: 6px
+        box-shadow: 4px 4px 13px rgba(0, 0, 0, 0.12)
+        .btn
+            margin-top: 30px
+        &-heading
+            text-align: center
+            &-title
+                +mix.typography(28px, 600, map.get(vars.$basic, 'black'))

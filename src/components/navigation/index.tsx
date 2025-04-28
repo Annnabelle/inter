@@ -17,7 +17,7 @@ const Navigation: React.FC = () => {
   const [subHoveredItem, setSubHoveredItem] = useState<string | null>(null);
 
   const navItems: NavItem[] = [
-    { to: '/', icon: <IoMdHome />, text: `${t('navigation.main')}` },
+    { to: '/main', icon: <IoMdHome />, text: `${t('navigation.main')}` },
     { 
       to: '/cooperation', 
       icon: <BiWorld />, 

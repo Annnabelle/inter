@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
+import LoginPage from "../pages/login";
 
 
 const Home = lazy(() => import("../pages/home"));
@@ -24,7 +25,8 @@ const Router: React.FC = () => {
   return (
     <Suspense fallback={<div>Загрузка...</div>}>
       <Routes>
-        <Route path="/" element={<MainEventsPage />}>
+        <Route path='/' element={<LoginPage/>}/>
+        <Route path="/main" element={<MainEventsPage />}>
           <Route index element={<Home />} />
         </Route>
         <Route path="/cooperation" element={<Cooperation />} />
