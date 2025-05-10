@@ -1,9 +1,10 @@
-import { LoginForm } from "../store/authSlice";
-import { User } from "../types/user";
-import { LoginRequestDto, UserResponseDto } from "./dtos";
-import { UserRole } from "./roles";
 
-export function mapLoginFormToDto(data: LoginForm) : LoginRequestDto { 
+import { LoginRequestDto, UserResponseDto } from "../dtos/users";
+import { LoginFormTypes } from "../types/auth.types";
+import { User } from "../types/user";
+import { UserRole } from "../utils/roles";
+
+export function mapLoginFormToDto(data: LoginFormTypes) : LoginRequestDto { 
   return {
     email: data.email,
     password: data.password,
@@ -20,12 +21,9 @@ export function mapUserDtoToUser(userDto: UserResponseDto): User {
     email: userDto.email,
     phone: userDto.phone,
     status: userDto.status,
-    role: UserRole[roleAlias] || UserRole.USER,
+    role: userDto.role,
+    // role: UserRole[roleAlias] || UserRole.USER,
     language: userDto.language,
-    lastLoggedInAt: userDto.lastLoggedInAt ? new Date(userDto.lastLoggedInAt) : null,
+    lastLoggedInAt: userDto.lastLoggedInAt ? new Date(userDto.lastLoggedInAt).toISOString() : null,
   };
 }
-
-
-
-

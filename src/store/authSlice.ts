@@ -1,24 +1,25 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { mapLoginFormToDto, mapUserDtoToUser } from '../utils/authMapper';
-import { ErrorDto, LoginResponseDto } from '../utils/dtos';
 import { AuthState } from '../types/user';
 import { BASE_URL } from '../utils/baseUrl';
+import { mapLoginFormToDto } from '../mappers/auth.mapper';
+import { LoginRequestDto, LoginResponseDto, UserRegisterRequestDto, UserResponseDto } from '../dtos/users';
+import { ErrorDto } from '../dtos/main.dto';
+import { mapUserRegisterToUserRegisterDto } from '../mappers/user.mapper';
+import { RegisterFormTypes } from '../types/auth.types';
 import axios from 'axios';
-
-export type LoginForm = {
-  email: string;
-  password: string;
-};
 
 export const login = createAsyncThunk(
   'auth/login',
-  async (data: LoginForm, { rejectWithValue }) => {
+  async (data: LoginRequestDto, { rejectWithValue }) => {
     try {
       const dto = mapLoginFormToDto(data);
       const response = await axios.post<LoginResponseDto>(`${BASE_URL}/users/login`, dto);
 
       if ('success' in response.data && response.data.success) {
-        return response.data;
+        const { user, tokens } = response.data as Exclude<LoginResponseDto, ErrorDto>;
+        localStorage.setItem('accessToken', tokens.accessToken);
+        localStorage.setItem('refreshToken', tokens.refreshToken);
+        return { user, tokens };
       } else {
         const error = response.data as ErrorDto;
         return rejectWithValue(error.errorMessage?.ru || 'Ошибка авторизации');
@@ -29,12 +30,34 @@ export const login = createAsyncThunk(
   }
 );
 
+
+
+export const registerUser = createAsyncThunk(
+  'auth/register',
+  async (data: RegisterFormTypes, {rejectWithValue}) => {
+    try {
+      const dto = mapUserRegisterToUserRegisterDto(data);
+      const response = await axios.post<UserRegisterRequestDto>(`${BASE_URL}/users/register`, dto);
+      if ('success' in response.data && response.data.success){
+        return response.data;
+      } else {
+        const error = response.data as ErrorDto;
+        return rejectWithValue(error.errorMessage?.ru || 'Ошибка добавления')
+      }
+    }catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || 'Ошибка сервера');
+    }
+  }
+)
+
 const initialState: AuthState = {
   user: null,
   accessToken: null,
   refreshToken: null,
   isLoading: false,
   error: null,
+  status: null,
+  success: null,
 };
 
 export const authSlice = createSlice({
@@ -58,17 +81,27 @@ export const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
-        const { user, tokens } = action.payload as Exclude<LoginResponseDto, ErrorDto>;
-        state.user = mapUserDtoToUser(user);
-        state.accessToken = tokens.accessToken;
-        state.refreshToken = tokens.refreshToken;
-        localStorage.setItem('accessToken', tokens.accessToken);
-        localStorage.setItem('refreshToken', tokens.refreshToken);
+        state.user = action.payload.user;
+        state.accessToken = action.payload.tokens.accessToken;
+        state.refreshToken = action.payload.tokens.refreshToken;
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
-      });
+      })
+      .addCase(registerUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(registerUser.fulfilled, (state) => {
+        state.isLoading = false;
+        state.status = "succeeded";
+        state.success = true;
+      })
+      .addCase(registerUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
   },
 });
 

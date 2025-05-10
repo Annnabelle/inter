@@ -1,7 +1,6 @@
 import React from 'react';
 import { Form, Input } from 'antd';
-import { useDispatch } from 'react-redux';
-import { AppDispatch, RootState } from '../../store';
+import { RootState, useAppDispatch } from '../../store';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { login, LoginForm } from '../../store/authSlice';
@@ -47,7 +46,7 @@ const WaveBackground: React.FC = () => {
 };
 
 const LoginPage: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { isLoading, error } = useSelector((state: RootState) => state.auth);
   const onFinish = async (values: LoginForm) => {

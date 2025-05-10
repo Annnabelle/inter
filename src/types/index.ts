@@ -16,7 +16,7 @@ export interface ModalProps {
 export type SubDropdownItem = {
     to: string;
     text: string;
-  };
+};
   
 export type DropdownItem = {
     to: string;
@@ -24,44 +24,37 @@ export type DropdownItem = {
     icon?: React.ReactNode;
     subDropdown?: SubDropdownItem[];
     className?: string
-  };
-  
+};
 export type NavItem = {
     to?: string;
     icon: React.ReactNode;
     text: string;
     dropdown?: DropdownItem[];
-  };
-  
-
+};
 export interface InternationalOrganizationChiefDataType {
     key: string;
     fullName: string;
     additionalInformation?: string;
     file?: string;
 }
-
 export interface InternationalOrganizationNonGovernmentChiefDataType {
     key: string;
     fullName: string;
     additionalInformation?: string;
     file?: string;
 }
-
 export interface InternationalOrganizationProjectDataType{
     key: string;
     projectName: string;
     additionalInformation?: string;
     file?: string;
 }
-
 export interface InternationalNonGovernmentOrganizationProjectDataType{
     key: string;
     projectName: string;
     additionalInformation: string;
     file?: string
 }
-
 export interface InternationalOrganizationChronologyOfMeetingDataType{
     key: string;
     number: string;
@@ -71,7 +64,6 @@ export interface InternationalOrganizationChronologyOfMeetingDataType{
     level: string;
     nameOfMeeting: string
 }
-
 export interface InternationalNonGovernmentOrganizationsChronologyOfMeetingDataType{
     key: string;
     number: string;
@@ -81,7 +73,6 @@ export interface InternationalNonGovernmentOrganizationsChronologyOfMeetingDataT
     level: string;
     nameOfMeeting: string
 }
-
 export interface CountriesInnerEventDataType {
     key: string;
     data: string;
@@ -90,7 +81,6 @@ export interface CountriesInnerEventDataType {
     format?: string;
     level: string;
 }
-
 export interface CountriesInnerVisitsDataType {
     key: string;
     period: string;
@@ -99,7 +89,6 @@ export interface CountriesInnerVisitsDataType {
     organizer?: string;
     administrationСonsent: string;
 }
-
 export interface CountriesInnerInternationalDocumentsDataType {
     key: string;
     name: string;
@@ -108,7 +97,6 @@ export interface CountriesInnerInternationalDocumentsDataType {
     additionalInformation?: string;
     files: string;
 }
-
 export interface ExpertsTableDataTypes{
     key: string,
     mainAreas: string,
@@ -117,14 +105,14 @@ export interface ExpertsTableDataTypes{
     date: string,
     files: string
 }
-
 export interface TranslatorsTableDataTypes {
-    key: string,
-    name: string,
-    languages: string,
-    rating: string
+    key: string ,
+    fullName: string,
+    languages: { language: string; rating: number }[];
+    phone?: string,
+    status?: string,
+    email?: string
 }
-
 export interface InternationalTreatiesTableDataType{
     key: string,
     item: string,
@@ -134,7 +122,6 @@ export interface InternationalTreatiesTableDataType{
     files: string,
     level: string
 }
-
 export interface InternationalDocumentsTableDataType{
     key: string,
     item: string,
@@ -143,14 +130,12 @@ export interface InternationalDocumentsTableDataType{
     place: string,
     files: string,
 }
-
 export interface CountriesTableDataType { 
     key: string,
     countries: string,
     meeting: string,
     visits: string
 }
-
 export interface ReportsTableDataType {
     key: string,
     nameOfReport: string,
@@ -163,9 +148,9 @@ export interface ReportsTableDataType {
 export interface AdministrationDataType {
     key: string,
     name: string, 
-    role: string, 
+    role: string | undefined, 
     status: string,
-    lastVisit: string,
+    lastLoggedInAt: string,
     action: string
 }
 

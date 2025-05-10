@@ -1,27 +1,56 @@
-import { UserRole } from "../utils/roles";
-
-export type User = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  status: string;
-  role: UserRole;
-  language: string;
-  lastLoggedInAt: Date | null;
-};
+import { UserResponseDto } from "../dtos/users";
 
 export type AuthTokens = {
     accessToken: string;
     refreshToken: string;
 };
 
+export type userLoginType = {
+  email: string,
+  password: string
+}
+
 export type AuthState = {
-    user: User | null;
+    user: UserResponseDto | null;
     accessToken: string | null;
     refreshToken: string | null;
     isLoading: boolean;
     error: string | null;
+    status?: string | null
+    success?: boolean | null
 };
+
+export type User = {
+    id: string;
+    key?: string,
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    status: string;
+    role: {
+      id?: string;
+      name?: {
+        ru?: string;
+        uz?: string;
+        en?: string;
+      };
+      alias?: string;
+    };
+    language: string;
+    lastLoggedInAt: string | null;
+}
+
+
+export type UserRegister = {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+  role: string;
+  password: string;
+  language: string;
+}
+
+
   

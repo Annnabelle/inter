@@ -138,6 +138,10 @@ export const resources = {
                 role: 'Role',
                 status: 'Status',
                 lastLogin: 'Last login',
+                lastName: 'Last Name',
+                phone: 'Phone Number',
+                email: 'Email',
+                password: 'Password',
             },
             crudNames: {
                 event: 'event',
@@ -352,6 +356,10 @@ export const resources = {
             role: 'Роль',
             status: 'Статус',
             lastLogin: 'Последний вход',
+            lastName: 'Фамилия',
+            phone: 'Номер телефона',
+            email: 'Почта',
+            password: 'Пароль',
         },
         crudNames: {
             event: 'мероприятие',
@@ -567,6 +575,11 @@ export const resources = {
             role: 'Rol',
             status: 'Holat',
             lastLogin: 'Oxirgi kirish',
+            lastName: 'Familiya',
+            phone: 'Telefon raqami',
+            email: 'Elektron pochta',
+            password: 'Parol',
+            
         },
         crudNames: {
             event: 'tadbir',
