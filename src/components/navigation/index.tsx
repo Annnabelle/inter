@@ -24,6 +24,7 @@ const Navigation: React.FC = () => {
       text: `${t('navigation.cooperation')}`,
       dropdown: [
         { to: '/countries', text: `${t('navigation.countries')}` },
+        // {to: '/organizations', text: 'Организации'},
         { 
           to: '/international-organizations', 
           text: `${t('navigation.internationalOrganizations')}`,

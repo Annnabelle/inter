@@ -24,3 +24,20 @@ export type PaginatedResponse<T> = {
 }
 
 export type HexString = string
+
+export type MultilingualStringDto = {
+    ru: string;
+    uz: string;
+    en: string;
+}
+
+export type MultilingualOptionalStringDto = {
+    ru?: string;
+    uz?: string;
+    en?: string;
+}
+
+export const OrganizationType = {
+  International: "international",
+  NonGovInternational: "non_gov",
+} as const;

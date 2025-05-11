@@ -41,6 +41,7 @@ export const resources = {
                 Agency: 'Agency',
                 otherOrganizer: 'Other organizer',
                 expertLevel: 'Expert-level',
+                organizations: 'Organizations'
             },
             buttons: {
                 back: 'Back',
@@ -142,6 +143,7 @@ export const resources = {
                 phone: 'Phone Number',
                 email: 'Email',
                 password: 'Password',
+                nameOfTheOrganization: 'Name of the organization'
             },
             crudNames: {
                 event: 'event',
@@ -152,7 +154,8 @@ export const resources = {
                 head: 'chief',
                 project: 'project',
                 agreement: 'agreement',
-                report: 'report'
+                report: 'report',
+                organization: 'organization'
             },
             tableTitles: {
                 countries: 'Country',
@@ -190,7 +193,9 @@ export const resources = {
                 type: 'Type',
                 responsiblePerson: 'Responsible person',
                 creationDate: 'Creation date',
-                actions: 'Actions'	
+                actions: 'Actions',
+                typeOfOrganization: 'Type of organization',
+                comment: 'Comment'
             },
             tablesName: {
                 events: 'Events',
@@ -260,6 +265,7 @@ export const resources = {
             Agency: 'Агентство',
             otherOrganizer: 'Другой организатор	',
             expertLevel: 'Экспертный',
+            organizations: 'Организации'
         },
         buttons: {
             back: 'Назад',
@@ -360,6 +366,7 @@ export const resources = {
             phone: 'Номер телефона',
             email: 'Почта',
             password: 'Пароль',
+            nameOfTheOrganization: 'Название организации'
         },
         crudNames: {
             event: 'мероприятие',
@@ -371,6 +378,7 @@ export const resources = {
             project: 'проект',
             agreement: 'договор',
             report: 'отчет',
+            organization: 'oрганизацию'
         },
         tableTitles: {
             countries: 'Страна',
@@ -408,8 +416,9 @@ export const resources = {
             type: 'Тип',
             responsiblePerson: 'Ответственный',
             creationDate: 'Дата создания',
-            actions: 'Действия'	
-
+            actions: 'Действия',
+            typeOfOrganization: 'Тип организации',
+            comment: 'Комментарий',
         },
         tablesName: {
             events: 'Мероприятия',
@@ -437,7 +446,8 @@ export const resources = {
             annual: 'Годовой',
         }
     }},
-    uz:{translation:{
+    uz:{
+        translation:{
         navigation: {
             main: 'Bosh sahifa',
             cooperation: 'Hamkorlik',
@@ -478,6 +488,7 @@ export const resources = {
             Agency: 'Agentlik',
             otherOrganizer: 'Boshqa tashkilotchi',
             expertLevel: 'Ekspert darajasidagi',
+            organizations: 'Tashkilotlar'
         },
         buttons: {
             back: 'Orqaga',
@@ -579,7 +590,7 @@ export const resources = {
             phone: 'Telefon raqami',
             email: 'Elektron pochta',
             password: 'Parol',
-            
+            nameOfTheOrganization: 'Tashkilot nomi'
         },
         crudNames: {
             event: 'tadbir',
@@ -590,7 +601,8 @@ export const resources = {
             head: 'rahbar',
             project: 'loyihа',
             agreement: 'shartnoma',
-            report: 'hisobot'
+            report: 'hisobot',
+            organization: 'tashkilotni'
         },
         tableTitles: {
             countries: 'Mamlakat',
@@ -628,7 +640,9 @@ export const resources = {
             type: 'Turi',
             responsiblePerson: "Mas'ul shaxs",
             creationDate: 'Yaratilgan sana',
-            actions: 'Harakatlar'	
+            actions: 'Harakatlar',
+            typeOfOrganization: 'Tashkilot turi',
+            comment: 'Izoh'
         },
         tablesName: {
             events: 'Tadbirlar',

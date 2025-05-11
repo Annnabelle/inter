@@ -1,6 +1,6 @@
 import { TableProps, Tag } from "antd";
 import {TFunction} from 'i18next'
-import { AdministrationDataType } from "../types/user";
+import { AdministrationDataType } from "../types";
 export const AdministrationTableColumns = (t: TFunction): TableProps<AdministrationDataType>["columns"] => [
     {
         title: t('inputs.name'),

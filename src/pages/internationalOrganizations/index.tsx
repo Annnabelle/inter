@@ -81,7 +81,8 @@ const InternationalOrganizations: React.FC = () => {
     <MainLayout>
       <MainHeading title={`${t('titles.internationalOrganizations')}`} subtitle='Подзаголовок'>
         <div className="main-heading-dropdown main-heading-dropdown-single-btn">
-        <Select options={filterOptions} size="large" className="select" placeholder={`${t('buttons.sort.sortBy')}`} />
+          {/* <Button className='danger'>Удалить организацию</Button> */}
+        {/* <Select options={filterOptions} size="large" className="select" placeholder={`${t('buttons.sort.sortBy')}`} /> */}
         </div>
       </MainHeading>
       <div style={{background: colorBgContainer,}} className="layout-content-container">

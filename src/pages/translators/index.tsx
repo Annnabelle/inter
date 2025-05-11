@@ -3,7 +3,6 @@ import { IoMdAdd } from "react-icons/io";
 import { theme, Form, Input, Select, InputNumber } from "antd";
 import { TranslatorsColumns } from "../../tableData/translators";
 import { TranslatorsTableDataTypes } from "../../types";
-import { FileItem } from "../../types/countries";
 import { useTranslation } from "react-i18next";
 import { RootState, useAppDispatch, useAppSelector } from "../../store";
 import { createTranslator, deleteTranslator, retrieveTranslators, updateTranslator } from "../../store/translators";
@@ -43,16 +42,30 @@ const Translators: React.FC = () => {
     const page = useAppSelector((state) => state.translators.page)
     const total = useAppSelector((state) => state.translators.total)
     const [currentPage, setCurrentPage] = useState(page);
-    const [form] = Form.useForm();
+    const [editForm] = Form.useForm();
     useEffect(() => {
         if(translators.length === 0){
             dispatch(retrieveTranslators({limit: 10, page: currentPage}))
         }
     }, [dispatch, translators.length, currentPage, limit])
 
-    const [languages, setLanguages] = useState<{ language: TranslatorLanguage | string; rating: number | null; }[]>([]);
+    useEffect(() => {
+        if (modalState.translatorData) {
+            editForm.setFieldsValue({
+            firstName: modalState.translatorData.firstName,
+            lastName: modalState.translatorData.lastName,
+            phone: modalState.translatorData.phone,
+            email: modalState.translatorData.email,
+            languages: (modalState.translatorData.languages || []).map((item) => ({
+                language: item.language,
+                rating: item.rating,
+            })),
+            });
+    }
+    }, [modalState.translatorData, editForm]);
 
-      
+
+    const [languages, setLanguages] = useState<{ language: TranslatorLanguage | string; rating: number | null; }[]>([]);
 
     const TranslatorsData = useMemo(() => { 
         return translators.map((translator) => ({
@@ -70,7 +83,7 @@ const Translators: React.FC = () => {
         const updatedLanguages = [...languages, newLang];
         setLanguages(updatedLanguages);
         
-        form.setFieldsValue({
+        editForm.setFieldsValue({
             languages: updatedLanguages
         });
     };
@@ -82,9 +95,9 @@ const Translators: React.FC = () => {
             rating: l.rating
             }));
             setLanguages(langs);
-            form.setFieldsValue({ languages: langs });
+            editForm.setFieldsValue({ languages: langs });
         }
-    }, [modalState.translatorData, form]);
+    }, [modalState.translatorData, editForm]);
       
     const handleModal = (modalName: string, value: boolean) => {
         setModalState((prev) => ({...prev, [modalName] : value}));
@@ -218,7 +231,7 @@ const Translators: React.FC = () => {
                columns={TranslatorsColumns(t)}/>
             </div>
             <ModalWindow title={t('buttons.add') + " " + t('crudNames.translator')}  openModal={modalState.addTranslator} closeModal={() => handleModal('addTranslator', false)}>
-                <FormComponent  onFinish={handleCreateTranslator}>
+                <FormComponent onFinish={handleCreateTranslator}>
                     <div className="form-inputs">
                         <Form.Item className="input" name="firstName" >
                             <Input className="input" size='large' placeholder={t('inputs.enterFullName')}/>
@@ -321,7 +334,7 @@ const Translators: React.FC = () => {
                 handleDelete={() => handleDeleteOpen('Translator')}
             >
                 {modalState.translatorData && (
-                    <FormComponent onFinish={handleUpdateTranslator}>
+                    <FormComponent formProps={editForm} onFinish={handleUpdateTranslator}>
                         <div className="form-inputs">
                             <Form.Item className="input" name="firstName" initialValue={modalState.translatorData.firstName}>
                                 <Input className="input" size='large' placeholder={modalState.translatorData.firstName} />

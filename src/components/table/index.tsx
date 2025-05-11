@@ -1,6 +1,7 @@
 
 import { Table } from "antd";
 import type { TablePaginationConfig, TableProps } from "antd";
+
 interface ComponentTableProps<T> {
   onRowClick?: (record: T) => void;
   columns?: TableProps<T>["columns"]; 

@@ -4,12 +4,14 @@ import userReducer from './usersSlice'
 import { TypedUseSelectorHook, useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import translatorsReducer from './translators'
+import organizationsReducer from './organizations'
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     users: userReducer,
-    translators: translatorsReducer
+    translators: translatorsReducer,
+    organizations: organizationsReducer
   },
 });
 

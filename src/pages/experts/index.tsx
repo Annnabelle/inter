@@ -201,11 +201,11 @@ const Experts: React.FC = () => {
                 </FormComponent>
             </ModalWindow>
             <ModalWindow openModal={modalState.deleteExpert} title={`${t('titles.areYouSure')} ${t('crudNames.expert')} ?`} className="modal-tight" closeModal={() => handleModal('deleteExpert', false)}>
-                    <div className="modal-tight-container">
-                        <Button onClick={() => handleModal('deleteExpert', false)} className="outline">{t('buttons.cancel')}</Button>
-                        <Button className="danger">{t('buttons.delete')}</Button>
-                    </div>
-                </ModalWindow>
+                <div className="modal-tight-container">
+                    <Button onClick={() => handleModal('deleteExpert', false)} className="outline">{t('buttons.cancel')}</Button>
+                    <Button className="danger">{t('buttons.delete')}</Button>
+                </div>
+            </ModalWindow>
         </MainLayout>
     );
 };
