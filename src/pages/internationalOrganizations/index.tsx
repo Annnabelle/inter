@@ -2,22 +2,23 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { theme, Form, Input, Upload } from "antd";
 import { IoMdAdd } from 'react-icons/io';
 import {FileItem } from '../../types/countries';
-import { InternationalOrganizationChiefDataType, InternationalOrganizationChronologyOfMeetingDataType, InternationalOrganizationProjectDataType } from '../../types';
+import { InternationalOrganizationChiefDataType, InternationalOrganizationProjectDataType } from '../../types';
 import { InternationalOrganizationChiefColumns } from '../../tableData/internationalOrganizationChiefTable';
-import { InternationalOrganizationProjectColumns, InternationalOrganizationProjectData } from '../../tableData/internationalOrganizationProject';
-import { InternationalOrganizationChronologyOfMeetingColumns, InternationalOrganizationChronologyOfMeetingData } from '../../tableData/internationalOgranizationChronologyOfMeeting';
-import MainLayout from '../../components/layout'
-import MainHeading from '../../components/mainHeading'
-import ModalWindow from '../../components/modalWindow';
-import Button from '../../components/button';
-import FormComponent from '../../components/form';
-import ComponentTable from '../../components/table';
+import { InternationalOrganizationProjectColumns } from '../../tableData/internationalOrganizationProject';
 import { useTranslation } from 'react-i18next';
 import { RootState, useAppDispatch, useAppSelector } from '../../store';
 import { useParams } from 'react-router-dom';
 import { createOrganizationsEmployees, deleteOrganizationsEmployees, retrieveOrganizationsEmployees, updateOrganizationsEmployees } from '../../store/organizationEmployeeSlice';
 import { organizationEmployee, organizationEmployees } from '../../types/organizationEmployee';
 import { toast } from 'react-toastify';
+import { createOrganizationProject, deleteOrganizationProject, retrieveOrganizationsProjects, updateOrganizationsProject } from '../../store/projects';
+import MainLayout from '../../components/layout'
+import MainHeading from '../../components/mainHeading'
+import ModalWindow from '../../components/modalWindow';
+import Button from '../../components/button';
+import FormComponent from '../../components/form';
+import ComponentTable from '../../components/table';
+import { project } from '../../types/projects';
 
 const InternationalOrganizations: React.FC = () => {
   const { t } = useTranslation();
@@ -34,7 +35,8 @@ const InternationalOrganizations: React.FC = () => {
       projectEdit:  boolean,
       projectDelete: boolean,
       addProject: boolean,
-      employeeData: organizationEmployee | null
+      employeeData: organizationEmployee | null,
+      projectData: project | null
   }>({
       chiefRetrieve: false,
       chiefEdit: false,
@@ -44,21 +46,30 @@ const InternationalOrganizations: React.FC = () => {
       projectEdit: false,
       projectDelete: false,
       addProject: false,
-      employeeData: null
+      employeeData: null,
+      projectData: null
   });
   const { id } = useParams<{ id: string }>();
   const dispatch  =  useAppDispatch();
   const organizationEmployees = useAppSelector((state: RootState) => state.organizationEmployee.organizationsEmployees)
+  const organizationProjects = useAppSelector((state) => state.organizationProjects.organizationProjects)
   const limit = useAppSelector((state) => state.organizations.limit)
   const page = useAppSelector((state) => state.organizations.page)
   const total = useAppSelector((state) => state.organizations.total)
   const [currentPage, setCurrentPage] = useState(page);
   const [editForm] = Form.useForm();
+
   useEffect(() => {
       if (id && organizationEmployees.length === 0) {
         dispatch(retrieveOrganizationsEmployees({ limit: 10, page: currentPage, id }));
       }
   }, [dispatch, organizationEmployees.length, currentPage, limit, id])
+
+  useEffect(() => {
+      if (id && organizationProjects.length === 0) {
+        dispatch(retrieveOrganizationsProjects({ limit: 10, page: currentPage, id }));
+      }
+  }, [dispatch, organizationProjects.length, currentPage, limit, id])
 
   useEffect(() => {
     if (modalState.employeeData) {
@@ -69,8 +80,14 @@ const InternationalOrganizations: React.FC = () => {
           phone: modalState.employeeData.phone,
           employeePosition: modalState.employeeData.position,
       });
+    } else if (modalState.projectData){
+      editForm.setFieldsValue({
+        name: modalState.projectData.name,
+        comment: modalState.projectData.comment
+      })
     }
-  }, [modalState.employeeData, editForm]);
+  }, [modalState.employeeData, editForm, modalState.projectData]);
+
 
   const organizationEmployeeData = useMemo(() => {
       return organizationEmployees.map((organizationEmployee) => ({
@@ -82,6 +99,15 @@ const InternationalOrganizations: React.FC = () => {
       }))
   }, [organizationEmployees, t])
 
+  const organizationProjectsData = useMemo(() => {
+    return organizationProjects.map((projects) => ({
+      key: projects.id,
+      name: projects.name,
+      comment: projects.comment,
+      document: projects.documents
+    }))
+  }, [organizationProjects, t])
+
   const handleModal = (modalName: string, value: boolean) => {
     setModalState((prev) => ({ ...prev, [modalName]: value }));
   };
@@ -90,7 +116,7 @@ const InternationalOrganizations: React.FC = () => {
     setFiles([...files, { id: files.length + 1, file: null }]);
   };
   
- const handleRowClick = (type: 'chief' | 'project', action: 'Retrieve' | 'Edit' | 'Delete', record: InternationalOrganizationChiefDataType) => {
+ const handleRowClick = (type: 'chief' | 'project', action: 'Retrieve' | 'Edit' | 'Delete', record: InternationalOrganizationChiefDataType | InternationalOrganizationProjectDataType ) => {
   console.log(`Clicked on ${type}, action: ${action}, record:`, record);
   if (type === 'chief'){
     const organizationEmployeeData = organizationEmployees.find(
@@ -101,12 +127,12 @@ const InternationalOrganizations: React.FC = () => {
       employeeData: organizationEmployeeData,
     }));
   } else if(type === 'project'){
-    const organizationEmployeeData = organizationEmployees.find(
-    (organizationEmployee) => organizationEmployee.id === record.key) ?? null;
+    const organizationProjectsData = organizationProjects.find(
+      (organizationProject) => organizationProject.id === record.key) ?? null;
     setModalState((prev) => ({
       ...prev,
       [`${type}${action}`]: true,
-      employeeData: organizationEmployeeData,
+      projectData: organizationProjectsData,
     }));
   } else {
     console.log('HandleRowClick Error');
@@ -197,6 +223,66 @@ const InternationalOrganizations: React.FC = () => {
     }
   };
 
+
+  const handleUpdateOrganizationProject = async (values: any) => {
+    try {
+      const updatedData = {
+          ...values,
+          id: modalState?.projectData?.id,
+      };
+      const resultAction = await dispatch(updateOrganizationsProject(updatedData));
+      
+      if (updateOrganizationsProject.fulfilled.match(resultAction)) {
+          toast.success('Проект успешно обновлен');
+          setTimeout(() => {
+              handleModal('projectEdit', false);
+              dispatch(retrieveOrganizationsProjects(updatedData.id));
+              window.location.reload(); 
+          }, 1000); 
+      } else {
+          toast.error('Ошибка при обновлении проекта');
+      }
+    } catch (err) {
+        toast.error((err as string) || 'Ошибка сервера');
+    }
+  };
+
+  const handleCreateOrganizationProject = async(values: project) => {
+    try {
+      const data = {...values, organizationId: id ?? ''};
+      const resultAction = await dispatch(createOrganizationProject(data))
+      if(createOrganizationProject.fulfilled.match(resultAction)){
+        toast.success('Проект добавлен успешно')
+        setTimeout(() => {
+          handleModal('chiefAdd', false);
+          window.location.reload()
+        }, 1000)
+      } else {
+        toast.error("Ошибка при создании проекта")
+      }
+    } catch (err) {
+      toast.error((err as string) || 'Ошибка сервера')
+    }
+  }
+
+  const handleDeleteOrganizationProject = async () => {
+    try {
+        const organizationProjectId = modalState.projectData?.id
+        const resultAction = await dispatch(deleteOrganizationProject(organizationProjectId));
+
+        if (deleteOrganizationProject.fulfilled.match(resultAction)) {
+        toast.success('Проект успешно удален');
+        setTimeout(() => {
+            window.location.reload(); 
+        }, 1000);
+        } else {
+        toast.error('Ошибка при удалении проекта');
+        }
+    } catch (error) {
+        toast.error('Ошибка при удалении проекта');
+    }
+  };
+
   // const filterOptions = [
   //   {value: 'byName',label: t('buttons.sort.byName')},
   //   {value: 'byVisit',label: t('buttons.sort.byVisit')},
@@ -227,7 +313,7 @@ const InternationalOrganizations: React.FC = () => {
             </div>
             <ComponentTable<InternationalOrganizationChiefDataType> onRowClick={(record) => handleRowClick('chief', "Retrieve", record)} data={organizationEmployeeData} columns={InternationalOrganizationChiefColumns(t)} />
           </div>
-            {/* <div className="page-inner-table-container">
+            <div className="page-inner-table-container">
                 <div className="page-inner-table-container-heading">
                   <div className="heading-title">
                     <h3 className="title">
@@ -238,9 +324,9 @@ const InternationalOrganizations: React.FC = () => {
                         <Button className="outline" onClick={() => handleModal('addProject', true)}>{t('buttons.add')}  {t('crudNames.project')}<IoMdAdd/></Button>
                     </div>
                 </div>
-                <ComponentTable<InternationalOrganizationProjectDataType> onRowClick={() => handleRowClick('project', "Retrieve")} data={InternationalOrganizationProjectData} columns={InternationalOrganizationProjectColumns(t)}/>
+                <ComponentTable<InternationalOrganizationProjectDataType> onRowClick={(record) => handleRowClick('project', "Retrieve", record)} data={organizationProjectsData} columns={InternationalOrganizationProjectColumns(t)}/>
             </div>
-            <div className="page-inner-table-container">
+            {/* <div className="page-inner-table-container">
                 <div className="page-inner-table-container-heading">
                     <div className="heading-title">
                         <h3 className="title">
@@ -376,81 +462,85 @@ const InternationalOrganizations: React.FC = () => {
                     <Button onClick={() => handleDeleteOrganizationEmployee()} className="danger">{t('buttons.delete')}</Button>
                 </div>
             </ModalWindow>
-            <ModalWindow openModal={modalState.projectRetrieve} title={t('buttons.retrieve') + " " + t('crudNames.project')}  closeModal={() => handleModal('projectRetrieve', false)} handleEdit={() => handleEditOpen('project')}>
-              <FormComponent>
-                      <div className="form-inputs">
-                      <Form.Item className="input" name="fullName" >
-                          <Input disabled className="input" size='large' />
-                      </Form.Item>
-                      <Form.Item className="input" name="additionalInfo" >
-                          <Input disabled className="input" size='large' />
-                      </Form.Item>
-                  </div>
+            {modalState.projectData && (
+              <ModalWindow openModal={modalState.projectRetrieve} title={t('buttons.retrieve') + " " + t('crudNames.project')}  closeModal={() => handleModal('projectRetrieve', false)} handleEdit={() => handleEditOpen('project')}>
+                <FormComponent>
+                        <div className="form-inputs">
+                        <Form.Item className="input" name="name" >
+                            <Input disabled className="input" size='large' placeholder={modalState?.projectData.name}/>
+                        </Form.Item>
+                        <Form.Item className="input" name="comment" >
+                            <Input disabled className="input" size='large' placeholder={modalState?.projectData?.comment}/>
+                        </Form.Item>
+                    </div>
+                    {files.map((item) => (
+                      <div className="form-inputs" key={item?.id}>
+                        <Form.Item className="input" name="addCVFile" >
+                            <Upload disabled>
+                                <Input disabled className="input input-upload" size='large' />
+                            </Upload>
+                        </Form.Item>
+                      </div>
+                    ))}
+                </FormComponent>
+              </ModalWindow>
+            )}
+            {modalState.projectData && (
+              <ModalWindow openModal={modalState.projectEdit} title={t('buttons.edit') + " " + t('crudNames.project')}  closeModal={() => handleModal('projectEdit', false)} handleDelete={() => handleDeleteOpen('project')}>
+                <FormComponent  onFinish={handleUpdateOrganizationProject} >
+                    <div className="form-inputs" >
+                        <Form.Item className="input" name="name" initialValue={modalState?.projectData?.name}>
+                            <Input className="input" size='large' />
+                        </Form.Item>
+                        <Form.Item className="input" name="comment" initialValue={modalState?.projectData?.comment} >
+                            <Input className="input" size='large' />
+                        </Form.Item>
+                    </div>
                   {files.map((item) => (
                     <div className="form-inputs" key={item?.id}>
                       <Form.Item className="input" name="addCVFile" >
-                          <Upload disabled>
-                              <Input disabled className="input input-upload" size='large' />
-                          </Upload>
+                        <Upload>
+                          <Input className="input input-upload" size='large' placeholder={t('inputs.uploadCV')}/>
+                        </Upload>
                       </Form.Item>
                     </div>
                   ))}
-              </FormComponent>
-            </ModalWindow>
-            <ModalWindow openModal={modalState.projectEdit} title={t('buttons.edit') + " " + t('crudNames.project')}  closeModal={() => handleModal('projectEdit', false)} handleDelete={() => handleDeleteOpen('project')}>
-              <FormComponent  onFinish={onFinish} >
-                  <div className="form-inputs" >
-                      <Form.Item className="input" name="fullName" >
-                          <Input className="input" size='large' placeholder={t('inputs.enterFullName')}/>
-                      </Form.Item>
-                      <Form.Item className="input" name="additionalInfo" >
-                          <Input className="input" size='large' placeholder={t('inputs.additionalInformation')}/>
-                      </Form.Item>
-                  </div>
-                {files.map((item) => (
-                  <div className="form-inputs" key={item?.id}>
-                    <Form.Item className="input" name="addCVFile" >
-                      <Upload>
-                        <Input className="input input-upload" size='large' placeholder={t('inputs.uploadCV')}/>
-                      </Upload>
-                    </Form.Item>
-                  </div>
-                ))}
-                  <div className="form-btn-new">
-                      <p className="form-btn-new-text" onClick={addFileField}>{t('buttons.addAnotherCV')}</p>
-                  </div>
-                  <Button>{t('buttons.edit')}</Button>
-              </FormComponent>
-            </ModalWindow>
-            <ModalWindow title={t('buttons.add') + " " + t('crudNames.project')}  openModal={modalState.addProject} closeModal={() => handleModal('addProject', false)}>
-                <FormComponent onFinish={onFinish}>
-                        <div className="form-inputs">
-                            <Form.Item className="input" name="fullName" >
-                                <Input className="input" size='large' placeholder={t('inputs.enterFullName')}/>
-                            </Form.Item>
-                            <Form.Item className="input" name="additionalInfo" >
-                                <Input className="input" size='large' placeholder={t('inputs.additionalInformation')}/>
-                            </Form.Item>
-                        </div>
-                    {files.map((item) => (
-                        <div className="form-inputs" key={item?.id}>
-                             <Form.Item className="input" name="addCVFile" >
-                                <Upload>
-                                    <Input className="input input-upload" size='large' placeholder={t('inputs.uploadCV')}/>
-                                </Upload>
-                            </Form.Item>
-                        </div>
-                    ))}
                     <div className="form-btn-new">
                         <p className="form-btn-new-text" onClick={addFileField}>{t('buttons.addAnotherCV')}</p>
                     </div>
-                    <Button>{t('buttons.create')}</Button>
+                    <Button type='submit'>{t('buttons.edit')}</Button>
+                </FormComponent>
+              </ModalWindow>
+            )}
+            <ModalWindow title={t('buttons.add') + " " + t('crudNames.project')}  openModal={modalState.addProject} closeModal={() => handleModal('addProject', false)}>
+                <FormComponent onFinish={handleCreateOrganizationProject}>
+                    <div className="form-inputs">
+                        <Form.Item className="input" name="name" >
+                            <Input className="input" size='large' placeholder={t('inputs.title')}/>
+                        </Form.Item>
+                        <Form.Item className="input" name="comment" >
+                            <Input className="input" size='large' placeholder={t('inputs.additionalInformation')}/>
+                        </Form.Item>
+                    </div>
+                    {files.map((item) => (
+                      <div className="form-inputs" key={item?.id}>
+                            <Form.Item className="input" name="addCVFile" >
+                              <Upload>
+                                  <Input className="input input-upload" size='large' placeholder={t('inputs.uploadCV')}/>
+                              </Upload>
+                          </Form.Item>
+                      </div>
+                    ))}
+                    <div className="form-btn-new">
+                      <p className="form-btn-new-text" onClick={addFileField}>{t('buttons.addAnotherCV')}</p>
+                    </div>
+                    <Button type='submit'>{t('buttons.create')}</Button>
                 </FormComponent>
             </ModalWindow>
             <ModalWindow openModal={modalState.projectDelete} title={`${t('titles.areYouSure')} ${t('crudNames.project')} ?`} className="modal-tight" closeModal={() => handleModal('projectDelete', false)}>
                 <div className="modal-tight-container">
                     <Button onClick={() => handleModal('projectDelete', false)} className="outline">{t('buttons.cancel')}</Button>
-                    <Button className="danger">{t('buttons.delete')}</Button>
+                    <Button onClick={() => handleDeleteOrganizationProject()} className="danger">{t('buttons.delete')}</Button>
                 </div>
             </ModalWindow>
         </div>

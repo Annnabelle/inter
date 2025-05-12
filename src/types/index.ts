@@ -48,9 +48,9 @@ export interface InternationalOrganizationNonGovernmentChiefDataType {
 }
 export interface InternationalOrganizationProjectDataType{
     key: string;
-    projectName: string;
-    additionalInformation?: string;
-    file?: string;
+    name: string;
+    comment?: string;
+    document?: string[];
 }
 export interface InternationalNonGovernmentOrganizationProjectDataType{
     key: string;

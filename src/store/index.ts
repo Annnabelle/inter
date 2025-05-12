@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import translatorsReducer from './translators'
 import organizationsReducer from './organizations'
 import OrganizationEmployeeReducer from './organizationEmployeeSlice'
+import organizationProjectsReduce from './projects'
 
 export const store = configureStore({
   reducer: {
@@ -13,7 +14,8 @@ export const store = configureStore({
     users: userReducer,
     translators: translatorsReducer,
     organizations: organizationsReducer,
-    organizationEmployee: OrganizationEmployeeReducer
+    organizationEmployee: OrganizationEmployeeReducer,
+    organizationProjects: organizationProjectsReduce,
   },
 });
 

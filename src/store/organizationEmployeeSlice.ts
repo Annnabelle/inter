@@ -1,13 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { BASE_URL } from "../utils/baseUrl";
-import { ErrorDto, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
-import { createOrganizationType, Organization } from "../types/organizations";
-import { CreateOrganizationResponseDto, GetOrganizationsResponseDto, OrganizationResponseDto } from "../dtos/organizations";
-import { createOrganizationToCreateOrganizationDto, organizationResponseDtoToOrganization, paginatedOrganizationsDtoToPaginatedOrganizations, updateOrganizationsToUpdateOrganizationDto } from "../mappers/organizations.mapper";
-import axios from "axios";
 import { organizationEmployee, organizationEmployees, organizationEmployeesWithDocs } from "../types/organizationEmployee";
-import { createOrganizationEmployeeDto, CreateOrganizationEmployeeResponseDto, DeleteOrganizationEmployeeDto, GetOrganizationEmployeeResponseDto, OrganizationEmployeeResponseDto } from "../dtos/organizationEmployee";
+import { CreateOrganizationEmployeeResponseDto, DeleteOrganizationEmployeeDto, GetOrganizationEmployeeResponseDto, OrganizationEmployeeResponseDto } from "../dtos/organizationEmployee";
 import { createOrganizationEmployeeToCreateOrganizationEmployeeDto, organizationEmployeeResponseDtoToOrganizationEmployee, paginatedOrganizationsEmployeesDtoToPaginatedOrganizationsEmployees, updateOrganizationsEmployeesToUpdateOrganizationEmployeesDto } from "../mappers/organizationEmployee.mapper";
+import { ErrorDto, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
+import { BASE_URL } from "../utils/baseUrl";
+import axios from "axios";
 
 type OrganizationsEmployeesState = {
   organizationsEmployees: organizationEmployee[]
