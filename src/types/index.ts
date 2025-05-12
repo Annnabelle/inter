@@ -32,10 +32,13 @@ export type NavItem = {
     dropdown?: DropdownItem[];
 };
 export interface InternationalOrganizationChiefDataType {
-    key: string;
-    fullName: string;
-    additionalInformation?: string;
-    file?: string;
+    key: string,
+    fullName: string,
+    phone?: string,
+    email?: string,
+    position?: string,
+    comment?: string,
+    // organizationId: string,
 }
 export interface InternationalOrganizationNonGovernmentChiefDataType {
     key: string;

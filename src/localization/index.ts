@@ -155,10 +155,12 @@ export const resources = {
                 project: 'project',
                 agreement: 'agreement',
                 report: 'report',
-                organization: 'organization'
+                organization: 'organization',
+                employee: "employee"
             },
             tableTitles: {
                 countries: 'Country',
+                position: 'Position',
                 meetings: 'Meetings',
                 visits: 'Visits',
                 date: 'Date', 
@@ -378,10 +380,12 @@ export const resources = {
             project: 'проект',
             agreement: 'договор',
             report: 'отчет',
-            organization: 'oрганизацию'
+            organization: 'oрганизацию',
+            employee: "сотрудника"
         },
         tableTitles: {
             countries: 'Страна',
+            position: 'Должность',
             meetings: 'Встречи',
             visits: 'Визиты',
             date: 'Дата', 
@@ -602,11 +606,13 @@ export const resources = {
             project: 'loyihа',
             agreement: 'shartnoma',
             report: 'hisobot',
-            organization: 'tashkilotni'
+            organization: 'tashkilotni',
+            employee: 'xodim'
         },
         tableTitles: {
             countries: 'Mamlakat',
             meetings: 'Uchrashuvlar',
+            position: 'Lavozim ',
             visits: 'Tashriflar',
             date: 'Sana', 
             name: 'Nomi', 

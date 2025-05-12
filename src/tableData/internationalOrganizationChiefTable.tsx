@@ -1,6 +1,7 @@
 import { TableProps } from "antd";
 import { InternationalOrganizationChiefDataType } from "../types";
 import { TFunction } from "i18next";
+import { organizationEmployee } from "../types/organizationEmployee";
 
 export const InternationalOrganizationChiefColumns = (t: TFunction) : TableProps<InternationalOrganizationChiefDataType>["columns"] => [
   {
@@ -16,30 +17,36 @@ export const InternationalOrganizationChiefColumns = (t: TFunction) : TableProps
     render: (text) => <p className="table-text">{text}</p>,
   },
   {
-    title: t('tableTitles.files'),
-    dataIndex: "file",
-    key: "file",
+    title: t('tableTitles.position'),
+    dataIndex: "employeePosition",
+    key: "employeePosition",
+    render: (text) => <p className="table-text">{text}</p>,
+  },
+  {
+    title: t('inputs.email'),
+    dataIndex: "email",
+    key: "email",
     render: (text) => <p className="table-text">{text}</p>,
   },
 ];
 
-export const InternationalOrganizationChiefData: InternationalOrganizationChiefDataType[] = [
-  {
-    key: "1",
-    fullName: "Reza Javad",
-    additionalInformation: "Дополнительная информация",
-    file: "Файлы",
-  },
-  {
-    key: "2",
-    fullName: "Reza Javad",
-    additionalInformation: "Дополнительная информация",
-    file: "Файлы",
-  },
-  {
-    key: "3",
-    fullName: "Reza Javad",
-    additionalInformation: "Дополнительная информация",
-    file: "Файлы",
-  },
-];
+// export const InternationalOrganizationChiefData: InternationalOrganizationChiefDataType[] = [
+//   {
+//     key: "1",
+//     fullName: "Reza Javad",
+//     additionalInformation: "Дополнительная информация",
+//     file: "Файлы",
+//   },
+//   {
+//     key: "2",
+//     fullName: "Reza Javad",
+//     additionalInformation: "Дополнительная информация",
+//     file: "Файлы",
+//   },
+//   {
+//     key: "3",
+//     fullName: "Reza Javad",
+//     additionalInformation: "Дополнительная информация",
+//     file: "Файлы",
+//   },
+// ];

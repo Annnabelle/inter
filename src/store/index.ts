@@ -5,13 +5,15 @@ import { TypedUseSelectorHook, useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import translatorsReducer from './translators'
 import organizationsReducer from './organizations'
+import OrganizationEmployeeReducer from './organizationEmployeeSlice'
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     users: userReducer,
     translators: translatorsReducer,
-    organizations: organizationsReducer
+    organizations: organizationsReducer,
+    organizationEmployee: OrganizationEmployeeReducer
   },
 });
 
