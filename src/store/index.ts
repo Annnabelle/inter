@@ -9,6 +9,7 @@ import OrganizationEmployeeReducer from './organizationEmployeeSlice'
 import organizationProjectsReducer from './projects'
 import expertsReducer from './expertsSlice'
 import documentsReducer from './documents'
+import reportsReducer from './reports'
 
 export const store = configureStore({
   reducer: {
@@ -19,7 +20,8 @@ export const store = configureStore({
     organizationEmployee: OrganizationEmployeeReducer,
     organizationProjects: organizationProjectsReducer,
     experts: expertsReducer,
-    documents: documentsReducer
+    documents: documentsReducer,
+    reports: reportsReducer,
   },
 });
 

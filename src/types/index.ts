@@ -1,5 +1,6 @@
 import { JSX } from '@emotion/react/jsx-runtime'
 import {ReactNode} from 'react'
+import { ReportType } from '../dtos/reports'
 
 export interface ModalProps {
     closeModal?: ()=> void,
@@ -140,12 +141,13 @@ export interface CountriesTableDataType {
     visits: string
 }
 export interface ReportsTableDataType {
-    key: string,
-    nameOfReport: string,
-    typeOfReport: string,
-    responsibleForReport: string,
-    dateOfCreation: string,
-    actions: [string, string]
+    key: string
+    name: string
+    type: ReportType
+    startDate: string
+    endDate: string
+    responsible?: string
+    comment?: string
 }
 
 export interface AdministrationDataType {
