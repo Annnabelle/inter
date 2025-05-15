@@ -1,12 +1,12 @@
 import { TableProps } from "antd";
 import { TFunction } from "i18next";
-import { OrganizationsDataType } from "../types/organizations";
+import { Organizations } from "../types/organizations";
 export const OrganizationsTableColumns = (
   t: TFunction,
   currentLang: string,
-  handleEditOpen: (record: OrganizationsDataType) => void,
-  handleDeleteOpen: (record: OrganizationsDataType) => void,
-): TableProps<OrganizationsDataType>["columns"] => [
+  handleEditOpen: (record: Organizations) => void,
+  handleDeleteOpen: (record: Organizations) => void,
+): TableProps<Organizations>["columns"] => [
   {
     title: t('tableTitles.name'),
     dataIndex: ['organizationName', currentLang],

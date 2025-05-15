@@ -10,6 +10,7 @@ import organizationProjectsReducer from './projects'
 import expertsReducer from './expertsSlice'
 import documentsReducer from './documents'
 import reportsReducer from './reports'
+import countriesReducer from './countries'
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ export const store = configureStore({
     experts: expertsReducer,
     documents: documentsReducer,
     reports: reportsReducer,
+    countries: countriesReducer,
   },
 });
 

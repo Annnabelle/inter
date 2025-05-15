@@ -2,26 +2,38 @@
 import { useNavigate } from "react-router-dom";
 import { Select, theme } from "antd";
 import { CountriesTableDataType } from "../../types";
-import { CountriesTableColumns, CountriesTableData } from "../../tableData/countriesTable";
+import { CountriesTableColumns } from "../../tableData/countriesTable";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
 import ComponentTable from "../../components/table";
 import { useTranslation } from "react-i18next";
+import { RootState, useAppDispatch, useAppSelector } from "../../store";
+import { useEffect, useMemo, useState } from "react";
+import { RetrieveCountries } from "../../store/countries";
 
 
 const Countries: React.FC = () => {
-     const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const currentLang = (i18n.resolvedLanguage)
     const {
         token: { colorBgContainer },
     } = theme.useToken();
-    // const [openSortDropdown, setOpenSortDropdown] = useState<boolean>(false);
     const navigate = useNavigate()
-    // const handleSortDropdown = () => {
-    //     setOpenSortDropdown((prev) => (!prev))
-    // }
+    const dispatch = useAppDispatch();
+    const countries = useAppSelector((state: RootState) => state.countries.countries)
+    const limit = useAppSelector((state) => state.countries.limit)
+    const page = useAppSelector((state) => state.countries.page)
+    const total = useAppSelector((state) => state.countries.total)
+    const [currentPage, setCurrentPage] = useState(page);
     const handleRowClick = (record: { key: string }) => {
         navigate(`/countries/${record.key}`)
     }
+
+    useEffect(() => {
+        if(countries.length === 0){
+            dispatch(RetrieveCountries({limit: 1, page: currentPage}))
+        }
+    }, [dispatch, countries.length, currentPage, limit])
 
     const filterOptions = [
         {value: 'byName',label: t('buttons.sort.byName')},
@@ -29,6 +41,15 @@ const Countries: React.FC = () => {
         {value: 'byMeeting',label: t('buttons.sort.byMeeting')},
         {value: 'all', label: t('buttons.sort.all')}
     ]
+
+
+    const countriesData = useMemo(() => {
+        return countries.map((country) => ({
+            key: country.id,
+            name: country.name,
+            comment: country.comment
+        }))
+    }, [countries, t])
     
     return (
         <MainLayout>
@@ -43,7 +64,7 @@ const Countries: React.FC = () => {
                 }}
                 className="layout-content-container"
             >
-               <ComponentTable<CountriesTableDataType> onRowClick={handleRowClick} columns={CountriesTableColumns(t)} data={CountriesTableData}/>
+               <ComponentTable<CountriesTableDataType> onRowClick={handleRowClick} columns={CountriesTableColumns(t, currentLang ?? 'ru')} data={countriesData}/>
             </div>
         </MainLayout>
     );

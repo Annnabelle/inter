@@ -136,9 +136,12 @@ export interface InternationalDocumentsTableDataType{
 }
 export interface CountriesTableDataType { 
     key: string,
-    countries: string,
-    meeting: string,
-    visits: string
+    name: {
+        ru: string,
+        en: string,
+        uz: string
+    },
+    comment?: string,
 }
 export interface ReportsTableDataType {
     key: string

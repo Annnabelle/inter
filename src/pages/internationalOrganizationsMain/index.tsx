@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { theme, Form, Input, Select } from "antd";
 import { useTranslation } from "react-i18next";
-import { createOrganizationType, Organization, OrganizationsDataType } from "../../types/organizations";
+import { CreateOrganization, Organization, Organizations } from "../../types/organizations";
 import { OrganizationsTableColumns } from "../../tableData/organization";
 import { RootState, useAppDispatch, useAppSelector } from "../../store";
 import { createOrganization, deleteOrganization, retrieveInternationalOrganizations, updateOrganization } from "../../store/organizations";
@@ -70,7 +70,7 @@ const InternationalOrganizationsMain: React.FC = () => {
     const handleRowClick = (
         type: 'Organizations',
             action: 'retrieve' | 'edit' | 'delete',
-            record: OrganizationsDataType
+            record: Organizations
         ) => {
             console.log(`Clicked on ${type}, action: ${action}, record:`, record);
         
@@ -86,7 +86,7 @@ const InternationalOrganizationsMain: React.FC = () => {
         {value: 'all', label: t('buttons.sort.all')}
     ]
 
-    const handleCreateOrganization = async (values: createOrganizationType) => {
+    const handleCreateOrganization = async (values: CreateOrganization) => {
         try {
              const payload = {
                 ...values,
@@ -113,7 +113,7 @@ const InternationalOrganizationsMain: React.FC = () => {
         }
     }
 
-    const handleEditOpen = (record: OrganizationsDataType) => {
+    const handleEditOpen = (record: Organizations) => {
         const organization = internationalOrganizations.find(org => org.id === record.key);
         if (organization) {
             setModalState((prev) => ({
@@ -139,7 +139,7 @@ const InternationalOrganizationsMain: React.FC = () => {
 
 
 
-    const handleDeleteOpen = (record: OrganizationsDataType) => {
+    const handleDeleteOpen = (record: Organizations) => {
         const organization = internationalOrganizations.find(org => org.id === record.key);
         if (organization) {
             setModalState((prev) => ({
@@ -214,7 +214,7 @@ const InternationalOrganizationsMain: React.FC = () => {
                 }}
                 className="layout-content-container"
             >
-                <ComponentTable<OrganizationsDataType> 
+                <ComponentTable<Organizations> 
                     pagination={{
                         current: currentPage,
                         pageSize: limit,

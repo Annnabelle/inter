@@ -1,8 +1,8 @@
 import { PaginatedResponse } from "../dtos/main.dto";
 import { CreateOrganizationDto, OrganizationResponseDto, UpdateOrganizationDto } from "../dtos/organizations";
-import { createOrganizationType, Organization } from "../types/organizations";
+import { CreateOrganization, Organization } from "../types/organizations";
 
-export function createOrganizationToCreateOrganizationDto(organization: createOrganizationType): CreateOrganizationDto {
+export function createOrganizationToCreateOrganizationDto(organization: CreateOrganization): CreateOrganizationDto {
     return {
         name: {
             en: organization.name.en,
