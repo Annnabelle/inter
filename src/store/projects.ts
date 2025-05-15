@@ -1,22 +1,22 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { BASE_URL } from "../utils/baseUrl";
-import { ErrorDto, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
-import { organizationEmployee } from "../types/organizationEmployee";
-import { CreateProjectResponseDto, DeleteProjectDto, GetProjectsResponseDto, ProjectResponseDto } from "../dtos/projects";
-import { createOrganizationProjectToCreateOrganizationProjectDto, organizationProjectResponseDtoToOrganizationProject, paginatedOrganizationsProjectsDtoToPaginatedOrganizationsProjects, updateOrganizationsProjectToUpdateOrganizationProjectDto } from "../mappers/projects.mapper";
-import { project, projects, projectUpdate } from "../types/projects";
+import { ErrorDto, HexString, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
+import { CreateProjectResponseDto, DeleteProjectDto, GetProjectResponseDto, GetProjectsResponseDto, PopulatedProjectResponseDto, ProjectResponseDto } from "../dtos/projects";
+import { createOrganizationProjectToCreateOrganizationProjectDto, organizationProjectResponseDtoToOrganizationProject, paginatedOrganizationsProjectsDtoToPaginatedOrganizationsProjects, RetrieveProjectDtoToRetrieveProject, updateOrganizationsProjectToUpdateOrganizationProjectDto } from "../mappers/projects.mapper";
+import { Project, Projects, ProjectWithDocs } from "../types/projects";
 import axios from "axios";
 
 type OrganizationsEmployeesState = {
-  organizationProjects: projects[]
+  organizationProjects: Projects[]
   loading: boolean;
   error: string | null;
   success: boolean;
   limit: number,
   page: number,
   total: number,
-  organizationsProjectUpdate: project | null,
-  organizationProjectDelete: project[] | null
+  organizationsProjectUpdate: Project | null,
+  organizationProjectDelete: Project[] | null
+  project: ProjectWithDocs | null
 };
 
 const initialState: OrganizationsEmployeesState = {
@@ -28,7 +28,8 @@ const initialState: OrganizationsEmployeesState = {
   page: 1,
   total: 0,
   organizationsProjectUpdate: null,
-  organizationProjectDelete: null
+  organizationProjectDelete: null,
+  project: null
 };
 
 function isSuccessResponse(
@@ -47,20 +48,47 @@ function isSuccessResponse(
   );
 }
   
-export const retrieveOrganizationsProjects = createAsyncThunk<PaginatedResponse<projects>, {page: number, limit: number, id: string},{ rejectValue: string }>(
+export const retrieveOrganizationsProjects = createAsyncThunk<PaginatedResponse<Projects>, {page: number, limit: number, id: string},{ rejectValue: string }>(
   "organizationsProjects/retrieveOrganizationsProjects",
   async ({page, limit, id}, { rejectWithValue }) => {
     try {
       const response = await axios.get<GetProjectsResponseDto>(`${BASE_URL}/projects?limit=${limit}&page=${page}&organizationId=${id}`);
 
       if (isSuccessResponse(response.data)) {
+        console.log("ers", response.data);
+        
         const paginatedOrganizationProjects = paginatedOrganizationsProjectsDtoToPaginatedOrganizationsProjects(response.data);
         return paginatedOrganizationProjects;
+
       } else {
         const error = response.data as ErrorDto;
         return rejectWithValue(error.errorMessage?.ru || "Ошибка получения проекта");
       }
     } catch (error: any) {
+      console.log(error);
+      return rejectWithValue(error.message || "Произошла ошибка при получении проектов");
+    }
+  }
+);
+
+export const retrieveOrganizationProjectById = createAsyncThunk<ProjectWithDocs, {id: HexString},{ rejectValue: string }>(
+  "organizationsProjects/retrieveOrganizationProjectById",
+  async ({id}, { rejectWithValue }) => {
+    try {
+      const response = await axios.get<GetProjectResponseDto>(`${BASE_URL}/projects/${id}`);
+
+      if ("success" in response.data && response.data.success === true) {
+        console.log("ers", response.data);
+        const data = response.data as {success: true, project: PopulatedProjectResponseDto}
+        const project = RetrieveProjectDtoToRetrieveProject(data.project);
+        return project;
+
+      } else {
+        const error = response.data as ErrorDto;
+        return rejectWithValue(error.errorMessage?.ru || "Ошибка получения проекта");
+      }
+    } catch (error: any) {
+      console.log(error);
       return rejectWithValue(error.message || "Произошла ошибка при получении проектов");
     }
   }
@@ -68,7 +96,7 @@ export const retrieveOrganizationsProjects = createAsyncThunk<PaginatedResponse<
 
 
 
-export const updateOrganizationsProject = createAsyncThunk<projects, projects, { rejectValue: string }>(
+export const updateOrganizationsProject = createAsyncThunk<Projects, Projects, { rejectValue: string }>(
   'organizationsProjects/updateOrganizationsProject',
   async (data, { rejectWithValue }) => {
     try {
@@ -85,7 +113,6 @@ export const updateOrganizationsProject = createAsyncThunk<projects, projects, {
         return rejectWithValue(error.errorMessage?.ru || 'Ошибка обновления проекта');
       }
     } catch (error: any) {
-      console.log(error);
       
       return rejectWithValue(error.response?.data?.message || 'Ошибка сервера');
     }
@@ -95,7 +122,7 @@ export const updateOrganizationsProject = createAsyncThunk<projects, projects, {
 
 export const createOrganizationProject = createAsyncThunk(
   'organizationsProjects/createOrganizationProject',
-  async (data: project, {rejectWithValue}) => {
+  async (data: Project, {rejectWithValue}) => {
     try {
       const dto = createOrganizationProjectToCreateOrganizationProjectDto(data);
       const response = await axios.post<CreateProjectResponseDto>(`${BASE_URL}/projects`, dto);
@@ -136,7 +163,7 @@ const organizationsProjectsSlice = createSlice({
         state.error = null;
         state.success = false;
       })
-      .addCase( retrieveOrganizationsProjects.fulfilled, (state, action: PayloadAction<PaginatedResponseDto<projects>>) => {
+      .addCase( retrieveOrganizationsProjects.fulfilled, (state, action: PayloadAction<PaginatedResponseDto<Projects>>) => {
           state.loading = false;
           state.organizationProjects = action.payload.data;
           state.limit = action.payload.limit;
@@ -149,6 +176,21 @@ const organizationsProjectsSlice = createSlice({
         state.loading = false;
         state.error = typeof action.payload === 'string' ? action.payload : 'Что-то пошло не так';
         state.success = false;
+      })
+      .addCase(retrieveOrganizationProjectById.pending, (state) => {
+        state.loading = true,
+        state.error = null,
+        state.success = false
+      })
+      .addCase(retrieveOrganizationProjectById.fulfilled, (state, action: PayloadAction<ProjectWithDocs>) => {
+        state.loading = false,
+        state.project = action.payload
+        state.success = true
+      })
+      .addCase(retrieveOrganizationProjectById.rejected, (state) => {
+        state.loading = true,
+        state.error = null,
+        state.success = false
       })
       .addCase(createOrganizationProject.pending, (state) => {
         state.loading = true;
@@ -167,7 +209,7 @@ const organizationsProjectsSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(updateOrganizationsProject.fulfilled, (state, action: PayloadAction<project>) => {
+      .addCase(updateOrganizationsProject.fulfilled, (state, action: PayloadAction<Project>) => {
         state.loading = false;
         state.organizationsProjectUpdate = action.payload;
       })

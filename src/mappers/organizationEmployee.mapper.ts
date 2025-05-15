@@ -1,8 +1,8 @@
 import { PaginatedResponse } from "../dtos/main.dto";
-import { createOrganizationEmployeeDto, OrganizationEmployeeResponseDto, UpdateOrganizationEmployeeDto } from "../dtos/organizationEmployee";
-import { organizationEmployee, organizationEmployees, organizationEmployeesWithDocs } from "../types/organizationEmployee";
+import { organizationEmployeesDto, GetOrganizationEmployeeResponseDto, OrganizationEmployeeResponseDto, UpdateOrganizationEmployeeDto, PopulatedOrganizationEmployeeResponseDto } from "../dtos/organizationEmployee";
+import { OrganizationEmployee, OrganizationEmployees, OrganizationEmployeeWithDocs } from "../types/organizationEmployee";
 
-export function createOrganizationEmployeeToCreateOrganizationEmployeeDto(organizationEmployee: organizationEmployees): createOrganizationEmployeeDto {
+export function CreateOrganizationEmployeeToCreateOrganizationEmployeeDto(organizationEmployee: OrganizationEmployees): organizationEmployeesDto {
     return {
         firstName: organizationEmployee.firstName,
         lastName: organizationEmployee.lastName,
@@ -10,11 +10,12 @@ export function createOrganizationEmployeeToCreateOrganizationEmployeeDto(organi
         email: organizationEmployee.email,
         position: organizationEmployee.position,
         comment: organizationEmployee.comment,
-        organizationId: organizationEmployee.organizationId
+        organizationId: organizationEmployee.organizationId,
+        documents: organizationEmployee.documents
     }
 }
 
-export function organizationEmployeeResponseDtoToOrganizationEmployee(dto: OrganizationEmployeeResponseDto): organizationEmployee {
+export function OrganizationEmployeesResponseDtoToOrganizationEmployees(dto: OrganizationEmployeeResponseDto): OrganizationEmployee {
   return {
     id: dto.id,
     firstName: dto.firstName,
@@ -23,11 +24,35 @@ export function organizationEmployeeResponseDtoToOrganizationEmployee(dto: Organ
     email: dto.email,
     position: dto.position,
     comment: dto.comment,
-    organizationId: dto.organizationId
+    organizationId: dto.organizationId,
   };
 }
 
-export function updateOrganizationsEmployeesToUpdateOrganizationEmployeesDto(organizationEmployee: organizationEmployeesWithDocs): UpdateOrganizationEmployeeDto{
+export function OrganizationEmployeeResponseDtoToOrganizationEmployeeResponse(
+  dto: PopulatedOrganizationEmployeeResponseDto
+): OrganizationEmployeeWithDocs { 
+  return {
+    id: dto?.id,
+    firstName: dto.firstName,
+    lastName: dto.lastName,
+    phone: dto.phone,
+    email: dto.email,
+    position: dto.position,
+    comment: dto.comment,
+    organizationId: dto.organizationId,
+    documents: dto.documents.map(document => { 
+        return {
+            extension: document.extension,
+            id: document.id,
+            mimeType: document.mimeType,
+            originalName: document.originalName,
+            url: document.url
+        }
+    })
+  };
+}
+
+export function UpdateOrganizationEmployeeToUpdateOrganizationEmployeeResponseDto(organizationEmployee: OrganizationEmployeeWithDocs): UpdateOrganizationEmployeeDto{
     return {
         firstName: organizationEmployee.firstName,
         lastName: organizationEmployee.lastName,
@@ -35,17 +60,17 @@ export function updateOrganizationsEmployeesToUpdateOrganizationEmployeesDto(org
         email: organizationEmployee.email,
         position: organizationEmployee.position,
         comment: organizationEmployee.comment,
-        documents: organizationEmployee.documents,
+        documents: organizationEmployee.documents?.map((document => document.id))
     }
 }
 
-export function paginatedOrganizationsEmployeesDtoToPaginatedOrganizationsEmployees(paginatedOrganizations: PaginatedResponse<OrganizationEmployeeResponseDto> ): PaginatedResponse<organizationEmployee> {
+export function PaginatedOrganizationsEmployeesResponseDtoToPaginatedOrganizationsEmployeesResponse(paginatedOrganizations: PaginatedResponse<OrganizationEmployeeResponseDto> ): PaginatedResponse<OrganizationEmployee> {
     return{
         limit: paginatedOrganizations.limit,
         page: paginatedOrganizations.page,
         total: paginatedOrganizations.total,
         data: paginatedOrganizations.data.map(organizationDto => {
-            return organizationEmployeeResponseDtoToOrganizationEmployee(organizationDto)
+            return OrganizationEmployeesResponseDtoToOrganizationEmployees(organizationDto)
         })
     }
 }

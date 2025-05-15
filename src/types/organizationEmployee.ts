@@ -1,32 +1,37 @@
-export type organizationEmployees = {
+import { HexString } from "../dtos/main.dto"
+import { Document } from "./documents"
+
+export type OrganizationEmployees = {
     firstName: string,
     lastName: string,
     phone: string,
     email: string,
     position?: string,
     comment?: string,
-    organizationId: string,
+    organizationId: HexString,
+    documents: HexString[]
 }
 
-export type organizationEmployee = {
-    id: string,
+export type OrganizationEmployee = {
+    id: HexString, // поэтому сказал везде использовать, чтобы потом урл вместо айдишки не пытаться отправить
     firstName: string,
     lastName: string,
     phone?: string,
     email?: string,
     position?: string,
     comment?: string,
-    organizationId: string,
+    organizationId: HexString,
+    documents?: HexString[]
 }
 
-export type organizationEmployeesWithDocs = {
-    id: string,
+export type OrganizationEmployeeWithDocs = {
+    id: HexString,
     firstName: string, 
     lastName: string,
     phone?: string,
     email?: string,
     position?: string,
     comment?: string,
-    organizationId: string,
-    documents: string[]
+    organizationId: HexString,
+    documents: Document[]
 }

@@ -1,10 +1,8 @@
 import { PaginatedResponse } from "../dtos/main.dto";
-import { createOrganizationEmployeeDto, OrganizationEmployeeResponseDto, UpdateOrganizationEmployeeDto } from "../dtos/organizationEmployee";
-import { CreateProjectDto, GetProjectsResponseDto, ProjectResponseDto, UpdateProjectDto } from "../dtos/projects";
-import { organizationEmployee, organizationEmployees, organizationEmployeesWithDocs } from "../types/organizationEmployee";
-import { project, projects, projectUpdate } from "../types/projects";
+import { CreateProjectDto, PopulatedProjectResponseDto, ProjectResponseDto, UpdateProjectDto } from "../dtos/projects";
+import { Project, Projects, ProjectUpdate, ProjectWithDocs } from "../types/projects";
 
-export function createOrganizationProjectToCreateOrganizationProjectDto(project: projects): CreateProjectDto {
+export function createOrganizationProjectToCreateOrganizationProjectDto(project: Projects): CreateProjectDto {
     return {
         name: project.name,
         organizationId: project.organizationId,
@@ -13,7 +11,7 @@ export function createOrganizationProjectToCreateOrganizationProjectDto(project:
     }
 }
 
-export function organizationProjectResponseDtoToOrganizationProject(project: ProjectResponseDto): project {
+export function organizationProjectResponseDtoToOrganizationProject(project: ProjectResponseDto): Project {
   return {
     id: project?.id,
     name: project?.name,
@@ -22,7 +20,27 @@ export function organizationProjectResponseDtoToOrganizationProject(project: Pro
   };
 }
 
-export function updateOrganizationsProjectToUpdateOrganizationProjectDto(projectUpdate: projectUpdate): UpdateProjectDto{
+export function RetrieveProjectDtoToRetrieveProject(
+  dto: PopulatedProjectResponseDto
+): ProjectWithDocs { 
+  return {
+    id: dto?.id,
+    name: dto.name,
+    comment: dto.comment,
+    organizationId: dto.organizationId,
+    documents: dto.documents.map(document => { 
+        return {
+            extension: document.extension,
+            id: document.id,
+            mimeType: document.mimeType,
+            originalName: document.originalName,
+            url: document.url
+        }
+    })
+  };
+}
+
+export function updateOrganizationsProjectToUpdateOrganizationProjectDto(projectUpdate: ProjectUpdate): UpdateProjectDto{
     return {
         name: projectUpdate.name,
         comment: projectUpdate.comment,
@@ -30,7 +48,7 @@ export function updateOrganizationsProjectToUpdateOrganizationProjectDto(project
     }
 }
 
-export function paginatedOrganizationsProjectsDtoToPaginatedOrganizationsProjects(paginatedOrganizationsProjects: PaginatedResponse<ProjectResponseDto> ): PaginatedResponse<projects> {
+export function paginatedOrganizationsProjectsDtoToPaginatedOrganizationsProjects(paginatedOrganizationsProjects: PaginatedResponse<ProjectResponseDto> ): PaginatedResponse<Projects> {
     return{
         limit: paginatedOrganizationsProjects.limit,
         page: paginatedOrganizationsProjects.page,

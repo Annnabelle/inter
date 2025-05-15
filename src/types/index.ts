@@ -102,11 +102,11 @@ export interface CountriesInnerInternationalDocumentsDataType {
 }
 export interface ExpertsTableDataTypes{
     key: string,
-    mainAreas: string,
-    fullName: string,
-    event: string,
-    date: string,
-    files: string
+    fullName?: string,
+    phone?: string,
+    email?: string,
+    comment?: string,
+    spheres?: string
 }
 export interface TranslatorsTableDataTypes {
     key: string ,

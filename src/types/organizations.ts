@@ -1,5 +1,7 @@
-export interface OrganizationsDataType {
-    key: string;
+import { HexString } from "../dtos/main.dto";
+
+export interface Organizations {
+    key: HexString;
     organizationName: {
         en?: string,
         ru?: string, 
@@ -10,7 +12,7 @@ export interface OrganizationsDataType {
     action: string;
 }
 
-export type createOrganizationType = {
+export type CreateOrganization = {
     name: {
         ru: string,
         uz: string,
@@ -21,7 +23,7 @@ export type createOrganizationType = {
 }
 
 export type Organization = {
-    id: string,
+    id: HexString,
     name: {
         ru: string,
         uz: string,

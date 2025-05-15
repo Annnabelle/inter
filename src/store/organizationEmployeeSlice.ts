@@ -1,20 +1,21 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { organizationEmployee, organizationEmployees, organizationEmployeesWithDocs } from "../types/organizationEmployee";
-import { CreateOrganizationEmployeeResponseDto, DeleteOrganizationEmployeeDto, GetOrganizationEmployeeResponseDto, OrganizationEmployeeResponseDto } from "../dtos/organizationEmployee";
-import { createOrganizationEmployeeToCreateOrganizationEmployeeDto, organizationEmployeeResponseDtoToOrganizationEmployee, paginatedOrganizationsEmployeesDtoToPaginatedOrganizationsEmployees, updateOrganizationsEmployeesToUpdateOrganizationEmployeesDto } from "../mappers/organizationEmployee.mapper";
+import { OrganizationEmployee, OrganizationEmployees, OrganizationEmployeeWithDocs } from "../types/organizationEmployee";
+import { CreateOrganizationEmployeeResponseDto, DeleteOrganizationEmployeeDto, GetOrganizationEmployeeResponseDto, OrganizationEmployeeResponseDto, PopulatedOrganizationEmployeeResponseDto } from "../dtos/organizationEmployee";
+import { CreateOrganizationEmployeeToCreateOrganizationEmployeeDto, PaginatedOrganizationsEmployeesResponseDtoToPaginatedOrganizationsEmployeesResponse, OrganizationEmployeeResponseDtoToOrganizationEmployeeResponse, UpdateOrganizationEmployeeToUpdateOrganizationEmployeeResponseDto, OrganizationEmployeesResponseDtoToOrganizationEmployees } from "../mappers/organizationEmployee.mapper";
 import { ErrorDto, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
 import { BASE_URL } from "../utils/baseUrl";
 import axios from "axios";
 
 type OrganizationsEmployeesState = {
-  organizationsEmployees: organizationEmployee[]
+  organizationsEmployees: OrganizationEmployee[]
   loading: boolean;
   error: string | null;
   success: boolean;
   limit: number,
   page: number,
   total: number,
-  organizationsEmployee: organizationEmployee | null
+  organizationsEmployee: OrganizationEmployee | null,
+  employee: OrganizationEmployeeWithDocs | null
 };
 
 const initialState: OrganizationsEmployeesState = {
@@ -25,7 +26,8 @@ const initialState: OrganizationsEmployeesState = {
   limit: 0,
   page: 1,
   total: 0,
-  organizationsEmployee: null
+  organizationsEmployee: null,
+  employee: null
 };
 
 function isSuccessResponse(
@@ -44,7 +46,7 @@ function isSuccessResponse(
   );
 }
   
-export const retrieveOrganizationsEmployees = createAsyncThunk<PaginatedResponse<organizationEmployee>, {page: number, limit: number, id: string},{ rejectValue: string }>(
+export const RetrieveOrganizationEmployees = createAsyncThunk<PaginatedResponse<OrganizationEmployee>, {page: number, limit: number, id: string},{ rejectValue: string }>(
   "organizationsEmployees/retrieveOrganizationsEmployees",
   async ({page, limit, id}, { rejectWithValue }) => {
     try {
@@ -52,7 +54,7 @@ export const retrieveOrganizationsEmployees = createAsyncThunk<PaginatedResponse
       console.log(response.data);
       
       if (isSuccessResponse(response.data)) {
-        const paginatedOrganizations = paginatedOrganizationsEmployeesDtoToPaginatedOrganizationsEmployees(response.data);
+        const paginatedOrganizations = PaginatedOrganizationsEmployeesResponseDtoToPaginatedOrganizationsEmployeesResponse(response.data);
         return paginatedOrganizations;
       } else {
         const error = response.data as ErrorDto;
@@ -64,20 +66,42 @@ export const retrieveOrganizationsEmployees = createAsyncThunk<PaginatedResponse
   }
 );
 
+export const retrieveOrganizationsEmployeeById = createAsyncThunk<OrganizationEmployeeWithDocs, {id: string},{ rejectValue: string }>(
+  "organizationsEmployees/retrieveOrganizationsEmployeeById",
+  async ({id}, { rejectWithValue }) => {
+    try {
+      const response = await axios.get<GetOrganizationEmployeeResponseDto>(`${BASE_URL}/organization-employees/${id}`);
+
+      if ("success" in response.data && response.data.success === true) {
+        const data = response.data as { success: true; employee: PopulatedOrganizationEmployeeResponseDto };
+        const employee = OrganizationEmployeeResponseDtoToOrganizationEmployeeResponse(data.employee);
+        return employee;
+      } else {
+        const error = response.data as ErrorDto;
+        return rejectWithValue(error.errorMessage?.ru || "Ошибка получения проекта"); // поменять текст. проверить по всему проекту
+      }
+    } catch (error: any) {
+      console.log(error);
+      return rejectWithValue(error.message || "Произошла ошибка при получении проектов");
+    }
+  }
+);
 
 
-export const updateOrganizationsEmployees = createAsyncThunk<organizationEmployee, organizationEmployeesWithDocs, { rejectValue: string }>(
+
+
+export const updateOrganizationsEmployees = createAsyncThunk<OrganizationEmployee, OrganizationEmployeeWithDocs, { rejectValue: string }>(
   'organizationsEmployees/updateOrganizationsEmployees',
   async (data, { rejectWithValue }) => {
     try {
-      const dto = updateOrganizationsEmployeesToUpdateOrganizationEmployeesDto(data);
+      const dto = UpdateOrganizationEmployeeToUpdateOrganizationEmployeeResponseDto(data);
       const response = await axios.patch(`${BASE_URL}/organization-employees/${data.id}`, dto);
       console.log("response.data ", response.data );
       
       if ('success' in response.data && response.data.success) {
         console.log(response.data);
         
-        return organizationEmployeeResponseDtoToOrganizationEmployee(response.data.employee); 
+        return OrganizationEmployeesResponseDtoToOrganizationEmployees(response.data.employee); 
       } else {
         const error = response.data as ErrorDto;
         return rejectWithValue(error.errorMessage?.ru || 'Ошибка обновления организации');
@@ -93,9 +117,9 @@ export const updateOrganizationsEmployees = createAsyncThunk<organizationEmploye
 
 export const createOrganizationsEmployees = createAsyncThunk(
   'organizationsEmployees/createOrganizationsEmployees',
-  async (data: organizationEmployees, {rejectWithValue}) => {
+  async (data: OrganizationEmployees, {rejectWithValue}) => {
     try {
-      const dto = createOrganizationEmployeeToCreateOrganizationEmployeeDto(data);
+      const dto = CreateOrganizationEmployeeToCreateOrganizationEmployeeDto(data);
       const response = await axios.post<CreateOrganizationEmployeeResponseDto>(`${BASE_URL}/organization-employees`, dto);
       if ('success' in response.data && response.data.success){
         return response.data;
@@ -129,12 +153,12 @@ const organizationsEmployeesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(retrieveOrganizationsEmployees.pending, (state) => {
+      .addCase(RetrieveOrganizationEmployees.pending, (state) => {
         state.loading = true;
         state.error = null;
         state.success = false;
       })
-      .addCase( retrieveOrganizationsEmployees.fulfilled, (state, action: PayloadAction<PaginatedResponseDto<organizationEmployee>>) => {
+      .addCase( RetrieveOrganizationEmployees.fulfilled, (state, action: PayloadAction<PaginatedResponseDto<OrganizationEmployee>>) => {
           state.loading = false;
           state.organizationsEmployees = action.payload.data;
           state.limit = action.payload.limit;
@@ -143,10 +167,25 @@ const organizationsEmployeesSlice = createSlice({
           state.success = true;
         }
       )
-      .addCase(retrieveOrganizationsEmployees.rejected, (state, action) => {
+      .addCase(RetrieveOrganizationEmployees.rejected, (state, action) => {
         state.loading = false;
         state.error = typeof action.payload === 'string' ? action.payload : 'Что-то пошло не так';
         state.success = false;
+      })
+      .addCase(retrieveOrganizationsEmployeeById.pending, (state) => {
+        state.loading = true,
+        state.error = null,
+        state.success = false
+      })
+      .addCase(retrieveOrganizationsEmployeeById.fulfilled, (state, action: PayloadAction<OrganizationEmployeeWithDocs>) => {
+        state.loading = false,
+        state.employee = action.payload
+        state.success = true
+      })
+      .addCase(retrieveOrganizationsEmployeeById.rejected, (state) => {
+        state.loading = true,
+        state.error = null,
+        state.success = false
       })
       .addCase(createOrganizationsEmployees.pending, (state) => {
         state.loading = true;
@@ -165,7 +204,7 @@ const organizationsEmployeesSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(updateOrganizationsEmployees.fulfilled, (state, action: PayloadAction<organizationEmployee>) => {
+      .addCase(updateOrganizationsEmployees.fulfilled, (state, action: PayloadAction<OrganizationEmployee>) => {
         state.loading = false;
         state.organizationsEmployee = action.payload;
       })

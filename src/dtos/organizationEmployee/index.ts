@@ -1,6 +1,7 @@
+import { UploadResponseDto } from "../documents";
 import { ErrorDto, HexString, PaginatedResponseDto } from "../main.dto";
 
-export type createOrganizationEmployeeDto = {
+export type organizationEmployeesDto = {
   firstName: string;
   lastName: string;
   organizationId: HexString;
@@ -40,6 +41,10 @@ export class UpdateOrganizationEmployeeDto {
   documents?: HexString[];
 }
 
+export type PopulatedOrganizationEmployeeResponseDto = OrganizationEmployeeResponseDto & {
+  documents: UploadResponseDto[],
+};
+
 export type CreateOrganizationEmployeeResponseDto = {
   success: boolean,
   employee: OrganizationEmployeeResponseDto,
@@ -51,7 +56,7 @@ export type DeleteOrganizationEmployeeResponseDto = {
 
 export type GetOrganizationEmployeeResponseDto = {
   success: boolean,
-  employee: OrganizationEmployeeResponseDto,
+  employee: PopulatedOrganizationEmployeeResponseDto,
 } | ErrorDto;
 
 export type GetOrganizationEmployeesResponseDto = ({

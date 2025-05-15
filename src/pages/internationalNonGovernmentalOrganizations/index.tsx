@@ -1,33 +1,33 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { theme, Form, Input, Upload, Select } from "antd";
 import { IoMdAdd } from 'react-icons/io';
-import {FileItem } from '../../types/countries';
-import { InternationalNonGovernmentOrganizationProjectDataType, InternationalNonGovernmentOrganizationsChronologyOfMeetingDataType, InternationalOrganizationChiefDataType, InternationalOrganizationNonGovernmentChiefDataType } from '../../types';
-import { InternationalOrganizationNonGovernmentChiefColumns, InternationalOrganizationNonGovernmentChiefData } from '../../tableData/internationalNonGovernmentOrganizationChief';
-import { InternationalNonGovernmentOrganizationsChronologyOfMeetingColumns, InternationalNonGovernmentOrganizationsChronologyOfMeetingData } from '../../tableData/internationalNonGovernmentOrganizationChronologyOfMeetings';
-import { InternationalNonGovernmentOrganizationProjectColumns, InternationalNonGovernmentOrganizationProjectData } from '../../tableData/internationalNonGovernmentOrganizationProject';
+import { InternationalOrganizationChiefDataType, InternationalOrganizationProjectDataType } from '../../types';
+import { useTranslation } from 'react-i18next';
+import { OrganizationEmployee, OrganizationEmployees } from '../../types/organizationEmployee';
+import { useParams } from 'react-router-dom';
+import { RootState, useAppDispatch, useAppSelector } from '../../store';
+import { createOrganizationsEmployees, deleteOrganizationsEmployees, RetrieveOrganizationEmployees, retrieveOrganizationsEmployeeById, updateOrganizationsEmployees } from '../../store/organizationEmployeeSlice';
+import { toast } from 'react-toastify';
+import { InternationalOrganizationChiefColumns } from '../../tableData/internationalOrganizationChiefTable';
+import { createOrganizationProject, deleteOrganizationProject, retrieveOrganizationProjectById, retrieveOrganizationsProjects, updateOrganizationsProject } from '../../store/projects';
+import { Project } from '../../types/projects';
+import { CreateDocument } from '../../store/documents';
+import { InternationalOrganizationProjectColumns } from '../../tableData/internationalOrganizationProject';
 import MainLayout from '../../components/layout'
 import MainHeading from '../../components/mainHeading'
 import ModalWindow from '../../components/modalWindow';
 import Button from '../../components/button';
 import FormComponent from '../../components/form';
 import ComponentTable from '../../components/table';
-import { useTranslation } from 'react-i18next';
-import { organizationEmployee, organizationEmployees } from '../../types/organizationEmployee';
-import { useParams } from 'react-router-dom';
-import { RootState, useAppDispatch, useAppSelector } from '../../store';
-import { createOrganizationsEmployees, deleteOrganizationsEmployees, retrieveOrganizationsEmployees, updateOrganizationsEmployees } from '../../store/organizationEmployeeSlice';
-import { toast } from 'react-toastify';
-import { InternationalOrganizationChiefColumns } from '../../tableData/internationalOrganizationChiefTable';
+import { Document } from '../../types/documents';
+import { normalizeUrl } from '../../utils/baseUrl';
 
 const InternationalNonGovernmentalOrganizations: React.FC = () => {
     const { t } = useTranslation();
     const {
       token: { colorBgContainer },
     } = theme.useToken();
-    const [documentField, setDocumentField] = useState<FileItem[]>([{ id: 1, file: null }]);
-    const [referenceField, setReferenceField] = useState<FileItem[]>([{ id: 1, file: null }]);
-    const [referenceDocumentField, setReferenceDocumentField] = useState<FileItem[]>([{ id: 1, file: null }]);
+    const [files, setFiles] = useState([{ id: Date.now() }])
     const [modalState, setModalState] = useState<{
           chiefRetrieve: boolean,
           chiefEdit: boolean,
@@ -37,7 +37,8 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
           projectEdit:  boolean,
           projectDelete: boolean,
           addProject: boolean,
-          employeeData: organizationEmployee | null
+          employeeData: OrganizationEmployee | null
+          projectData: Project | null
       }>({
           chiefRetrieve: false,
           chiefEdit: false,
@@ -47,43 +48,75 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
           projectEdit: false,
           projectDelete: false,
           addProject: false,
-          employeeData: null
+          employeeData: null,
+          projectData: null
       });
     const { id } = useParams<{ id: string }>();
     const dispatch  =  useAppDispatch();
     const organizationEmployees = useAppSelector((state: RootState) => state.organizationEmployee.organizationsEmployees)
+    const organizationProjects = useAppSelector((state) => state.organizationProjects.organizationProjects)
     const limit = useAppSelector((state) => state.organizations.limit)
     const page = useAppSelector((state) => state.organizations.page)
     const total = useAppSelector((state) => state.organizations.total)
+      const projectById = useAppSelector((state) => state.organizationProjects.project)
+      const employeeById = useAppSelector((state) => state.organizationEmployee.employee)
     const [currentPage, setCurrentPage] = useState(page);
     const [editForm] = Form.useForm();
+    const [uploadedFileIds, setUploadedFileIds] = useState<string[]>([]);
+    const [selectedChiefId, setSelectedChiefId] = useState<string | null>(null);
+    const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null)
     useEffect(() => {
-        if (id && organizationEmployees.length === 0) {
-            dispatch(retrieveOrganizationsEmployees({ limit: 10, page: currentPage, id }));
+        if (id) {
+            dispatch(RetrieveOrganizationEmployees({ limit: 10, page: currentPage, id }));
         }
     }, [dispatch, organizationEmployees.length, currentPage, limit, id])
 
     useEffect(() => {
+          if (id) {
+            dispatch(retrieveOrganizationsProjects({ limit: 10, page: currentPage, id }));
+          }
+      }, [dispatch, organizationProjects.length, currentPage, limit, id])
+
+     
+    useEffect(() => {
         if (modalState.employeeData) {
+            editForm.resetFields(); 
             editForm.setFieldsValue({
-            fullName: modalState.employeeData.firstName + ' ' + modalState.employeeData.lastName,
-            additionalInformation: modalState.employeeData.comment,
-            email: modalState.employeeData.email,
-            phone: modalState.employeeData.phone,
-            employeePosition: modalState.employeeData.position,
-        });
+              firstName: modalState.employeeData.firstName,
+              lastName: modalState.employeeData.lastName,
+              additionalInformation: modalState.employeeData.comment,
+              email: modalState.employeeData.email,
+              phone: modalState.employeeData.phone,
+              comment: modalState.employeeData.comment,
+              position: modalState.employeeData.position,
+              employeePosition: modalState.employeeData.position,
+          });
+        } else if (modalState.projectData){
+          editForm.setFieldsValue({
+            name: modalState.projectData.name,
+            comment: modalState.projectData.comment
+          })
         }
-    }, [modalState.employeeData, editForm]);
+      }, [modalState.employeeData, editForm, modalState.projectData]);
 
     const organizationEmployeeData = useMemo(() => {
-        return organizationEmployees.map((organizationEmployee) => ({
-            key: organizationEmployee.id,
-            fullName: organizationEmployee.firstName + " " + organizationEmployee.lastName,
-            additionalInformation: organizationEmployee.comment,
-            email: organizationEmployee.email,
-            employeePosition: organizationEmployee.position
-        }))
+      return organizationEmployees.map((organizationEmployee) => ({
+        key: organizationEmployee.id,
+        fullName: organizationEmployee.firstName + " " + organizationEmployee.lastName,
+        additionalInformation: organizationEmployee.comment,
+        email: organizationEmployee.email,
+        employeePosition: organizationEmployee.position
+      }))
     }, [organizationEmployees, t])
+
+    const organizationProjectsData = useMemo(() => {
+      return organizationProjects.map((projects) => ({
+        key: projects.id,
+        name: projects.name,
+        comment: projects.comment,
+        document: projects.documents
+      }))
+    }, [organizationProjects, t])
     
     const handleModal = (modalName: string, value: boolean) => {
       setModalState((prev) => ({ ...prev, [modalName]: value }));
@@ -93,39 +126,50 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
     //   setOpenSortDropdown((prev) => !prev);
     // };
     
-    const addDocumentField = () => {
-      setDocumentField([...documentField, { id: documentField.length + 1, file: null }]);
-    };
-    const addReferenceField = () => {
-        setReferenceField([...referenceField, { id: referenceField.length + 1, file: null }]);
-    };
-
-    const addReferenceDocumentField = () => {
-        setReferenceDocumentField([...referenceDocumentField, { id: referenceDocumentField.length + 1, file: null }]);
-    };
+    const handleRowClick = (
+        type: 'chief' | 'project',
+        action: 'Retrieve' | 'Edit' | 'Delete',
+        record: InternationalOrganizationChiefDataType | InternationalOrganizationProjectDataType
+      ) => {
+        console.log(`Clicked on ${type}, action: ${action}, record:`, record);
     
-    const handleRowClick = (type: 'chief' | 'project', action: 'Retrieve' | 'Edit' | 'Delete', record: InternationalOrganizationChiefDataType) => {
-      console.log(`Clicked on ${type}, action: ${action}, record:`, record);
-      if (type === 'chief'){
-        const organizationEmployeeData = organizationEmployees.find(
-        (organizationEmployee) => organizationEmployee.id === record.key) ?? null;
-        setModalState((prev) => ({
-          ...prev,
-          [`${type}${action}`]: true,
-          employeeData: organizationEmployeeData,
-        }));
-      } else if(type === 'project'){
-        const organizationEmployeeData = organizationEmployees.find(
-        (organizationEmployee) => organizationEmployee.id === record.key) ?? null;
-        setModalState((prev) => ({
-          ...prev,
-          [`${type}${action}`]: true,
-          employeeData: organizationEmployeeData,
-        }));
+        if (type === 'chief') {
+          const organizationEmployeeData = organizationEmployees.find(
+            (organizationEmployee) => organizationEmployee.id === record.key
+          ) ?? null;
+          setSelectedChiefId(record.key);
+          setModalState((prev) => ({
+            ...prev,
+            [`${type}${action}`]: true,
+            employeeData: organizationEmployeeData,
+          }));
+        } else if (type === 'project') {
+    
+          const organizationProjectsData = organizationProjects.find(
+            (organizationProject) => organizationProject.id === record.key
+          ) ?? null;
+          setSelectedProjectId(record.key)
+          setModalState((prev) => ({
+            ...prev,
+            [`${type}${action}`]: true,
+            projectData: organizationProjectsData,
+          }));
       } else {
         console.log('HandleRowClick Error');
       }
     };
+
+    useEffect(() => {
+        if (selectedChiefId) {
+          dispatch(retrieveOrganizationsEmployeeById({ id: selectedChiefId }));
+        }
+      }, [dispatch, selectedChiefId]);
+    
+      useEffect(() => {
+        if (selectedProjectId) {
+          dispatch(retrieveOrganizationProjectById({ id: selectedProjectId }));
+        }
+      }, [dispatch, selectedProjectId]);
     
     const handleEditOpen = (type: 'chief' | 'project') => {
       setModalState((prev) => ({
@@ -147,10 +191,6 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
       }, 10);
     };
     
-    const onFinish = () => {
-      console.log('hello finish');
-    };
-
     const filterOptions = [
         {value: 'byName',label: t('buttons.sort.byName')},
         {value: 'byVisit',label: t('buttons.sort.byVisit')},
@@ -158,9 +198,9 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
         {value: 'all', label: t('buttons.sort.all')}
     ]
 
-    const handleCreateOrganizationEmployee = async(values: organizationEmployees) => {
+    const handleCreateOrganizationEmployee = async(values: OrganizationEmployees) => {
         try {
-          const data = {...values, organizationId: id ?? ''};
+          const data = {...values, organizationId: id ?? '', documents: uploadedFileIds};
           const resultAction = await dispatch(createOrganizationsEmployees(data))
           if(createOrganizationsEmployees.fulfilled.match(resultAction)){
             toast.success('Сотрудник добавлен успешно')
@@ -176,6 +216,10 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
         }
     }
 
+    const addFileField = () => {
+      setFiles([...files, { id: files.length + 1 }]);
+    };
+
     const handleUpdateOrganizationEmployee = async (values: any) => {
         try {
           const updatedData = {
@@ -183,13 +227,12 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
               id: modalState?.employeeData?.id,
           };
           const resultAction = await dispatch(updateOrganizationsEmployees(updatedData));
-          console.log('resultAction', resultAction);
           
           if (updateOrganizationsEmployees.fulfilled.match(resultAction)) {
               toast.success('Сотрудник успешно обновлен');
               setTimeout(() => {
                   handleModal('chiefEdit', false);
-                  dispatch(retrieveOrganizationsEmployees(updatedData.id));
+                  dispatch(RetrieveOrganizationEmployees(updatedData.id));
                   window.location.reload(); 
               }, 1000); 
           } else {
@@ -217,6 +260,82 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
             toast.error('Ошибка при удалении сотрудника');
         }
     };
+    const handleCreateOrganizationProject = async(values: Project) => {
+        try {
+          const data = {...values, organizationId: id ?? '', documents: uploadedFileIds};
+          const resultAction = await dispatch(createOrganizationProject(data))
+          if(createOrganizationProject.fulfilled.match(resultAction)){
+            toast.success('Проект добавлен успешно')
+            setTimeout(() => {
+              handleModal('chiefAdd', false);
+              window.location.reload()
+            }, 1000)
+          } else {
+            toast.error("Ошибка при создании проекта")
+          }
+        } catch (err) {
+          toast.error((err as string) || 'Ошибка сервера')
+        }
+    }
+    const handleUpdateOrganizationProject = async (values: any) => {
+        try {
+          const updatedData = {
+              ...values,
+              id: modalState?.projectData?.id,
+          };
+          const resultAction = await dispatch(updateOrganizationsProject(updatedData));
+          
+          if (updateOrganizationsProject.fulfilled.match(resultAction)) {
+              toast.success('Проект успешно обновлен');
+              setTimeout(() => {
+                  handleModal('projectEdit', false);
+                  dispatch(retrieveOrganizationsProjects(updatedData.id));
+                  window.location.reload(); 
+              }, 1000); 
+          } else {
+              toast.error('Ошибка при обновлении проекта');
+          }
+        } catch (err) {
+            toast.error((err as string) || 'Ошибка сервера');
+        }
+      };
+    const handleDeleteOrganizationProject = async () => {
+        try {
+          const organizationProjectId = modalState.projectData?.id
+          const resultAction = await dispatch(deleteOrganizationProject(organizationProjectId));
+  
+          if (deleteOrganizationProject.fulfilled.match(resultAction)) {
+          toast.success('Проект успешно удален');
+          setTimeout(() => {
+              window.location.reload(); 
+          }, 1000);
+          } else {
+            toast.error('Ошибка при удалении проекта');
+          }
+      } catch (error) {
+          toast.error('Ошибка при удалении проекта');
+      }
+    };
+
+     const handleFileUpload = async (file: File, onSuccess: Function, onError: Function) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      try {
+          const response = await dispatch(CreateDocument(formData));
+          const fileId = response?.payload?.upload?.id;
+          console.log("fileId", fileId);
+          
+          if (fileId) {
+            setUploadedFileIds(prev => [...prev, fileId]); // сохраняем ID
+            onSuccess(); // уведомляем Upload об успешной загрузке
+          } else {
+            throw new Error('File ID not found in response');
+          }
+        } catch (error) {
+          console.error('Upload error:', error);
+          onError(error);
+        }
+    };
 
   return (
     <MainLayout>
@@ -240,7 +359,7 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
             </div>
             <ComponentTable<InternationalOrganizationChiefDataType> onRowClick={(record) => handleRowClick('chief', "Retrieve", record)} data={organizationEmployeeData} columns={InternationalOrganizationChiefColumns(t)} />
           </div>
-            {/* <div className="page-inner-table-container">
+            <div className="page-inner-table-container">
                 <div className="page-inner-table-container-heading">
                   <div className="heading-title">
                     <h3 className="title">
@@ -251,9 +370,9 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                         <Button className="outline" onClick={() => handleModal('addProject', true)}>{t('buttons.add')}  {t('crudNames.project')}<IoMdAdd/></Button>
                     </div>
                 </div>
-                <ComponentTable<InternationalNonGovernmentOrganizationProjectDataType> onRowClick={() => handleRowClick('project', "Retrieve")} columns={InternationalNonGovernmentOrganizationProjectColumns} data={InternationalNonGovernmentOrganizationProjectData}/>
+                <ComponentTable<InternationalOrganizationProjectDataType> onRowClick={(record) => handleRowClick('project', "Retrieve", record)} data={organizationProjectsData} columns={InternationalOrganizationProjectColumns(t)}/>
             </div>
-            <div className="page-inner-table-container">
+            {/* <div className="page-inner-table-container">
                 <div className="page-inner-table-container-heading">
                     <div className="heading-title">
                         <h3 className="title">
@@ -289,100 +408,114 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                         <Input  className="input" size='large' placeholder={t('tableTitles.comment')}/>
                     </Form.Item>
                   </div>
-                    {/* {files.map((item) => (
+                    {files.map((item) => (
                         <div className="form-inputs" key={item?.id}>
-                             <Form.Item className="input" name="addCVFile" >
-                                <Upload>
-                                    <Input className="input input-upload" size='large' placeholder={t('inputs.uploadCV')}/>
-                                </Upload>
-                            </Form.Item>
+                          <Form.Item className="input">
+                            <Upload
+                              customRequest={({ file, onSuccess, onError }) => 
+                                handleFileUpload(file as File, onSuccess!, onError!)
+                              }
+                            >
+                              <Input
+                                className="input input-upload"
+                                size='large'
+                                placeholder={t('inputs.uploadFile')}
+                              />
+                            </Upload>
+                          </Form.Item>
                         </div>
-                    ))}
-                    <div className="form-btn-new">
-                        <p className="form-btn-new-text" onClick={addFileField}>{t('buttons.addAnotherCV')}</p>
-                    </div> */}
+                      ))}
+  
+                      <div className="form-btn-new">
+                          <p className="form-btn-new-text" onClick={addFileField}>{t('buttons.addAnotherFile')}</p>
+                      </div>
                     <Button type='submit'>{t('buttons.create')}</Button>
                 </FormComponent>
             </ModalWindow>
-             {modalState.employeeData && (
+             {employeeById && selectedChiefId && (
               <ModalWindow openModal={modalState.chiefRetrieve} title={t('buttons.retrieve') + " " + t('crudNames.employee')} closeModal={() => handleModal('chiefRetrieve', false)} handleEdit={() => handleEditOpen('chief')}>
                 <FormComponent>
                     <div className="form-inputs">
-                      <Form.Item className="input" name="fullName">
-                          <Input disabled className="input" size='large' placeholder={modalState.employeeData.firstName + " " + modalState.employeeData.lastName} />
-                      </Form.Item>
-                      <Form.Item className="input" name="email">
-                          <Input disabled className="input" size='large' placeholder={modalState.employeeData.email} />
-                      </Form.Item>
+                      {employeeById?.firstName && employeeById?.lastName && (
+                        <Form.Item className="input" name="fullName">
+                            <Input disabled className="input" size='large' placeholder={employeeById.firstName + " " + employeeById.lastName} />
+                        </Form.Item>
+                      )}
+                      {employeeById?.email && (
+                        <Form.Item className="input" name="email">
+                            <Input disabled className="input" size='large' placeholder={employeeById.email} />
+                        </Form.Item>
+                      )}
                     </div>
                     <div className="form-inputs">
-                      <Form.Item className="input" name="phone" >
-                          <Input disabled className="input" size='large' placeholder={modalState.employeeData.phone}/>
-                      </Form.Item>
-                      <Form.Item className="input" name="position" >
-                          <Input disabled className="input" size='large' placeholder={modalState.employeeData.position}/>
-                      </Form.Item>
+                      {employeeById?.phone && (
+                        <Form.Item className="input" name="phone" >
+                            <Input disabled className="input" size='large' placeholder={employeeById.phone}/>
+                        </Form.Item>
+                      )}
+                      {employeeById?.position && (
+                        <Form.Item className="input" name="position" >
+                            <Input disabled className="input" size='large' placeholder={employeeById.position}/>
+                        </Form.Item>
+                      )}
                     </div>
-                    <div className="form-inputs">
-                      <Form.Item className="input" name="comment" >
-                          <Input disabled className="input" size='large' placeholder={modalState.employeeData.comment}/>
-                      </Form.Item>
-                    </div>
-                    {/* {files.map((item) => (
-                      <div className="form-inputs" key={item?.id}>
-                        <Form.Item className="input" name="addCVFile" >
-                            <Upload disabled>
-                                <Input disabled className="input input-upload" size='large' />
-                            </Upload>
+                    {employeeById?.comment && (
+                      <div className="form-inputs">
+                        <Form.Item className="input" name="comment" >
+                            <Input disabled className="input" size='large' placeholder={employeeById.comment}/>
                         </Form.Item>
                       </div>
-                    ))} */}
+                    )}
+                    {employeeById?.documents?.map((item: Document) => (
+                      <div className="form-inputs" key={item?.id}>
+                        <Form.Item className="input" name="document">
+                          <div className="input input-upload">
+                            <a
+                              href={normalizeUrl(item?.url)}
+                              download={item?.originalName}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              📄 {item?.originalName}
+                            </a>
+                          </div>
+                        </Form.Item>
+                      </div>
+                    ))}
                 </FormComponent>
               </ModalWindow>
             )}
-             {modalState.employeeData && (
-              <ModalWindow openModal={modalState.chiefEdit} title={t('buttons.edit') + " " + t('crudNames.employee')} closeModal={() => handleModal('chiefEdit', false)} handleDelete={() => handleDeleteOpen('chief')}>
-                <FormComponent formProps={editForm} onFinish={handleUpdateOrganizationEmployee} >
-                  <div className="form-inputs">
-                    <Form.Item className="input" name="firstName" initialValue={modalState.employeeData.firstName}>
-                        <Input  className="input" size='large' />
-                    </Form.Item>
-                    <Form.Item className="input" name="lastName" initialValue={modalState.employeeData.lastName}>
-                        <Input  className="input" size='large' />
-                    </Form.Item>
-                  </div>
-                  <div className="form-inputs">
-                    <Form.Item className="input" name="email" initialValue={modalState.employeeData.email}>
-                        <Input  className="input" size='large' />
-                    </Form.Item>
-                    <Form.Item className="input" name="phone" initialValue={modalState.employeeData.phone}>
-                        <Input  className="input" size='large'/>
-                    </Form.Item>
-                  </div>
-                  <div className="form-inputs">
-                    <Form.Item className="input" name="position" initialValue={modalState.employeeData.position}>
-                        <Input  className="input" size='large'/>
-                    </Form.Item>
-                    <Form.Item className="input" name="comment" initialValue={modalState.employeeData.comment}>
-                        <Input  className="input" size='large'/>
-                    </Form.Item>
-                  </div>
-                  {/* {files.map((item) => (
-                    <div className="form-inputs" key={item?.id}>
-                      <Form.Item className="input" name="addCVFile" >
-                        <Upload>
-                          <Input className="input input-upload" size='large' placeholder={t('inputs.uploadCV')}/>
-                        </Upload>
+              {modalState.employeeData && (
+                <ModalWindow openModal={modalState.chiefEdit} title={t('buttons.edit') + " " + t('crudNames.employee')} closeModal={() => handleModal('chiefEdit', false)} handleDelete={() => handleDeleteOpen('chief')}>
+                  <FormComponent  formProps={editForm} onFinish={handleUpdateOrganizationEmployee} >
+                    <div className="form-inputs">
+                      <Form.Item className="input" name="firstName">
+                        <Input className="input" size="large" />
+                      </Form.Item>
+                      <Form.Item className="input" name="lastName">
+                        <Input className="input" size="large" />
                       </Form.Item>
                     </div>
-                  ))}
-                  <div className="form-btn-new">
-                      <p className="form-btn-new-text" onClick={addFileField}>{t('buttons.addAnotherCV')}</p>
-                  </div> */}
-                  <Button type='submit'>{t('buttons.edit')}</Button>
-                </FormComponent>
-              </ModalWindow>
-            )}
+                    <div className="form-inputs">
+                      <Form.Item className="input" name="email" >
+                          <Input  className="input" size='large' />
+                      </Form.Item>
+                      <Form.Item className="input" name="phone" >
+                          <Input  className="input" size='large'/>
+                      </Form.Item>
+                    </div>
+                    <div className="form-inputs">
+                      <Form.Item className="input" name="position" >
+                          <Input  className="input" size='large'/>
+                      </Form.Item>
+                      <Form.Item className="input" name="comment" >
+                          <Input  className="input" size='large'/>
+                      </Form.Item>
+                    </div>
+                    <Button type='submit'>{t('buttons.edit')}</Button>
+                  </FormComponent>
+                </ModalWindow>
+              )}
             <ModalWindow openModal={modalState.chiefDelete} title={`${t('titles.areYouSure')} ${t('crudNames.employee')} ?`} className="modal-tight" closeModal={() => handleModal("chiefDelete", false)}>
                 <div className="modal-tight-container">
                     <Button onClick={() => handleModal("chiefDelete", false)} className="outline">{t('buttons.cancel')}</Button>
@@ -390,83 +523,90 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                 </div>
             </ModalWindow>
 
-            {/* <ModalWindow openModal={modalState.projectRetrieve} title={t('buttons.retrieve') + " " + t('crudNames.project')} closeModal={() => handleModal('projectRetrieve', false)} handleEdit={() => handleEditOpen('project')}>
-              <FormComponent>
-                      <div className="form-inputs">
-                      <Form.Item className="input" name="fullName" >
-                          <Input disabled className="input" size='large' />
-                      </Form.Item>
-                      <Form.Item className="input" name="additionalInfo" >
-                          <Input disabled className="input" size='large' />
-                      </Form.Item>
-                  </div>
-                  {referenceDocumentField.map((item) => (
-                        <div className="form-inputs" key={item?.id}>
-                            <Form.Item className="input" name="projectReferenceFile" >
-                            <Upload disabled>
-                                <Input disabled className="input input-upload" size='large'/>
-                            </Upload>
-                            </Form.Item>
-                        </div>
-                    ))}
-              </FormComponent>
-            </ModalWindow>
-            <ModalWindow openModal={modalState.projectEdit} title={t('buttons.edit') + " " + t('crudNames.project')} closeModal={() => handleModal('projectEdit', false)} handleDelete={() => handleDeleteOpen('project')}>
-              <FormComponent  onFinish={onFinish} >
-                  <div className="form-inputs" >
-                      <Form.Item className="input" name="fullName" >
-                          <Input className="input" size='large' placeholder={t('inputs.enterFullName')}/>
-                      </Form.Item>
-                      <Form.Item className="input" name="additionalInfo" >
-                          <Input className="input" size='large' placeholder={t('inputs.additionalInformation')}/>
-                      </Form.Item>
-                  </div>
-                    {referenceDocumentField.map((item) => (
-                        <div className="form-inputs" key={item?.id}>
-                            <Form.Item className="input" name="projectReferenceFile" >
-                            <Upload>
-                                <Input className="input input-upload" size='large' placeholder={t('inputs.uploadScannedDocument')}/>
-                            </Upload>
-                            </Form.Item>
-                        </div>
-                    ))}
-                    <div className="form-btn-new">
-                        <p className="form-btn-new-text" onClick={addReferenceDocumentField}>{t('buttons.addAnotherDocument')}</p>
-                    </div>
-                  <Button>{t('buttons.edit')}</Button>
-              </FormComponent>
-            </ModalWindow>
-            <ModalWindow title={t('buttons.add') + " " + t('crudNames.project')} openModal={modalState.addProject} closeModal={() => handleModal('addProject', false)}>
-                <FormComponent onFinish={onFinish}>
+            {projectById && modalState.projectRetrieve && (
+              <ModalWindow openModal={modalState.projectRetrieve} title={t('buttons.retrieve') + " " + t('crudNames.project')}  closeModal={() => handleModal('projectRetrieve', false)} handleEdit={() => handleEditOpen('project')}>
+                <FormComponent>
                         <div className="form-inputs">
-                            <Form.Item className="input" name="fullName" >
-                                <Input className="input" size='large' placeholder={t('inputs.enterFullName')}/>
-                            </Form.Item>
-                            <Form.Item className="input" name="additionalInfo" >
-                                <Input className="input" size='large' placeholder={t('inputs.additionalInformation')}/>
-                            </Form.Item>
-                        </div>
-                        {referenceDocumentField.map((item) => (
-                        <div className="form-inputs" key={item?.id}>
-                            <Form.Item className="input" name="projectReferenceFile" >
-                            <Upload>
-                                <Input className="input input-upload" size='large' placeholder={t('inputs.uploadScannedDocument')}/>
-                            </Upload>
-                            </Form.Item>
-                        </div>
+                        <Form.Item className="input" name="name" >
+                            <Input disabled className="input" size='large' placeholder={projectById.name}/>
+                        </Form.Item>
+                        <Form.Item className="input" name="comment" >
+                            <Input disabled className="input" size='large' placeholder={projectById.comment}/>
+                        </Form.Item>
+                    </div>
+                    {projectById?.documents?.map((item: Document) => (
+                      <div className="form-inputs" key={item?.id}>
+                        <Form.Item className="input" name="document">
+                          <div className="input input-upload">
+                            <a
+                              href={normalizeUrl(item?.url)}
+                              download={item?.originalName}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              📄 {item?.originalName}
+                            </a>
+                          </div>
+                        </Form.Item>
+                      </div>
+                    ))}
+                </FormComponent>
+              </ModalWindow>
+            )}
+           {modalState.projectData && (
+              <ModalWindow openModal={modalState.projectEdit} title={t('buttons.edit') + " " + t('crudNames.project')}  closeModal={() => handleModal('projectEdit', false)} handleDelete={() => handleDeleteOpen('project')}>
+                <FormComponent formProps={editForm}  onFinish={handleUpdateOrganizationProject} >
+                    <div className="form-inputs" >
+                        <Form.Item className="input" name="name">
+                            <Input className="input" size='large' />
+                        </Form.Item>
+                        <Form.Item className="input" name="comment" >
+                            <Input className="input" size='large' />
+                        </Form.Item>
+                    </div>
+                    <Button type='submit'>{t('buttons.edit')}</Button>
+                </FormComponent>
+              </ModalWindow>
+            )}
+            <ModalWindow title={t('buttons.add') + " " + t('crudNames.project')}  openModal={modalState.addProject} closeModal={() => handleModal('addProject', false)}>
+                <FormComponent onFinish={handleCreateOrganizationProject}>
+                    <div className="form-inputs">
+                        <Form.Item className="input" name="name" >
+                            <Input className="input" size='large' placeholder={t('inputs.title')}/>
+                        </Form.Item>
+                        <Form.Item className="input" name="comment" >
+                            <Input className="input" size='large' placeholder={t('inputs.additionalInformation')}/>
+                        </Form.Item>
+                    </div>
+                     {files.map((item) => (
+                      <div className="form-inputs" key={item?.id}>
+                        <Form.Item className="input">
+                          <Upload
+                            customRequest={({ file, onSuccess, onError }) => 
+                              handleFileUpload(file as File, onSuccess!, onError!)
+                            }
+                          >
+                            <Input
+                              className="input input-upload"
+                              size='large'
+                              placeholder={t('inputs.uploadFile')}
+                            />
+                          </Upload>
+                        </Form.Item>
+                      </div>
                     ))}
                     <div className="form-btn-new">
-                        <p className="form-btn-new-text" onClick={addReferenceDocumentField}>{t('buttons.addAnotherDocument')}</p>
+                      <p className="form-btn-new-text" onClick={addFileField}>{t('buttons.addAnotherFile')}</p>
                     </div>
-                    <Button>{t('buttons.create')}</Button>
+                    <Button type='submit'>{t('buttons.create')}</Button>
                 </FormComponent>
             </ModalWindow>
-            <ModalWindow openModal={modalState.projectDelete} title={`${t('titles.areYouSure')} ${t('crudNames.project')} ?`}className="modal-tight" closeModal={() => handleModal('projectDelete', false)}>
+            <ModalWindow openModal={modalState.projectDelete} title={`${t('titles.areYouSure')} ${t('crudNames.project')} ?`} className="modal-tight" closeModal={() => handleModal('projectDelete', false)}>
                 <div className="modal-tight-container">
                     <Button onClick={() => handleModal('projectDelete', false)} className="outline">{t('buttons.cancel')}</Button>
-                    <Button className="danger">{t('buttons.delete')}</Button>
+                    <Button onClick={() => handleDeleteOrganizationProject()} className="danger">{t('buttons.delete')}</Button>
                 </div>
-            </ModalWindow> */}
+            </ModalWindow>
         </div>
       </div>
     </MainLayout>

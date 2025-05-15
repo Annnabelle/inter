@@ -1,3 +1,4 @@
+import { HexString } from "../dtos/main.dto";
 import { UserResponseDto } from "../dtos/users";
 
 export type AuthTokens = {
@@ -5,7 +6,7 @@ export type AuthTokens = {
     refreshToken: string;
 };
 
-export type userLoginType = {
+export type UserLoginType = {
   email: string,
   password: string
 }
@@ -21,7 +22,7 @@ export type AuthState = {
 };
 
 export type User = {
-    id: string;
+    id: HexString;
     key?: string,
     firstName: string;
     lastName: string;
@@ -29,7 +30,7 @@ export type User = {
     phone: string;
     status: string;
     role: {
-      id?: string;
+      id?: HexString;
       name?: {
         ru?: string;
         uz?: string;

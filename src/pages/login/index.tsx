@@ -3,9 +3,10 @@ import { Form, Input } from 'antd';
 import { RootState, useAppDispatch } from '../../store';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { login, LoginForm } from '../../store/authSlice';
+import { Login } from '../../store/authSlice';
 import { toast } from 'react-toastify';
 import Button from '../../components/button';
+import { LoginForm } from '../../types/auth.types';
 import './styles.sass'
 
 const WaveBackground: React.FC = () => {
@@ -51,7 +52,7 @@ const LoginPage: React.FC = () => {
   const { isLoading, error } = useSelector((state: RootState) => state.auth);
   const onFinish = async (values: LoginForm) => {
     try {
-      const result = await dispatch(login(values)).unwrap();
+      const result = await dispatch(Login(values)).unwrap();
       toast.success('Успешный вход!');
       navigate('/main');
     } catch (err) {

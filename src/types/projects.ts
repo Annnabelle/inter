@@ -1,19 +1,31 @@
-export type projects = {
-    id: string,
+import { HexString } from "../dtos/main.dto";
+import { Document } from "./documents";
+// import { Document } from "./documents"
+
+export type Projects = {
+    id: HexString,
     name: string,
     organizationId: string,
     comment?: string,
     documents?: string[]
 }
 
-export type project = {
-    id: string, 
+export type ProjectWithDocs = {
+    id: HexString,
+    name: string,
+    organizationId: string,
+    comment?: string,
+    documents?: Document[]
+}
+
+export type Project = {
+    id: HexString, 
     name: string,
     organizationId: string,
     comment?: string,
 }
 
-export type projectUpdate = {
+export type ProjectUpdate = {
     name?: string;
     comment?: string;
     documents?: string[];

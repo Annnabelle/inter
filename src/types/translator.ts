@@ -1,8 +1,9 @@
+import { HexString } from "../dtos/main.dto";
 import { TranslatorLanguage } from "../utils/consts";
 
     
 export type Translator = {
-    id?: string,
+    id?: HexString,
     firstName: string,
     lastName: string,
     email?: string,

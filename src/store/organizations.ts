@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { BASE_URL } from "../utils/baseUrl";
 import { ErrorDto, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
-import { createOrganizationType, Organization } from "../types/organizations";
+import { CreateOrganization, Organization } from "../types/organizations";
 import { CreateOrganizationResponseDto, GetOrganizationsResponseDto, OrganizationResponseDto } from "../dtos/organizations";
 import { createOrganizationToCreateOrganizationDto, organizationResponseDtoToOrganization, paginatedOrganizationsDtoToPaginatedOrganizations, updateOrganizationsToUpdateOrganizationDto } from "../mappers/organizations.mapper";
 import axios from "axios";
@@ -106,7 +106,7 @@ export const updateOrganization = createAsyncThunk<Organization, Organization, {
 
 export const createOrganization = createAsyncThunk(
   'organizations/createOrganization',
-  async (data: createOrganizationType, {rejectWithValue}) => {
+  async (data: CreateOrganization, {rejectWithValue}) => {
     try {
       const dto = createOrganizationToCreateOrganizationDto(data);
       const response = await axios.post<CreateOrganizationResponseDto>(`${BASE_URL}/organizations`, dto);

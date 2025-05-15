@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { RootState, useAppDispatch, useAppSelector } from "../../store";
 import {  User } from "../../types/user";
 import { deleteUser, retrieveUsers, updateUser } from "../../store/usersSlice";
-import { registerUser } from "../../store/authSlice";
+import { RegisterUser } from "../../store/authSlice";
 import { toast } from "react-toastify";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
@@ -14,9 +14,9 @@ import Button from "../../components/button";
 import ModalWindow from "../../components/modalWindow";
 import FormComponent from "../../components/form";
 import ComponentTable from "../../components/table";
-import { RegisterFormTypes } from "../../types/auth.types";
 import { formatDateTime, FormatPhone } from "../../utils/consts";
 import { AdministrationDataType } from "../../types";
+import { RegisterForm } from "../../types/auth.types";
 
 
 const Administration: React.FC = () => {
@@ -113,12 +113,12 @@ const Administration: React.FC = () => {
             setModalState((prev) => ({ ...prev, [`delete${type}`]: true }));
         }, 10);
     };
-    const handleRegisterUser = async (values: RegisterFormTypes) => {
+    const handleRegisterUser = async (values: RegisterForm) => {
         try {
             const newFormData = {...values, language: "ru" }
-            const resultAction = await dispatch(registerUser(newFormData));
+            const resultAction = await dispatch(RegisterUser(newFormData));
           
-            if (registerUser.fulfilled.match(resultAction)) {
+            if (RegisterUser.fulfilled.match(resultAction)) {
                 toast.success('Юзер добавлен успешно');
                 setTimeout(() => {
                     handleModal('addAdministration', false);

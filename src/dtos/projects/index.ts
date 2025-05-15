@@ -1,3 +1,4 @@
+import { UploadResponseDto } from "../documents";
 import { ErrorDto, HexString, PaginatedResponseDto } from "../main.dto";
 
 export type CreateProjectDto = {
@@ -24,6 +25,17 @@ export type UpdateProjectDto = {
   documents?: HexString[];
 }
 
+
+export type PopulatedProjectResponseDto = ProjectResponseDto & {
+  documents: UploadResponseDto[],
+};
+
+export type GetProjectResponseDto = {
+  success: boolean,
+  project: PopulatedProjectResponseDto,
+} | ErrorDto;
+
+
 export type CreateProjectResponseDto = {
   success: boolean,
   project: ProjectResponseDto,
@@ -33,10 +45,6 @@ export type DeleteProjectResponseDto = {
   success: boolean,
 } | ErrorDto;
 
-export type GetProjectResponseDto = {
-  success: boolean,
-  project: ProjectResponseDto,
-} | ErrorDto;
 
 export type GetProjectsResponseDto = ({
   success: boolean,

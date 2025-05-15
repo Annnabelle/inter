@@ -2,9 +2,9 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { BASE_URL } from "../utils/baseUrl";
 import {  mapPaginatedTranslatorsDtoToPaginatedTranslators, mapTranslatorDtoToTranslator, mapTranslatorToTranslatorCreateDto, mapTranslatorToUpdateTranslatorDto } from "../mappers/transaltor.mapper";
 import { CreateTranslatorRequest, Translator } from "../types/translator";
-import axios from "axios";
 import { CreateTranslatorResponseDto, GetTranslatorResponseDto, GetTranslatorsResponseDto, TranslatorResponseDto } from "../dtos/translators";
 import { ErrorDto, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
+import axios from "axios";
 
 type TranslatorState = {
   translators: Translator[];

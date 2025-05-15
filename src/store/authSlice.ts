@@ -5,10 +5,10 @@ import { mapLoginFormToDto } from '../mappers/auth.mapper';
 import { LoginRequestDto, LoginResponseDto, UserRegisterRequestDto, UserResponseDto } from '../dtos/users';
 import { ErrorDto } from '../dtos/main.dto';
 import { mapUserRegisterToUserRegisterDto } from '../mappers/user.mapper';
-import { RegisterFormTypes } from '../types/auth.types';
 import axios from 'axios';
+import { RegisterForm } from '../types/auth.types';
 
-export const login = createAsyncThunk(
+export const Login = createAsyncThunk(
   'auth/login',
   async (data: LoginRequestDto, { rejectWithValue }) => {
     try {
@@ -32,9 +32,9 @@ export const login = createAsyncThunk(
 
 
 
-export const registerUser = createAsyncThunk(
+export const RegisterUser = createAsyncThunk(
   'auth/register',
-  async (data: RegisterFormTypes, {rejectWithValue}) => {
+  async (data: RegisterForm, {rejectWithValue}) => {
     try {
       const dto = mapUserRegisterToUserRegisterDto(data);
       const response = await axios.post<UserRegisterRequestDto>(`${BASE_URL}/users/register`, dto);
@@ -75,30 +75,30 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(login.pending, (state) => {
+      .addCase(Login.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(login.fulfilled, (state, action) => {
+      .addCase(Login.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload.user;
         state.accessToken = action.payload.tokens.accessToken;
         state.refreshToken = action.payload.tokens.refreshToken;
       })
-      .addCase(login.rejected, (state, action) => {
+      .addCase(Login.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })
-      .addCase(registerUser.pending, (state) => {
+      .addCase(RegisterUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(registerUser.fulfilled, (state) => {
+      .addCase(RegisterUser.fulfilled, (state) => {
         state.isLoading = false;
         state.status = "succeeded";
         state.success = true;
       })
-      .addCase(registerUser.rejected, (state, action) => {
+      .addCase(RegisterUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })
