@@ -118,15 +118,6 @@ export interface TranslatorsTableDataTypes {
     status?: string,
     email?: string
 }
-export interface InternationalTreatiesTableDataType{
-    key: string,
-    item: string,
-    nameOfTheContract: string,
-    date: string,
-    place: string,
-    files: string,
-    level: string
-}
 
 export interface CountriesTableDataType { 
     key: string,

@@ -181,13 +181,6 @@ const InternationalDocumentsPage: React.FC = () => {
             setModalState((prev) => ({ ...prev, [`delete${type}`]: true }));
         }, 10);
     };
-    const countryOptions = [
-        { value: "test1", label: "test1" },
-        { value: "test2", label: "test2" },
-        { value: "test3", label: "test3" },
-        { value: "test4", label: "test4" },
-        { value: "test5", label: "test5" },
-    ];
 
     const filterOptions = [
         {value: 'byName',label: t('buttons.sort.byName')},
@@ -195,6 +188,7 @@ const InternationalDocumentsPage: React.FC = () => {
         {value: 'byMeeting',label: t('buttons.sort.byMeeting')},
         {value: 'all', label: t('buttons.sort.all')}
     ]
+
     const handleCreateDocument = async(values: InternationalDocuments) => {
         try {
           const data = {...values, files: uploadedFileIds};
@@ -256,23 +250,23 @@ const InternationalDocumentsPage: React.FC = () => {
         }
     };
 
-     const handleDeleteInternationalDocument = async () => {
-            try {
-                const reportId = modalState.DocumentData?.id
-                const resultAction = await dispatch(DeleteInternationalDocument(reportId));
-        
-                if (DeleteInternationalDocument.fulfilled.match(resultAction)) {
-                toast.success('Документ успешно удален');
-                setTimeout(() => {
-                    window.location.reload(); 
-                }, 1000);
-                } else {
-                toast.error('Ошибка при удалении отчета');
-                }
-            } catch (error) {
-                toast.error('Ошибка при удалении отчета');
+    const handleDeleteInternationalDocument = async () => {
+        try {
+            const reportId = modalState.DocumentData?.id
+            const resultAction = await dispatch(DeleteInternationalDocument(reportId));
+    
+            if (DeleteInternationalDocument.fulfilled.match(resultAction)) {
+            toast.success('Документ успешно удален');
+            setTimeout(() => {
+                window.location.reload(); 
+            }, 1000);
+            } else {
+            toast.error('Ошибка при удалении отчета');
             }
-        };
+        } catch (error) {
+            toast.error('Ошибка при удалении отчета');
+        }
+    };
     return (
         <MainLayout>
             <MainHeading title={`${t('titles.internationalDocuments')}`} subtitle="Подзаголоок">

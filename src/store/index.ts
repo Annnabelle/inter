@@ -12,6 +12,7 @@ import uploadsReducer from './uploads'
 import reportsReducer from './reports'
 import countriesReducer from './countries'
 import internationalDocumentsReducer from './internationalDocuments'
+import agreementReducer from './agreements'
 
 export const store = configureStore({
   reducer: {
@@ -25,7 +26,8 @@ export const store = configureStore({
     uploads: uploadsReducer,
     reports: reportsReducer,
     countries: countriesReducer,
-    internationalDocuments: internationalDocumentsReducer
+    internationalDocuments: internationalDocumentsReducer,
+    agreement: agreementReducer
   },
 });
 

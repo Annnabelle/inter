@@ -16,7 +16,7 @@ type InternationalDocumentsState = {
   total: number,
   internationalDocumentById: InternationalDocumentsWithDocs | null
   internationalDocumentUpdate: InternationalDocument | null,
-  internationalDocumentDelete: InternationalDocuments[] | null
+  internationalDocumentDelete: InternationalDocument[] | null
 };
 
 const initialState: InternationalDocumentsState = {
@@ -219,18 +219,18 @@ const expertsSlice = createSlice({
         state.loading = false;
         state.error = action.payload || "An error occurred";
       })
-      // .addCase(DeleteExpert.pending, state => {
-      //   state.loading = true;
-      //   state.error = null;
-      // })
-      // .addCase(DeleteExpert.fulfilled, (state, action) => {
-      //   state.loading = false;
-      //   state.expertDelete = state.experts.filter(expert => expert.id !== String(action.meta.arg));
-      // })
-      // .addCase(DeleteExpert.rejected, (state, action) => {
-      //   state.loading = false;
-      //   state.error = action.payload as string;
-      // });
+      .addCase(DeleteInternationalDocument.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(DeleteInternationalDocument.fulfilled, (state, action) => {
+        state.loading = false;
+        state.internationalDocumentDelete = state.internationalDocuments.filter(document => document.id !== String(action.meta.arg));
+      })
+      .addCase(DeleteInternationalDocument.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 
