@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
-import { theme, Form, Input, Upload, DatePicker, Select } from "antd";
-import { InternationalDocumentsTableDataType } from "../../types";
-import { FileItem } from "../../types/countries";
-import { InternationalDocumentsTableColumn, InternationalDocumentsTableData } from "../../tableData/internationalDocuments";
+import { theme, Form, Input, Upload, DatePicker, Select, SelectProps } from "antd";
+import { Country, FileItem } from "../../types/countries";
+import { InternationalDocumentsTableColumn } from "../../tableData/internationalDocuments";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
 import Button from "../../components/button";
@@ -11,32 +10,138 @@ import ComponentTable from "../../components/table";
 import ModalWindow from "../../components/modalWindow";
 import FormComponent from "../../components/form";
 import { useTranslation } from "react-i18next";
+import { RootState, useAppDispatch, useAppSelector } from "../../store";
+import { CreateInternationalDocument, DeleteInternationalDocument, RetrieveInternationalDocumentById, RetrieveInternationalDocuments, UpdateInternationalDocumentRequest } from "../../store/internationalDocuments";
+import { InternationalDocument, InternationalDocuments, InternationalDocumentsTableDataType } from "../../types/internationalDocuments";
+import dayjs from "dayjs";
+import { toast } from "react-toastify";
+import { Document } from "../../types/uploads";
+import { normalizeUrl } from "../../utils/baseUrl";
+import { fetchCountries } from "../../store/countries";
+import { fetchOrganizationSearch } from "../../store/organizations";
+import { CreateDocument } from "../../store/uploads";
 
 
-const InternationalDocuments: React.FC = () => {
-    const { t } = useTranslation();
+const InternationalDocumentsPage: React.FC = () => {
+    const { t, i18n } = useTranslation();
+    const language = i18n.resolvedLanguage || 'ru';
     const {
         token: { colorBgContainer },
     } = theme.useToken();
-    // const [form] = Form.useForm();
-        const [files, setFiles] = useState<FileItem[]>([{ id: 1, name: "", file: null }]);
-    // const [openSortDropdown, setOpenSortDropdown] = useState<boolean>(false);
-    const [modalState, setModalState] = useState({
+    const dispatch  =  useAppDispatch();
+    const internationalDocuments = useAppSelector((state: RootState) => state.internationalDocuments.internationalDocuments)
+    const page = useAppSelector((state) => state.internationalDocuments.page)
+    const total = useAppSelector((state) => state.internationalDocuments.total)
+    const limit = useAppSelector((state) => state.internationalDocuments.limit)
+    const [currentPage, setCurrentPage] = useState(page);
+    const [files, setFiles] = useState([{ id: Date.now() }]);
+    const documentById = useAppSelector((state) => state.internationalDocuments.internationalDocumentById)
+    const [editForm] = Form.useForm();
+    const [uploadedFileIds, setUploadedFileIds] = useState<string[]>([]);
+    const [modalState, setModalState] = useState<{
+        addDocument: boolean,
+        editDocument: boolean,
+        retrieveDocument: boolean,
+        deleteDocument: boolean,
+        DocumentData: InternationalDocument | null,
+    }>({
         addDocument: false,
         editDocument: false,
         retrieveDocument: false,
-        deleteDocument: false
+        deleteDocument: false,
+        DocumentData: null
     });
-    const [isAnotherCountry, setIsAnotherCountry] = useState<boolean>(false)
-    const [isAnotherGovernment, setIsAnotherGovernment] = useState<boolean>(false)
+    const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null);
+    const countriesSearch = useAppSelector((state) => state.countries.countriesSearch);
+    const organizationSearch = useAppSelector((state) => state.organizations.organizationSearch)
+    const [searchType, setSearchType] = useState<'country' | 'organization'>('country');
+    const [options, setOptions] = useState<{ label: string; value: string }[]>([]);
+    const supportedLangs = ['ru', 'en', 'uz'] as const;
+    const fallbackLang: (typeof supportedLangs)[number] = 'ru';
+    const currentLang = supportedLangs.includes(i18n.resolvedLanguage as any)
+    ? (i18n.resolvedLanguage as typeof fallbackLang)
+    : fallbackLang;
 
-    const addFileField = () => {
-        setFiles([...files, { id: files.length + 1, name: "", file: null }]);
+    const handleTypeChange = (value: 'country' | 'organization') => {
+        setSearchType(value);
+        setOptions([]);
     };
 
-    // const handleSortDropdown = () => {
-    //     setOpenSortDropdown((prev) => (!prev))
-    // }
+    useEffect(() => {
+        dispatch(RetrieveInternationalDocuments({ limit: 10, page: currentPage }));
+    }, [dispatch, internationalDocuments.length, currentPage, limit])
+    
+    const addFileField = () => {
+        setFiles([...files, { id: files.length + 1}]);
+    };
+
+    const handleSearch = (value: string) => {
+        if (!value.trim()) return;
+
+        if (searchType === 'country') {
+            dispatch(fetchCountries({ query: value }));
+        } else if (searchType === 'organization') {
+            dispatch(fetchOrganizationSearch({ query: value }));
+        }
+    };
+
+    useEffect(() => {
+        const language = (i18n.resolvedLanguage || 'ru') as 'ru' | 'uz' | 'en';
+
+        if (searchType === 'country') {
+            setOptions(
+            countriesSearch.map((c) => ({
+                label: c.name?.[language] || c.name.ru,
+                value: c.id,
+            }))
+            );
+        } else {
+            setOptions(
+                organizationSearch.map((o) => ({
+                    label: o.name?.[language] || o.name.ru,
+                    value: o.id,
+                }))
+            );
+        }
+    }, [countriesSearch, searchType, organizationSearch,  i18n.resolvedLanguage]);
+
+
+    const internationalDocumentData = useMemo(() => {
+        return internationalDocuments.map((document, index) => ({
+            key: document.id,
+            itemNumber: index + 1,
+            name: document.name,
+            place: document.place,
+            approval: document.approval,
+            comment: document.comment,
+            countryId: document.countryId,
+            date: dayjs(document.date).format('YYYY-MM-DD'),
+            organizationId: document.name,
+            signLevel: document.signLevel
+        }))
+    }, [internationalDocuments, t])
+    
+    useEffect(() => {
+        if (selectedDocumentId) {
+            dispatch(RetrieveInternationalDocumentById({id: selectedDocumentId}))
+        }
+    }, [dispatch, selectedDocumentId])
+
+    useEffect(() => {
+        if (documentById) {
+            editForm.resetFields(); 
+            editForm.setFieldsValue({
+                name: documentById.name,
+                place: documentById.place,
+                approval: documentById.approval,
+                comment: documentById.comment,
+                date: dayjs(documentById.date),
+                signLevel: documentById.signLevel,
+                countryId: documentById.country?.name.ru,
+                organization: documentById.organizationId
+            });
+        }
+    }, [documentById, editForm]);
 
     const handleModal = (modalName: string, value: boolean) => {
         setModalState((prev) => ({...prev, [modalName] : value}));
@@ -44,11 +149,18 @@ const InternationalDocuments: React.FC = () => {
 
     const handleRowClick = (type: 'Document', action: 'retrieve' | 'edit' | 'delete', record: InternationalDocumentsTableDataType) => {
         console.log(`Clicked on ${type}, action: ${action}, record:`, record);
-        setModalState((prev) => ({
-            ...prev,
-            [`${action}${type}`]: true,
-        }));
+        if (type === 'Document'){
+            const documentData = internationalDocuments.find((document) => document.id === record.key) ?? null
+            setSelectedDocumentId(record.key)
+            setModalState((prev) => ({
+                ...prev,
+                [`${action}${type}`]: true,
+                DocumentData: documentData
+            }))
+        }
     };
+    
+
 
     const handleEditOpen = (type: 'Document') => {
         setModalState((prev) => ({
@@ -75,19 +187,7 @@ const InternationalDocuments: React.FC = () => {
         { value: "test3", label: "test3" },
         { value: "test4", label: "test4" },
         { value: "test5", label: "test5" },
-      ];
-
-    const onFinish = () => {
-        console.log('hello finish');
-    }
-
-    const handleAnotherCountry = () => {
-        setIsAnotherCountry((prev) => !prev)
-    }
-
-    const handleAnotherGovernment = () => {
-        setIsAnotherGovernment((prev) => !prev)
-    }
+    ];
 
     const filterOptions = [
         {value: 'byName',label: t('buttons.sort.byName')},
@@ -95,7 +195,84 @@ const InternationalDocuments: React.FC = () => {
         {value: 'byMeeting',label: t('buttons.sort.byMeeting')},
         {value: 'all', label: t('buttons.sort.all')}
     ]
+    const handleCreateDocument = async(values: InternationalDocuments) => {
+        try {
+          const data = {...values, files: uploadedFileIds};
+          const resultAction = await dispatch(CreateInternationalDocument(data))
+          if(CreateInternationalDocument.fulfilled.match(resultAction)){
+            toast.success('Документ добавлен успешно')
+            setTimeout(() => {
+              handleModal('addDocument', false);
+              window.location.reload()
+            }, 1000)
+          } else {
+            toast.error("Ошибка при создании документа")
+          }
+        } catch (err) {
+          toast.error((err as string) || 'Ошибка сервера')
+        }
+    }
+    
+    const handleUpdateDocument = async (values: any) => {
+        try {
+          const updatedData = {...values, id: selectedDocumentId,     
+            countryId: values.countryId?.value || documentById?.countryId,
+            organizationId: values.organizationId?.value || documentById?.organizationId,};
+          const resultAction = await dispatch(UpdateInternationalDocumentRequest(updatedData));
+          console.log('resultAction', resultAction);
+          
+          if (UpdateInternationalDocumentRequest.fulfilled.match(resultAction)) {
+              toast.success('Документ успешно обновлен');
+              setTimeout(() => {
+                  handleModal('editDocument', false);
+                  dispatch(RetrieveInternationalDocuments(updatedData.id));
+                  window.location.reload(); 
+              }, 1000); 
+          } else {
+              toast.error('Ошибка при обновлении документа');
+          }
+        } catch (err) {
+            toast.error((err as string) || 'Ошибка сервера');
+        }
+    };
+    const handleFileUpload = async (file: File, onSuccess: Function, onError: Function) => {
+        const formData = new FormData();
+        formData.append('file', file);
+    
+        try {
+            const response = await dispatch(CreateDocument(formData));
+            const fileId = response?.payload?.upload?.id;
+            console.log("fileId", fileId);
+            
+            if (fileId) {
+                setUploadedFileIds(prev => [...prev, fileId]); 
+                onSuccess(); 
+            } else {
+                throw new Error('File ID not found in response');
+            }
+            } catch (error) {
+            console.error('Upload error:', error);
+            onError(error);
+        }
+    };
 
+     const handleDeleteInternationalDocument = async () => {
+            try {
+                const reportId = modalState.DocumentData?.id
+                const resultAction = await dispatch(DeleteInternationalDocument(reportId));
+        
+                if (DeleteInternationalDocument.fulfilled.match(resultAction)) {
+                toast.success('Документ успешно удален');
+                setTimeout(() => {
+                    window.location.reload(); 
+                }, 1000);
+                } else {
+                toast.error('Ошибка при удалении отчета');
+                }
+            } catch (error) {
+                toast.error('Ошибка при удалении отчета');
+            }
+        };
     return (
         <MainLayout>
             <MainHeading title={`${t('titles.internationalDocuments')}`} subtitle="Подзаголоок">
@@ -110,12 +287,12 @@ const InternationalDocuments: React.FC = () => {
                 }}
                 className="layout-content-container"
             >
-               <ComponentTable<InternationalDocumentsTableDataType> onRowClick={(record) => handleRowClick('Document', 'retrieve', record)} columns={InternationalDocumentsTableColumn(t)} data={InternationalDocumentsTableData}/>
+               <ComponentTable<InternationalDocumentsTableDataType> onRowClick={(record) => handleRowClick('Document', 'retrieve', record)} columns={InternationalDocumentsTableColumn(t)} data={internationalDocumentData}/>
             </div>
             <ModalWindow title={t('buttons.add') + " " + t('crudNames.document')} openModal={modalState.addDocument} closeModal={() => handleModal('addDocument', false)}>
-                <FormComponent  onFinish={onFinish}>
+                <FormComponent  onFinish={handleCreateDocument}>
                     <div className="form-inputs">
-                        <Form.Item className="input" name="nameOfDocument" >
+                        <Form.Item className="input" name="name" >
                             <Input className="input" size='large' placeholder={t('tableTitles.nameOfDocument')}/>
                         </Form.Item>
                         <Form.Item className="input" name="date" >
@@ -123,46 +300,49 @@ const InternationalDocuments: React.FC = () => {
                         </Form.Item>
                     </div>
                     <div className="form-inputs">
-                        <Form.Item className="input" name="country" >
-                            <Select className="input" size="large" options={countryOptions} placeholder={t('tableTitles.countries')} />
+                        <Select
+                            value={searchType}
+                            onChange={handleTypeChange}
+                            size="large"
+                            options={[
+                            { label: t('tableTitles.countries'), value: 'country' },
+                            { label: t('titles.organizations'), value: 'organization' },
+                            ]}
+                            style={{ width: 200 }}
+                        />
+                        <Form.Item name={searchType === 'country' ? 'countryId' : 'organizationId'} className="input">
+                            <Select
+                                showSearch
+                                placeholder={t('inputs.search')}
+                                size="large"
+                                className="input"
+                                onSearch={handleSearch}
+                                filterOption={false}
+                                options={options}
+                            />
                         </Form.Item>
-                    </div>  
-                    {isAnotherCountry && (
-                        <div className="form-inputs">
-                                <Form.Item className="input" name="anotherCountry" >
-                                    <Input className="input" size='large' placeholder={t('tableTitles.countries')}/>
-                                </Form.Item>
-                        </div>
-                    )}
-                    <div className="form-btn-new form-btn-another-input">
-                        <p className="form-btn-new-text" onClick={handleAnotherCountry}>{t('buttons.otherCountry')}</p>
-                    </div>
-
-                    <div className="form-inputs">
-                        <Form.Item className="input" name="government" >
-                            <Select className="input" size="large" options={countryOptions} placeholder={t('inputs.governmentBody')} />
-                        </Form.Item>
-                    </div>  
-                    {isAnotherGovernment && (
-                        <div className="form-inputs">
-                                <Form.Item className="input" name="anotherGovernment" >
-                                    <Input className="input" size='large' placeholder={t('inputs.nameOfGovernmentBody')}/>
-                                </Form.Item>
-                        </div>
-                    )}
-                    <div className="form-btn-new form-btn-another-input">
-                        <p className="form-btn-new-text" onClick={handleAnotherGovernment}>{t('buttons.otherGovernmentBody')}</p>
                     </div>
                     <div className="form-inputs">
-                        <Form.Item className="input" name="administrationPermission" >
-                            <Input className="input" size='large' placeholder={t('inputs.administrationsPermission')}/>
+                        <Form.Item className="input" name="approval" >
+                            <Input className="input" size='large' placeholder={t('inputs.levelOfSigning')}/>
+                        </Form.Item>
+                        <Form.Item className="input" name="place" >
+                            <Input className="input" size='large' placeholder={t('tableTitles.placeOfSigning')}/>
                         </Form.Item>
                     </div>  
                     {files.map((item) => (
                         <div className="form-inputs" key={item?.id}>
-                            <Form.Item className="input" name="file" >
-                                <Upload>
-                                    <Input className="input input-upload" size='large' placeholder={t('inputs.uploadFile')}/>
+                            <Form.Item className="input">
+                                <Upload
+                                customRequest={({ file, onSuccess, onError }) => 
+                                    handleFileUpload(file as File, onSuccess!, onError!)
+                                }
+                                >
+                                <Input
+                                    className="input input-upload"
+                                    size='large'
+                                    placeholder={t('inputs.uploadFile')}
+                                />
                                 </Upload>
                             </Form.Item>
                         </div>
@@ -170,127 +350,144 @@ const InternationalDocuments: React.FC = () => {
                     <div className="form-btn-new">
                         <p className="form-btn-new-text" onClick={addFileField}>{t('buttons.addAnotherFile')}</p>
                     </div>
-                    <Button>{t('buttons.create')}</Button>
+                    <Button type="submit">{t('buttons.create')}</Button>
                 </FormComponent>
             </ModalWindow>
-            <ModalWindow title={t('buttons.retrieve') + " " + t('crudNames.document')} openModal={modalState.retrieveDocument} closeModal={() => handleModal('retrieveDocument', false)} handleEdit={() => handleEditOpen('Document')}>
-                <FormComponent>
-                    <div className="form-inputs">
-                        <Form.Item className="input" name="nameOfDocument" >
-                            <Input disabled className="input" size='large' />
-                        </Form.Item>
-                        <Form.Item className="input" name="date" >
-                            <DatePicker disabled size="large" className="input" placeholder=" "/>
-                        </Form.Item>
-                    </div>
-                    <div className="form-inputs">
-                        <Form.Item className="input" name="country">
-                            <Select disabled className="input" size="large" options={countryOptions}  />
-                        </Form.Item>
-                    </div>  
-                    {isAnotherCountry && (
+            {documentById && selectedDocumentId && (
+                <ModalWindow title={t('buttons.retrieve') + " " + t('crudNames.document')} openModal={modalState.retrieveDocument} closeModal={() => handleModal('retrieveDocument', false)} handleEdit={() => handleEditOpen('Document')}>
+                    <FormComponent>
                         <div className="form-inputs">
-                            <Form.Item className="input" name="anotherCountry" >
-                                <Input disabled className="input" size='large' />
-                            </Form.Item>
-                        </div>
-                    )}
-                    <div className="form-inputs">
-                        <Form.Item className="input" name="government" >
-                            <Select disabled className="input" size="large" options={countryOptions}  />
-                        </Form.Item>
-                    </div>  
-                    {isAnotherGovernment && (
-                        <div className="form-inputs">
-                            <Form.Item className="input" name="anotherGovernment" >
-                                <Input disabled className="input" size='large'/>
-                            </Form.Item>
-                        </div>
-                    )}
-                    <div className="form-inputs">
-                        <Form.Item className="input" name="administrationPermission" >
-                            <Input disabled className="input" size='large' />
-                        </Form.Item>
-                    </div>  
-                    {files.map((item) => (
-                        <div className="form-inputs" key={item?.id}>
-                            <Form.Item className="input" name="file" >
-                                <Upload>
-                                    <Input disabled className="input input-upload" size='large'/>
-                                </Upload>
-                            </Form.Item>
-                        </div>
-                    ))}
-                </FormComponent>
-            </ModalWindow>
-            <ModalWindow title={t('buttons.edit') + " " + t('crudNames.document')} openModal={modalState.editDocument} closeModal={() => handleModal('editDocument', false)} handleDelete={() => handleDeleteOpen('Document')}>
-                <FormComponent>
-                    <div className="form-inputs">
-                        <Form.Item className="input" name="nameOfDocument" >
-                            <Input className="input" size='large' placeholder={t('tableTitles.nameOfDocument')}/>
-                        </Form.Item>
-                        <Form.Item className="input" name="date" >
-                            <DatePicker size="large" className="input" placeholder={t('inputs.selectDate')} />
-                        </Form.Item>
-                    </div>
-                    <div className="form-inputs">
-                        <Form.Item className="input" name="country" >
-                            <Select className="input" size="large" options={countryOptions} placeholder={t('tableTitles.countries')} />
-                        </Form.Item>
-                    </div>  
-                    {isAnotherCountry && (
-                        <div className="form-inputs">
-                                <Form.Item className="input" name="anotherCountry" >
-                                    <Input className="input" size='large' placeholder={t('tableTitles.countries')}/>
+                            {documentById.name && (
+                                <Form.Item className="input" name="name" >
+                                    <Input disabled className="input" size='large' placeholder={documentById.name}/>
                                 </Form.Item>
-                        </div>
-                    )}
-                    <div className="form-btn-new form-btn-another-input">
-                        <p className="form-btn-new-text" onClick={handleAnotherCountry}>{t('buttons.otherCountry')}</p>
-                    </div>
-                    <div className="form-inputs">
-                        <Form.Item className="input" name="government" >
-                            <Select className="input" size="large" options={countryOptions} placeholder={t('inputs.governmentBody')}  />
-                        </Form.Item>
-                    </div>  
-                    {isAnotherGovernment && (
-                        <div className="form-inputs">
-                                <Form.Item className="input" name="anotherGovernment" >
-                                    <Input className="input" size='large' placeholder={t('inputs.nameOfGovernmentBody')}/>
+                            )}
+                            {documentById.date && (
+                                <Form.Item className="input" name="date" >
+                                    <DatePicker disabled size="large" className="input" placeholder={dayjs(documentById.date).format('DD/MM/YYYY')} />
                                 </Form.Item>
+                            )}
                         </div>
-                    )}
-                    <div className="form-btn-new form-btn-another-input">
-                        <p className="form-btn-new-text" onClick={handleAnotherGovernment}>{t('buttons.otherGovernmentBody')}</p>
-                    </div>
-                    <div className="form-inputs">
-                        <Form.Item className="input" name="administrationPermission" >
-                            <Input className="input" size='large' placeholder={t('inputs.administrationsPermission')}/>
-                        </Form.Item>
-                    </div>  
-                    {files.map((item) => (
-                        <div className="form-inputs" key={item?.id}>
-                            <Form.Item className="input" name="file" >
-                                <Upload>
-                                    <Input className="input input-upload" size='large' placeholder={t('inputs.uploadFile')}/>
-                                </Upload>
+                        {documentById.country && (
+                            <div className="form-inputs">
+                                <Form.Item className="input" name="country">
+                                    <Input disabled className="input" size='large'  placeholder={documentById.country.name?.[currentLang] || ""}/>
+                                </Form.Item>
+                            </div>  
+                        )}
+                        {documentById.organization?.name && (
+                            <div className="form-inputs">
+                                <Form.Item className="input" name="organization" >
+                                    <Input disabled className="input" size='large'  placeholder={documentById.organization?.name?.[currentLang] || ""}/>
+                                    {/* <Select disabled className="input" size="large" options={countryOptions}  /> */}
+                                </Form.Item>
+                            </div>  
+                        )}
+                        {documentById.approval && (
+                            <div className="form-inputs">
+                                <Form.Item className="input" name="approval" >
+                                    <Input disabled className="input" size='large' placeholder={documentById.approval} />
+                                </Form.Item>
+                            </div>  
+                        )}
+                        {documentById?.files?.map((item: Document) => (
+                            <div className="form-inputs" key={item?.id}>
+                                <Form.Item className="input" name="document">
+                                    <div className="input input-upload">
+                                    <a
+                                        href={normalizeUrl(item?.url)}
+                                        download={item?.originalName}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        📄 {item?.originalName}
+                                    </a>
+                                    </div>
+                                </Form.Item>
+                            </div>
+                        ))}
+                    </FormComponent>
+                </ModalWindow>
+            )}
+            {modalState.DocumentData && (
+                <ModalWindow title={t('buttons.edit') + " " + t('crudNames.document')} openModal={modalState.editDocument} closeModal={() => handleModal('editDocument', false)} handleDelete={() => handleDeleteOpen('Document')}>
+                    <FormComponent formProps={editForm} onFinish={handleUpdateDocument}>
+                        <div className="form-inputs">
+                            {modalState.DocumentData.name && (
+                                <Form.Item className="input" name="name" >
+                                    <Input className="input" size='large' />
+                                </Form.Item>
+                            )}
+                            {modalState.DocumentData.date && (
+                                <Form.Item className="input" name="date" >
+                                    <DatePicker size="large" className="input" />
+                                </Form.Item>
+                            )}
+                        </div>
+                        <div className="form-inputs">
+                            <Select
+                                value={searchType}
+                                onChange={handleTypeChange}
+                                size="large"
+                                options={[
+                                { label: t('tableTitles.countries'), value: 'country' },
+                                { label: t('titles.organizations'), value: 'organization' },
+                                ]}
+                                style={{ width: 200 }}
+                            />
+                            <Form.Item name={searchType === 'country' ? 'countryId' : 'organizationId'} className="input">
+                                <Select
+                                    labelInValue
+                                    showSearch
+                                    placeholder={t('inputs.search')}
+                                    size="large"
+                                    className="input"
+                                    onSearch={handleSearch}
+                                    filterOption={false}
+                                    options={options}
+                                />
                             </Form.Item>
                         </div>
-                    ))}
-                    <div className="form-btn-new">
-                        <p className="form-btn-new-text" onClick={addFileField}>{t('buttons.addAnotherFile')}</p>
-                    </div>
-                    <Button>{t('buttons.edit')}</Button>
-                </FormComponent>
-            </ModalWindow>
+                        <div className="form-inputs">
+                            {modalState.DocumentData.place && (
+                                <Form.Item className="input" name="place" >
+                                    <Input className="input" size='large'/>
+                                </Form.Item>
+                            )}
+                            {modalState.DocumentData.approval && (
+                                <Form.Item className="input" name="approval" >
+                                    <Input className="input" size='large'/>
+                                </Form.Item>
+                            )}
+                        </div>
+                         {documentById?.files?.map((item: Document) => (
+                            <div className="form-inputs" key={item?.id}>
+                                <Form.Item className="input" name="document">
+                                    <div className="input input-upload">
+                                    <a
+                                        href={normalizeUrl(item?.url)}
+                                        download={item?.originalName}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        📄 {item?.originalName}
+                                    </a>
+                                    </div>
+                                </Form.Item>
+                            </div>
+                        ))}
+                        <Button type="submit">{t('buttons.edit')}</Button>
+                    </FormComponent>
+                </ModalWindow>
+            )}
             <ModalWindow openModal={modalState.deleteDocument} title={`${t('titles.areYouSure')} ${t('crudNames.document')}?`} className="modal-tight" closeModal={() => handleModal('deleteDocument', false)}>
                 <div className="modal-tight-container">
                     <Button onClick={() => handleModal('deleteDocument', false)} className="outline">{t('buttons.cancel')}</Button>
-                    <Button className="danger">{t('buttons.delete')}</Button>
+                    <Button onClick={() => handleDeleteInternationalDocument()} className="danger">{t('buttons.delete')}</Button>
                 </div>
             </ModalWindow>
         </MainLayout>
     );
 };
 
-export default InternationalDocuments;
+export default InternationalDocumentsPage;

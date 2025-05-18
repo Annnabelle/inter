@@ -22,4 +22,14 @@ export interface DateItem {
     id: number;
     place: string;
     date: Dayjs | null;
-  }
+}
+
+export type SearchCountry = {
+  id: HexString,
+  name: {
+        ru: string;
+        uz: string;
+        en: string;
+  };
+  comment?: string,
+}

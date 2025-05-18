@@ -1,6 +1,6 @@
 import { HexString } from "../dtos/main.dto"
 import { ReportType } from "../dtos/reports"
-import { Document } from "./documents"
+import { Document } from "./uploads"
 
 export type Report = {
     id: HexString,

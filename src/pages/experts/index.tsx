@@ -14,7 +14,7 @@ import FormComponent from "../../components/form";
 import ComponentTable from "../../components/table";
 import { Expert, ExpertsType } from "../../types/experts.type";
 import { toast } from "react-toastify";
-import { CreateDocument } from "../../store/documents";
+import { CreateDocument } from "../../store/uploads";
 
 
 const Experts: React.FC = () => {

@@ -8,9 +8,10 @@ import organizationsReducer from './organizations'
 import OrganizationEmployeeReducer from './organizationEmployeeSlice'
 import organizationProjectsReducer from './projects'
 import expertsReducer from './expertsSlice'
-import documentsReducer from './documents'
+import uploadsReducer from './uploads'
 import reportsReducer from './reports'
 import countriesReducer from './countries'
+import internationalDocumentsReducer from './internationalDocuments'
 
 export const store = configureStore({
   reducer: {
@@ -21,9 +22,10 @@ export const store = configureStore({
     organizationEmployee: OrganizationEmployeeReducer,
     organizationProjects: organizationProjectsReducer,
     experts: expertsReducer,
-    documents: documentsReducer,
+    uploads: uploadsReducer,
     reports: reportsReducer,
     countries: countriesReducer,
+    internationalDocuments: internationalDocumentsReducer
   },
 });
 

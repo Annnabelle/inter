@@ -6,7 +6,7 @@ import { CreateExpertResponseDto, DeleteExpertDto, ExpertResponseDto, GetExperts
 import { CreateExpertToCreateExpertDto, ExpertsResponseDtoToExperts, PaginatedExpertsDtoToPaginatedExperts, UpdateExpertToUpdateExpertDto } from "../mappers/experts.mapper";
 import axios from "axios";
 
-type OrganizationsEmployeesState = {
+type ExpertsState = {
   experts: Expert[]
   loading: boolean;
   error: string | null;
@@ -18,7 +18,7 @@ type OrganizationsEmployeesState = {
   expertDelete: ExpertsType[] | null
 };
 
-const initialState: OrganizationsEmployeesState = {
+const initialState: ExpertsState = {
   experts: [],
   loading: false,
   error: null,

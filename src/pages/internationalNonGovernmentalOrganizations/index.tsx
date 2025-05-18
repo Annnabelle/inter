@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import { InternationalOrganizationChiefColumns } from '../../tableData/internationalOrganizationChiefTable';
 import { createOrganizationProject, deleteOrganizationProject, retrieveOrganizationProjectById, retrieveOrganizationsProjects, updateOrganizationsProject } from '../../store/projects';
 import { Project } from '../../types/projects';
-import { CreateDocument } from '../../store/documents';
+import { CreateDocument } from '../../store/uploads';
 import { InternationalOrganizationProjectColumns } from '../../tableData/internationalOrganizationProject';
 import MainLayout from '../../components/layout'
 import MainHeading from '../../components/mainHeading'
@@ -19,7 +19,7 @@ import ModalWindow from '../../components/modalWindow';
 import Button from '../../components/button';
 import FormComponent from '../../components/form';
 import ComponentTable from '../../components/table';
-import { Document } from '../../types/documents';
+import { Document } from '../../types/uploads';
 import { normalizeUrl } from '../../utils/baseUrl';
 
 const InternationalNonGovernmentalOrganizations: React.FC = () => {

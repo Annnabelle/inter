@@ -6,7 +6,7 @@ import { CountryResponseDto, GetCountriesResponseDto } from "../dtos/countries";
 import { paginatedCountriesDtoToPaginatedCountries } from "../mappers/countries.mapper";
 import axios from "axios";
 
-type OCountriesState = {
+type CountriesState = {
   countries: Country[]
   loading: boolean;
   error: string | null;
@@ -14,9 +14,11 @@ type OCountriesState = {
   limit: number,
   page: number,
   total: number,
+  countriesSearch: Country[]
 };
 
-const initialState: OCountriesState = {
+
+const initialState: CountriesState = {
   countries: [],
   loading: false,
   error: null,
@@ -24,6 +26,7 @@ const initialState: OCountriesState = {
   limit: 0,
   page: 1,
   total: 0,
+  countriesSearch: [],
 };
 
 function isSuccessResponse(
@@ -61,6 +64,44 @@ export const RetrieveCountries = createAsyncThunk<PaginatedResponse<Country>, {p
   }
 );
 
+export const fetchCountries = createAsyncThunk<PaginatedResponse<Country>, {query: string},{ rejectValue: string }>(
+  "countries/searchCountries",
+  async ({query}, { rejectWithValue }) => {
+    try {
+      const response = await axios.get<GetCountriesResponseDto>(`${BASE_URL}/countries/search?query=${query}`);
+    console.log('q2', query);
+      if (isSuccessResponse(response.data)) {
+        const countriesSearch = paginatedCountriesDtoToPaginatedCountries(response.data);
+        return countriesSearch;
+      } else {
+        const error = response.data as ErrorDto;
+        return rejectWithValue(error.errorMessage?.ru || "Ошибка получения стран");
+      }
+    } catch (error: any) {
+      return rejectWithValue(error.message || "Произошла ошибка при получении стран");
+    }
+  }
+);
+// export const fetchCountries = createAsyncThunk<PaginatedResponse<Search>,{ query: string },{ rejectValue: string }>(
+//   'countries/searchCountries',
+//   async ({ query }, { rejectWithValue }) => {
+//     try {
+//       const response = await axios.get<GetCountriesResponseDto>(
+//         `http://localhost:4000/countries/search?query=${query}`
+//       );
+
+//       if ('success' in response.data && response.data.success) {
+//         return paginatedSearchDtoToPaginatedSearch(response.data.data);
+//       } else {
+//         return rejectWithValue('Search failed');
+//       }
+//     } catch (error) {
+//       return rejectWithValue('Something went wrong');
+//     }
+//   }
+// );
+
+
 
 const countriesSlice = createSlice({
   name: "countries",
@@ -88,6 +129,20 @@ const countriesSlice = createSlice({
         state.error = typeof action.payload === 'string' ? action.payload : 'Что-то пошло не так';
         state.success = false;
       })
+      .addCase(fetchCountries.pending, (state) => {
+        state.success = false;
+      })
+      .addCase( fetchCountries.fulfilled, (state, action: PayloadAction<PaginatedResponseDto<Country>>) => {
+        state.loading = false;
+        state.countriesSearch = action.payload.data;
+        state.limit = action.payload.limit;
+        state.page = action.payload.page;
+        state.total = action.payload.total
+        state.success = true;
+      })
+      .addCase(fetchCountries.rejected, (state) => {
+        state.success = false;
+      });
   },
 });
 

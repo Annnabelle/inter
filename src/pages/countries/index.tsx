@@ -31,7 +31,7 @@ const Countries: React.FC = () => {
 
     useEffect(() => {
         if(countries.length === 0){
-            dispatch(RetrieveCountries({limit: 1, page: currentPage}))
+            dispatch(RetrieveCountries({limit: 10, page: currentPage}))
         }
     }, [dispatch, countries.length, currentPage, limit])
 
@@ -64,7 +64,17 @@ const Countries: React.FC = () => {
                 }}
                 className="layout-content-container"
             >
-               <ComponentTable<CountriesTableDataType> onRowClick={handleRowClick} columns={CountriesTableColumns(t, currentLang ?? 'ru')} data={countriesData}/>
+               <ComponentTable<CountriesTableDataType> 
+                pagination={{
+                    current: currentPage,
+                    pageSize: limit,
+                    total: total,
+                    onChange: (page) => {
+                        setCurrentPage(page);
+                        dispatch(RetrieveCountries({ page, limit: limit }));
+                    },
+                }}
+               onRowClick={handleRowClick} columns={CountriesTableColumns(t, currentLang ?? 'ru')} data={countriesData}/>
             </div>
         </MainLayout>
     );

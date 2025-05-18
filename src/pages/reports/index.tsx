@@ -7,9 +7,9 @@ import { useTranslation } from "react-i18next";
 import { Report } from "../../types/reports";
 import { RootState, useAppDispatch, useAppSelector } from "../../store";
 import { CreateReport, deleteReport, RetrieveReportById, RetrieveReports, UpdateReport } from "../../store/reports";
-import { CreateDocument } from "../../store/documents";
+import { CreateDocument } from "../../store/uploads";
 import { toast } from "react-toastify";
-import { Document } from "../../types/documents";
+import { Document } from "../../types/uploads";
 import { normalizeUrl } from "../../utils/baseUrl";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
@@ -26,7 +26,7 @@ const Reports: React.FC = () => {
         token: { colorBgContainer },
     } = theme.useToken();
     const [isActionOpen, setActionOpen] = useState<boolean>(false);
-     const [files, setFiles] = useState([{ id: Date.now() }]);
+    const [files, setFiles] = useState([{ id: Date.now() }]);
     const [modalState, setModalState] = useState<{
         addReport: boolean,
         editReport: boolean,

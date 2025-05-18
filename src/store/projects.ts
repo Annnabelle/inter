@@ -6,7 +6,7 @@ import { createOrganizationProjectToCreateOrganizationProjectDto, organizationPr
 import { Project, Projects, ProjectWithDocs } from "../types/projects";
 import axios from "axios";
 
-type OrganizationsEmployeesState = {
+type ProjectsState = {
   organizationProjects: Projects[]
   loading: boolean;
   error: string | null;
@@ -19,7 +19,7 @@ type OrganizationsEmployeesState = {
   project: ProjectWithDocs | null
 };
 
-const initialState: OrganizationsEmployeesState = {
+const initialState: ProjectsState = {
   organizationProjects: [],
   loading: false,
   error: null,

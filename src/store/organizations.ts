@@ -16,6 +16,7 @@ type OrganizationsState = {
   page: number,
   total: number,
   organization: Organization | null
+  organizationSearch: Organization[]
 };
 
 const initialState: OrganizationsState = {
@@ -27,7 +28,8 @@ const initialState: OrganizationsState = {
   limit: 0,
   page: 1,
   total: 0,
-  organization: null
+  organization: null,
+  organizationSearch: []
 };
 
 function isSuccessResponse(
@@ -51,6 +53,25 @@ export const retrieveNonGovOrganizations = createAsyncThunk<PaginatedResponse<Or
   async ({page, limit}, { rejectWithValue }) => {
     try {
       const response = await axios.get<GetOrganizationsResponseDto>(`${BASE_URL}/organizations?page=${page}&limit=${limit}&type=non_gov`);
+
+      if (isSuccessResponse(response.data)) {
+        const paginatedOrganizations = paginatedOrganizationsDtoToPaginatedOrganizations(response.data);
+        return paginatedOrganizations;
+      } else {
+        const error = response.data as ErrorDto;
+        return rejectWithValue(error.errorMessage?.ru || "Ошибка получения организаций");
+      }
+    } catch (error: any) {
+      return rejectWithValue(error.message || "Произошла ошибка при получении организаций");
+    }
+  }
+);
+
+export const fetchOrganizationSearch = createAsyncThunk<PaginatedResponse<Organization>, {query: string},{ rejectValue: string }>(
+  "organizations/fetchOrganizationSearch",
+  async ({query}, { rejectWithValue }) => {
+    try {
+      const response = await axios.get<GetOrganizationsResponseDto>(`${BASE_URL}/organizations/search?query=${query}`);
 
       if (isSuccessResponse(response.data)) {
         const paginatedOrganizations = paginatedOrganizationsDtoToPaginatedOrganizations(response.data);
@@ -175,6 +196,20 @@ const organizationsSlice = createSlice({
           state.success = true;
         }
       )
+      .addCase(fetchOrganizationSearch.pending, (state) => {
+        state.success = false;
+      })
+      .addCase( fetchOrganizationSearch.fulfilled, (state, action: PayloadAction<PaginatedResponseDto<Organization>>) => {
+        state.loading = false;
+        state.organizationSearch = action.payload.data;
+        state.limit = action.payload.limit;
+        state.page = action.payload.page;
+        state.total = action.payload.total
+        state.success = true;
+      })
+      .addCase(fetchOrganizationSearch.rejected, (state) => {
+        state.success = false;
+      })
       .addCase(retrieveInternationalOrganizations.rejected, (state, action) => {
         state.loading = false;
         state.error = typeof action.payload === 'string' ? action.payload : 'Что-то пошло не так';

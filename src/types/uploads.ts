@@ -9,7 +9,7 @@ export type UploadOwnerEntity = {
 
 export type Upload = {
     entity?: UploadOwnerEntity
-    owner?: HexString  // 
+    owner?: HexString  
 }
 
 export type Document = {

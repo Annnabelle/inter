@@ -1,5 +1,5 @@
 import { HexString } from "../dtos/main.dto"
-import { Document } from "./documents"
+import { Document } from "./uploads"
 
 export type OrganizationEmployees = {
     firstName: string,

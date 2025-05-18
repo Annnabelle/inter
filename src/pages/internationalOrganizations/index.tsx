@@ -12,7 +12,7 @@ import { OrganizationEmployee, OrganizationEmployees } from '../../types/organiz
 import { toast } from 'react-toastify';
 import { createOrganizationProject, deleteOrganizationProject, retrieveOrganizationProjectById, retrieveOrganizationsProjects, updateOrganizationsProject } from '../../store/projects';
 import { Project } from '../../types/projects';
-import { CreateDocument } from '../../store/documents';
+import { CreateDocument } from '../../store/uploads';
 import { normalizeUrl } from '../../utils/baseUrl';
 import MainLayout from '../../components/layout'
 import MainHeading from '../../components/mainHeading'
@@ -20,7 +20,7 @@ import ModalWindow from '../../components/modalWindow';
 import Button from '../../components/button';
 import FormComponent from '../../components/form';
 import ComponentTable from '../../components/table';
-import { Document } from '../../types/documents';
+import { Document } from '../../types/uploads';
 
 const InternationalOrganizations: React.FC = () => {
   const { t } = useTranslation();
@@ -237,6 +237,7 @@ const InternationalOrganizations: React.FC = () => {
         toast.error((err as string) || 'Ошибка сервера');
     }
   };
+  
   const handleDeleteOrganizationEmployee = async () => {
     try {
         const organizationEmployeeId = modalState.employeeData?.id
@@ -254,7 +255,6 @@ const InternationalOrganizations: React.FC = () => {
         toast.error('Ошибка при удалении сотрудника');
     }
   };
-
 
   const handleUpdateOrganizationProject = async (values: any) => {
     try {

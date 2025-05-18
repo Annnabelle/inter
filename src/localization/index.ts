@@ -143,7 +143,8 @@ export const resources = {
                 phone: 'Phone Number',
                 email: 'Email',
                 password: 'Password',
-                nameOfTheOrganization: 'Name of the organization'
+                nameOfTheOrganization: 'Name of the organization',
+                search: 'Search'
             },
             crudNames: {
                 event: 'event',
@@ -368,7 +369,8 @@ export const resources = {
             phone: 'Номер телефона',
             email: 'Почта',
             password: 'Пароль',
-            nameOfTheOrganization: 'Название организации'
+            nameOfTheOrganization: 'Название организации',
+            search: 'поиск'
         },
         crudNames: {
             event: 'мероприятие',
@@ -594,7 +596,8 @@ export const resources = {
             phone: 'Telefon raqami',
             email: 'Elektron pochta',
             password: 'Parol',
-            nameOfTheOrganization: 'Tashkilot nomi'
+            nameOfTheOrganization: 'Tashkilot nomi',
+            search: 'qidiruv'
         },
         crudNames: {
             event: 'tadbir',

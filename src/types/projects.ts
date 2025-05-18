@@ -1,5 +1,5 @@
 import { HexString } from "../dtos/main.dto";
-import { Document } from "./documents";
+import { Document } from "./uploads";
 // import { Document } from "./documents"
 
 export type Projects = {

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { ErrorDto, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
+import { ErrorDto, HexString, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
 import { BASE_URL } from "../utils/baseUrl";
 import { Report, Reports, ReportsWithDocs } from "../types/reports";
 import { CreateReportResponseDto, DeleteReportDto, GetReportResponseDto, PopulatedReportResponseDto, ReportResponseDto } from "../dtos/reports";
@@ -68,7 +68,7 @@ export const RetrieveReports = createAsyncThunk<PaginatedResponse<Report>, {page
   }
 );
 
-export const RetrieveReportById = createAsyncThunk<ReportsWithDocs, {id: string},{ rejectValue: string }>(
+export const RetrieveReportById = createAsyncThunk<ReportsWithDocs, {id: HexString},{ rejectValue: string }>(
   "reports/RetrieveReportById",
   async ({id}, { rejectWithValue }) => {
     try {

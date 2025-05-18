@@ -1,4 +1,4 @@
-import { UploadResponseDto } from "../documents";
+import { UploadResponseDto } from "../uploads";
 import { ErrorDto, HexString, PaginatedResponseDto } from "../main.dto";
 
 export const ReportType = {

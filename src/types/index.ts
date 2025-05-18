@@ -1,6 +1,7 @@
 import { JSX } from '@emotion/react/jsx-runtime'
 import {ReactNode} from 'react'
 import { ReportType } from '../dtos/reports'
+import { HexString } from '../dtos/main.dto'
 
 export interface ModalProps {
     closeModal?: ()=> void,
@@ -126,14 +127,7 @@ export interface InternationalTreatiesTableDataType{
     files: string,
     level: string
 }
-export interface InternationalDocumentsTableDataType{
-    key: string,
-    item: string,
-    nameOfTheDocument: string,
-    date: string,
-    place: string,
-    files: string,
-}
+
 export interface CountriesTableDataType { 
     key: string,
     name: {
