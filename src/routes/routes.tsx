@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
-import LoginPage from "../pages/login";
+
 
 
 const Home = lazy(() => import("../pages/home"));
@@ -20,7 +20,10 @@ const EventStatistics = lazy(() => import("../pages/eventStatistics"))
 const EventStatisticsInner = lazy(() => import( "../pages/eventStatisticsInner"))
 const EventVisitsEmployee = lazy(() => import ("../pages/visits-employees"))
 const StatisticsOfCountryVisits = lazy(() => import("../pages/statisticsOfCountryVisits") )
-
+const LoginPage = lazy(() => import ("../pages/login"))
+// const Organizations = lazy(() => import ("../pages/organizations"))
+const InternationalOrganizationsMain = lazy(() => import ("../pages/internationalOrganizationsMain"))
+const InternationalNonGovernmentalOrganizationsMain = lazy(() => import ("../pages/internationalNonGovernmentalOrganizationsMain"))
 const Router: React.FC = () => {
   return (
     <Suspense fallback={<div>Загрузка...</div>}>
@@ -32,8 +35,11 @@ const Router: React.FC = () => {
         <Route path="/cooperation" element={<Cooperation />} />
         <Route path='/countries' element={<Countries/>}/>
         <Route path='/countries/:id' element={<CountriesInner/>}/>
-        <Route path="/international-organizations" element={<InternationalOrganizations/>}/>
-        <Route path='/international-non-governmental-organizations' element={<InternationalNonGovernmentalOrganizations/>}/>
+        {/* <Route path='/organizations' element={<Organizations/>}/> */}
+        <Route path='/international-organizations' element={<InternationalOrganizationsMain/>}/>
+        <Route path='/international-non-governmental-organizations' element={<InternationalNonGovernmentalOrganizationsMain/>}/>
+        <Route path="/international-organizations/:id" element={<InternationalOrganizations/>}/>
+        <Route path='/international-non-governmental-organizations/:id' element={<InternationalNonGovernmentalOrganizations/>}/>
         <Route path='/experts' element={<Experts/>}/>
         <Route path='/translators' element={<Translators/>}/>
         <Route path='/international-treaties' element={<InternationalTreaties/>}/>

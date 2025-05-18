@@ -1,5 +1,7 @@
 import { JSX } from '@emotion/react/jsx-runtime'
 import {ReactNode} from 'react'
+import { ReportType } from '../dtos/reports'
+import { HexString } from '../dtos/main.dto'
 
 export interface ModalProps {
     closeModal?: ()=> void,
@@ -16,7 +18,7 @@ export interface ModalProps {
 export type SubDropdownItem = {
     to: string;
     text: string;
-  };
+};
   
 export type DropdownItem = {
     to: string;
@@ -24,44 +26,40 @@ export type DropdownItem = {
     icon?: React.ReactNode;
     subDropdown?: SubDropdownItem[];
     className?: string
-  };
-  
+};
 export type NavItem = {
     to?: string;
     icon: React.ReactNode;
     text: string;
     dropdown?: DropdownItem[];
-  };
-  
-
+};
 export interface InternationalOrganizationChiefDataType {
-    key: string;
-    fullName: string;
-    additionalInformation?: string;
-    file?: string;
+    key: string,
+    fullName: string,
+    phone?: string,
+    email?: string,
+    position?: string,
+    comment?: string,
+    // organizationId: string,
 }
-
 export interface InternationalOrganizationNonGovernmentChiefDataType {
     key: string;
     fullName: string;
     additionalInformation?: string;
     file?: string;
 }
-
 export interface InternationalOrganizationProjectDataType{
     key: string;
-    projectName: string;
-    additionalInformation?: string;
-    file?: string;
+    name: string;
+    comment?: string;
+    document?: string[];
 }
-
 export interface InternationalNonGovernmentOrganizationProjectDataType{
     key: string;
     projectName: string;
     additionalInformation: string;
     file?: string
 }
-
 export interface InternationalOrganizationChronologyOfMeetingDataType{
     key: string;
     number: string;
@@ -71,7 +69,6 @@ export interface InternationalOrganizationChronologyOfMeetingDataType{
     level: string;
     nameOfMeeting: string
 }
-
 export interface InternationalNonGovernmentOrganizationsChronologyOfMeetingDataType{
     key: string;
     number: string;
@@ -81,7 +78,6 @@ export interface InternationalNonGovernmentOrganizationsChronologyOfMeetingDataT
     level: string;
     nameOfMeeting: string
 }
-
 export interface CountriesInnerEventDataType {
     key: string;
     data: string;
@@ -90,7 +86,6 @@ export interface CountriesInnerEventDataType {
     format?: string;
     level: string;
 }
-
 export interface CountriesInnerVisitsDataType {
     key: string;
     period: string;
@@ -99,7 +94,6 @@ export interface CountriesInnerVisitsDataType {
     organizer?: string;
     administrationСonsent: string;
 }
-
 export interface CountriesInnerInternationalDocumentsDataType {
     key: string;
     name: string;
@@ -108,64 +102,48 @@ export interface CountriesInnerInternationalDocumentsDataType {
     additionalInformation?: string;
     files: string;
 }
-
 export interface ExpertsTableDataTypes{
     key: string,
-    mainAreas: string,
-    fullName: string,
-    event: string,
-    date: string,
-    files: string
+    fullName?: string,
+    phone?: string,
+    email?: string,
+    comment?: string,
+    spheres?: string
 }
-
 export interface TranslatorsTableDataTypes {
-    key: string,
-    name: string,
-    languages: string,
-    rating: string
-}
-
-export interface InternationalTreatiesTableDataType{
-    key: string,
-    item: string,
-    nameOfTheContract: string,
-    date: string,
-    place: string,
-    files: string,
-    level: string
-}
-
-export interface InternationalDocumentsTableDataType{
-    key: string,
-    item: string,
-    nameOfTheDocument: string,
-    date: string,
-    place: string,
-    files: string,
+    key: string ,
+    fullName: string,
+    languages: { language: string; rating: number }[];
+    phone?: string,
+    status?: string,
+    email?: string
 }
 
 export interface CountriesTableDataType { 
     key: string,
-    countries: string,
-    meeting: string,
-    visits: string
+    name: {
+        ru: string,
+        en: string,
+        uz: string
+    },
+    comment?: string,
 }
-
 export interface ReportsTableDataType {
-    key: string,
-    nameOfReport: string,
-    typeOfReport: string,
-    responsibleForReport: string,
-    dateOfCreation: string,
-    actions: [string, string]
+    key: string
+    name: string
+    type: ReportType
+    startDate: string
+    endDate: string
+    responsible?: string
+    comment?: string
 }
 
 export interface AdministrationDataType {
     key: string,
     name: string, 
-    role: string, 
+    role: string | undefined, 
     status: string,
-    lastVisit: string,
+    lastLoggedInAt: string,
     action: string
 }
 

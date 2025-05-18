@@ -1,7 +1,13 @@
 import React from 'react';
 import { Form, Input } from 'antd';
-import './styles.sass'
+import { RootState, useAppDispatch } from '../../store';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Login } from '../../store/authSlice';
+import { toast } from 'react-toastify';
 import Button from '../../components/button';
+import { LoginForm } from '../../types/auth.types';
+import './styles.sass'
 
 const WaveBackground: React.FC = () => {
   return (
@@ -41,18 +47,24 @@ const WaveBackground: React.FC = () => {
 };
 
 const LoginPage: React.FC = () => {
-  const onFinish = (values: any) => {
-    console.log('Login values:', values);
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const { isLoading, error } = useSelector((state: RootState) => state.auth);
+  const onFinish = async (values: LoginForm) => {
+    try {
+      const result = await dispatch(Login(values)).unwrap();
+      toast.success('Успешный вход!');
+      navigate('/main');
+    } catch (err) {
+      toast.error(err as string);
+    }
   };
 
   return (
     <div className="login-container">
-      {/* Левая часть: анимация волн */}
       <div className="login-container-left-section">
         <WaveBackground />
       </div>
-
-      {/* Правая часть: форма логина */}
       <div className="login-container-right-section">
         <div className="login-container-form-container">
           <div className="login-container-form-container-heading">
@@ -65,23 +77,27 @@ const LoginPage: React.FC = () => {
             className='login-form'
           >
             <Form.Item
-              label="Логин"
-              name="username"
-              rules={[{ required: true, message: 'Введите логин!' }]}
+              label="Email"
+              name="email"
+              rules={[
+                { required: true, message: 'Введите логин' },
+                { type: 'email', message: 'Некорректный логин' },
+              ]}
             >
-              <Input className='input' />
+              <Input className='input' type='email' />
             </Form.Item>
 
             <Form.Item
               label="Пароль"
               name="password"
-              rules={[{ required: true, message: 'Введите пароль!' }]}
+              rules={[{ required: true, message: 'Введите пароль' }]}
             >
               <Input.Password className='input' />
             </Form.Item>
-              <Button>
+              <Button type='submit'>
                 Войти
               </Button>
+              {error && <div style={{ color: 'red', textAlign: 'center' }}>{error}</div>}
           </Form>
         </div>
       </div>

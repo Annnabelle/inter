@@ -41,6 +41,7 @@ export const resources = {
                 Agency: 'Agency',
                 otherOrganizer: 'Other organizer',
                 expertLevel: 'Expert-level',
+                organizations: 'Organizations'
             },
             buttons: {
                 back: 'Back',
@@ -138,6 +139,12 @@ export const resources = {
                 role: 'Role',
                 status: 'Status',
                 lastLogin: 'Last login',
+                lastName: 'Last Name',
+                phone: 'Phone Number',
+                email: 'Email',
+                password: 'Password',
+                nameOfTheOrganization: 'Name of the organization',
+                search: 'Search'
             },
             crudNames: {
                 event: 'event',
@@ -148,10 +155,13 @@ export const resources = {
                 head: 'chief',
                 project: 'project',
                 agreement: 'agreement',
-                report: 'report'
+                report: 'report',
+                organization: 'organization',
+                employee: "employee"
             },
             tableTitles: {
                 countries: 'Country',
+                position: 'Position',
                 meetings: 'Meetings',
                 visits: 'Visits',
                 date: 'Date', 
@@ -186,7 +196,9 @@ export const resources = {
                 type: 'Type',
                 responsiblePerson: 'Responsible person',
                 creationDate: 'Creation date',
-                actions: 'Actions'	
+                actions: 'Actions',
+                typeOfOrganization: 'Type of organization',
+                comment: 'Comment'
             },
             tablesName: {
                 events: 'Events',
@@ -256,6 +268,7 @@ export const resources = {
             Agency: 'Агентство',
             otherOrganizer: 'Другой организатор	',
             expertLevel: 'Экспертный',
+            organizations: 'Организации'
         },
         buttons: {
             back: 'Назад',
@@ -352,6 +365,12 @@ export const resources = {
             role: 'Роль',
             status: 'Статус',
             lastLogin: 'Последний вход',
+            lastName: 'Фамилия',
+            phone: 'Номер телефона',
+            email: 'Почта',
+            password: 'Пароль',
+            nameOfTheOrganization: 'Название организации',
+            search: 'поиск'
         },
         crudNames: {
             event: 'мероприятие',
@@ -363,9 +382,12 @@ export const resources = {
             project: 'проект',
             agreement: 'договор',
             report: 'отчет',
+            organization: 'oрганизацию',
+            employee: "сотрудника"
         },
         tableTitles: {
             countries: 'Страна',
+            position: 'Должность',
             meetings: 'Встречи',
             visits: 'Визиты',
             date: 'Дата', 
@@ -400,8 +422,9 @@ export const resources = {
             type: 'Тип',
             responsiblePerson: 'Ответственный',
             creationDate: 'Дата создания',
-            actions: 'Действия'	
-
+            actions: 'Действия',
+            typeOfOrganization: 'Тип организации',
+            comment: 'Комментарий',
         },
         tablesName: {
             events: 'Мероприятия',
@@ -429,7 +452,8 @@ export const resources = {
             annual: 'Годовой',
         }
     }},
-    uz:{translation:{
+    uz:{
+        translation:{
         navigation: {
             main: 'Bosh sahifa',
             cooperation: 'Hamkorlik',
@@ -470,6 +494,7 @@ export const resources = {
             Agency: 'Agentlik',
             otherOrganizer: 'Boshqa tashkilotchi',
             expertLevel: 'Ekspert darajasidagi',
+            organizations: 'Tashkilotlar'
         },
         buttons: {
             back: 'Orqaga',
@@ -567,6 +592,12 @@ export const resources = {
             role: 'Rol',
             status: 'Holat',
             lastLogin: 'Oxirgi kirish',
+            lastName: 'Familiya',
+            phone: 'Telefon raqami',
+            email: 'Elektron pochta',
+            password: 'Parol',
+            nameOfTheOrganization: 'Tashkilot nomi',
+            search: 'qidiruv'
         },
         crudNames: {
             event: 'tadbir',
@@ -577,11 +608,14 @@ export const resources = {
             head: 'rahbar',
             project: 'loyihа',
             agreement: 'shartnoma',
-            report: 'hisobot'
+            report: 'hisobot',
+            organization: 'tashkilotni',
+            employee: 'xodim'
         },
         tableTitles: {
             countries: 'Mamlakat',
             meetings: 'Uchrashuvlar',
+            position: 'Lavozim ',
             visits: 'Tashriflar',
             date: 'Sana', 
             name: 'Nomi', 
@@ -615,7 +649,9 @@ export const resources = {
             type: 'Turi',
             responsiblePerson: "Mas'ul shaxs",
             creationDate: 'Yaratilgan sana',
-            actions: 'Harakatlar'	
+            actions: 'Harakatlar',
+            typeOfOrganization: 'Tashkilot turi',
+            comment: 'Izoh'
         },
         tablesName: {
             events: 'Tadbirlar',

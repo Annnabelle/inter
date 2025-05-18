@@ -1,17 +1,19 @@
 import React, { ReactNode } from 'react';
-import { Form } from 'antd';
+import { Form, FormInstance  } from 'antd';
 import './styles.sass';
 
 interface FormComponentProps {
     children: ReactNode;
     onFinish?: (values: any) => void;
+    formProps?: FormInstance; 
 }
 
-const FormComponent: React.FC<FormComponentProps> = ({ children, onFinish }) => {
-    const [form] = Form.useForm();
-    
+const FormComponent: React.FC<FormComponentProps> = ({ children, onFinish, formProps }) => {
+    const [defaultForm] = Form.useForm(); // Распаковываем formInstance
+    const usedForm = formProps ?? defaultForm;
+
     return (
-        <Form form={form} layout='vertical' onFinish={onFinish} className='form'>
+        <Form form={usedForm} layout='vertical' onFinish={onFinish} className='form'>
             {children}
         </Form>
     );

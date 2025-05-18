@@ -1,46 +1,84 @@
-import { useState } from "react";
-import { IoMdAdd } from "react-icons/io";
+import { useEffect, useMemo, useState } from "react";
 import { theme, Form, Input, Upload, DatePicker } from "antd";
-import { DateItem, FileItem } from "../../types/countries";
+import { Country, DateItem, FileItem } from "../../types/countries";
 import { CountriesEventTableColumns, CountriesEventTableData } from "../../tableData/countriesInnerEvent";
-import { CountriesInnerInternationalDocumentsColumns, CountriesInnerInternationalDocumentsData } from "../../tableData/countriesInnerInternationalDocuments";
+import { CountriesInnerInternationalDocumentsColumns } from "../../tableData/countriesInnerInternationalDocuments";
 import { CountriesInnerVisitsColumns, CountriesInnerVisitsData } from "../../tableData/countriesInnerVisitTable";
 import { CountriesInnerEventDataType, CountriesInnerInternationalDocumentsDataType, CountriesInnerVisitsDataType } from "../../types";
 import { useTranslation } from "react-i18next";
+import { RootState, useAppDispatch, useAppSelector } from "../../store";
+import { RetrieveCountries } from "../../store/countries";
+import { useParams } from "react-router-dom";
+import { RetrieveInternationalDocuments } from "../../store/internationalDocuments";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
 import Button from "../../components/button";
 import ModalWindow from "../../components/modalWindow";
 import FormComponent from "../../components/form";
 import ComponentTable from "../../components/table";
+import dayjs from "dayjs";
+import { InternationalDocument, InternationalDocumentsTableDataType } from "../../types/internationalDocuments";
+import { InternationalDocumentsTableColumn } from "../../tableData/internationalDocuments";
 
 const CountriesInner: React.FC = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    type Lang = 'ru' | 'uz' | 'en';
+    const currentLang = i18n.language as Lang;
+    const { id } = useParams<{ id: string }>();
+    const dispatch = useAppDispatch();
     const { token: { colorBgContainer }} = theme.useToken();
     const [files, setFiles] = useState<FileItem[]>([{ id: 1, name: "", file: null }]);
     const [dates, setDates] = useState<DateItem[]>([{ id: 1, place: "", date: null }]);
-    const [modalState, setModalState] = useState({
+    const countries = useAppSelector((state: RootState) => state.countries.countries)
+    const limit = useAppSelector((state) => state.countries.limit)
+    const page = useAppSelector((state) => state.countries.page)
+    const total = useAppSelector((state) => state.countries.total)
+    const documentPage = useAppSelector((state) => state.internationalDocuments.page)
+    const documentTotal = useAppSelector((state) => state.internationalDocuments.total)
+    const documentLimit = useAppSelector((state) => state.internationalDocuments.limit)
+    const internationalDocuments = useAppSelector((state: RootState) => state.internationalDocuments.internationalDocuments)
+    const [currentPage, setCurrentPage] = useState(page);
+    const [currentDocumentPage, setCurrentDocumentPage] = useState(page);
+    const [modalState, setModalState] = useState<{
+        addDocument: boolean,
+        editDocument: boolean,
+        retrieveDocument: boolean,
+        deleteDocument: boolean,
+        DocumentData: InternationalDocument | null,
+    }>({
         addDocument: false,
-        retrieveDocument: false,
         editDocument: false,
+        retrieveDocument: false,
         deleteDocument: false,
-    })
+        DocumentData: null
+    });
+
+    useEffect(() => {
+        if(countries.length === 0){
+            dispatch(RetrieveCountries({limit: 10, page: currentPage}))
+        }
+    }, [dispatch, countries.length, currentPage, limit])
+
+    // console.log(countries);
+
+    const countryName: Country | undefined = countries.find(country => country?.id === id)
+    
 
     const handleModal = (modalName: string, value: boolean) => {
         setModalState((prev) => ({...prev, [modalName] : value}));
     }
 
-    const handleRowClick = (type: 'document', action: 'Retrieve' | 'Edit' | 'Delete', record: CountriesInnerInternationalDocumentsDataType) => {
+
+    const handleRowClick = (type: 'Document', action: 'retrieve' | 'edit' | 'delete', record: InternationalDocumentsTableDataType) => {
         console.log(`Clicked on ${type}, action: ${action}, record:`, record);
-    
-        const modalKey = action === 'Retrieve' ? 'retrieveDocument' 
-                      : action === 'Edit' ? 'editDocument' 
-                      : 'deleteDocument';
-    
-        setModalState((prev) => ({
-            ...prev,
-            [modalKey]: true,
-        }));
+        if (type === 'Document'){
+            const documentData = internationalDocuments.find((document) => document.id === record.key) ?? null
+            setModalState((prev) => ({
+                ...prev,
+                [`${action}${type}`]: true,
+                DocumentData: documentData
+            }))
+        }
     };
     
       
@@ -59,13 +97,13 @@ const CountriesInner: React.FC = () => {
     };
     
 
-    const handleDeleteOpen = (type: 'Document') => {
+    const handleDeleteOpen = (type: 'document') => {
         setModalState((prev) => ({
           ...prev,
-          [`delete${type}`]: false,
+          [`${type}Delete`]: false,
         }));
         setTimeout(() => {
-          setModalState((prev) => ({ ...prev, [`delete${type}`]: true }));
+          setModalState((prev) => ({ ...prev, [`${type}Delete`]: true }));
         }, 10);
       };
 
@@ -78,11 +116,28 @@ const CountriesInner: React.FC = () => {
     const onFinish = () => {
         console.log('hello finish');
     }
+     useEffect(() => {
+        dispatch(RetrieveInternationalDocuments({ limit: 2, page: currentPage }));
+    }, [dispatch, internationalDocuments.length, currentPage, limit])
+
+     const internationalDocumentData = useMemo(() => {
+        return internationalDocuments.map((document, index) => ({
+            key: document.id,
+            itemNumber: index + 1,
+            name: document.name,
+            place: document.place,
+            approval: document.approval,
+            comment: document.comment,
+            countryId: document.countryId,
+            date: dayjs(document.date).format('YYYY-MM-DD'),
+            organizationId: document.name,
+            signLevel: document.signLevel
+        }))
+    }, [internationalDocuments, t])
     
     return (
         <MainLayout>
-            <MainHeading title={`${t('titles.countries')}`} subtitle="Подзаголоок">
-            </MainHeading>
+            <MainHeading title={`${t('titles.countries')}`} subtitle="Подзаголоок"/>
             <div
                 style={{
                     background: colorBgContainer,
@@ -91,7 +146,7 @@ const CountriesInner: React.FC = () => {
             >
                 <div className="page-inner">
                     <div className="page-inner-title">
-                        <h1 className="title">{t('tableTitles.countries')}: Российская Федерация </h1>
+                        <h1 className="title">{t('tableTitles.countries')}: {countryName?.name?.[currentLang]} </h1>
                     </div>
                     <div className="page-inner-content">
                         <div className="page-inner-content-title">
@@ -125,11 +180,21 @@ const CountriesInner: React.FC = () => {
                                 {t('tablesName.internationalDocuments')}
                             </h3>
                         </div>
-                        <div className="heading-btn">
+                        {/* <div className="heading-btn">
                             <Button className="outline" onClick={() => handleModal('addDocument', true)}>{t('buttons.add')} {t('crudNames.document')} <IoMdAdd/></Button>
-                        </div>
+                        </div> */}
                     </div>
-                    <ComponentTable<CountriesInnerInternationalDocumentsDataType> onRowClick={(record) => handleRowClick('document', 'Retrieve', record)} data={CountriesInnerInternationalDocumentsData(t)} columns={CountriesInnerInternationalDocumentsColumns(t)} />
+                     <ComponentTable<InternationalDocumentsTableDataType> 
+                      pagination={{
+                        current: currentPage,
+                        pageSize: documentLimit,
+                        total: documentTotal,
+                        onChange: (page) => {
+                            setCurrentPage(page);
+                            dispatch(RetrieveInternationalDocuments({ page, limit: limit }));
+                        },
+                    }}
+                     onRowClick={(record) => handleRowClick('Document', 'retrieve', record)} columns={InternationalDocumentsTableColumn(t)} data={internationalDocumentData}/>
                 </div>
                 <ModalWindow openModal={modalState.retrieveDocument} title={`${t('buttons.retrieve')} ${t('crudNames.document')}`} closeModal={() => handleModal('retrieveDocument', false)} handleEdit={() => handleEditOpen()}>
                     <FormComponent>
@@ -157,7 +222,7 @@ const CountriesInner: React.FC = () => {
                         ))}
                     </FormComponent>
                 </ModalWindow>
-                <ModalWindow openModal={modalState.editDocument} title={`${t('buttons.edit')} ${t('crudNames.document')}`} closeModal={() => handleModal('editDocument', false)} handleDelete={() => handleDeleteOpen('Document')}>
+                <ModalWindow openModal={modalState.editDocument} title={`${t('buttons.edit')} ${t('crudNames.document')}`} closeModal={() => handleModal('editDocument', false)} handleDelete={() => handleDeleteOpen('document')}>
                         <FormComponent onFinish={onFinish}>
                             {files.map((item) => (
                                 <div className="form-inputs" key={item?.id}>

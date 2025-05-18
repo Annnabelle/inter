@@ -1,6 +1,6 @@
 import { TableProps, Tag } from "antd";
-import { AdministrationDataType } from "../types";
 import {TFunction} from 'i18next'
+import { AdministrationDataType } from "../types";
 export const AdministrationTableColumns = (t: TFunction): TableProps<AdministrationDataType>["columns"] => [
     {
         title: t('inputs.name'),
@@ -26,8 +26,8 @@ export const AdministrationTableColumns = (t: TFunction): TableProps<Administrat
     },
     {
         title:  t('inputs.lastLogin'),
-        dataIndex: "lastVisit",
-        key: "lastVisit",
+        dataIndex: "lastLoggedInAt",
+        key: "lastLoggedInAt",
         render: (text) => <p className="table-text">{text}</p>,
     },
     {
@@ -38,30 +38,30 @@ export const AdministrationTableColumns = (t: TFunction): TableProps<Administrat
     },
 ];
 
-export const AdministrationTableData = (t: TFunction): AdministrationDataType[] => [
-  {
-    key: "1",
-    name: "Test name",
-    role: "Тест названия",
-    status: t('buttons.active'),
-    lastVisit: "01/01/2025",
-    action: t('buttons.edit'),
-  },
-  {
-    key: "2",
-    name: "Test name",
-    role: "Тест названия",
-    status: t('buttons.active'),
-    lastVisit: "01/01/2025",
-    action: t('buttons.edit'),
+// export const AdministrationTableData = (t: TFunction): AdministrationDataType[] => [
+//   {
+//     key: "1",
+//     name: "Test name",
+//     role: "Тест названия",
+//     status: "Active", //t('buttons.active')
+//     lastVisit: "01/01/2025",
+//     action: t('buttons.edit'),
+//   },
+//   {
+//     key: "2",
+//     name: "Test name",
+//     role: "Тест названия",
+//     status: "Active",
+//     lastVisit: "01/01/2025",
+//     action: t('buttons.edit'),
 
-  },
-  {
-    key: "3",
-    name: "Test name",
-    role: "Тест названия",
-    status: t('buttons.inactive'),
-    lastVisit: "01/01/2025",
-    action: t('buttons.edit'),
-  },
-];
+//   },
+//   {
+//     key: "3",
+//     name: "Test name",
+//     role: "Тест названия",
+//     status: "Active",
+//     lastVisit: "01/01/2025",
+//     action: t('buttons.edit'),
+//   },
+// ];
