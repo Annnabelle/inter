@@ -267,7 +267,17 @@ const InternationalTreaties: React.FC = () => {
                 }}
                 className="layout-content-container"
             >
-               <ComponentTable<InternationalTreatiesTableDataType> onRowClick={(record) => handleRowClick('Treaties', 'retrieve', record)} columns={InternationalTreatiesTableColumn(t)} data={agreementDocumentData}/>
+               <ComponentTable<InternationalTreatiesTableDataType> 
+                pagination={{
+                    current: currentPage,
+                    pageSize: limit,
+                    total: total,
+                    onChange: (page) => {
+                        setCurrentPage(page);
+                        dispatch(RetrieveAgreementDocuments({ page, limit: limit }));
+                    },
+                }}
+                onRowClick={(record) => handleRowClick('Treaties', 'retrieve', record)} columns={InternationalTreatiesTableColumn(t)} data={agreementDocumentData}/>
             </div>
             <ModalWindow title={t('buttons.add') + " " + t('crudNames.agreement')} openModal={modalState.addTreaties} closeModal={() => handleModal('addTreaties', false)}>
                 <FormComponent  onFinish={handleCreateDocument}>

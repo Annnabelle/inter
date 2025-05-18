@@ -106,7 +106,7 @@ export const UpdateReport = createAsyncThunk<Report, ReportsWithDocs, { rejectVa
         const error = response.data as ErrorDto;
         console.log(error);
         
-        return rejectWithValue(error.errorMessage?.ru || 'Ошибка обновления репорта');
+        return rejectWithValue(error.errorMessage?.ru || 'Ошибка обновления отчета');
       }
     } catch (error: any) {
       console.log(error);

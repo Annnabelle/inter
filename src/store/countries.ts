@@ -49,7 +49,7 @@ export const RetrieveCountries = createAsyncThunk<PaginatedResponse<Country>, {p
   "countries/RetrieveCountries",
   async ({page, limit}, { rejectWithValue }) => {
     try {
-      const response = await axios.get<GetCountriesResponseDto>(`${BASE_URL}/countries?limit=${limit}&page=${page}`);
+      const response = await axios.get<GetCountriesResponseDto>(`${BASE_URL}/countries?limit=${limit}&page=${page}&sortOrder=asc`);
 
       if (isSuccessResponse(response.data)) {
         const paginatedCountries = paginatedCountriesDtoToPaginatedCountries(response.data);

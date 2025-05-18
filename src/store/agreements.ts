@@ -114,7 +114,7 @@ export const UpdateAgreementDocumentRequest = createAsyncThunk<AgreementDocument
         return AgreementDocumentsResponseDtoToAgreementDocumentsResponse(response.data.employee); 
       } else {
         const error = response.data as ErrorDto;
-        return rejectWithValue(error.errorMessage?.ru || 'Ошибка обновления международного документа');
+        return rejectWithValue(error.errorMessage?.ru || 'Ошибка обновления договора');
       }
     } catch (error: any) {
       console.log(error);

@@ -41,7 +41,7 @@ export const CreateDocument = createAsyncThunk(
         return response.data;
       } else {
         const error = response.data as ErrorDto;
-        return rejectWithValue(error.errorMessage?.ru || 'Ошибка добавления докемента')
+        return rejectWithValue(error.errorMessage?.ru || 'Ошибка добавления файла')
       }
     }catch (error: any){
       return rejectWithValue(error.response?.data?.message || 'Ошибка сервера');

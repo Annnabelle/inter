@@ -1,17 +1,18 @@
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Avatar } from "antd";
 import { LuUserRound } from "react-icons/lu";
 import { IoIosArrowDown } from "react-icons/io";
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import Button from "../button";
-
-import "./styles.sass";
 import { useTranslation } from "react-i18next";
+import Button from "../button";
+import "./styles.sass";
+import { RootState, useAppDispatch, useAppSelector } from "../../store";
 
 const UserInfo: React.FC = () => {
   const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state: RootState) => state.auth.user)
   const handleClickOutside = useCallback((event: MouseEvent) => {
     if (isOpen && dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
       setIsOpen(false);
@@ -24,7 +25,6 @@ const UserInfo: React.FC = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [handleClickOutside]);
-
   return (
     <div className="user" ref={dropdownRef}>
       <div

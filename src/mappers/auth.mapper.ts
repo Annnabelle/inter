@@ -1,10 +1,10 @@
 
 import { LoginRequestDto, UserResponseDto } from "../dtos/users";
-import { LoginFormTypes } from "../types/auth.types";
+import { LoginForm } from "../types/auth.types";
 import { User } from "../types/user";
 import { UserRole } from "../utils/roles";
 
-export function mapLoginFormToDto(data: LoginFormTypes) : LoginRequestDto { 
+export function mapLoginFormToDto(data: LoginForm) : LoginRequestDto { 
   return {
     email: data.email,
     password: data.password,
@@ -12,8 +12,6 @@ export function mapLoginFormToDto(data: LoginFormTypes) : LoginRequestDto {
 }
 
 export function mapUserDtoToUser(userDto: UserResponseDto): User {
-  const roleAlias = userDto.role.alias.toUpperCase() as keyof typeof UserRole;
-
   return {
     id: userDto.id,
     firstName: userDto.firstName,

@@ -58,8 +58,8 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
     const limit = useAppSelector((state) => state.organizations.limit)
     const page = useAppSelector((state) => state.organizations.page)
     const total = useAppSelector((state) => state.organizations.total)
-      const projectById = useAppSelector((state) => state.organizationProjects.project)
-      const employeeById = useAppSelector((state) => state.organizationEmployee.employee)
+    const projectById = useAppSelector((state) => state.organizationProjects.project)
+    const employeeById = useAppSelector((state) => state.organizationEmployee.employee)
     const [currentPage, setCurrentPage] = useState(page);
     const [editForm] = Form.useForm();
     const [uploadedFileIds, setUploadedFileIds] = useState<string[]>([]);
@@ -354,10 +354,19 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                 </h3>
               </div>
               <div className="heading-btn">
-                <Button className="outline" onClick={() => handleModal('addChief', true)}>{t('buttons.add')} {t('crudNames.head')} <IoMdAdd/></Button>
+                <Button className="outline" onClick={() => handleModal('addChief', true)}>{t('buttons.add')} {t('crudNames.employee')} <IoMdAdd/></Button>
               </div>
             </div>
-            <ComponentTable<InternationalOrganizationChiefDataType> onRowClick={(record) => handleRowClick('chief', "Retrieve", record)} data={organizationEmployeeData} columns={InternationalOrganizationChiefColumns(t)} />
+            <ComponentTable<InternationalOrganizationChiefDataType> 
+              pagination={{
+                current: currentPage,
+                pageSize: limit,
+                total: total,
+                onChange: (page) => {
+                    setCurrentPage(page);
+                },
+              }}
+              onRowClick={(record) => handleRowClick('chief', "Retrieve", record)} data={organizationEmployeeData} columns={InternationalOrganizationChiefColumns(t)} />
           </div>
             <div className="page-inner-table-container">
                 <div className="page-inner-table-container-heading">
@@ -370,7 +379,16 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                         <Button className="outline" onClick={() => handleModal('addProject', true)}>{t('buttons.add')}  {t('crudNames.project')}<IoMdAdd/></Button>
                     </div>
                 </div>
-                <ComponentTable<InternationalOrganizationProjectDataType> onRowClick={(record) => handleRowClick('project', "Retrieve", record)} data={organizationProjectsData} columns={InternationalOrganizationProjectColumns(t)}/>
+                <ComponentTable<InternationalOrganizationProjectDataType> 
+                    pagination={{
+                    current: currentPage,
+                    pageSize: limit,
+                    total: total,
+                    onChange: (page) => {
+                        setCurrentPage(page);
+                    },
+                  }}
+              onRowClick={(record) => handleRowClick('project', "Retrieve", record)} data={organizationProjectsData} columns={InternationalOrganizationProjectColumns(t)}/>
             </div>
             {/* <div className="page-inner-table-container">
                 <div className="page-inner-table-container-heading">

@@ -366,7 +366,16 @@ const InternationalOrganizations: React.FC = () => {
                 <Button className="outline" onClick={() => handleModal('addChief', true)}>{t('buttons.add')} {t('crudNames.head')}<IoMdAdd/></Button>
               </div>
             </div>
-            <ComponentTable<InternationalOrganizationChiefDataType> onRowClick={(record) => handleRowClick('chief', "Retrieve", record)} data={organizationEmployeeData} columns={InternationalOrganizationChiefColumns(t)} />
+            <ComponentTable<InternationalOrganizationChiefDataType> 
+              pagination={{
+                current: currentPage,
+                pageSize: limit,
+                total: total,
+                onChange: (page) => {
+                    setCurrentPage(page)
+                }
+              }}
+            onRowClick={(record) => handleRowClick('chief', "Retrieve", record)} data={organizationEmployeeData} columns={InternationalOrganizationChiefColumns(t)} />
           </div>
             <div className="page-inner-table-container">
                 <div className="page-inner-table-container-heading">

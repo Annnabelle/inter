@@ -1,11 +1,10 @@
 import { TableProps } from "antd";
 import { InternationalOrganizationChiefDataType } from "../types";
 import { TFunction } from "i18next";
-import { organizationEmployee } from "../types/organizationEmployee";
 
 export const InternationalOrganizationChiefColumns = (t: TFunction) : TableProps<InternationalOrganizationChiefDataType>["columns"] => [
   {
-    title: t('tableTitles.fullNameOfLeader'),
+    title: t('navigation.employees'),
     dataIndex: "fullName",
     key: "fullName",
     render: (text) => <h1 className="table-title">{text}</h1>,

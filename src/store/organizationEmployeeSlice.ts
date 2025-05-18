@@ -58,10 +58,10 @@ export const RetrieveOrganizationEmployees = createAsyncThunk<PaginatedResponse<
         return paginatedOrganizations;
       } else {
         const error = response.data as ErrorDto;
-        return rejectWithValue(error.errorMessage?.ru || "Ошибка получения организаций");
+        return rejectWithValue(error.errorMessage?.ru || "Ошибка получения сотрудников");
       }
     } catch (error: any) {
-      return rejectWithValue(error.message || "Произошла ошибка при получении организаций");
+      return rejectWithValue(error.message || "Произошла ошибка при получении сотрудников");
     }
   }
 );
@@ -78,11 +78,11 @@ export const retrieveOrganizationsEmployeeById = createAsyncThunk<OrganizationEm
         return employee;
       } else {
         const error = response.data as ErrorDto;
-        return rejectWithValue(error.errorMessage?.ru || "Ошибка получения проекта"); // поменять текст. проверить по всему проекту
+        return rejectWithValue(error.errorMessage?.ru || "Ошибка получения сотрудника"); 
       }
     } catch (error: any) {
       console.log(error);
-      return rejectWithValue(error.message || "Произошла ошибка при получении проектов");
+      return rejectWithValue(error.message || "Произошла ошибка при получении сотрудника");
     }
   }
 );
@@ -104,7 +104,7 @@ export const updateOrganizationsEmployees = createAsyncThunk<OrganizationEmploye
         return OrganizationEmployeesResponseDtoToOrganizationEmployees(response.data.employee); 
       } else {
         const error = response.data as ErrorDto;
-        return rejectWithValue(error.errorMessage?.ru || 'Ошибка обновления организации');
+        return rejectWithValue(error.errorMessage?.ru || 'Ошибка обновления сотрудника');
       }
     } catch (error: any) {
       console.log(error);
@@ -125,7 +125,7 @@ export const createOrganizationsEmployees = createAsyncThunk(
         return response.data;
       } else {
         const error = response.data as ErrorDto;
-        return rejectWithValue(error.errorMessage?.ru || 'Ошибка добавления организации')
+        return rejectWithValue(error.errorMessage?.ru || 'Ошибка добавления сотрудника')
       }
     }catch (error: any){
       return rejectWithValue(error.response?.data?.message || 'Ошибка сервера');
@@ -140,7 +140,7 @@ export const deleteOrganizationsEmployees = createAsyncThunk(
       const response = await axios.delete<DeleteOrganizationEmployeeDto>(`${BASE_URL}/organization-employees/${id}`)
       return response.data
     } catch(error: any){
-      return rejectWithValue(error.response?.data || 'Ошибка удаления сотрудника')
+      return rejectWithValue(error.response?.data || 'Ошибка удаления сотрудников')
     }
   }
 )

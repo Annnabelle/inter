@@ -57,10 +57,10 @@ export const RetrieveExperts = createAsyncThunk<PaginatedResponse<Expert>, {page
         return paginatedOrganizationProjects;
       } else {
         const error = response.data as ErrorDto;
-        return rejectWithValue(error.errorMessage?.ru || "Ошибка получения проекта");
+        return rejectWithValue(error.errorMessage?.ru || "Ошибка получения экспертов");
       }
     } catch (error: any) {
-      return rejectWithValue(error.message || "Произошла ошибка при получении проектов");
+      return rejectWithValue(error.message || "Произошла ошибка при получении экспертов");
     }
   }
 );
@@ -102,7 +102,7 @@ export const CreateExpert = createAsyncThunk(
         return response.data;
       } else {
         const error = response.data as ErrorDto;
-        return rejectWithValue(error.errorMessage?.ru || 'Ошибка добавления проекта')
+        return rejectWithValue(error.errorMessage?.ru || 'Ошибка добавления эксперта')
       }
     }catch (error: any){
       return rejectWithValue(error.response?.data?.message || 'Ошибка сервера');

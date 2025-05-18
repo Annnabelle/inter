@@ -66,7 +66,7 @@ export const RetrieveInternationalDocuments = createAsyncThunk<PaginatedResponse
     } catch (error: any) {
       console.log(error);
       
-      return rejectWithValue(error.message || "Произошла ошибка при получении документов");
+      return rejectWithValue(error.message || "Произошла ошибка при получении международных документов");
     }
   }
 );
@@ -90,7 +90,7 @@ export const RetrieveInternationalDocumentById = createAsyncThunk<InternationalD
       }
     } catch (error: any) {
       console.log(error);
-      return rejectWithValue(error.message || "Произошла ошибка при получении проектов");
+      return rejectWithValue(error.message || "Произошла ошибка при получении международного документа");
     }
   }
 );

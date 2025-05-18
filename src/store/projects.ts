@@ -62,7 +62,7 @@ export const retrieveOrganizationsProjects = createAsyncThunk<PaginatedResponse<
 
       } else {
         const error = response.data as ErrorDto;
-        return rejectWithValue(error.errorMessage?.ru || "Ошибка получения проекта");
+        return rejectWithValue(error.errorMessage?.ru || "Ошибка получения проектов");
       }
     } catch (error: any) {
       console.log(error);
@@ -89,7 +89,7 @@ export const retrieveOrganizationProjectById = createAsyncThunk<ProjectWithDocs,
       }
     } catch (error: any) {
       console.log(error);
-      return rejectWithValue(error.message || "Произошла ошибка при получении проектов");
+      return rejectWithValue(error.message || "Произошла ошибка при получении проекта");
     }
   }
 );

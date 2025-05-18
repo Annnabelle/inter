@@ -58,10 +58,10 @@ export const retrieveTranslators = createAsyncThunk<PaginatedResponse<Translator
         return paginatedTranslators;
       } else {
         const error = response.data as ErrorDto;
-        return rejectWithValue(error.errorMessage?.ru || "Ошибка получения переводчика");
+        return rejectWithValue(error.errorMessage?.ru || "Ошибка получения переводчиков");
       }
     } catch (error: any) {
-      return rejectWithValue(error.message || "Произошла ошибка при получении переводчика");
+      return rejectWithValue(error.message || "Произошла ошибка при получении переводчиков");
     }
   }
 );
@@ -117,7 +117,7 @@ export const updateTranslator = createAsyncThunk<Translator, Translator, { rejec
         return mapTranslatorToUpdateTranslatorDto(response.data.translator); 
       } else {
         const error = response.data as ErrorDto;
-        return rejectWithValue(error.errorMessage?.ru || 'Ошибка обновления юзера');
+        return rejectWithValue(error.errorMessage?.ru || 'Ошибка обновления переводчика');
       }
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Ошибка сервера');

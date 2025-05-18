@@ -95,7 +95,7 @@ export const retrieveUsers = createAsyncThunk<RetrieveUsersResult, { page: numbe
           return mapUserDtoToUser(response.data.user); 
         } else {
           const error = response.data as ErrorDto;
-          return rejectWithValue(error.errorMessage?.ru || 'Ошибка обновления юзера');
+          return rejectWithValue(error.errorMessage?.ru || 'Ошибка обновления пользователя');
         }
       } catch (error: any) {
         return rejectWithValue(error.response?.data?.message || 'Ошибка сервера');

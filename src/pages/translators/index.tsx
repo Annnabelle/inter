@@ -173,7 +173,7 @@ const Translators: React.FC = () => {
                     window.location.reload(); 
                 }, 1000); 
             } else {
-                toast.error('Ошибка при обновлении пользователя');
+                toast.error('Ошибка при обновлении переводчика');
             }
         } catch (err) {
             toast.error((err as string) || 'Ошибка сервера');

@@ -159,8 +159,6 @@ const InternationalDocumentsPage: React.FC = () => {
             }))
         }
     };
-    
-
 
     const handleEditOpen = (type: 'Document') => {
         setModalState((prev) => ({
@@ -281,7 +279,17 @@ const InternationalDocumentsPage: React.FC = () => {
                 }}
                 className="layout-content-container"
             >
-               <ComponentTable<InternationalDocumentsTableDataType> onRowClick={(record) => handleRowClick('Document', 'retrieve', record)} columns={InternationalDocumentsTableColumn(t)} data={internationalDocumentData}/>
+               <ComponentTable<InternationalDocumentsTableDataType>
+                pagination={{
+                    current: currentPage,
+                    pageSize: limit,
+                    total: total,
+                    onChange: (page) => {
+                        setCurrentPage(page);
+                        dispatch(RetrieveInternationalDocuments({ page, limit: limit }));
+                    },
+                }}
+                onRowClick={(record) => handleRowClick('Document', 'retrieve', record)} columns={InternationalDocumentsTableColumn(t)} data={internationalDocumentData}/>
             </div>
             <ModalWindow title={t('buttons.add') + " " + t('crudNames.document')} openModal={modalState.addDocument} closeModal={() => handleModal('addDocument', false)}>
                 <FormComponent  onFinish={handleCreateDocument}>
