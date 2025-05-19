@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
-import { theme, Form, Input, Upload, DatePicker, Select, SelectProps } from "antd";
-import { Country, FileItem } from "../../types/countries";
+import { theme, Form, Input, Upload, DatePicker, Select } from "antd";
 import { InternationalDocumentsTableColumn } from "../../tableData/internationalDocuments";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";

@@ -3,9 +3,9 @@ import { Avatar } from "antd";
 import { LuUserRound } from "react-icons/lu";
 import { IoIosArrowDown } from "react-icons/io";
 import { useTranslation } from "react-i18next";
+import { RootState, useAppDispatch, useAppSelector } from "../../store";
 import Button from "../button";
 import "./styles.sass";
-import { RootState, useAppDispatch, useAppSelector } from "../../store";
 
 const UserInfo: React.FC = () => {
   const { t } = useTranslation()
