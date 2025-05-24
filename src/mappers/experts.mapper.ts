@@ -1,6 +1,6 @@
-import { CreateExpertDto, ExpertResponseDto, UpdateExpertDto } from "../dtos/experts";
+import { CreateExpertDto, ExpertResponseDto, PopulatedExpertResponseDto, UpdateExpertDto } from "../dtos/experts";
 import { PaginatedResponse } from "../dtos/main.dto";
-import { Expert, ExpertsType } from "../types/experts.type";
+import { Expert, ExpertsType, ExpertWithDocs } from "../types/experts.type";
 
 export function CreateExpertToCreateExpertDto(expert: ExpertsType): CreateExpertDto {
     return {
@@ -17,15 +17,39 @@ export function CreateExpertToCreateExpertDto(expert: ExpertsType): CreateExpert
 }
 
 
+export function ExpertResponseDtoToExpert(expert: PopulatedExpertResponseDto): ExpertWithDocs {
+  return {
+    id: expert?.id,
+    spheres: expert?.spheres,
+    firstName: expert?.firstName,
+    lastName: expert?.lastName,
+    email: expert?.email,
+    phone: expert?.phone,
+    comment: expert?.comment,
+    organization: expert.organization ? {
+        id: expert.organization.id,
+        name: {
+            ru: expert.organization.name.ru,
+            en: expert.organization.name.en,
+            uz: expert.organization.name.uz
+        },
+        comment: expert.organization.comment,
+        type: expert.organization.type
+    }: null,
+    events: expert.events,
+    files: expert.documents
+  };
+}
+
 export function ExpertsResponseDtoToExperts(expert: ExpertResponseDto): Expert {
   return {
     id: expert?.id,
     spheres: expert?.spheres,
     firstName: expert?.firstName,
     lastName: expert?.lastName,
-    comment: expert?.comment,
+    email: expert?.email,
     phone: expert?.phone,
-    email: expert?.email
+    comment: expert?.comment
   };
 }
 

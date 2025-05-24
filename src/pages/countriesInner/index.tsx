@@ -116,7 +116,7 @@ const CountriesInner: React.FC = () => {
             approval: document.approval,
             comment: document.comment,
             countryId: document.countryId,
-            date: dayjs(document.date).format('YYYY-MM-DD'),
+            date: dayjs(document.date).format('DD.MM.YYYY'),
             organizationId: document.name,
             signLevel: document.signLevel
         }))

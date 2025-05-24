@@ -79,8 +79,7 @@ export const RetrieveInternationalDocumentById = createAsyncThunk<InternationalD
 
       if ("success" in response.data && response.data.success === true) {
         console.log("ers", response.data);
-        const data = response.data as {success: true, document: PopulatedDocumentResponseDto
-        }
+        const data = response.data as {success: true, document: PopulatedDocumentResponseDto}
         const project = InternationalDocumentResponseDtoToInternationalDocument(data.document);
         return project;
 

@@ -13,8 +13,8 @@ export type Upload = {
 }
 
 export type Document = {
-    extension: string
     id: string
+    extension: string
     mimeType: string
     originalName: string
     url: string

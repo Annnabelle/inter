@@ -105,7 +105,7 @@ const InternationalTreaties: React.FC = () => {
             place: document.place,
             comment: document.comment,
             countryId: document.countryId,
-            date: dayjs(document.date).format('YYYY-MM-DD'),
+            date: dayjs(document.date).format('DD.MM.YYYY'),
             signLevel: document.signLevel
         }))
     }, [agreementDocuments, t])

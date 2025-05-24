@@ -52,6 +52,7 @@ const InternationalOrganizationsMain: React.FC = () => {
 
     console.log('internationalOrganizations', internationalOrganizations);
     
+    
 
     const InternationalOrganizationsData = useMemo(() => {
         return internationalOrganizations.map((organization) => ({

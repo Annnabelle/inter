@@ -75,8 +75,8 @@ const Reports: React.FC = () => {
             key: report.id,
             name: report.name,
             type: report.type,
-            startDate: dayjs(report.startDate).format('YYYY-MM-DD'),
-            endDate: dayjs(report.endDate).format('YYYY-MM-DD'),
+            startDate: dayjs(report.startDate).format('DD.MM.YYYY'),
+            endDate: dayjs(report.endDate).format('DD.MM.YYYY'),
             responsible: report.responsible,
             comment: report.comment
           }))
@@ -327,10 +327,10 @@ const Reports: React.FC = () => {
                         </div> 
                         <div className="form-inputs">
                             <Form.Item className="input" name="startDate" >
-                                <DatePicker disabled size="large" className="input" placeholder={dayjs(reportById.startDate).format('YYYY-MM-DD')}/>
+                                <DatePicker disabled size="large" className="input" placeholder={dayjs(reportById.startDate).format('DD.MM.YYYY')}/>
                             </Form.Item>
                             <Form.Item className="input" name="endDate" >
-                                <DatePicker disabled size="large" className="input"   placeholder={dayjs(reportById.endDate).format('YYYY-MM-DD')}/>
+                                <DatePicker disabled size="large" className="input"   placeholder={dayjs(reportById.endDate).format('DD.MM.YYYY')}/>
                             </Form.Item>
                         </div> 
                         {reportById?.documents?.map((item: Document) => (

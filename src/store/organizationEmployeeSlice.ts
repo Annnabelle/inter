@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { OrganizationEmployee, OrganizationEmployees, OrganizationEmployeeWithDocs } from "../types/organizationEmployee";
+import { OrganizationEmployee, OrganizationEmployees, OrganizationEmployeeUpdate, OrganizationEmployeeWithDocs } from "../types/organizationEmployee";
 import { CreateOrganizationEmployeeResponseDto, DeleteOrganizationEmployeeDto, GetOrganizationEmployeeResponseDto, OrganizationEmployeeResponseDto, PopulatedOrganizationEmployeeResponseDto } from "../dtos/organizationEmployee";
 import { CreateOrganizationEmployeeToCreateOrganizationEmployeeDto, PaginatedOrganizationsEmployeesResponseDtoToPaginatedOrganizationsEmployeesResponse, OrganizationEmployeeResponseDtoToOrganizationEmployeeResponse, UpdateOrganizationEmployeeToUpdateOrganizationEmployeeResponseDto, OrganizationEmployeesResponseDtoToOrganizationEmployees } from "../mappers/organizationEmployee.mapper";
 import { ErrorDto, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
@@ -90,7 +90,7 @@ export const retrieveOrganizationsEmployeeById = createAsyncThunk<OrganizationEm
 
 
 
-export const updateOrganizationsEmployees = createAsyncThunk<OrganizationEmployee, OrganizationEmployeeWithDocs, { rejectValue: string }>(
+export const updateOrganizationsEmployees = createAsyncThunk<OrganizationEmployee, OrganizationEmployeeUpdate, { rejectValue: string }>(
   'organizationsEmployees/updateOrganizationsEmployees',
   async (data, { rejectWithValue }) => {
     try {

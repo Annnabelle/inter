@@ -18,7 +18,8 @@ import { Document } from "../../types/uploads";
 import { normalizeUrl } from "../../utils/baseUrl";
 import { fetchCountries } from "../../store/countries";
 import { fetchOrganizationSearch } from "../../store/organizations";
-import { CreateDocument } from "../../store/uploads";
+import { CreateDocument, DeleteUpload } from "../../store/uploads";
+import { FaTrashAlt } from "react-icons/fa";
 
 
 const InternationalDocumentsPage: React.FC = () => {
@@ -114,7 +115,7 @@ const InternationalDocumentsPage: React.FC = () => {
             approval: document.approval,
             comment: document.comment,
             countryId: document.countryId,
-            date: dayjs(document.date).format('YYYY-MM-DD'),
+            date: dayjs(document.date).format('DD.MM.YYYY'),
             organizationId: document.name,
             signLevel: document.signLevel
         }))
@@ -264,6 +265,7 @@ const InternationalDocumentsPage: React.FC = () => {
             toast.error('Ошибка при удалении отчета');
         }
     };
+
     return (
         <MainLayout>
             <MainHeading title={`${t('titles.internationalDocuments')}`} subtitle="Подзаголоок">
@@ -464,19 +466,25 @@ const InternationalDocumentsPage: React.FC = () => {
                          {documentById?.files?.map((item: Document) => (
                             <div className="form-inputs" key={item?.id}>
                                 <Form.Item className="input" name="document">
-                                    <div className="input input-upload">
-                                    <a
-                                        href={normalizeUrl(item?.url)}
-                                        download={item?.originalName}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        📄 {item?.originalName}
-                                    </a>
+                                    <div className="input-upload-items">
+                                        <div className="input input-upload">
+                                            <a
+                                                href={normalizeUrl(item?.url)}
+                                                download={item?.originalName}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                📄 {item?.originalName}
+                                            </a>
+                                        </div>
+                                        {/* <div className="deleteUpload" onClick={() => deleteUpload(item?.id)}>
+                                            <FaTrashAlt/>
+                                        </div> */}
                                     </div>
                                 </Form.Item>
                             </div>
                         ))}
+
                         <Button type="submit">{t('buttons.edit')}</Button>
                     </FormComponent>
                 </ModalWindow>

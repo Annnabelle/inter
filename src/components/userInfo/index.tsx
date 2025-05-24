@@ -3,22 +3,23 @@ import { Avatar } from "antd";
 import { LuUserRound } from "react-icons/lu";
 import { IoIosArrowDown } from "react-icons/io";
 import { useTranslation } from "react-i18next";
-import { RootState, useAppDispatch, useAppSelector } from "../../store";
+import { RootState, useAppSelector } from "../../store";
 import Button from "../button";
 import "./styles.sass";
 
 const UserInfo: React.FC = () => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation();
+  type Lang = 'ru' | 'uz' | 'en';
+  const currentLang = i18n.language as Lang;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const dispatch = useAppDispatch();
   const user = useAppSelector((state: RootState) => state.auth.user)
   const handleClickOutside = useCallback((event: MouseEvent) => {
     if (isOpen && dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
       setIsOpen(false);
     }
   }, [isOpen]);
-
+  
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -37,10 +38,10 @@ const UserInfo: React.FC = () => {
         <Avatar className="user-avatar" size="large" icon={<LuUserRound className="user-icon" />} />
         <div className="user-text">
           <div className="user-text-container">
-            <p className="user-text-container-name">Mukhammad</p>
+            <p className="user-text-container-name">{user?.firstName}</p>
           </div>
           <div className="user-text-container">
-            <p className="user-text-container-role">{t('titles.administrator')}</p>
+             {user?.role?.name?.[currentLang]}
           </div>
         </div>
         <div className="user-arrow">

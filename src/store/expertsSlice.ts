@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { BASE_URL } from "../utils/baseUrl";
-import { ErrorDto, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
-import { Expert, ExpertsType } from "../types/experts.type";
-import { CreateExpertResponseDto, DeleteExpertDto, ExpertResponseDto, GetExpertsResponseDto } from "../dtos/experts";
-import { CreateExpertToCreateExpertDto, ExpertsResponseDtoToExperts, PaginatedExpertsDtoToPaginatedExperts, UpdateExpertToUpdateExpertDto } from "../mappers/experts.mapper";
+import { ErrorDto, HexString, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
+import { Expert, ExpertsType, ExpertWithDocs } from "../types/experts.type";
+import { CreateExpertResponseDto, DeleteExpertDto, ExpertResponseDto, GetExpertResponseDto, GetExpertsResponseDto, PopulatedExpertResponseDto } from "../dtos/experts";
+import { CreateExpertToCreateExpertDto, ExpertResponseDtoToExpert, ExpertsResponseDtoToExperts, PaginatedExpertsDtoToPaginatedExperts, UpdateExpertToUpdateExpertDto } from "../mappers/experts.mapper";
 import axios from "axios";
 
 type ExpertsState = {
@@ -15,7 +15,8 @@ type ExpertsState = {
   page: number,
   total: number,
   expertUpdate: ExpertsType | null,
-  expertDelete: ExpertsType[] | null
+  expertDelete: ExpertsType[] | null,
+  expertById: ExpertWithDocs | null
 };
 
 const initialState: ExpertsState = {
@@ -27,7 +28,8 @@ const initialState: ExpertsState = {
   page: 1,
   total: 0,
   expertUpdate: null,
-  expertDelete: null
+  expertDelete: null,
+  expertById: null
 };
 
 function isSuccessResponse(
@@ -64,6 +66,26 @@ export const RetrieveExperts = createAsyncThunk<PaginatedResponse<Expert>, {page
     }
   }
 );
+
+export const RetrieveExpertById = createAsyncThunk<ExpertWithDocs, {id: HexString}, {rejectValue: string}>(
+  "experts/RetrieveExpertById",
+  async ({id}, {rejectWithValue}) => {
+    try {
+      const response = await axios.get<GetExpertResponseDto>(`${BASE_URL}/experts/${id}`);
+      if ('success' in response.data && response.data.success === true) {
+        const data = response.data as {success: true, expert: PopulatedExpertResponseDto}
+        const expert = ExpertResponseDtoToExpert(data.expert)
+        return expert
+      } else {
+        const error = response.data as ErrorDto
+        return rejectWithValue(error.errorMessage?.ru || "Ошибка получения эксперта")
+      }
+    } catch (error: any) {
+        console.log(error);
+        return rejectWithValue(error.message || "Произошла ошибка")
+    }
+  }
+)
 
 
 
@@ -161,6 +183,21 @@ const expertsSlice = createSlice({
       .addCase(CreateExpert.rejected, (state, action) => {
         state.loading = false;
         state.error = typeof action.payload === 'string' ? action.payload : 'Что-то пошло не так';
+      })
+      .addCase(RetrieveExpertById.pending, (state) => {
+        state.loading = true,
+        state.error = null,
+        state.success = false
+      })
+      .addCase(RetrieveExpertById.fulfilled, (state, action: PayloadAction<ExpertWithDocs>) => {
+        state.loading = false,
+        state.expertById = action.payload
+        state.success = true
+      })
+      .addCase(RetrieveExpertById.rejected, (state) => {
+        state.loading = true,
+        state.error = null,
+        state.success = false
       })
       .addCase(UpdateExpert.pending, (state) => {
         state.loading = true;

@@ -19,6 +19,8 @@ export const Login = createAsyncThunk(
         const { user, tokens } = response.data as Exclude<LoginResponseDto, ErrorDto>;
         localStorage.setItem('accessToken', tokens.accessToken);
         localStorage.setItem('refreshToken', tokens.refreshToken);
+        console.log("user", user);
+        
         return { user, tokens };
       } else {
         const error = response.data as ErrorDto;
