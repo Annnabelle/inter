@@ -48,7 +48,7 @@ function isSuccessResponse(
   );
 }
   
-export const retrieveOrganizationsProjects = createAsyncThunk<PaginatedResponse<Projects>, {page: number, limit: number, id: string},{ rejectValue: string }>(
+export const retrieveOrganizationsProjects = createAsyncThunk<PaginatedResponse<Projects>, {page: number, limit: number, id: HexString | undefined},{ rejectValue: string }>(
   "organizationsProjects/retrieveOrganizationsProjects",
   async ({page, limit, id}, { rejectWithValue }) => {
     try {

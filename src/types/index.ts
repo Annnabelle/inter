@@ -78,14 +78,7 @@ export interface InternationalNonGovernmentOrganizationsChronologyOfMeetingDataT
     level: string;
     nameOfMeeting: string
 }
-export interface CountriesInnerEventDataType {
-    key: string;
-    data: string;
-    nameOfMeeting: string
-    place?: string;
-    format?: string;
-    level: string;
-}
+
 export interface CountriesInnerVisitsDataType {
     key: string;
     period: string;

@@ -8,6 +8,12 @@ export type ErrorDto = {
     errorCode: number;
 };
 
+export class PaginatedDto {
+  page?: number = 1;
+  limit?: number = 10;
+  sortOrder?: 'asc' | 'desc';
+}
+
 
 export type PaginatedResponseDto<T> = {
     data: T[];

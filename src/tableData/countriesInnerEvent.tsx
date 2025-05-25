@@ -1,64 +1,36 @@
 import { TableProps } from "antd";
-import { CountriesInnerEventDataType } from "../types";
 import { TFunction } from "i18next";
+import { CountriesInnerEventDataType } from "../types/events";
 
 export const CountriesEventTableColumns= (t: TFunction): TableProps<CountriesInnerEventDataType>["columns"] => [
     {
         title: t('tableTitles.date'),
-        dataIndex: "data",
-        key: "data",
+        dataIndex: "key",
+        key: "key",
         render: (text) => <h1 className="table-title">{text}</h1>,
     },
     {
       title: t('tableTitles.name'),
-      dataIndex: "nameOfMeeting",
-      key: "nameOfMeeting",
+      dataIndex: "name",
+      key: "name",
       render: (text) => <p className="table-text">{text}</p>
     },
     {
         title: t('tableTitles.place'),
-        dataIndex: "place",
+        dataIndex: "start",
         key: "place",
         render: (text) => <p className="table-text">{text}</p>,
     },
     {
         title: t('tableTitles.format'),
-        dataIndex: "format",
+        dataIndex: "end",
         key: "format",
         render: (text) => <p className="table-text">{text}</p>,
     },
     {
         title: t('tableTitles.level'),
-        dataIndex: "level",
+        dataIndex: "comment",
         key: "level",
         render: (text) => <p className="table-text">{text}</p>
     },
-];
-
-export const CountriesEventTableData: CountriesInnerEventDataType[] = [
-  {
-    key: "1",
-    data: "01/01/2025",
-    nameOfMeeting: "Тест названия",
-    place: "Место проведения тест",
-    format: "Онлайн",
-    level: "Тест уровень",
-  },
-  {
-    key: "2",
-    data: "01/01/2025",
-    nameOfMeeting: "Тест названия",
-    place: "Место проведения тест",
-    format: "Онлайн",
-    level: "Тест уровень",
-
-  },
-  {
-    key: "3",
-    data: "01/01/2025",
-    nameOfMeeting: "Тест названия",
-    place: "Место проведения тест",
-    format: "Онлайн",
-    level: "Тест уровень",
-  },
 ];

@@ -18,11 +18,13 @@ const MainEventsPage: React.FC = () => {
     const [addEventModalOpen, setAddEventModalOpen] = useState<boolean>(false); 
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const eventsDropdownRef = useRef<HTMLDivElement>(null);
+
     const handleClickOutside = useCallback((event: MouseEvent) => {
         if (isOpen && eventsDropdownRef.current && !eventsDropdownRef.current.contains(event.target as Node)) {
             setIsOpen(false);
         }
     }, [isOpen]);
+    
 
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);

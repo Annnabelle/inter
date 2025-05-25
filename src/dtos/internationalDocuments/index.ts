@@ -1,5 +1,5 @@
 import { CountryResponseDto } from "../countries";
-import { ErrorDto, HexString, PaginatedResponseDto } from "../main.dto";
+import { ErrorDto, HexString, PaginatedDto, PaginatedResponseDto } from "../main.dto";
 import { OrganizationResponseDto } from "../organizations";
 import { UploadResponseDto } from "../uploads";
 
@@ -41,11 +41,6 @@ export type GetDocumentDto = {
     id: HexString;
 }
 
-export class PaginatedDto {
-  page?: number = 1;
-  limit?: number = 10;
-  sortOrder?: 'asc' | 'desc';
-}
 
 export type GetDocumentsDto = PaginatedDto & {
     organizationId?: HexString;

@@ -14,14 +14,14 @@ import { createOrganizationProject, deleteOrganizationProject, retrieveOrganizat
 import { Project } from '../../types/projects';
 import { CreateDocument, DeleteUpload } from '../../store/uploads';
 import { normalizeUrl } from '../../utils/baseUrl';
+import { Document } from '../../types/uploads';
+import { FaTrashAlt } from 'react-icons/fa';
 import MainLayout from '../../components/layout'
 import MainHeading from '../../components/mainHeading'
 import ModalWindow from '../../components/modalWindow';
 import Button from '../../components/button';
 import FormComponent from '../../components/form';
 import ComponentTable from '../../components/table';
-import { Document } from '../../types/uploads';
-import { FaTrashAlt } from 'react-icons/fa';
 
 const InternationalOrganizations: React.FC = () => {
   const { t } = useTranslation();
@@ -61,6 +61,10 @@ const InternationalOrganizations: React.FC = () => {
   const employeeById = useAppSelector((state) => state.organizationEmployee.employee)
   const page = useAppSelector((state) => state.organizations.page)
   const total = useAppSelector((state) => state.organizations.total)
+  const projectsPage = useAppSelector((state) => state.organizationProjects.page)
+  const projectsTotal = useAppSelector((state) => state.organizationProjects.total)
+  const projectsLimit = useAppSelector((state) => state.organizationProjects.limit)
+  const [currentProjectPage, setCurrentProjectPage] = useState(projectsPage)
   const [currentPage, setCurrentPage] = useState(page);
   const [editForm] = Form.useForm();
   const [uploadedFileIds, setUploadedFileIds] = useState<string[]>([]);
@@ -76,9 +80,9 @@ const InternationalOrganizations: React.FC = () => {
 
   useEffect(() => {
       if (id) {
-        dispatch(retrieveOrganizationsProjects({ limit: 10, page: currentPage, id }));
+        dispatch(retrieveOrganizationsProjects({ limit: 10, page: currentProjectPage, id }));
       }
-  }, [dispatch, organizationProjects.length, currentPage, limit, id])
+  }, [dispatch, organizationProjects.length, currentProjectPage, limit, id])
 
   
   useEffect(() => {
@@ -429,7 +433,17 @@ const InternationalOrganizations: React.FC = () => {
                         <Button className="outline" onClick={() => handleModal('addProject', true)}>{t('buttons.add')}  {t('crudNames.project')}<IoMdAdd/></Button>
                     </div>
                 </div>
-                <ComponentTable<InternationalOrganizationProjectDataType> onRowClick={(record) => handleRowClick('project', "Retrieve", record)} data={organizationProjectsData} columns={InternationalOrganizationProjectColumns(t)}/>
+                <ComponentTable<InternationalOrganizationProjectDataType> 
+                  pagination={{
+                    current: currentProjectPage,
+                    pageSize: projectsLimit,
+                    total: projectsTotal,
+                    onChange: (page) => {
+                        setCurrentProjectPage(page)
+                        dispatch(retrieveOrganizationsProjects({limit: 10, page: currentProjectPage, id: id }))
+                    }
+                  }}
+                onRowClick={(record) => handleRowClick('project', "Retrieve", record)} data={organizationProjectsData} columns={InternationalOrganizationProjectColumns(t)}/>
             </div>
             {/* <div className="page-inner-table-container">
                 <div className="page-inner-table-container-heading">

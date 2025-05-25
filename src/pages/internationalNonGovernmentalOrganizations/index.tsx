@@ -71,15 +71,15 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
     const [selectedChiefId, setSelectedChiefId] = useState<string | null>(null);
     const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null)
     const [localFiles, setLocalFiles] = useState<Document[]>([]);
-      console.log('total:', total);
+
     useEffect(() => {
-        if (id) {
+        if (organizationEmployees.length === 0) {
             dispatch(RetrieveOrganizationEmployees({ limit: 10, page: currentPage, id }));
         }
     }, [dispatch, organizationEmployees.length, currentPage, limit, id])
 
     useEffect(() => {
-          if (id) {
+          if (organizationProjects.length === 0) {
             dispatch(retrieveOrganizationsProjects({ limit: 10, page: currentProjectPage, id }));
           }
       }, [dispatch, organizationProjects.length, currentProjectPage, limit, id])
@@ -422,6 +422,7 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                 total: total,
                 onChange: (page) => {
                     setCurrentPage(page);
+                    dispatch(RetrieveOrganizationEmployees({page: currentPage, limit: limit, id: id}))
                 },
               }}
               onRowClick={(record) => handleRowClick('chief', "Retrieve", record)} data={organizationEmployeeData} columns={InternationalOrganizationChiefColumns(t)} />
@@ -443,7 +444,8 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                     pageSize: limitProject,
                     total: totalProject,
                     onChange: (page) => {
-                        setCurrentPage(page);
+                        setCurrentProjectPage(page);
+                        dispatch(retrieveOrganizationsProjects({page: currentProjectPage, limit: limitProject, id: id}))
                     },
                   }}
               onRowClick={(record) => handleRowClick('project', "Retrieve", record)} data={organizationProjectsData} columns={InternationalOrganizationProjectColumns(t)}/>

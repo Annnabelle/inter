@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { theme, Form, Input, Upload, DatePicker, Select } from "antd";
 import { Country } from "../../types/countries";
-import { CountriesEventTableColumns, CountriesEventTableData } from "../../tableData/countriesInnerEvent";
+import { CountriesEventTableColumns } from "../../tableData/countriesInnerEvent";
 import { CountriesInnerVisitsColumns, CountriesInnerVisitsData } from "../../tableData/countriesInnerVisitTable";
-import { CountriesInnerEventDataType, CountriesInnerVisitsDataType } from "../../types";
+import { CountriesInnerVisitsDataType } from "../../types";
 import { useTranslation } from "react-i18next";
 import { RootState, useAppDispatch, useAppSelector } from "../../store";
 import { fetchCountries, RetrieveCountries } from "../../store/countries";
@@ -16,6 +16,9 @@ import { toast } from "react-toastify";
 import { CreateDocument } from "../../store/uploads";
 import { fetchOrganizationSearch } from "../../store/organizations";
 import { Document } from "../../types/uploads";
+import { IoMdAdd } from "react-icons/io";
+import { RetrieveEvents } from "../../store/events";
+import { CountriesInnerEventDataType } from "../../types/events";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
 import Button from "../../components/button";
@@ -23,7 +26,6 @@ import ModalWindow from "../../components/modalWindow";
 import FormComponent from "../../components/form";
 import ComponentTable from "../../components/table";
 import dayjs from "dayjs";
-import { IoMdAdd } from "react-icons/io";
 
 const CountriesInner: React.FC = () => {
     const { t, i18n } = useTranslation();
@@ -39,13 +41,16 @@ const CountriesInner: React.FC = () => {
     const limit = useAppSelector((state) => state.countries.limit)
     const page = useAppSelector((state) => state.countries.page)
     const total = useAppSelector((state) => state.countries.total)
+    const eventsLimit = useAppSelector((state) => state.events.limit)
+    const eventsPage = useAppSelector((state) => state.events.page)
+    const eventsTotal = useAppSelector((state) => state.events.total)
     const documentPage = useAppSelector((state) => state.internationalDocuments.page)
     const documentTotal = useAppSelector((state) => state.internationalDocuments.total)
     const documentLimit = useAppSelector((state) => state.internationalDocuments.limit)
     const internationalDocuments = useAppSelector((state: RootState) => state.internationalDocuments.internationalDocuments)
     const [currentPage, setCurrentPage] = useState(documentPage);
     const [uploadedFileIds, setUploadedFileIds] = useState<string[]>([]);
-    const [currentDocumentPage, setCurrentDocumentPage] = useState(page);
+    const [currentEventPage, setCurrentEventPage] = useState(eventsPage);
     const [modalState, setModalState] = useState<{
         addDocument: boolean,
         editDocument: boolean,
@@ -59,7 +64,6 @@ const CountriesInner: React.FC = () => {
         deleteDocument: false,
         DocumentData: null
     });
-
     const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null);
     const countriesSearch = useAppSelector((state) => state.countries.countriesSearch);
     const organizationSearch = useAppSelector((state) => state.organizations.organizationSearch)
@@ -68,6 +72,7 @@ const CountriesInner: React.FC = () => {
     const supportedLangs = ['ru', 'en', 'uz'] as const;
     const fallbackLang: (typeof supportedLangs)[number] = 'ru';
     const [editForm] = Form.useForm();
+    const events = useAppSelector((state) => state.events.events)
 
 
     const handleTypeChange = (value: 'country' | 'organization') => {
@@ -105,8 +110,29 @@ const CountriesInner: React.FC = () => {
         }
     }, [countriesSearch, searchType, organizationSearch,  i18n.resolvedLanguage]);
 
+    useEffect(() => {
+        if(events.length === 0){
+            dispatch(RetrieveEvents({page: currentEventPage, limit: eventsLimit, sortOrder:'desc', countryId: id}))
+        }
+    }, [events.length, dispatch, limit])
+
+    console.log("events", events);
+
+
+    const eventsData = useMemo(() => {
+        return events.map((event, index) => ({
+            key: index + 1,
+            name: event.name,
+            eventType: event.eventType,
+            start: event.startDate,
+            end: event.endDate,
+            comment: event?.comment
+        }))
+    }, [events, t])
+    
+
     const internationalDocumentData = useMemo(() => {
-    return internationalDocuments
+        return internationalDocuments
         .filter((document) => document.countryId === id)
         .map((document, index) => ({
             key: document.id,
@@ -120,7 +146,7 @@ const CountriesInner: React.FC = () => {
             organizationId: document.name,
             signLevel: document.signLevel
         }))
-}, [internationalDocuments, t, id]);
+    }, [internationalDocuments, t, id]);
 
 
     useEffect(() => {
@@ -134,10 +160,6 @@ const CountriesInner: React.FC = () => {
             dispatch(RetrieveInternationalDocumentById({id: selectedDocumentId}))
         }
     }, [dispatch, selectedDocumentId])
-
-    console.log('====================================');
-    console.log("internationalDocuments", internationalDocuments);
-    console.log('====================================');
 
     useEffect(() => {
         if (documentById) {
@@ -155,14 +177,11 @@ const CountriesInner: React.FC = () => {
         }
     }, [documentById, editForm]);
 
-
     const countryName: Country | undefined = countries.find(country => country?.id === id)
     
-
     const handleModal = (modalName: string, value: boolean) => {
         setModalState((prev) => ({...prev, [modalName] : value}));
     }
-
 
     const handleRowClick = (type: 'Document', action: 'retrieve' | 'edit' | 'delete', record: InternationalDocumentsTableDataType) => {
         console.log(`Clicked on ${type}, action: ${action}, record:`, record);
@@ -176,7 +195,6 @@ const CountriesInner: React.FC = () => {
             }))
         }
     };
-    
       
     const handleEditOpen = (type: 'Document') => {
         setModalState((prev) => ({
@@ -186,8 +204,7 @@ const CountriesInner: React.FC = () => {
         setTimeout(() => {
             setModalState((prev) => ({ ...prev, [`edit${type}`]: true }));
         }, 10);
-    };
-    
+    };  
 
     const handleDeleteOpen = (type: 'Document') => {
         setModalState((prev) => ({
@@ -202,9 +219,11 @@ const CountriesInner: React.FC = () => {
     const addFileField = () => {
         setFiles([...files, { id: files.length + 1 }]);
     };
+
     const addDateField = () => {
         setDates([...dates, { id: dates.length + 1}]);
     };
+
     const onFinish = () => {
         console.log('hello finish');
     }
@@ -230,66 +249,67 @@ const CountriesInner: React.FC = () => {
         }
     }
         
-        const handleUpdateDocument = async (values: any) => {
-            try {
-              const updatedData = {...values, id: selectedDocumentId,     
-                countryId: values.countryId?.value || documentById?.countryId,
-                organizationId: values.organizationId?.value || documentById?.organizationId,};
-              const resultAction = await dispatch(UpdateInternationalDocumentRequest(updatedData));
-              console.log('resultAction', resultAction);
-              
-              if (UpdateInternationalDocumentRequest.fulfilled.match(resultAction)) {
-                  toast.success('Документ успешно обновлен');
-                  setTimeout(() => {
-                      handleModal('editDocument', false);
-                      dispatch(RetrieveInternationalDocuments(updatedData.id));
-                      window.location.reload(); 
-                  }, 1000); 
-              } else {
-                  toast.error('Ошибка при обновлении документа');
-              }
-            } catch (err) {
-                toast.error((err as string) || 'Ошибка сервера');
-            }
-        };
-        const handleFileUpload = async (file: File, onSuccess: Function, onError: Function) => {
-            const formData = new FormData();
-            formData.append('file', file);
-        
-            try {
-                const response = await dispatch(CreateDocument(formData));
-                const fileId = response?.payload?.upload?.id;
-                console.log("fileId", fileId);
-                
-                if (fileId) {
-                    setUploadedFileIds(prev => [...prev, fileId]); 
-                    onSuccess(); 
-                } else {
-                    throw new Error('File ID not found in response');
-                }
-                } catch (error) {
-                console.error('Upload error:', error);
-                onError(error);
-            }
-        };
-    
-        const handleDeleteInternationalDocument = async () => {
-            try {
-                const reportId = modalState.DocumentData?.id
-                const resultAction = await dispatch(DeleteInternationalDocument(reportId));
-        
-                if (DeleteInternationalDocument.fulfilled.match(resultAction)) {
-                toast.success('Документ успешно удален');
+    const handleUpdateDocument = async (values: any) => {
+        try {
+            const updatedData = {...values, id: selectedDocumentId,     
+            countryId: values.countryId?.value || documentById?.countryId,
+            organizationId: values.organizationId?.value || documentById?.organizationId,};
+            const resultAction = await dispatch(UpdateInternationalDocumentRequest(updatedData));
+            console.log('resultAction', resultAction);
+            
+            if (UpdateInternationalDocumentRequest.fulfilled.match(resultAction)) {
+                toast.success('Документ успешно обновлен');
                 setTimeout(() => {
+                    handleModal('editDocument', false);
+                    dispatch(RetrieveInternationalDocuments(updatedData.id));
                     window.location.reload(); 
-                }, 1000);
-                } else {
-                toast.error('Ошибка при удалении отчета');
-                }
-            } catch (error) {
-                toast.error('Ошибка при удалении отчета');
+                }, 1000); 
+            } else {
+                toast.error('Ошибка при обновлении документа');
             }
-        };
+        } catch (err) {
+            toast.error((err as string) || 'Ошибка сервера');
+        }
+    };
+
+    const handleFileUpload = async (file: File, onSuccess: Function, onError: Function) => {
+        const formData = new FormData();
+        formData.append('file', file);
+    
+        try {
+            const response = await dispatch(CreateDocument(formData));
+            const fileId = response?.payload?.upload?.id;
+            console.log("fileId", fileId);
+            
+            if (fileId) {
+                setUploadedFileIds(prev => [...prev, fileId]); 
+                onSuccess(); 
+            } else {
+                throw new Error('File ID not found in response');
+            }
+            } catch (error) {
+            console.error('Upload error:', error);
+            onError(error);
+        }
+    };
+    
+    const handleDeleteInternationalDocument = async () => {
+        try {
+            const reportId = modalState.DocumentData?.id
+            const resultAction = await dispatch(DeleteInternationalDocument(reportId));
+    
+            if (DeleteInternationalDocument.fulfilled.match(resultAction)) {
+            toast.success('Документ успешно удален');
+            setTimeout(() => {
+                window.location.reload(); 
+            }, 1000);
+            } else {
+            toast.error('Ошибка при удалении отчета');
+            }
+        } catch (error) {
+            toast.error('Ошибка при удалении отчета');
+        }
+    };
     
     return (
         <MainLayout>
@@ -319,7 +339,18 @@ const CountriesInner: React.FC = () => {
                             {t('tablesName.events')}
                         </h3>
                     </div>
-                    <ComponentTable<CountriesInnerEventDataType> columns={CountriesEventTableColumns(t)} data={CountriesEventTableData} />
+                    <ComponentTable<CountriesInnerEventDataType> 
+                        pagination={{
+                            current: currentEventPage,
+                            pageSize: eventsLimit,
+                            total: eventsTotal,
+                            onChange: (page) => {
+                                setCurrentEventPage(page);
+                                dispatch(RetrieveEvents({ page, limit: eventsLimit, countryId: id }));
+                            },
+                        }}
+                        columns={CountriesEventTableColumns(t)} data={eventsData} 
+                    />
                 </div>
                 <div className="page-inner-table-container">
                     <div className="page-inner-table-container-heading">
@@ -327,7 +358,8 @@ const CountriesInner: React.FC = () => {
                             {t('tablesName.visits')}
                         </h3>
                     </div>
-                    <ComponentTable<CountriesInnerVisitsDataType> data={CountriesInnerVisitsData} columns={CountriesInnerVisitsColumns(t)}/>
+                    <ComponentTable<CountriesInnerVisitsDataType> 
+                    data={CountriesInnerVisitsData} columns={CountriesInnerVisitsColumns(t)}/>
                 </div>
                 <div className="page-inner-table-container">
                     <div className="page-inner-table-container-heading">

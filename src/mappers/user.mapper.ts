@@ -1,7 +1,7 @@
 import { PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
 import { LoginRequestDto, UserRegisterRequestDto, UserRequestUpdateDto, UserResponseDto } from "../dtos/users";
 import { UserUpdateType } from "../store/usersSlice";
-import { User, userLoginType, UserRegister } from "../types/user";
+import { User, UserLoginType, UserRegister } from "../types/user";
 
   export function mapUserDtoToUser(userDto: UserResponseDto): User {
     return {
@@ -23,7 +23,7 @@ import { User, userLoginType, UserRegister } from "../types/user";
     }
   };
 
-  export function mapUserLoginToLoginRequestDto(userLogin: userLoginType): LoginRequestDto{
+  export function mapUserLoginToLoginRequestDto(userLogin: UserLoginType): LoginRequestDto{
     return{
       email: userLogin.email,
       password: userLogin.password
