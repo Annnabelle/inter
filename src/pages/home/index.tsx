@@ -11,6 +11,11 @@ import CalendarFooter from "../../components/calendarFooter";
 import Button from "../../components/button";
 import ModalWindow from "../../components/modalWindow";
 import AddEventForm from "../../components/events/addEvent";
+import { saveAs } from "file-saver";
+import { Document, Packer, Paragraph, TextRun } from "docx";
+import { RootState, useAppSelector } from "../../store";
+ import * as XLSX from "xlsx";
+import moment from "moment";
 
 const MainEventsPage: React.FC = () => {
     const { t } = useTranslation();
@@ -20,6 +25,7 @@ const MainEventsPage: React.FC = () => {
     const [addEventModalOpen, setAddEventModalOpen] = useState<boolean>(false); 
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const eventsDropdownRef = useRef<HTMLDivElement>(null);
+    const events = useAppSelector((state: RootState) => state.eventsCalendar.eventsCalendar)
     const handleClickOutside = useCallback((event: MouseEvent) => {
         if (isOpen && eventsDropdownRef.current && !eventsDropdownRef.current.contains(event.target as Node)) {
             setIsOpen(false);
@@ -42,6 +48,60 @@ const MainEventsPage: React.FC = () => {
         setAddEventModalOpen(false);
     };
 
+    const handleDownloadExcel = () => {
+        const ws = XLSX.utils.json_to_sheet(
+            events.map((event) => ({
+            "Название мероприятия": event.name,
+            "Дата начала": moment(event.startDate).format("DD MMM YYYY HH:mm"),
+            "Дата окончания": moment(event.endDate).format("DD MMM YYYY HH:mm"),
+            "Комментарий": event.comment || "-",
+            }))
+        );
+
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "События");
+
+        const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        const excelFile = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+
+        saveAs(excelFile, "Список_мероприятий.xlsx");
+    };
+
+    const handleDownloadWord = () => {
+        const doc = new Document({
+            sections: [
+            {
+                properties: {},
+                children: [
+                new Paragraph({
+                    children: [
+                    new TextRun({
+                        text: "Список мероприятий",
+                        bold: true,
+                        size: 36,
+                    }),
+                    ],
+                }),
+                ...events.map((event) =>
+                    new Paragraph({
+                    children: [
+                        new TextRun({
+                        text: `• ${event.name} - ${moment(event.startDate).format("DD MMMM YYYY HH:mm")} → ${moment(event.endDate).format("DD MMMM YYYY HH:mm")}`,
+                        size: 24,
+                        }),
+                    ],
+                    })
+                ),
+                ],
+            },
+            ],
+        });
+
+        Packer.toBlob(doc).then((blob) => {
+            saveAs(blob, "Список_мероприятий.docx");
+        });
+    };
+
     return (
         <MainLayout>
             <MainHeading title={`${t("titles.main")}` } subtitle="Подзаголовок">
@@ -53,9 +113,9 @@ const MainEventsPage: React.FC = () => {
                     {isOpen && (
                         <div className="event-dropdown">
                             <div className="event-dropdown-action">
-                                <Button className="outline-black">{t("buttons.excelDownload")}<HiOutlineDocumentDownload fontSize={24}/> </Button>
-                                <Button className="outline-black">{t("buttons.worldDownload")} <HiOutlineDocumentDownload fontSize={24}/></Button>
-                                <Button className="outline-black">{t("buttons.print")} <IoPrintOutline fontSize={24} /></Button>
+                                <Button onClick={handleDownloadExcel} className="outline-black">{t("buttons.excelDownload")}<HiOutlineDocumentDownload fontSize={24}/> </Button>
+                                <Button onClick={handleDownloadWord}  className="outline-black">{t("buttons.worldDownload")} <HiOutlineDocumentDownload fontSize={24}/></Button>
+                                {/* <Button className="outline-black">{t("buttons.print")} <IoPrintOutline fontSize={24} /></Button> */}
                             </div>
                         </div>
                     )}
