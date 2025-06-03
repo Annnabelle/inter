@@ -423,7 +423,7 @@ const Experts: React.FC = () => {
                             )}
                             {expertById?.organization?.name && (
                                 <div className="form-inputs">
-                                    <Form.Item className="input" name="" >
+                                    <Form.Item className="input" name="organization" >
                                         <Input disabled className="input" size='large'  placeholder={expertById.organization?.name?.[currentLang] || ""}/>
                                     </Form.Item>
                                 </div>  

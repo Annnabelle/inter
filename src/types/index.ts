@@ -1,7 +1,8 @@
 import { JSX } from '@emotion/react/jsx-runtime'
 import {ReactNode} from 'react'
 import { ReportType } from '../dtos/reports'
-import { HexString } from '../dtos/main.dto'
+
+
 
 export interface ModalProps {
     closeModal?: ()=> void,

@@ -2,15 +2,18 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { BASE_URL } from "../utils/baseUrl";
 import { ErrorDto, HexString, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
 import { ExpertsType, ExpertWithDocs } from "../types/experts.type";
-import axios from "axios";
-import { GetEventsDto, GetEventsResponseDto } from "../dtos/events/getEvents";
+import { GetEventsDto } from "../dtos/events/getEvents";
 import { EventResponseDto } from "../dtos/events/getEvent";
 import { PaginatedEventsDtoToPaginatedEvents } from "../mappers/events.mapper";
 import { Event, EventSortField, EventType } from "../types/events";
+import { mapEventToCreateEventDto } from "../mappers/events.caledar.mapper";
+import { CreateEventResponseDto } from "../dtos/events/addEvent";
 import qs from "qs"
+import axios from "axios";
 
 type EventsState = {
   events: Event[]
+  eventsCalendar: Event[]
   loading: boolean;
   error: string | null;
   success: boolean;
@@ -20,10 +23,12 @@ type EventsState = {
   expertUpdate: ExpertsType | null,
   expertDelete: ExpertsType[] | null,
   expertById: ExpertWithDocs | null
+  currentEvent: Event | null,
 };
 
 const initialState: EventsState = {
   events: [],
+  eventsCalendar: [],
   loading: false,
   error: null,
   success: false,
@@ -32,7 +37,8 @@ const initialState: EventsState = {
   total: 0,
   expertUpdate: null,
   expertDelete: null,
-  expertById: null
+  expertById: null,
+  currentEvent: null
 };
 
 function isSuccessResponse(
@@ -57,7 +63,7 @@ type RetrieveEventsParams = {
   organizationId?: HexString,
   countryId?: HexString,
   eventTypes?: EventType[],
-  sortBy?: EventSortField, // event sort fields
+  sortBy?: EventSortField,
   sortOrder?: 'asc' | 'desc',
 }
   
@@ -99,6 +105,7 @@ export const RetrieveEvents = createAsyncThunk<
     }
   }
 );
+
 
 
 // export const RetrieveExpertById = createAsyncThunk<ExpertWithDocs, {id: HexString}, {rejectValue: string}>(
@@ -148,23 +155,29 @@ export const RetrieveEvents = createAsyncThunk<
 // );
 
 
-// export const CreateExpert = createAsyncThunk(
-//   'events/createExpert',
-//   async (data: ExpertsType, {rejectWithValue}) => {
-//     try {
-//       const dto = CreateExpertToCreateExpertDto(data);
-//       const response = await axios.post<CreateExpertResponseDto>(`${BASE_URL}/experts`, dto);
-//       if ('success' in response.data && response.data.success){
-//         return response.data;
-//       } else {
-//         const error = response.data as ErrorDto;
-//         return rejectWithValue(error.errorMessage?.ru || 'Ошибка добавления эксперта')
-//       }
-//     }catch (error: any){
-//       return rejectWithValue(error.response?.data?.message || 'Ошибка сервера');
-//     }
-//   }
-// )
+export const CreateEvent = createAsyncThunk(
+  'events/CreateEvent',
+  async (data: Event, {rejectWithValue}) => {
+    try {
+      const dto = mapEventToCreateEventDto(data);
+      const response = await axios.post<CreateEventResponseDto>(`${BASE_URL}/events`, dto);
+      if ('success' in response.data && response.data.success){
+        return response.data;
+      } else {
+        
+        const error = response.data as ErrorDto;
+        console.log('error2', error);
+        return rejectWithValue(error.errorMessage?.ru || 'Ошибка добавления мероприятия')
+      }
+    }catch (error: any){
+      console.log('====================================');
+      console.log('error1', error);
+      console.log('====================================');
+      return rejectWithValue(error.response?.data?.message || 'Ошибка сервера');
+    }
+  }
+)
+
 
 // export const DeleteExpert = createAsyncThunk(
 //   'events/deleteExpert',
@@ -193,7 +206,7 @@ const eventsSlice = createSlice({
       })
       .addCase( RetrieveEvents.fulfilled, (state, action: PayloadAction<PaginatedResponseDto<Event>>) => {
           state.loading = false;
-          state.events = action.payload.data;
+          state.eventsCalendar = action.payload.data;
           state.limit = action.payload.limit;
           state.page = action.payload.page;
           state.total = action.payload.total
@@ -205,34 +218,19 @@ const eventsSlice = createSlice({
         state.error = typeof action.payload === 'string' ? action.payload : 'Что-то пошло не так';
         state.success = false;
       })
-    //   .addCase(CreateExpert.pending, (state) => {
-    //     state.loading = true;
-    //     state.success = false;
-    //     state.error = null;
-    //   })
-    //   .addCase(CreateExpert.fulfilled, (state) => {
-    //     state.loading = false;
-    //     state.success = true;
-    //   })
-    //   .addCase(CreateExpert.rejected, (state, action) => {
-    //     state.loading = false;
-    //     state.error = typeof action.payload === 'string' ? action.payload : 'Что-то пошло не так';
-    //   })
-    //   .addCase(RetrieveExpertById.pending, (state) => {
-    //     state.loading = true,
-    //     state.error = null,
-    //     state.success = false
-    //   })
-    //   .addCase(RetrieveExpertById.fulfilled, (state, action: PayloadAction<ExpertWithDocs>) => {
-    //     state.loading = false,
-    //     state.expertById = action.payload
-    //     state.success = true
-    //   })
-    //   .addCase(RetrieveExpertById.rejected, (state) => {
-    //     state.loading = true,
-    //     state.error = null,
-    //     state.success = false
-    //   })
+      .addCase(CreateEvent.pending, (state) => {
+        state.loading = true;
+        state.success = false;
+        state.error = null;
+      })
+      .addCase(CreateEvent.fulfilled, (state) => {
+        state.loading = false;
+        state.success = true;
+      })
+      .addCase(CreateEvent.rejected, (state, action) => {
+        state.loading = false;
+        state.error = typeof action.payload === 'string' ? action.payload : 'Что-то пошло не так';
+      })
     //   .addCase(UpdateExpert.pending, (state) => {
     //     state.loading = true;
     //     state.error = null;

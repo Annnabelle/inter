@@ -1,5 +1,7 @@
 import IMask from 'imask';
 
+export const DEFAULT_AGENCY_VALUE = '000000000000000000000000';
+
 export const TranslatorLanguage = {
     "ab": "Абхазский",
     "aa": "Афар",
@@ -209,4 +211,3 @@ export function formatDateTime(isoString: string | null): string {
   
     return `${day}.${month}.${year} ${hours}:${minutes}`;
   }
-  

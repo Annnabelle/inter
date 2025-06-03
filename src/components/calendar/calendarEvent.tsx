@@ -1,40 +1,77 @@
 import React from "react";
 import { EventProps } from "react-big-calendar";
 import { IoMdTime } from "react-icons/io";
-import moment from "moment";
+import { Event } from "../../types/events";
+import moment from "moment-timezone";
 import './styles.sass'
 
 const CalendarEvent: React.FC<EventProps> = ({ event }) => {
-    const hour = moment(event.start).hour();
-      let iconColor;
-      if (hour < 12) {
-        iconColor = "rgba(146, 84, 222, 1)";
-      } else if (hour < 16) {
-        iconColor = "rgb(246, 198, 95)";
-      } else {
-        iconColor = "rgb(73, 133, 253)";
-      }
-      const startTime = event?.start?.toLocaleTimeString("ru-Ru", {
-        hour: "2-digit",
-        minute: "2-digit"
-      })
+  const myEvent = event as Event;
 
-      const endTime = event?.end?.toLocaleTimeString("ru-Ru", {
-        hour: "2-digit",
-        minute: "2-digit"
-      })
-      
+  const startTime = moment(event.start).tz("Asia/Tashkent").format("HH:mm");
+  const endTime = moment(event.end).tz("Asia/Tashkent").format("HH:mm");
+
+  let iconColor = '#F8E71C';
+  let borderColor = '#F8E71C';
+  let backgroundColor = '#FCF7E8'
+
+    if (myEvent.eventType === 'birthday') {
+      iconColor = '#F8E71C',
+      backgroundColor = '#FCF7E8',
+      borderColor= '#F8E71C'
+    } else if (myEvent.eventType === 'foreign') {
+      iconColor = '#035703',
+      backgroundColor = '#CDFFCD',
+      borderColor = '#035703'
+    }  else if (myEvent.eventType === 'delegations'){
+      iconColor = '#035703',
+      backgroundColor = '#CDFFCD',
+      borderColor = '#035703'
+    } else if (myEvent.eventType === 'conference'){
+      iconColor = '#046BD1',
+      backgroundColor = '#ADE0FF',
+      borderColor = '#046BD1'
+    } else if (myEvent.eventType === 'diplomatic'){
+      iconColor = '#046BD1',
+      backgroundColor = '#ADE0FF',
+      borderColor = '#046BD1'
+    } else if (myEvent.eventType === 'meeting'){
+      iconColor = '#8A59D6',
+      backgroundColor = '#EBDCFC',
+      borderColor = '#8A59D6'
+    } else if (myEvent.eventType === 'personal'){
+      iconColor = '#8A59D6',
+      backgroundColor = '#EBDCFC',
+      borderColor = '#8A59D6'
+    } else if (myEvent.eventType === 'seminar'){
+      iconColor = '#6C7B8A',
+      backgroundColor = '#E5E5E5',
+      borderColor = '#6C7B8A'
+    } else if (myEvent.eventType === 'significant'){
+      iconColor = '#6C7B8A',
+      backgroundColor = '#E5E5E5',
+      borderColor = '#6C7B8A'
+    }
+  
+
   return (
-    <div className="event-box">
-        <div className="event-box-icon">
-            <IoMdTime className="icon" style={{ color: iconColor }} /> 
-        </div>
-        <div className="event-box-content">
-            <span className="title">{event.title}</span> 
-            <p className="text">{startTime} - {endTime}</p>
-        </div>
+    <div className="rbc-event-content event-box" style={{
+             borderColor: borderColor,
+             backgroundColor: backgroundColor,
+             padding: '5px',
+             borderRadius: '6px',
+           }}>
+      <div className="event-box-icon">
+        <IoMdTime className="icon" style={{ color: iconColor }} />
+      </div>
+      <div className="event-box-content">
+        <span className="title">{event.title}</span>
+        <p className="event-type">{myEvent.eventType}</p>
+        <p className="text">{myEvent.comment}</p>
+        <p className="text">{startTime} - {endTime}</p>
+      </div>
     </div>
   );
 };
 
-export default CalendarEvent;
+export default CalendarEvent

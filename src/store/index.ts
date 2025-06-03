@@ -14,6 +14,8 @@ import countriesReducer from './countries'
 import internationalDocumentsReducer from './internationalDocuments'
 import agreementReducer from './agreements'
 import eventsReducer from './events'
+import eventsCalendarReducer from './eventsCalendar'
+import organizersReducer from './orginizer'
 
 export const store = configureStore({
   reducer: {
@@ -29,7 +31,9 @@ export const store = configureStore({
     countries: countriesReducer,
     internationalDocuments: internationalDocumentsReducer,
     agreement: agreementReducer,
-    events: eventsReducer
+    events: eventsReducer,
+    eventsCalendar: eventsCalendarReducer,
+    organizer: organizersReducer
   },
 });
 

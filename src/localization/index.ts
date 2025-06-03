@@ -41,7 +41,13 @@ export const resources = {
                 Agency: 'Agency',
                 otherOrganizer: 'Other organizer',
                 expertLevel: 'Expert-level',
-                organizations: 'Organizations'
+                organizations: 'Organizations',
+                roles: {
+                    director: "Director",
+                    deputy: "Deputy",
+                    expert: "Expert",
+                    organizer: 'Organizer'
+                }
             },
             buttons: {
                 back: 'Back',
@@ -87,10 +93,15 @@ export const resources = {
 
             },
             events:{
-                conferences: 'Conferences/Forums',
-                seminar: 'Seminar/Training',
-                meetings: 'Meetings',
-                partners: 'Partners',
+                conference: 'Conference / Forum',
+                birthday: 'Birthdays',
+                delegations: 'Reception of Delegations',
+                diplomatic: 'Diplomatic Receptions',
+                foreign: 'Foreign Visits',
+                meeting: 'Meeting / Discussion',
+                personal: 'Personal Matters',
+                seminar: 'Seminar / Training',
+                significant: 'Significant Events',
                 other: 'Other',
                 online: 'Online',
                 offline: 'Offline',
@@ -106,6 +117,8 @@ export const resources = {
                 foreignVisits: 'Foreign visits',
                 receptionOfDelegations: 'Reception of delegations',
                 diplomaticReceptions: 'Diplomatic receptions',
+                hybrid: "Hybrid",
+                membersQuantity: 'Members quantity'
             },
             inputs: {
                 selectEvent: 'Select event',
@@ -144,7 +157,12 @@ export const resources = {
                 email: 'Email',
                 password: 'Password',
                 nameOfTheOrganization: 'Name of the organization',
-                search: 'Search'
+                search: 'Search',
+                startDate: 'Start Date',
+                endDate: 'End Date',
+                mainGuest: 'Main guest',
+                additionalMembers: 'Additional members',
+                notSelected: 'No selected'
             },
             crudNames: {
                 event: 'event',
@@ -268,7 +286,14 @@ export const resources = {
             Agency: 'Агентство',
             otherOrganizer: 'Другой организатор	',
             expertLevel: 'Экспертный',
-            organizations: 'Организации'
+            organizations: 'Организации',
+            roles: {
+                director: "Директор",
+                deputy: "Заместитель",
+                expert: "Эксперт",
+                organizer: 'Орзанизатор'
+            }
+
         },
         buttons: {
             back: 'Назад',
@@ -313,10 +338,15 @@ export const resources = {
             }
         },
         events:{
-            conferences: 'Конференции/Форумы',
-            seminar: 'Семинар/Тренинг',
-            meetings: 'Встречи',
-            partners: 'Партнеры',
+            conference: 'Конференция / Форум',
+            birthday: '	Дни рождения',
+            delegations: 'Прием делегаций',
+            diplomatic: 'Дипломатические приемы',
+            foreign: 'Иностранные визиты',
+            meeting: 'Встреча / Совещание',
+            personal: 'Личне вопросы',
+            seminar: 'Семинар/Тренинг ',
+            significant: 'Значимые события',
             other: 'Другое',
             online: 'Онлайн',
             offline: 'Офлайн',
@@ -332,6 +362,8 @@ export const resources = {
             foreignVisits: 'Зарубежные визиты',
             receptionOfDelegations: 'Прием делегаций',
             diplomaticReceptions: 'Дипломатические приёмы',
+            hybrid: "Гибридный",
+            membersQuantity: 'Количество участников',
         },
         inputs: {
             selectEvent: 'Выберите мероприятие',
@@ -370,7 +402,12 @@ export const resources = {
             email: 'Почта',
             password: 'Пароль',
             nameOfTheOrganization: 'Название организации',
-            search: 'поиск'
+            search: 'Поиск',
+            startDate: 'Начало даты',
+            endDate: 'Конец даты',
+            mainGuest: 'Главный гость',
+            additionalMembers: 'дополнительные участники',
+            notSelected: "Не выбрано"
         },
         crudNames: {
             event: 'мероприятие',
@@ -494,7 +531,13 @@ export const resources = {
             Agency: 'Agentlik',
             otherOrganizer: 'Boshqa tashkilotchi',
             expertLevel: 'Ekspert darajasidagi',
-            organizations: 'Tashkilotlar'
+            organizations: 'Tashkilotlar',
+            roles: {
+                director: "Direktor",
+                deputy: "Muovini",
+                expert: "Mutaxassis",
+                organizer: 'Tashkilotchi'
+            }
         },
         buttons: {
             back: 'Orqaga',
@@ -539,10 +582,15 @@ export const resources = {
             }
         },
         events:{
-            conferences: 'Konferensiyalar/Forumlar',
-            seminar: 'Seminar/Trening',
-            meetings: 'Uchrashuvlar',
-            partners: 'Hamkorlar',
+            conference: 'Konferensiya / Forum',
+            birthday: 'Tug‘ilgan kunlar',
+            delegations: 'Delegatsiyalarni qabul qilish',
+            diplomatic: 'Diplomatik qabullar',
+            foreign: 'Xorijiy tashriflar',
+            meeting: 'Uchrashuv / Majlis',
+            personal: 'Shaxsiy masalalar',
+            seminar: 'Seminar / Trening',
+            significant: 'Muhim voqealar',
             other: 'Boshqa',
             online: 'Onlayn',
             offline: 'Offline',
@@ -558,7 +606,8 @@ export const resources = {
             foreignVisits: 'Chet el safarlari',
             receptionOfDelegations: 'Delegatsiyalarni qabul qilish',
             diplomaticReceptions: 'Diplomatik qabul marosimlari',
-
+            hybrid: "Gibrid",
+            membersQuantity: "A'zolar soni",
         },
         inputs: {
             selectEvent: 'Tadbirni tanlang',
@@ -597,7 +646,12 @@ export const resources = {
             email: 'Elektron pochta',
             password: 'Parol',
             nameOfTheOrganization: 'Tashkilot nomi',
-            search: 'qidiruv'
+            search: 'Qidiruv',
+            startDate: 'Sana boshlanishi',
+            endDate: 'Sana tugashi',
+            mainGuest: 'Asosiy mehmon',
+            additionalMembers: 'Qo‘shimcha ishtirokchilar',
+            notSelected: 'Tanlanmagan'
         },
         crudNames: {
             event: 'tadbir',

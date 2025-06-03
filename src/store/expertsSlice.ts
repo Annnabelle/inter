@@ -70,7 +70,7 @@ export const RetrieveExperts = createAsyncThunk<PaginatedResponse<Expert>, {page
 export const RetrieveExpertById = createAsyncThunk<ExpertWithDocs, {id: HexString}, {rejectValue: string}>(
   "experts/RetrieveExpertById",
   async ({id}, {rejectWithValue}) => {
-    try {
+    try { 
       const response = await axios.get<GetExpertResponseDto>(`${BASE_URL}/experts/${id}`);
       if ('success' in response.data && response.data.success === true) {
         const data = response.data as {success: true, expert: PopulatedExpertResponseDto}

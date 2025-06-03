@@ -1,223 +1,242 @@
-import React, { useState } from "react";
-import { Calendar, dateFnsLocalizer, View } from "react-big-calendar";
-import { format, parse, startOfWeek, getDay, addDays, subDays } from "date-fns";
-import { CalendarComponentProps, EventType } from "../../types/events";
-import { ru } from "date-fns/locale";
-import ModalWindow from "../modalWindow";
-import AddEventForm from "../events/addEvent";
-import Button from "../button";
-import RetrieveEvent from "../events/retrieveEvent";
-import EditEvent from "../events/editEvent";
-import CalendarEventStyle from "./calendarEventStyle";
+import {
+  Calendar as BigCalendar,
+  momentLocalizer,
+  View,
+  Formats,
+} from "react-big-calendar";
+import moment from "moment-timezone";
+import { useEffect, useMemo, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../store";
+import { RetrieveEventsCalendar, RetrieveEventById, DeleteEvent, UpdateEventCalendar } from "../../store/eventsCalendar";
+import { getDateRange } from "./getRange";
 import CalendarEvent from "./calendarEvent";
+import RetrieveEventModal from "../events/retrieveEvent";
+import "moment/locale/ru";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import "./styles.sass";
+import EditEventModal from "../events/editEvent";
+import { toast } from "react-toastify";
+import ModalWindow from "../modalWindow";
+import Button from "../button";
 import { useTranslation } from "react-i18next";
 
-const locales = { ru };
-const localizer = dateFnsLocalizer({
-  format,
-  parse,
-  startOfWeek,
-  getDay,
-  locales,
-});
+moment.locale("ru");
 
-const initialEvents: EventType[] = [
-  {
-    title: "Совещание",
-    start: new Date(2024, 2, 15, 10, 0),
-    end: new Date(2024, 2, 15, 11, 0),
-    allDay: false,
-    organizer: "Иван Иванов",
-    eventType: "Совещание",
-    countOfMembers: "5",
-    partnersOptions: "Партнеры X",
-    donorFormat: "Формат A",
+const localizer = momentLocalizer(moment);
+
+const customFormats: Partial<Formats> = {
+  timeGutterFormat: "HH:mm",
+  eventTimeRangeFormat: (range, culture, localizer) => {
+    if (!localizer) return "";
+    return `${localizer.format(range.start, "HH:mm", culture)} — ${localizer.format(range.end, "HH:mm", culture)}`;
   },
-];
+};
 
-const CalendarComponent: React.FC<CalendarComponentProps> = (props) => {
-    const { t } = useTranslation();
-  const [events, setEvents] = useState<EventType[]>(initialEvents);
-  // const [form] = Form.useForm();
-  const [currentDate, setCurrentDate] = useState<Date>(new Date());
-  const [view, setView] = useState<View>("month");
-  const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
-  const [eventModalOpen, setEventModalOpen] = useState<boolean>(false);
-  const [editEventModalOpen, setEditEventModalOpen] = useState<boolean>(false)
-  const [isDeleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
-  const handleSelectEvent = (event: EventType) => {
-    setSelectedEvent(event);
-    setEventModalOpen(true);
+const CalendarComponent = () => {
+  const { t, i18n } = useTranslation();
+  const dispatch = useAppDispatch();
+  const eventsCalendar = useAppSelector((state) => state.eventsCalendar.eventsCalendar);
+  const selectedEventData = useAppSelector((state) => state.eventsCalendar.selectedEvent);
+
+
+  const [date, setDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState<Date>(
+    moment.tz("Asia/Tashkent").toDate()
+  );
+  const [currentView, setCurrentView] = useState<View>("month");
+  const [events, setEvents] = useState<any[]>([]);
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [modalState, setModalState] = useState({
+    retrieveEvents: false,
+    editEvent: false,
+    deleteEvent: false,
+  });
+
+  const handleModal = (modalName: string, value: boolean) => {
+    setModalState((prev) => ({ ...prev, [modalName]: value }));
   };
 
-  // const handleAddEvent = () => {
-  //   form
-  //     .validateFields()
-  //     .then((values) => {
-  //       const newEvent: EventType = {
-  //         title: values.eventName,
-  //         start: values.date[0].toDate(),
-  //         end: values.date[1].toDate(),
-  //         allDay: false,
-  //         organizer: values.organizer,
-  //         eventType: values.eventType,
-  //         countOfMembers: values.countOfMembers,
-  //         partnersOptions: values.partnersOptions,
-  //         donorFormat: values.donorFormat,
-  //       };
-  //       setEvents([...events, newEvent]);
-  //       props?.closeEventModal();
-  //     })
-  //     .catch((errorInfo) => console.log("Validation Failed:", errorInfo));
-  // };
-  
+  const handleEditOpen = () => {
+    setModalState((prev) => ({
+      ...prev,
+      retrieveEvents: false,
+    }));
+    setTimeout(() => {
+      setModalState((prev) => ({ ...prev, editEvent: true }));
+    }, 10);
+  };
 
-  const goToToday = () => setCurrentDate(new Date());
-  const goToNext = () =>
-    setCurrentDate(addDays(currentDate, view === "month" ? 30 : view === "week" ? 7 : 1));
-  const goToPrev = () =>
-    setCurrentDate(subDays(currentDate, view === "month" ? 30 : view === "week" ? 7 : 1));
+  const handleDeleteOpen = () => {
+    setModalState((prev) => ({
+      ...prev,
+      editEvent: false,
+    }));
+    setTimeout(() => {
+      setModalState((prev) => ({ ...prev, deleteEvent: true }));
+    }, 10);
+  };
 
-  const eventDetails = selectedEvent
-  ? {
-      title: selectedEvent.title,
-      start: selectedEvent.start ? format(selectedEvent.start, "dd.MM.yyyy HH:mm") : "Не указано",
-      end: selectedEvent.end ? format(selectedEvent.end, "dd.MM.yyyy HH:mm") : "Не указано",
-      organizer: selectedEvent.organizer || "Не указан",
-      eventType: selectedEvent.eventType || "Не указан",
-      countOfMembers: selectedEvent.countOfMembers ?? 0,
-      partnersOptions: selectedEvent.partnersOptions || "Не указано",
-      donorFormat: selectedEvent.donorFormat || "Не указано",
+  const dateRange = useMemo(
+    () => getDateRange(currentDate, currentView),
+    [currentDate, currentView]
+  );
+
+  useEffect(() => {
+    if (dateRange.startDate && dateRange.endDate) {
+      dispatch(
+        RetrieveEventsCalendar({
+          startDate: dateRange.startDate,
+          endDate: dateRange.endDate,
+        })
+      );
     }
-  : null;
-  
+  }, [dispatch, dateRange.startDate, dateRange.endDate]);
+
+  useEffect(() => {
+    if (eventsCalendar.length > 0) {
+      const updatedEvents = eventsCalendar.flatMap((ev) => {
+        const originalStart = moment.utc(ev.startDate);
+        const originalEnd = moment.utc(ev.endDate);
+        const start = originalStart.clone().tz("Asia/Tashkent").startOf("day");
+        const end = originalEnd.clone().tz("Asia/Tashkent").endOf("day");
+        const daysCount = end.diff(start, "days") + 1;
+
+        if (daysCount === 1) {
+          return [{
+            id: `${ev.id}`,
+            originalId: ev.id,
+            title: ev.name,
+            start: originalStart.clone().tz("Asia/Tashkent").toDate(),
+            end: originalEnd.clone().tz("Asia/Tashkent").toDate(),
+            comment: ev.comment ?? "",
+            eventType: ev.eventType,
+          }];
+        }
+
+        const eventsByDay = [];
+        for (let i = 0; i < daysCount; i++) {
+          const currentDay = start.clone().add(i, "days");
+          const isFirstDay = i === 0;
+          const isLastDay = i === daysCount - 1;
+
+          const eventStart = isFirstDay
+            ? originalStart.clone().tz("Asia/Tashkent")
+            : currentDay.clone().startOf("day");
+
+          const eventEnd = isLastDay
+            ? originalEnd.clone().tz("Asia/Tashkent")
+            : currentDay.clone().endOf("day");
+
+          eventsByDay.push({
+            id: `${ev.id}-day-${i + 1}`,
+            originalId: ev.id,
+            title: `${ev.name} • День ${i + 1}`,
+            start: eventStart.toDate(),
+            end: eventEnd.toDate(),
+            comment: ev.comment ?? "",
+            eventType: ev.eventType,
+          });
+        }
+
+        return eventsByDay;
+      });
+
+      setEvents(updatedEvents);
+    }
+  }, [eventsCalendar]);
+
+  const handleSelectEvent = (event: any) => {
+    const eventId = event.originalId || event.id;
+    setSelectedEventId(eventId);
+    dispatch(RetrieveEventById(eventId)).then(() => {
+      handleModal("retrieveEvents", true);
+    });
+  };
+
+
+  const getDateRangeLabel = () => {
+    const start = moment.tz(dateRange.startDate, "Asia/Tashkent");
+    const end = moment.tz(dateRange.endDate, "Asia/Tashkent");
+    return `${start.format("DD MMMM YYYY")} - ${end.format("DD MMMM YYYY")}`;
+  };
+  const eventById = selectedEventData?.event
+
+  const handleDeleteEvent = async () => {
+    if (!selectedEventId) return;
+
+    try {
+      const resultAction = await dispatch(DeleteEvent(selectedEventId));
+
+      if (DeleteEvent.fulfilled.match(resultAction)) {
+        toast.success("Мероприятие успешно удалено");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else {
+        toast.error("Ошибка при удалении мероприятия");
+      }
+    } catch (error) {
+      toast.error("Ошибка при удалении мероприятия");
+    }
+  };
+
+
   return (
     <div className="events">
       <div className="events-heading">
-        <div className="events-heading-goto">
-          <div className="events-heading-goto-content">
-            <h2 className="date">January 26 - February 01</h2>
-          </div>
-          <div className="events-heading-goto-content">
-            <div className="events-heading-goto-content-btn" onClick={goToPrev}>
-              <p className="text">{t('buttons.back')}</p>
-            </div>
-            <div className="events-heading-goto-content-btn" onClick={goToToday}>
-              <p className="text">{t('buttons.today')}</p>
-            </div>
-            <div className="events-heading-goto-content-btn" onClick={goToNext}>
-              <p className="text">{t('buttons.forward')}</p>
-            </div>
-          </div>
-        </div>
-        <div className="events-heading-btns">
-          <div className="events-heading-btns-container">
-            <Button className="outline" onClick={() => setView("month")}>{t('buttons.month')}</Button>
-            <Button className="outline" onClick={() => setView("week")}>{t('buttons.week')}</Button>
-            <Button className="outline" onClick={() => setView("day")}>{t('buttons.day')}</Button>
-          </div>
+        <div className="events-heading-goto-content">
+          <h2 className="date">{getDateRangeLabel()}</h2>
         </div>
       </div>
-      <Calendar
+
+      <BigCalendar
         localizer={localizer}
         events={events}
         startAccessor="start"
         endAccessor="end"
-        date={currentDate}
-        onNavigate={(date) => setCurrentDate(date)}
-        view={view}
-        onView={(newView) => setView(newView)}
-        style={{ height: "100vh", background: "white" }}
-        toolbar={false}
-        eventPropGetter={CalendarEventStyle}
-        onSelectEvent={handleSelectEvent}
-        components={{
-          event: CalendarEvent,
+        selectable
+        style={{ height: "100vh", background: "white", marginTop: "100px" }}
+        views={["month", "week", "day"]}
+        onNavigate={(date) => {
+          const tzDate = moment.tz(date, "Asia/Tashkent").toDate();
+          setCurrentDate(tzDate);
+          setDate(tzDate);
         }}
+        defaultView="week"
+        onView={(view) => setCurrentView(view)}
+        view={currentView}
+        date={date}
+        components={{ event: CalendarEvent }}
+        formats={customFormats}
+        min={new Date(date.getFullYear(), date.getMonth(), date.getDate(), 7, 0)}
+        max={new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 0)}
+        step={30}
+        timeslots={1}
+        onSelectEvent={handleSelectEvent}
       />
 
-      <ModalWindow
-        title={`${t('buttons.create')}` + " " 
-        +  `${t("crudNames.event")}`}
-        openModal={props?.openEventModal}
-        closeModal={props?.closeEventModal}
-      >
-        <AddEventForm handleAddEvent={(values) => {
-          const newEvent: EventType = {
-            title: values.eventName,
-            start: values.date[0].toDate(),
-            end: values.date[1].toDate(),
-            allDay: false,
-            organizer: values.organizer,
-            eventType: values.eventType,
-            countOfMembers: String(values.countOfMembers),
-            partnersOptions: values.partnersOptions,
-            donorFormat: values.donorFormat,
-          };          
-          setEvents([...events, newEvent]);
-          props?.closeEventModal();
-        }} />
+      <RetrieveEventModal
+        selectedEvent={eventById ? eventById : null}
+        isOpen={modalState.retrieveEvents}
+        onClose={() => handleModal("retrieveEvents", false)}
+        onEdit={handleEditOpen}
+      />
+      <EditEventModal
+        selectedEvent={eventById ? eventById : null}
+        isOpen={modalState.editEvent}
+        onClose={() => handleModal("editEvent", false)}
+        onDelete={handleDeleteOpen}
+      />
+      <ModalWindow openModal={modalState.deleteEvent} title={`${t('titles.areYouSure')} ${t('crudNames.event')} ?`} className="modal-tight" closeModal={() => handleModal('deleteExpert', false)}>
+        <div className="modal-tight-container">
+            <Button onClick={() => handleModal('deleteEvent', false)} className="outline">{t('buttons.cancel')}</Button>
+            <Button onClick={() => handleDeleteEvent()} className="danger">{t('buttons.delete')}</Button>
+        </div>
       </ModalWindow>
-      <ModalWindow
-        title={`${t('buttons.retrieve')}` + " " 
-        +  `${t("crudNames.event")}`}
-        openModal={eventModalOpen}
-        closeModal={() => setEventModalOpen(false)}
-        handleEdit={() => {
-          setEventModalOpen(false);
-          setTimeout(() => setEditEventModalOpen(true), 100);
-        }}
-      >
-        {selectedEvent && (
-          eventDetails && (
-            <RetrieveEvent event={eventDetails} />
-          )
-        )}
-      </ModalWindow>
-      <ModalWindow
-          title={`${t('buttons.edit')}` + " " 
-          +  `${t("crudNames.event")}`}
-          openModal={editEventModalOpen}
-          closeModal={() => setEditEventModalOpen(false)}
-          handleDelete={() => {  setTimeout(() => setDeleteModalOpen(true), 0);
-            setDeleteModalOpen(true)}}
-        >
-          {selectedEvent && (
-            <EditEvent
-              initialValues={selectedEvent}
-              handleAddEvent={(values) => {
-                const updatedEvent: EventType = {
-                  ...selectedEvent,
-                  title: values.eventName,
-                  start: values.date[0].toDate(),
-                  end: values.date[1].toDate(),
-                  organizer: values.organizer,
-                  eventType: values.eventType,
-                  countOfMembers: String(values.countOfMembers),
-                  partnersOptions: values.partnersOptions,
-                  donorFormat: values.donorFormat,
-                };
-                setEvents(events.map((ev) => (ev === selectedEvent ? updatedEvent : ev)));
-                setEditEventModalOpen(false);
-              }}
-            />
-          )}
-        </ModalWindow>
-          <ModalWindow openModal={isDeleteModalOpen} title={`${t('titles.areYouSure')} ${t('crudNames.event')} ?`}  className="modal-tight"
-            closeModal={() => setDeleteModalOpen(false)}>
-              <div className="modal-tight-container">
-                <Button onClick={() => setDeleteModalOpen(false)} className="outline">{t('buttons.cancel')}</Button>
-                <Button className="danger">{t('buttons.delete')}</Button>
-              </div>
-          </ModalWindow>
     </div>
   );
 };
 
 export default CalendarComponent;
-
 
 
 

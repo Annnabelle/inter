@@ -5,6 +5,9 @@ import { CreateOrganization, Organization } from "../types/organizations";
 import { CreateOrganizationResponseDto, GetOrganizationsResponseDto, OrganizationResponseDto } from "../dtos/organizations";
 import { createOrganizationToCreateOrganizationDto, organizationResponseDtoToOrganization, paginatedOrganizationsDtoToPaginatedOrganizations, updateOrganizationsToUpdateOrganizationDto } from "../mappers/organizations.mapper";
 import axios from "axios";
+import { Organizer } from "../types/organizer";
+import { paginatedOrganizersDtoToPaginatedOrganizers } from "../mappers/organizer.mapper";
+import { GetOrganizersResponseDto } from "../dtos/organizer";
 
 type OrganizationsState = {
   nonGovOrganizations: Organization[];
@@ -29,7 +32,7 @@ const initialState: OrganizationsState = {
   page: 1,
   total: 0,
   organization: null,
-  organizationSearch: []
+  organizationSearch: [],
 };
 
 function isSuccessResponse(
@@ -154,6 +157,7 @@ export const deleteOrganization = createAsyncThunk(
     }
   }
 )
+
   
 
 const organizationsSlice = createSlice({

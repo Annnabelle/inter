@@ -1,219 +1,184 @@
 import React, { useState } from "react";
-import { Form, Select, DatePicker, Input, Checkbox } from "antd";
-import { AddEventFormProps, EventFormValues } from "../../../types/events";
-import dayjs from "dayjs";
+import { Form, Select, DatePicker, Input } from "antd";
+import { Event, EventType } from "../../../types/events";
+import { useTranslation } from "react-i18next";
+import { useAppDispatch } from "../../../store";
+import { CreateEvent } from "../../../store/events";
+import { toast } from "react-toastify";
 import Button from "../../button";
 import FormComponent from "../../form";
-import { useTranslation } from "react-i18next";
+import ConferenceAdditionalFields from "./additionalField/ConferenceAdditionalFields";
+import MeetingAdditionalFields from "./additionalField/MeetingAdditionalFields";
+import BirthdayAdditionalFields from "./additionalField/BirthdayAdditionalFields";
+import DelegationAdditionalFields from "./additionalField/DelegationAdditionalFields";
+import DiplomaticAdditionalFields from "./additionalField/DiplomaticAdditionalFields";
+import ForeignAdditionalFields from "./additionalField/ForeignAdditionalFields";
+import SeminarAdditionalFields from "./additionalField/SeminarAdditionalFields";
 
+const createEventFieldsStrategy: Partial<Record<EventType, React.FC>> = {
+  [EventType.Birthday]: BirthdayAdditionalFields,
+  [EventType.Conference]: ConferenceAdditionalFields,
+  [EventType.Delegations]: DelegationAdditionalFields,
+  [EventType.Diplomatic]: DiplomaticAdditionalFields,
+  [EventType.Foreign]: ForeignAdditionalFields,
+  [EventType.Meeting]: MeetingAdditionalFields,
+  [EventType.Seminar]: SeminarAdditionalFields,
+};
 
-const AddEventForm: React.FC<AddEventFormProps> = ({ handleAddEvent }) => {
+const AddEventForm = ({ onSuccess }: { onSuccess: () => void}) => {
   const { t } = useTranslation();
-  const [form] = Form.useForm<EventFormValues>();
-  const [isMIDChecked, setIsMIDChecked] = useState<boolean>(false);
-  const [isSGBChecked, setIsSGBChecked] = useState<boolean>(false);
-  const [isAdminChecked, setIsAdminChecked] = useState<boolean>(false);
+  const [form] = Form.useForm<Event>();
+  const dispatch = useAppDispatch()
+  const [selectedEventType, setSelectedEventType] = useState<EventType | null>(null);
 
-  const eventOptions = [
-    { value: "conferences", label: t('events.conferences') },
-    { value: "seminar", label: t('events.seminar') },
-    { value: "meetings", label: t('events.meetings') },
-    { value: "partners", label: t('events.partners') },
-    { value: "other", label: t('events.other') },
-  ];
-  const eventFormat = [
-    { value: "online", label:  t('events.online')  },
-    { value: "offline", label:  t('events.offline')  },
-  ];
-  
-  const partnersOptions = [
-    { value: "test1", label: "test1" },
-    { value: "test2", label: "test2" },
-  ];
-  const donorFormat = [
-    { value: "test1", label: "test1" },
-    { value: "test2", label: "test2" },
-  ];
-  const onFinish = (values: EventFormValues) => {
-    handleAddEvent(values);
-    form.resetFields();
+  const onEventTypeChange = (value: EventType) => {
+    setSelectedEventType(value);
   };
 
+  const AdditionalFields = selectedEventType ? createEventFieldsStrategy[selectedEventType] : null;
+
+  const eventOptions = [
+    { value: EventType.Birthday, label: t('events.birthday') },
+    { value: EventType.Conference, label: t('events.conference') },
+    { value: EventType.Delegations, label: t('events.delegations') },
+    { value: EventType.Diplomatic, label: t('events.diplomatic') },
+    { value: EventType.Foreign, label: t('events.foreign') },
+    { value: EventType.Meeting, label: t('events.meeting') },
+    { value: EventType.Personal, label: t('events.personal') },
+    { value: EventType.Seminar, label: t('events.seminar') },
+    { value: EventType.Significant, label: t('events.significant') },
+  ];
+
+const handleCreateEvent = async (values: any) => {
+  try {
+    let formattedApprovals: Record<string, any> | null = null;
+
+    if (values.approvals) {
+      formattedApprovals = {};
+      Object.entries(values.approvals).forEach(([key, approval]: [string, any]) => {
+        const status = approval.status;
+
+        if (status === 'none') {
+          formattedApprovals![key] = { status: 'none' };
+        } else if (status === 'pending') {
+          formattedApprovals![key] = {
+            status: 'pending',
+            request: {
+              date: approval.request?.date ? approval.request.date.toISOString() : null,
+              document: approval.request?.document || '',
+            }
+          };
+        } else if (status === 'approved') {
+          formattedApprovals![key] = {
+            status: 'approved',
+            request: {
+              date: approval.request?.date ? approval.request.date.toISOString() : null,
+              document: approval.request?.document || '',
+            },
+            response: {
+              date: approval.response?.date ? approval.response.date.toISOString() : null,
+              document: approval.response?.document || '',
+            }
+          };
+        }
+      });
+    }
+    const formattedValues: any = {
+      ...values,
+      startDate: values.startDate ? values.startDate.toDate().toISOString() : null,
+      endDate: values.endDate ? values.endDate.toDate().toISOString() : null,
+    };
+
+    if (formattedApprovals) {
+      formattedValues.approvals = formattedApprovals;
+    }
+
+    console.log('formattedValues', formattedValues);
+
+    const resultAction = await dispatch(CreateEvent(formattedValues));
+    if (CreateEvent.fulfilled.match(resultAction)) {
+      toast.success('Мероприятие было добавлено успешно');
+      setTimeout(() => {
+         onSuccess();
+         window.location.reload()
+      }, 1000)
+    } else {
+      toast.error("Ошибка при добавлении мероприятия");
+    }
+  } catch (err) {
+    toast.error((err as string) || 'Ошибка сервера');
+  }
+};
+
   return (
-    <FormComponent onFinish={onFinish}>
+    <FormComponent onFinish={handleCreateEvent}>
       <div className="form-inputs">
-        <Form.Item
-          name="eventName"
-          className="input"
-        >
-          <Select className="input" size="large" options={eventOptions} placeholder={`${t('inputs.selectEvent')}`} />
-        </Form.Item>
-        <Form.Item
-          name="organizer"
-          className="input"
-        >
-          <Input className="input" size="large"  placeholder={`${t('inputs.enterOrganizer')}`}  />
-        </Form.Item>
-      </div>
-      <div className="form-inputs">
-        <Form.Item
-          name="eventType"
-          className="input"
-        >
-          <Select className="input" size="large" options={eventFormat} placeholder={`${t('inputs.selectFormat')}`}  />
-        </Form.Item>
-        <Form.Item
-          name="countOfMembers"
-          className="input"
-        >
-          <Input className="input" size="large"  placeholder={`${t('inputs.numberOfParticipants')}`} type="number" />
-        </Form.Item>
-      </div>
-      <div className="form-inputs">
-        <Form.Item
-          name="partnersOptions"
-          className="input"
-        >
-          <Select className="input" size="large" options={partnersOptions} placeholder={`${t('inputs.selectPartner')}`} />
-        </Form.Item>
-        <Form.Item
-          name="donorFormat"
-          className="input"
-        >
-          <Select className="input" size="large" options={donorFormat} placeholder={`${t('inputs.selectDonor')}`}  />
-        </Form.Item>
-      </div>
-      <div className="form-inputs">
-        <Form.Item
-          name="date"
-          style={{width: '100%'}}
-        >
-          <DatePicker.RangePicker
-            showTime
-            format="YYYY-MM-DD HH:mm"
-            defaultValue={[dayjs(), dayjs().add(1, "hour")]}
-            style={{ width: "100%" }}
+        <Form.Item name="eventType" className="input" rules={[{ required: true, message: t('errors.required') }]}>
+          <Select
+            className="input"
             size="large"
-            
+            options={eventOptions}
+            placeholder={t('inputs.selectEvent')}
+            onChange={onEventTypeChange}
+          />
+        </Form.Item>
+        <Form.Item name="name" className="input" rules={[{ required: true, message: t('errors.required') }]}>
+          <Input
+            className="input"
+            size="large"
+            placeholder={t('inputs.title')}
           />
         </Form.Item>
       </div>
-      <div className="form-inputs">
-        <div className="approval-container">
-          {isMIDChecked && (
-            <div className="approval-container-items">
-               <div className="approval-container-item">
-                 <div className="approval-letter-label">
-                   <p className="label">{`${t('events.letterToMFA')}`} </p>
-                 </div>
-                 <div style={{ display: "flex", gap: 8 }}>
-                  <Form.Item name="dateMidLetter"
-                    style={{width: '100%'}}>
-                   <DatePicker size="large" format="DD.MM.YYYY"   style={{ width: "100%" }} placeholder={`${t('inputs.selectDate')}`}/>
-                  </Form.Item>
-                  <Form.Item name="numberMidLetter"
-                    style={{width: '100%'}}>
-                   <Input size="large" placeholder={`${t('inputs.number')}`} style={{ width: "100%" }} />
-                  </Form.Item>
-                 </div>
-               </div>
-               <div className="approval-container-item">
-                 <div className="approval-letter-label">
-                   <p className="label">{t('events.MFAResponse')}</p>
-                 </div>
-                 <div style={{ display: "flex", gap: 8 }}>
-                  <Form.Item 
-                    name="dateMidResponse"
-                    style={{width: '100%'}}>
-                   <DatePicker size="large" format="DD.MM.YYYY" style={{ width: "100%" }} placeholder={`${t('inputs.selectDate')}`} />
-                  </Form.Item>
-                    <Form.Item 
-                      name="numberMidResponse"
-                      style={{width: '100%'}}>
-                      <Input size="large" placeholder={`${t('inputs.number')}`} style={{ width: "100%" }} />
-                    </Form.Item>
-                 </div>
-               </div>  
-             </div>
-          )}
-          <Checkbox checked={isMIDChecked} onChange={(e) => setIsMIDChecked(e.target.checked)}>
-          {t('events.approvalFromMFA')}
-          </Checkbox>
 
-          {isSGBChecked && (
-            <div className="approval-container-items">
-               <div className="approval-container-item">
-                 <div className="approval-letter-label">
-                   <p className="label">{t('events.letterToSSS')}</p>
-                 </div>
-                 <div style={{ display: "flex", gap: 8 }}>
-                  <Form.Item 
-                    name="dateSgbLetter"
-                    style={{width: '100%'}}>
-                   <DatePicker size="large" format="DD.MM.YYYY"   style={{ width: "100%" }} placeholder={`${t('inputs.selectDate')}`}/>
-                  </Form.Item>
-                  <Form.Item 
-                    name="numberSbgLetter"
-                    style={{width: '100%'}}>
-                   <Input size="large" placeholder={`${t('inputs.number')}`} style={{ width: "100%" }} />
-                  </Form.Item>
-                 </div>
-               </div>
-               <div className="approval-container-item">
-                 <div className="approval-letter-label">
-                   <p className="label">{t('events.SSSResponse')}</p>
-                 </div>
-                 <div style={{ display: "flex", gap: 8 }}>
-                  <Form.Item 
-                    name="dateSgbResponse"
-                    style={{width: '100%'}}> 
-                   <DatePicker size="large" format="DD.MM.YYYY" style={{ width: "100%" }} placeholder={`${t('inputs.selectDate')}`} />
-                  </Form.Item>
-                    <Form.Item 
-                    name="numberSgbResponse"
-                    style={{width: '100%'}}>  
-                   <Input size="large" placeholder={`${t('inputs.number')}`} style={{ width: "100%" }} />
-                  </Form.Item>
-                 </div>
-               </div>  
-             </div>
-          )}
-          <Checkbox checked={isSGBChecked} onChange={(e) => setIsSGBChecked(e.target.checked)}>
-          {t('events.approvalFromSSS')}
-          </Checkbox>
-          {isAdminChecked && (
-            <div className="approval-container-items">
-               <div className="approval-container-item">
-                 <div className="approval-letter-label">
-                   <p className="label">{t('events.letterToAdministration')}</p>
-                 </div>
-                 <div style={{ display: "flex", gap: 8 }}>
-                   <DatePicker size="large" format="DD.MM.YYYY"   style={{ width: "100%" }} placeholder={`${t('inputs.selectDate')}`}/>
-                   <Input size="large" placeholder={`${t('inputs.number')}`} style={{ width: "100%" }} />
-                 </div>
-               </div>
-               <div className="approval-container-item">
-                 <div className="approval-letter-label">
-                   <p className="label">{t('events.administrationResponse')}</p>
-                 </div>
-                 <div style={{ display: "flex", gap: 8 }}>
-                   <DatePicker size="large" format="DD.MM.YYYY" style={{ width: "100%" }} placeholder={`${t('inputs.selectDate')}`} />
-                   <Input size="large" placeholder={`${t('inputs.number')}`} style={{ width: "100%" }} />
-                 </div>
-               </div>  
-             </div>
-          )}
-          <Checkbox checked={isAdminChecked} onChange={(e) => setIsAdminChecked(e.target.checked)}>
-          {t('events.approvalFromAdministration')}
-          </Checkbox>
-        </div>
+      <div className="form-inputs">
+        <Form.Item
+          className="input"
+          name="startDate"
+          rules={[{ required: true, message: t('errors.required') }]}
+        >
+          <DatePicker
+            showTime={{ format: 'HH:mm' }}
+            format="YYYY-MM-DD HH:mm"
+            size="large"
+            className="input"
+            placeholder="Дата и время начала"
+            onChange={(date) => console.log('selected startDate:', date?.format('YYYY-MM-DD HH:mm:ss'))}
+          />
+        </Form.Item>
+        
+        <Form.Item
+          className="input"
+          name="endDate"
+          rules={[{ required: true, message: t('errors.required') }]}
+        >
+         <DatePicker
+          showTime={{ format: 'HH:mm' }}
+          format="YYYY-MM-DD HH:mm"
+          size="large"
+          className="input"
+          placeholder="Дата и время окончания"
+          onChange={(date) => console.log('selected endDate:', date?.format('YYYY-MM-DD HH:mm:ss'))}
+        />
+        </Form.Item>
       </div>
 
-      <Button type="submit">{t('buttons.create')}</Button>
+
+      <div className="form-inputs">
+        <Form.Item name="comment" className="input">
+          <Input
+            className="input"
+            size="large"
+            placeholder={t('tableTitles.comment')}
+          />
+        </Form.Item>
+      </div>
+
+      {typeof AdditionalFields === "function" && <AdditionalFields />}
+       <Button type="submit">{t('buttons.create')}</Button>
     </FormComponent>
   );
 };
 
 export default AddEventForm;
-
 

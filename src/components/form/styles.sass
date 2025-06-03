@@ -5,6 +5,18 @@
     @include mix.flex-content(flex-start, column)
     row-gap: 30px
     margin-top: 40px
+    align-items: start
+    .inputs
+        &-label
+            margin-top: -10px
+            margin-bottom: -15px
+            .label
+                +mix.typography(12px, 500, map.get(vars.$main, 'main'))
+    .form-donors
+        width: 100%
+        @include mix.flex-content(flex-start, column)
+        align-items: flex-end
+        row-gap: 10px
     &-inputs
         @include mix.flex-content(space-between, row)
         width: 100%
