@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
-import { HexString } from "../dtos/main.dto";
+import { ErrorDto, HexString } from "../dtos/main.dto";
 import { EventFormat, EventLevel } from "../dtos/events/addEvent";
+import { EventTypeCounters } from "../dtos/events/getEventsCalendar";
 
 export type Event = {
   id?: HexString,
@@ -9,6 +10,22 @@ export type Event = {
   eventType: EventType,
   startDate: Date,
   endDate: Date,
+};
+
+export type EventWithId = {
+  id: HexString,
+  name: string;
+  comment?: string,
+  eventType: EventType,
+  startDate: Date,
+  endDate: Date,
+}
+
+export type GetEventsCalendar = {
+  success: boolean,
+  events: EventWithId[],
+  total: number,
+  counters: EventTypeCounters,
 };
 
 

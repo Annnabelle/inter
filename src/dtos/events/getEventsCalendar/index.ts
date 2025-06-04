@@ -21,3 +21,4 @@ export type GetEventsCalendarResponseDto = {
   total: number,
   counters: EventTypeCounters,
 } | ErrorDto;
+

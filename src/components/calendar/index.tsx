@@ -37,7 +37,6 @@ const CalendarComponent = () => {
   const eventsCalendar = useAppSelector((state) => state.eventsCalendar.eventsCalendar);
   const selectedEventData = useAppSelector((state) => state.eventsCalendar.selectedEvent);
 
-
   const [date, setDate] = useState(new Date());
   const [currentDate, setCurrentDate] = useState<Date>(
     moment.tz("Asia/Tashkent").toDate()

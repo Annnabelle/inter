@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { BASE_URL } from "../utils/baseUrl";
-import { ErrorDto, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
+import { ErrorDto} from "../dtos/main.dto";
 import { ExpertsType, ExpertWithDocs } from "../types/experts.type";
 import { EventResponseDto, GetEventResponseDto } from "../dtos/events/getEvent";
-import { Event, EventById} from "../types/events";
-import { GetEventsCalendarDto } from "../dtos/events/getEventsCalendar";
-import { EventsCalendarResponseDtoToEventsCalendar, PaginatedEventsCalendarDtoToPaginatedEventsCalendar, UpdateEventCalendarToUpdateEventCalendarDTO } from "../mappers/events.caledar.mapper";
+import { Event, EventById, GetEventsCalendar} from "../types/events";
+import { EventTypeCounters, GetEventsCalendarResponseDto } from "../dtos/events/getEventsCalendar";
+import { EventsCalendarResponseDtoToEventsCalendar, isErrorDto, RetrieveEventsCalendarDtoToRetrieveEventsCalendar, UpdateEventCalendarToUpdateEventCalendarDTO } from "../mappers/events.caledar.mapper";
 import { DeleteEventDto } from "../dtos/events/deleteEvent";
 import axios from "axios"
 
@@ -22,6 +22,7 @@ type EventsState = {
   eventDelete: Event[] | null,
   expertById: ExpertWithDocs | null
   selectedEvent: EventById | null;
+  eventCounter: EventTypeCounters | null
 };
 
 const initialState: EventsState = {
@@ -36,12 +37,13 @@ const initialState: EventsState = {
   expertUpdate: null,
   eventDelete: null,
   expertById: null,
-  selectedEvent: null
+  selectedEvent: null,
+  eventCounter: null
 };
 
 function isSuccessResponse(
   data: unknown
-): data is { success: true; events: EventResponseDto[]; total: number; page?: number; limit?: number } {
+): data is { success: true; events: EventResponseDto[]; total: number; counters: EventTypeCounters } {
   return (
     typeof data === "object" &&
     data !== null &&
@@ -60,32 +62,39 @@ type RetrieveEventsParams = {
 
 
 export const RetrieveEventsCalendar = createAsyncThunk<
-  PaginatedResponse<Event>,
+  GetEventsCalendar,
   RetrieveEventsParams,
   { rejectValue: string }
 >(
   "eventsCalendar/RetrieveEventsCalendar",
-  async ({ startDate, endDate }, { rejectWithValue }) => {
+  async (
+    { startDate, endDate }: RetrieveEventsParams,
+    { rejectWithValue }
+  ): Promise<GetEventsCalendar | ReturnType<typeof rejectWithValue>> => {
     try {
       const startDateUTC = new Date(startDate).toISOString();
       const endDateUTC = new Date(endDate).toISOString();
 
-      const response = await axios.get<GetEventsCalendarDto>(`${BASE_URL}/events/calendar`, {
+      const response = await axios.get<GetEventsCalendarResponseDto>(`${BASE_URL}/events/calendar`, {
         params: {
           startDate: startDateUTC,
           endDate: endDateUTC,
-        }
+        },
       });
 
-      if (isSuccessResponse(response.data)) {
-        const paginatedEvents = PaginatedEventsCalendarDtoToPaginatedEventsCalendar(response.data);
-        return paginatedEvents;
-      } else {
-        const error = response.data as unknown as ErrorDto;
-        return rejectWithValue(error.errorMessage?.ru || "Ошибка получения ивентов");
+      if (isErrorDto(response.data)) {
+        return rejectWithValue(response.data.errorMessage?.ru || "Ошибка получения ивентов");
       }
+
+      const retrieveEvents = RetrieveEventsCalendarDtoToRetrieveEventsCalendar(response.data);
+      if (!retrieveEvents) {
+        return rejectWithValue("Получен пустой результат");
+      }
+
+      return retrieveEvents;
+
     } catch (error: any) {
-      console.log("error", error);
+      console.error("RetrieveEventsCalendar error:", error);
       return rejectWithValue(error.message || "Произошла ошибка при получении ивентов");
     }
   }
@@ -93,25 +102,8 @@ export const RetrieveEventsCalendar = createAsyncThunk<
 
 
 
-// export const RetrieveExpertById = createAsyncThunk<ExpertWithDocs, {id: HexString}, {rejectValue: string}>(
-//   "events/RetrieveExpertById",
-//   async ({id}, {rejectWithValue}) => {
-//     try {
-//       const response = await axios.get<GetExpertResponseDto>(`${BASE_URL}/experts/${id}`);
-//       if ('success' in response.data && response.data.success === true) {
-//         const data = response.data as {success: true, expert: PopulatedExpertResponseDto}
-//         const expert = ExpertResponseDtoToExpert(data.expert)
-//         return expert
-//       } else {
-//         const error = response.data as ErrorDto
-//         return rejectWithValue(error.errorMessage?.ru || "Ошибка получения эксперта")
-//       }
-//     } catch (error: any) {
-//         console.log(error);
-//         return rejectWithValue(error.message || "Произошла ошибка")
-//     }
-//   }
-// )
+
+
 
 
 
@@ -119,15 +111,10 @@ export const UpdateEventCalendar = createAsyncThunk<Event, Event, { rejectValue:
   'events/UpdateEventCalendar',
   async (data, { rejectWithValue }) => {
     try {
-      console.log('====================================');
-      console.log(data, 'data');
-      console.log('====================================');
       const dto = UpdateEventCalendarToUpdateEventCalendarDTO(data);
       const response = await axios.patch(`${BASE_URL}/events/${data.id}`, dto);
-      console.log("response.data ", response.data );
       
       if ('success' in response.data && response.data.success) {
-        console.log(response.data);
         
         return EventsCalendarResponseDtoToEventsCalendar(response.data.employee); 
       } else {
@@ -198,9 +185,10 @@ const eventsCalendarSlice = createSlice({
         state.error = null;
         state.success = false;
       })
-      .addCase( RetrieveEventsCalendar.fulfilled, (state, action: PayloadAction<PaginatedResponseDto<Event>>) => {
+      .addCase( RetrieveEventsCalendar.fulfilled, (state, action: PayloadAction<GetEventsCalendar>) => {
           state.loading = false;
-          state.eventsCalendar = action.payload.data;
+          state.eventsCalendar = action.payload.events;
+          state.eventCounter = action.payload.counters
           state.total = action.payload.total
           state.success = true;
         }
@@ -225,46 +213,6 @@ const eventsCalendarSlice = createSlice({
         state.error = null,
         state.success = false
       })
-    //   .addCase(CreateExpert.pending, (state) => {
-    //     state.loading = true;
-    //     state.success = false;
-    //     state.error = null;
-    //   })
-    //   .addCase(CreateExpert.fulfilled, (state) => {
-    //     state.loading = false;
-    //     state.success = true;
-    //   })
-    //   .addCase(CreateExpert.rejected, (state, action) => {
-    //     state.loading = false;
-    //     state.error = typeof action.payload === 'string' ? action.payload : 'Что-то пошло не так';
-    //   })
-    //   .addCase(RetrieveExpertById.pending, (state) => {
-    //     state.loading = true,
-    //     state.error = null,
-    //     state.success = false
-    //   })
-    //   .addCase(RetrieveExpertById.fulfilled, (state, action: PayloadAction<ExpertWithDocs>) => {
-    //     state.loading = false,
-    //     state.expertById = action.payload
-    //     state.success = true
-    //   })
-    //   .addCase(RetrieveExpertById.rejected, (state) => {
-    //     state.loading = true,
-    //     state.error = null,
-    //     state.success = false
-    //   })
-    //   .addCase(UpdateExpert.pending, (state) => {
-    //     state.loading = true;
-    //     state.error = null;
-    //   })
-    //   .addCase(UpdateExpert.fulfilled, (state, action: PayloadAction<ExpertsType>) => {
-    //     state.loading = false;
-    //     state.expertUpdate = action.payload;
-    //   })
-    //   .addCase(UpdateExpert.rejected, (state, action) => {
-    //     state.loading = false;
-    //     state.error = action.payload || "An error occurred";
-    //   })
       .addCase(DeleteEvent.pending, state => {
         state.loading = true;
         state.error = null;

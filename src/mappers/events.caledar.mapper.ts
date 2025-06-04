@@ -1,7 +1,8 @@
 import { CreateBaseEventDto, CreateBirthdayEventDto, CreateConferenceEventDto, CreateDelegationsEventDto, CreateDiplomaticEventDto, CreateEventDto, CreateForeignEventDto, CreateMeetingEventDto, CreateSeminarEventDto } from "../dtos/events/addEvent";
 import { EventResponseDto } from "../dtos/events/getEvent";
-import { PaginatedResponse } from "../dtos/main.dto";
-import { Event, EventType } from "../types/events";
+import { GetEventsCalendarResponseDto } from "../dtos/events/getEventsCalendar";
+import { ErrorDto, PaginatedResponse } from "../dtos/main.dto";
+import { Event, EventType, GetEventsCalendar } from "../types/events";
 
 export function EventsCalendarResponseDtoToEventsCalendar(eventCalendar: EventResponseDto): Event {
   return {
@@ -122,13 +123,22 @@ const mapEventSpecificsToDto: Record<EventType, Function> = {
   [EventType.Seminar] : mapSeminarSpecifics,
 }
 
-export function PaginatedEventsCalendarDtoToPaginatedEventsCalendar(paginatedEvents: any): PaginatedResponse<Event> {
+export function isErrorDto(obj: any): obj is ErrorDto {
+  return obj && typeof obj.errorMessage === 'object' && obj.errorMessage !== null;
+}
+
+export function RetrieveEventsCalendarDtoToRetrieveEventsCalendar(
+  paginatedEvents: GetEventsCalendarResponseDto
+): GetEventsCalendar | null {
+  if (isErrorDto(paginatedEvents)) {
+    return null;
+  }
   return {
-    limit: paginatedEvents.limit ?? 0,
-    page: paginatedEvents.page ?? 1,
-    total: paginatedEvents.total ?? 0,
-    data: paginatedEvents.events.map((event: EventResponseDto) =>
-      EventsCalendarResponseDtoToEventsCalendar(event)
-    ),
+    success: paginatedEvents.success,
+    events: paginatedEvents.events,
+    total: paginatedEvents.total,
+    counters: paginatedEvents.counters,
   };
 }
+
+

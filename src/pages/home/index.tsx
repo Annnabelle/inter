@@ -2,8 +2,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { theme } from "antd";
 import { HiOutlineDocumentDownload } from "react-icons/hi";
-import { IoPrintOutline } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
+import { saveAs } from "file-saver";
+import { Document, Packer, Paragraph, TextRun } from "docx";
+import { RootState, useAppSelector } from "../../store";
+import { UserRole } from "../../utils/roles";
+import { getUserRole } from "../../utils/getUserRole";
 import CalendarComponent from "../../components/calendar";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
@@ -11,13 +15,8 @@ import CalendarFooter from "../../components/calendarFooter";
 import Button from "../../components/button";
 import ModalWindow from "../../components/modalWindow";
 import AddEventForm from "../../components/events/addEvent";
-import { saveAs } from "file-saver";
-import { Document, Packer, Paragraph, TextRun } from "docx";
-import { RootState, useAppSelector } from "../../store";
- import * as XLSX from "xlsx";
 import moment from "moment";
-import { UserRole } from "../../utils/roles";
-import { getUserRole } from "../../utils/getUserRole";
+import * as XLSX from "xlsx";
 
 const MainEventsPage: React.FC = () => {
     const { t } = useTranslation();
@@ -29,6 +28,7 @@ const MainEventsPage: React.FC = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const eventsDropdownRef = useRef<HTMLDivElement>(null);
     const events = useAppSelector((state: RootState) => state.eventsCalendar.eventsCalendar)
+    const eventCounter = useAppSelector((state) => state.eventsCalendar.eventCounter)
     const handleClickOutside = useCallback((event: MouseEvent) => {
         if (isOpen && eventsDropdownRef.current && !eventsDropdownRef.current.contains(event.target as Node)) {
             setIsOpen(false);
@@ -133,7 +133,7 @@ const MainEventsPage: React.FC = () => {
                 className="layout-content-container"
             >
                 <CalendarComponent/> 
-                <CalendarFooter/>
+                <CalendarFooter eventCounter={eventCounter || {}}/>
                   <ModalWindow
                         title={`${t('buttons.create')}` + " " 
                         +  `${t("crudNames.event")}`}
