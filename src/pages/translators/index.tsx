@@ -15,10 +15,13 @@ import Button from "../../components/button";
 import ModalWindow from "../../components/modalWindow";
 import FormComponent from "../../components/form";
 import ComponentTable from "../../components/table";
+import { getUserRole } from "../../utils/getUserRole";
+import { UserRole } from "../../utils/roles";
 
 
 const Translators: React.FC = () => {
     const { t } = useTranslation();
+    const role = getUserRole();
     const {
         token: { colorBgContainer },
     } = theme.useToken();
@@ -331,7 +334,7 @@ const Translators: React.FC = () => {
                 title={t('buttons.edit') + " " + t('crudNames.translator')}
                 openModal={modalState.editTranslator}
                 closeModal={() => handleModal('editTranslator', false)}
-                handleDelete={() => handleDeleteOpen('Translator')}
+                {...(role !== UserRole.JUNIOR_INTL_OFFICER && { handleDelete: () => handleDeleteOpen('Translator'),})}
             >
                 {modalState.translatorData && (
                     <FormComponent formProps={editForm} onFinish={handleUpdateTranslator}>

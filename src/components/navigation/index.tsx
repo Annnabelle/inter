@@ -5,58 +5,82 @@ import { BiWorld } from "react-icons/bi";
 import { GoGraph } from "react-icons/go";
 import { GrDocument } from "react-icons/gr";
 import { FiSettings } from "react-icons/fi";
-import {  NavItem } from '../../types';
+import { NavItem } from '../../types';
 import { useTranslation } from 'react-i18next';
-
-
+import { getUserRole } from '../../utils/getUserRole';
+import { UserRole } from '../../utils/roles';
 
 const Navigation: React.FC = () => {
+  const role = getUserRole();
+
+  if (!role || role === UserRole.EMPLOYEE) {
+    return null;
+  }
+
   const { t } = useTranslation();
   const location = useLocation();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [subHoveredItem, setSubHoveredItem] = useState<string | null>(null);
 
   const navItems: NavItem[] = [
-    { to: '/main', icon: <IoMdHome />, text: `${t('navigation.main')}` },
-    { 
-      to: '/cooperation', 
-      icon: <BiWorld />, 
-      text: `${t('navigation.cooperation')}`,
+    { to: '/main', icon: <IoMdHome />, text: t('navigation.main') },
+    {
+      to: '/cooperation',
+      icon: <BiWorld />,
+      text: t('navigation.cooperation'),
       dropdown: [
-        { to: '/countries', text: `${t('navigation.countries')}` },
-        // {to: '/organizations', text: 'Организации'},
-        { 
-          to: '/international-organizations', 
-          text: `${t('navigation.internationalOrganizations')}`,
+        { to: '/countries', text: t('navigation.countries') },
+        { to: '/international-organizations', text: t('navigation.internationalOrganizations') },
+        { to: '/international-non-governmental-organizations', text: t('navigation.internationalNonGovernmentalOrganizations') },
+        {
+          to: '/',
+          text: t('navigation.internationalDocuments'),
+          icon: <IoIosArrowForward />,
+          subDropdown: [
+            { to: '/international-documents', text: t('navigation.internationalDocuments') },
+            { to: '/international-treaties', text: t('navigation.internationalTreaties') },
+          ],
         },
-        { to: '/international-non-governmental-organizations', text: `${t('navigation.internationalNonGovernmentalOrganizations')}` },
-        { to: '/', text: `${t('navigation.internationalDocuments')}`, icon:     <IoIosArrowForward/>,    subDropdown: [
-          { to: '/international-documents', text: `${t('navigation.internationalDocuments')}`},
-          { to: '/international-treaties', text: `${t('navigation.internationalTreaties')}`},
-        ] },
-        { to: '/experts', text: `${t('navigation.experts')}` },
-        { to: '/translators', text: `${t('navigation.translators')}` }
-      ]
+        { to: '/experts', text: t('navigation.experts') },
+        { to: '/translators', text: t('navigation.translators') },
+      ],
     },
-    { icon: <GoGraph />, text: `${t('navigation.eventStatistics')}`, dropdown: [{to: '/event-statistics', text: `${t('navigation.events')}`}, {to: "", text: `${t('navigation.visits')}`,  icon: <IoIosArrowForward/>, className: 'sub-dropdown-short',  subDropdown: [
-      { to: '/statistics-of-country-visits', text:  `${t('navigation.countries')}` },
-      { to: '/visit-statistics-employee', text: `${t('navigation.employees')}`  },
-    ] }] },
-    { to: '/reports', icon: <GrDocument />, text: `${t('navigation.reports')}` },
-    { to: '/administrations', icon: <FiSettings />, text: `${t('navigation.administrations')}`  },
+    {
+      icon: <GoGraph />,
+      text: t('navigation.eventStatistics'),
+      dropdown: [
+        { to: '/event-statistics', text: t('navigation.events') },
+        {
+          to: '',
+          text: t('navigation.visits'),
+          icon: <IoIosArrowForward />,
+          className: 'sub-dropdown-short',
+          subDropdown: [
+            { to: '/statistics-of-country-visits', text: t('navigation.countries') },
+            { to: '/visit-statistics-employee', text: t('navigation.employees') },
+          ],
+        },
+      ],
+    },
+    { to: '/reports', icon: <GrDocument />, text: t('navigation.reports') },
+    ...(role !== UserRole.INTL_OFFICER &&
+      role !== UserRole.JUNIOR_INTL_OFFICER &&
+      role !== UserRole.MANAGER
+      ? [{ to: '/administrations', icon: <FiSettings />, text: t('navigation.administrations') }]
+      : []),
   ];
 
   return (
     <nav className="navigation-items">
       {navItems.map(({ to, icon, text, dropdown }) => {
         const currentPath = location.pathname;
-        const isActive = to === '/' ? currentPath === '/' : (to ? currentPath.startsWith(to) : false);
+        const isActive = to === '/' ? currentPath === '/' : to ? currentPath.startsWith(to) : false;
         const isHovered = hoveredItem === (to ?? text);
 
         return (
-          <div 
-            key={to ?? text} 
-            className={`navigation-items-item ${isActive ? 'active' : ''} ${isHovered ? 'dropdown-open' : ''}`} 
+          <div
+            key={to ?? text}
+            className={`navigation-items-item ${isActive ? 'active' : ''} ${isHovered ? 'dropdown-open' : ''}`}
             onMouseEnter={() => setHoveredItem(to ?? text)}
             onMouseLeave={() => setHoveredItem(null)}
           >
@@ -83,7 +107,7 @@ const Navigation: React.FC = () => {
                   const isSubHovered = subHoveredItem === dropdownKey;
 
                   return (
-                    <div 
+                    <div
                       key={dropdownKey}
                       className="cooperation-dropdown-item"
                       onMouseEnter={() => setSubHoveredItem(dropdownKey)}
@@ -113,6 +137,8 @@ const Navigation: React.FC = () => {
 };
 
 export default Navigation;
+
+
 
 
 

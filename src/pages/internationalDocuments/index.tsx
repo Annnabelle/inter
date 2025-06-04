@@ -20,10 +20,13 @@ import { fetchCountries } from "../../store/countries";
 import { fetchOrganizationSearch } from "../../store/organizations";
 import { CreateDocument, DeleteUpload } from "../../store/uploads";
 import { FaTrashAlt } from "react-icons/fa";
+import { getUserRole } from "../../utils/getUserRole";
+import { UserRole } from "../../utils/roles";
 
 
 const InternationalDocumentsPage: React.FC = () => {
     const { t, i18n } = useTranslation();
+    const role = getUserRole();
     const language = i18n.resolvedLanguage || 'ru';
     const {
         token: { colorBgContainer },
@@ -413,7 +416,8 @@ const InternationalDocumentsPage: React.FC = () => {
                 </ModalWindow>
             )}
             {modalState.DocumentData && (
-                <ModalWindow title={t('buttons.edit') + " " + t('crudNames.document')} openModal={modalState.editDocument} closeModal={() => handleModal('editDocument', false)} handleDelete={() => handleDeleteOpen('Document')}>
+                <ModalWindow title={t('buttons.edit') + " " + t('crudNames.document')} openModal={modalState.editDocument} closeModal={() => handleModal('editDocument', false)}
+                {...(role !== UserRole.JUNIOR_INTL_OFFICER && { handleDelete: () => handleDeleteOpen('Document'),})}>
                     <FormComponent formProps={editForm} onFinish={handleUpdateDocument}>
                         <div className="form-inputs">
                             {modalState.DocumentData.name && (

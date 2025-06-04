@@ -16,9 +16,12 @@ import { Document, Packer, Paragraph, TextRun } from "docx";
 import { RootState, useAppSelector } from "../../store";
  import * as XLSX from "xlsx";
 import moment from "moment";
+import { UserRole } from "../../utils/roles";
+import { getUserRole } from "../../utils/getUserRole";
 
 const MainEventsPage: React.FC = () => {
     const { t } = useTranslation();
+    const role = getUserRole();
     const {
         token: { colorBgContainer },
     } = theme.useToken();
@@ -105,9 +108,11 @@ const MainEventsPage: React.FC = () => {
     return (
         <MainLayout>
             <MainHeading title={`${t("titles.main")}` } subtitle="Подзаголовок">
-                <Button onClick={handleCreateEventModalOpen}>
-                    {t('buttons.create')} {t('crudNames.event')} <FaPlus />
-                </Button>
+                {role !== UserRole.EMPLOYEE && (
+                    <Button onClick={handleCreateEventModalOpen}>
+                        {t('buttons.create')} {t('crudNames.event')} <FaPlus />
+                    </Button>
+                )}
                 <div className="layout-events-heading-dropdown" ref={eventsDropdownRef}>
                     <Button  onClick={(e) => {e.stopPropagation(); setIsOpen((prev) => !prev);}} className="outline">{t('buttons.actions')}</Button>
                     {isOpen && (

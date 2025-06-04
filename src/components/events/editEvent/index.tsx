@@ -16,6 +16,8 @@ import Button from "../../button";
 import dayjs from "dayjs";
 import { useAppDispatch } from "../../../store";
 import { UpdateEventCalendar } from "../../../store/eventsCalendar";
+import { UserRole } from "../../../utils/roles";
+import { getUserRole } from "../../../utils/getUserRole";
 
 interface RetrieveEventModalProps {
   selectedEvent: UpdateEvent | null;
@@ -89,7 +91,7 @@ const handleUpdateEvent = async (values: any) => {
       id: selectedEvent?.id,
       startDate: values.startDate?.toISOString(),
       endDate: values.endDate?.toISOString(),
-      approvals: formattedApprovals, // No longer checking if it's null
+      approvals: formattedApprovals,
     };
 
     const resultAction = await dispatch(UpdateEventCalendar(updatedData));
@@ -109,13 +111,13 @@ const handleUpdateEvent = async (values: any) => {
   }
 };
   if (!selectedEvent) return null;
-
+  const role = getUserRole();
   return (
     <ModalWindow
       openModal={isOpen}
       closeModal={onClose}
       title="Информация о событии"
-      handleDelete={onDelete}
+      {...(role !== UserRole.JUNIOR_INTL_OFFICER ? { handleDelete: onDelete } : {})}
     >
       <FormComponent formProps={form} onFinish={handleUpdateEvent}>
         <div className="form-inputs">

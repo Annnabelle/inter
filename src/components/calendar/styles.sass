@@ -7,12 +7,14 @@
     &-heading
         @include mix.flex-content(space-between, column)
         margin-bottom: 20px
+        align-items: start
         row-gap: 20px
         &-goto
             width: 100%
             @include mix.flex-content(space-between, row)
             &-content
-                @include mix.flex-content(center, row)
+                @include mix.flex-content(start, row)
+                align-items: start
                 column-gap: 50px
                 .date
                     +mix.typography(24px, 600, map.get(vars.$basic, 'black'))
@@ -37,9 +39,10 @@
         border-radius: 6px
         .rbc-toolbar
             position: absolute
-            top: -30%
+            top: -3%
             bottom: 50%
             right: 0
+            height: 200px
             @include mix.flex-content(center, column)
             row-gap: 10px
             .rbc-toolbar-label

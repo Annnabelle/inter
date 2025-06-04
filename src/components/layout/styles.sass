@@ -199,8 +199,10 @@
         &-tag
             padding: 5px
             &-active
-                +mix.typography(20px, 400, map.get(vars.$main, 'green'))
+                border: 1px solid map.get(vars.$events, 'green')
+                +mix.typography(20px, 400, map.get(vars.$events, 'green'))
             &-not-active
+                border: 1px solid map.get(vars.$main, 'red')
                 +mix.typography(20px, 400, map.get(vars.$main, 'red'))
         &-actions
             +mix.flex-content(flex-start, row)

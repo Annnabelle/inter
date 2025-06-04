@@ -18,10 +18,13 @@ import ModalWindow from "../../components/modalWindow";
 import FormComponent from "../../components/form";
 import ComponentTable from "../../components/table";
 import dayjs from "dayjs";
+import { getUserRole } from "../../utils/getUserRole";
+import { UserRole } from "../../utils/roles";
 
 
 const Reports: React.FC = () => {
     const { t } = useTranslation();
+    const role = getUserRole();
     const {
         token: { colorBgContainer },
     } = theme.useToken();
@@ -353,7 +356,9 @@ const Reports: React.FC = () => {
                 </ModalWindow>
             )}
             {modalState.reportData && (
-                <ModalWindow title={t('buttons.edit') + " " + t('crudNames.report')} openModal={modalState.editReport} closeModal={() => handleModal('editReport', false)} handleDelete={() => handleDeleteOpen('Report')}>
+                <ModalWindow title={t('buttons.edit') + " " + t('crudNames.report')} openModal={modalState.editReport} closeModal={() => handleModal('editReport', false)} 
+                {...(role !== UserRole.JUNIOR_INTL_OFFICER && { handleDelete: () => handleDeleteOpen('Report'),})}
+                >
                     <FormComponent formProps={editForm} onFinish={handleUpdateReport}>
                         <div className="form-inputs">
                             <Form.Item className="input" name="name" >

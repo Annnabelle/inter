@@ -22,6 +22,8 @@ import ModalWindow from '../../components/modalWindow';
 import Button from '../../components/button';
 import FormComponent from '../../components/form';
 import ComponentTable from '../../components/table';
+import { UserRole } from '../../utils/roles';
+import { getUserRole } from '../../utils/getUserRole';
 
 const InternationalOrganizations: React.FC = () => {
   const { t } = useTranslation();
@@ -71,7 +73,7 @@ const InternationalOrganizations: React.FC = () => {
   const [selectedChiefId, setSelectedChiefId] = useState<string | null>(null);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null)
   const [localFiles, setLocalFiles] = useState<Document[]>([]);
-
+  const role = getUserRole();
   useEffect(() => {
       if (id) {
         dispatch(RetrieveOrganizationEmployees({ limit: 10, page: currentPage, id }));
@@ -509,7 +511,8 @@ const InternationalOrganizations: React.FC = () => {
               </ModalWindow>
             )}
             {employeeById && (
-              <ModalWindow openModal={modalState.chiefEdit} title={t('buttons.edit') + " " + t('crudNames.employee')} closeModal={() => handleModal('chiefEdit', false)} handleDelete={() => handleDeleteOpen('chief')}>
+              <ModalWindow openModal={modalState.chiefEdit} title={t('buttons.edit') + " " + t('crudNames.employee')} closeModal={() => handleModal('chiefEdit', false)} handleDelete={() => handleDeleteOpen('chief')}
+               {...(role !== UserRole.JUNIOR_INTL_OFFICER && { handleDelete: () => handleDeleteOpen('chief'),})}>
                 <FormComponent  formProps={editForm} onFinish={handleUpdateOrganizationEmployee} >
                   <div className="form-inputs">
                   {employeeById?.firstName && (
@@ -678,7 +681,8 @@ const InternationalOrganizations: React.FC = () => {
               </ModalWindow>
             )}
             {projectById && (
-              <ModalWindow openModal={modalState.projectEdit} title={t('buttons.edit') + " " + t('crudNames.project')}  closeModal={() => handleModal('projectEdit', false)} handleDelete={() => handleDeleteOpen('project')}>
+              <ModalWindow openModal={modalState.projectEdit} title={t('buttons.edit') + " " + t('crudNames.project')}  closeModal={() => handleModal('projectEdit', false)}
+               {...(role !== UserRole.JUNIOR_INTL_OFFICER && { handleDelete: () => handleDeleteOpen('project'),})}>
                 <FormComponent formProps={editForm}  onFinish={handleUpdateOrganizationProject} >
                     <div className="form-inputs" >
                       {projectById.name && (

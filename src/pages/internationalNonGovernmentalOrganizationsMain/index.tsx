@@ -167,7 +167,7 @@ const InternationalNonGovernmentalOrganizationsMain: React.FC = () => {
             setModalState((prev) => ({
                 ...prev,
                 editOrganizations: false,
-                organizationData: organization, // ✅ соответствует типу Organization
+                organizationData: organization, 
             }));
 
             setTimeout(() => {

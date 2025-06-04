@@ -20,10 +20,13 @@ import { normalizeUrl } from "../../utils/baseUrl";
 import { FaTrashAlt } from "react-icons/fa";
 import { fetchCountries } from "../../store/countries";
 import { fetchOrganizationSearch } from "../../store/organizations";
+import { getUserRole } from "../../utils/getUserRole";
+import { UserRole } from "../../utils/roles";
 
 
 const Experts: React.FC = () => {
     const { t, i18n } = useTranslation();
+    const role = getUserRole();
     const { token: { colorBgContainer },} = theme.useToken();
     const [files, setFiles] = useState([{ id: Date.now() }]);
     const [modalState, setModalState] = useState<{
@@ -196,7 +199,6 @@ const Experts: React.FC = () => {
               throw new Error('File ID not found in response');
             }
           } catch (error) {
-            console.error('Upload error:', error);
             onError(error);
         }
     };
@@ -204,9 +206,6 @@ const Experts: React.FC = () => {
     const handleCreateExpert = async(values: ExpertsType) => {
         try {
           const data = {...values,  documents: uploadedFileIds};
-          console.log('====================================');
-          console.log(data, "data");
-          console.log('====================================');
           const resultAction = await dispatch(CreateExpert(data))
           if(CreateExpert.fulfilled.match(resultAction)){
             toast.success('Эксперт добавлен успешно')
@@ -267,8 +266,6 @@ const Experts: React.FC = () => {
             toast.error('Ошибка при удалении эксперта');
         }
     };
-
-    console.log('expertId', expertById);
     
 
     const deleteUpload = async (id: string) => {
@@ -450,7 +447,8 @@ const Experts: React.FC = () => {
                 </ModalWindow>
             )}
             {expertById && (
-                <ModalWindow title={t('buttons.edit') + " " + t('crudNames.expert')}  openModal={modalState.editExpert} closeModal={() => handleModal('editExpert', false)} handleDelete={() => handleDeleteOpen('Expert')}>
+                <ModalWindow title={t('buttons.edit') + " " + t('crudNames.expert')}  openModal={modalState.editExpert} closeModal={() => handleModal('editExpert', false)} 
+                 {...(role !== UserRole.JUNIOR_INTL_OFFICER && { handleDelete: () => handleDeleteOpen('Expert'),})}>
                     <FormComponent formProps={editForm} onFinish={handleUpdateExpert}>
                             <div className="form-inputs">
                                 <Form.Item className="input" name="firstName" initialValue={expertById.firstName}>

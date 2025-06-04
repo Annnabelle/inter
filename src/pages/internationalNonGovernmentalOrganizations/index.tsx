@@ -22,9 +22,12 @@ import ComponentTable from '../../components/table';
 import { Document } from '../../types/uploads';
 import { normalizeUrl } from '../../utils/baseUrl';
 import { FaTrashAlt } from 'react-icons/fa';
+import { UserRole } from '../../utils/roles';
+import { getUserRole } from '../../utils/getUserRole';
 
 const InternationalNonGovernmentalOrganizations: React.FC = () => {
     const { t } = useTranslation();
+    const role = getUserRole();
     const {
       token: { colorBgContainer },
     } = theme.useToken();
@@ -564,7 +567,8 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
               </ModalWindow>
             )}
             {employeeById && (
-              <ModalWindow openModal={modalState.chiefEdit} title={t('buttons.edit') + " " + t('crudNames.employee')} closeModal={() => handleModal('chiefEdit', false)} handleDelete={() => handleDeleteOpen('chief')}>
+              <ModalWindow openModal={modalState.chiefEdit} title={t('buttons.edit') + " " + t('crudNames.employee')} closeModal={() => handleModal('chiefEdit', false)} 
+              {...(role !== UserRole.JUNIOR_INTL_OFFICER && { handleDelete: () => handleDeleteOpen('chief'),})}>
                 <FormComponent  formProps={editForm} onFinish={handleUpdateOrganizationEmployee} >
                   <div className="form-inputs">
                   {employeeById?.firstName && (
@@ -684,7 +688,8 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
               </ModalWindow>
             )}
            {projectById && (
-              <ModalWindow openModal={modalState.projectEdit} title={t('buttons.edit') + " " + t('crudNames.project')}  closeModal={() => handleModal('projectEdit', false)} handleDelete={() => handleDeleteOpen('project')}>
+              <ModalWindow openModal={modalState.projectEdit} title={t('buttons.edit') + " " + t('crudNames.project')}  closeModal={() => handleModal('projectEdit', false)}
+              {...(role !== UserRole.JUNIOR_INTL_OFFICER && { handleDelete: () => handleDeleteOpen('project'),})}>
                 <FormComponent formProps={editForm}  onFinish={handleUpdateOrganizationProject} >
                     <div className="form-inputs" >
                       {projectById.name && (

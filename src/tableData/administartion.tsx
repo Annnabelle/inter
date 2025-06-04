@@ -19,7 +19,7 @@ export const AdministrationTableColumns = (t: TFunction): TableProps<Administrat
         dataIndex: "status",
         key: "status",
         render: (text) => (
-            <Tag className={`table-tag ${text ===  'Active' ? 'table-tag-active' : 'table-tag-not-active'}`} color={text === 'Active' ? 'green' : 'red'} style={{width: "100%", textAlign: "center"}}>
+            <Tag className={`table-tag ${text ===  'active' ? 'table-tag-active' : 'table-tag-not-active'}`} >
               {text}
             </Tag>
           )

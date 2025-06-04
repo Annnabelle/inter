@@ -19,7 +19,8 @@ export const Login = createAsyncThunk(
         const { user, tokens } = response.data as Exclude<LoginResponseDto, ErrorDto>;
         localStorage.setItem('accessToken', tokens.accessToken);
         localStorage.setItem('refreshToken', tokens.refreshToken);
-        console.log("user", user);
+        localStorage.setItem('userName', user.firstName)
+        localStorage.setItem('userRole', user.role.name.en)
         
         return { user, tokens };
       } else {
@@ -44,9 +45,14 @@ export const RegisterUser = createAsyncThunk(
         return response.data;
       } else {
         const error = response.data as ErrorDto;
+        console.log('====================================');
+        console.log(error);
+        console.log('====================================');
         return rejectWithValue(error.errorMessage?.ru || 'Ошибка добавления')
       }
     }catch (error: any) {
+      console.log('====================================');
+      console.log('====================================');
       return rejectWithValue(error.response?.data?.message || 'Ошибка сервера');
     }
   }
@@ -60,19 +66,21 @@ const initialState: AuthState = {
   error: null,
   status: null,
   success: null,
+  sessionStart: null,
+  isAuthenticated: false 
 };
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logout(state) {
-      state.user = null;
-      state.accessToken = null;
-      state.refreshToken = null;
-      state.error = null;
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+    logout: (state) => {
+      state.sessionStart = Date.now();
+      state.isAuthenticated = false;
+    },
+    login: (state) => {
+        state.isAuthenticated = true;
+        state.sessionStart = Date.now();
     },
   },
   extraReducers: (builder) => {
@@ -86,6 +94,7 @@ export const authSlice = createSlice({
         state.user = action.payload.user;
         state.accessToken = action.payload.tokens.accessToken;
         state.refreshToken = action.payload.tokens.refreshToken;
+        localStorage.setItem('sessionStart', Date.now().toString()); 
       })
       .addCase(Login.rejected, (state, action) => {
         state.isLoading = false;
@@ -107,7 +116,7 @@ export const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, login } = authSlice.actions;
 export default authSlice.reducer;
 
 

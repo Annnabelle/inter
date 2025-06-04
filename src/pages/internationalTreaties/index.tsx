@@ -20,10 +20,13 @@ import MainHeading from "../../components/mainHeading";
 import ModalWindow from "../../components/modalWindow";
 import ComponentTable from "../../components/table";
 import dayjs from "dayjs";
+import { getUserRole } from "../../utils/getUserRole";
+import { UserRole } from "../../utils/roles";
 
 
 const InternationalTreaties: React.FC = () => {
     const { t, i18n } = useTranslation();
+    const role = getUserRole();
     const language = i18n.resolvedLanguage || 'ru';
     const {
         token: { colorBgContainer },
@@ -396,7 +399,8 @@ const InternationalTreaties: React.FC = () => {
                 </ModalWindow>
             )}
             {modalState.AgreementData && (
-                <ModalWindow title={t('buttons.edit') + " " + t('crudNames.agreement')} openModal={modalState.editTreaties} closeModal={() => handleModal('editTreaties', false)} handleDelete={() => handleDeleteOpen('Treaties')}>
+                <ModalWindow title={t('buttons.edit') + " " + t('crudNames.agreement')} openModal={modalState.editTreaties} closeModal={() => handleModal('editTreaties', false)} 
+                {...(role !== UserRole.JUNIOR_INTL_OFFICER && { handleDelete: () => handleDeleteOpen('Treaties'),})}>
                     <FormComponent formProps={editForm} onFinish={handleUpdateDocument}>
                         <div className="form-inputs">
                             {modalState.AgreementData.name && (

@@ -26,6 +26,16 @@ const UserInfo: React.FC = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [handleClickOutside]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("userName")
+    localStorage.removeItem("accessToken")
+    localStorage.removeItem("refreshToken")
+    localStorage.removeItem("userRole")
+    window.location.href = "/";
+  };
+
+  
   return (
     <div className="user" ref={dropdownRef}>
       <div
@@ -38,10 +48,10 @@ const UserInfo: React.FC = () => {
         <Avatar className="user-avatar" size="large" icon={<LuUserRound className="user-icon" />} />
         <div className="user-text">
           <div className="user-text-container">
-            <p className="user-text-container-name">{user?.firstName}</p>
+            <p className="user-text-container-name">{localStorage.getItem('userName')}</p>
           </div>
           <div className="user-text-container">
-             {user?.role?.name?.[currentLang]}
+            {localStorage.getItem('userRole')}
           </div>
         </div>
         <div className="user-arrow">
@@ -51,7 +61,7 @@ const UserInfo: React.FC = () => {
       {isOpen && (
         <div className="user-dropdown">
           <div className="user-dropdown-action">
-            <Button>{t('buttons.logout')}</Button>
+            <Button onClick={handleLogout}>{t('buttons.logout')}</Button>
           </div>
         </div>
       )}

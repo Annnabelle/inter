@@ -46,6 +46,11 @@ const Administration: React.FC = () => {
     const page = useAppSelector((state) => state.users.dataPage)
     const pagesTotal = useAppSelector((state) => state.users.dataTotal)
     const [currentPage, setCurrentPage] = useState(page);
+    const supportedLangs = ['ru', 'en', 'uz'] as const;
+    const fallbackLang: (typeof supportedLangs)[number] = 'ru';
+     const currentLang = supportedLangs.includes(i18n.resolvedLanguage as any)
+    ? (i18n.resolvedLanguage as typeof fallbackLang)
+    : fallbackLang;
 
     useEffect(() => {
         if (users.length === 0) {
@@ -60,7 +65,7 @@ const Administration: React.FC = () => {
                 name: user.firstName + " " + user.lastName,
                 lastLoggedInAt: formatDateTime(user.lastLoggedInAt),
                 status: user.status,
-                role: user.role.name?.ru,
+                role: user.role.name?.[currentLang] || user.role.name?.[fallbackLang],
                 action: t('buttons.retrieve'),
             }));
         }, [users]);
@@ -83,10 +88,11 @@ const Administration: React.FC = () => {
       };
 
     const roleOption = [
-        { value: "Супер администратор", label: t('roles.superAdministrator') },
-        { value: "superadmin", label: "Superadmin"},
-        { value: "Младший администратор", label: t('roles.juniorAdministrator') },
-        { value: "Пользователь", label: t('roles.user')},
+        { value: "admin", label: 'Администратор'},
+        { value: "intl_officer", label: "Сотрудник международного управления"},
+        { value: "junior_intl_officer", label: 'Младший сотрудник международного управления' },
+        { value: "manager", label: 'Руководство'},
+        { value: "employee", label: 'Другие сотрудники'},
     ];
     const statusOption = [
         { value: "Активный", label: t('buttons.active') },
@@ -122,6 +128,7 @@ const Administration: React.FC = () => {
                 toast.success('Юзер добавлен успешно');
                 setTimeout(() => {
                     handleModal('addAdministration', false);
+                    window.location.reload(); 
                 }, 1000); 
             } else {
                 toast.error('Ошибка при регистрации');
@@ -145,6 +152,7 @@ const Administration: React.FC = () => {
                 toast.success('Пользователь успешно обновлен');
                 setTimeout(() => {
                     handleModal('editAdministration', false);
+                    window.location.reload(); 
                     dispatch(retrieveUsers(updatedData.id));
                 }, 1000); 
             } else {
@@ -226,11 +234,11 @@ const Administration: React.FC = () => {
                             <Input className="input" size='large' placeholder={`${t('inputs.password')}`} />
                         </Form.Item>
                     </div>
-                    <div className="form-inputs">
+                    {/* <div className="form-inputs">
                         <Form.Item className="input" name="status" >
                             <Select className="input" size="large" options={statusOption} placeholder={`${t('inputs.status')}`} />
                         </Form.Item>
-                    </div>
+                    </div> */}
                     <Button type="submit">{t('buttons.create')}</Button>
                 </FormComponent>
             </ModalWindow>
@@ -254,7 +262,7 @@ const Administration: React.FC = () => {
                     </div>
                     <div className="form-inputs">
                         <Form.Item className="input" name="role" >
-                            <Select className="input" size="large" placeholder={modalState.userData?.role.name?.en} disabled/>
+                            <Select className="input" size="large" placeholder={modalState.userData?.role?.name?.ru} disabled/>
                         </Form.Item>
                     </div>
                     <div className="form-inputs">
@@ -282,11 +290,11 @@ const Administration: React.FC = () => {
                         <Input className="input" size="large" placeholder={`${t('inputs.email')}`} />
                     </Form.Item>
                 </div>
-                <div className="form-inputs">
-                    <Form.Item className="input" name="role" initialValue={modalState.userData?.role.name}>
+                {/* <div className="form-inputs">
+                    <Form.Item className="input" name="role" initialValue={modalState.userData?.role.name?.ru}>
                         <Select className="input" size="large" options={roleOption} placeholder={`${t('inputs.role')}`} />
                     </Form.Item>
-                </div>
+                </div> */}
                 <div className="form-inputs">
                     <Form.Item className="input" name="status" initialValue={modalState.userData?.status}>
                         <Select className="input" size="large" options={statusOption} placeholder={`${t('inputs.status')}`} />

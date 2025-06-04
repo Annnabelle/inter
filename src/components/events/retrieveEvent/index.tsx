@@ -11,6 +11,8 @@ import DiplomaticAdditionalFieldsRetrieve from "./diplomaticAdditionalFieldsRetr
 import ForeignAdditionalFieldsRetrieve from "./foreignAdditionalFieldsRetrieve";
 import MeetingAdditionalFieldsRetrieve from "./meetingAdditionalFieldsRetrieve";
 import SeminarAdditionalFieldsRetrieve from "./seminarAdditionalFieldsRetrieve";
+import { getUserRole } from "../../../utils/getUserRole";
+import { UserRole } from "../../../utils/roles";
 
 interface RetrieveEventModalProps {
   selectedEvent: Event | null;
@@ -43,9 +45,11 @@ const RetrieveEventModal: React.FC<RetrieveEventModalProps> = ({
 
   const EventAdditionalFieldsComponent =
     retrieveEventFieldsStrategy[selectedEvent.eventType];
-
+  const role = getUserRole();
   return (
-    <ModalWindow openModal={isOpen} closeModal={onClose} title="Информация о событии" handleEdit={onEdit}>
+    <ModalWindow openModal={isOpen} closeModal={onClose} title="Информация о событии" 
+    {...(role !== UserRole.EMPLOYEE ? { handleEdit: onEdit } : {})}
+    >
       <FormComponent formProps={form}>
         <div className="form-inputs">
           <Form.Item name="eventType" className="input">

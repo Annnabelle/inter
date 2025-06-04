@@ -26,6 +26,8 @@ import ModalWindow from "../../components/modalWindow";
 import FormComponent from "../../components/form";
 import ComponentTable from "../../components/table";
 import dayjs from "dayjs";
+import { UserRole } from "../../utils/roles";
+import { getUserRole } from "../../utils/getUserRole";
 
 const CountriesInner: React.FC = () => {
     const { t, i18n } = useTranslation();
@@ -310,6 +312,8 @@ const CountriesInner: React.FC = () => {
             toast.error('Ошибка при удалении отчета');
         }
     };
+
+    const role = getUserRole();
     
     return (
         <MainLayout>
@@ -505,15 +509,16 @@ const CountriesInner: React.FC = () => {
                 </ModalWindow>
             )}
             {modalState.DocumentData && (
-                <ModalWindow title={t('buttons.edit') + " " + t('crudNames.document')} openModal={modalState.editDocument} closeModal={() => handleModal('editDocument', false)} handleDelete={() => handleDeleteOpen('Document')}>
+                <ModalWindow title={t('buttons.edit') + " " + t('crudNames.document')} openModal={modalState.editDocument} closeModal={() => handleModal('editDocument', false)}  
+                {...(role !== UserRole.JUNIOR_INTL_OFFICER && { handleDelete: () => handleDeleteOpen('Document'),})}>
                     <FormComponent formProps={editForm} onFinish={handleUpdateDocument}>
                         <div className="form-inputs">
-                            {modalState.DocumentData.name && (
+                            {modalState?.DocumentData?.name && (
                                 <Form.Item className="input" name="name" >
                                     <Input className="input" size='large' />
                                 </Form.Item>
                             )}
-                            {modalState.DocumentData.date && (
+                            {modalState?.DocumentData?.date && (
                                 <Form.Item className="input" name="date" >
                                     <DatePicker size="large" className="input" />
                                 </Form.Item>
@@ -544,12 +549,12 @@ const CountriesInner: React.FC = () => {
                             </Form.Item>
                         </div>
                         <div className="form-inputs">
-                            {modalState.DocumentData.place && (
+                            {modalState?.DocumentData?.place && (
                                 <Form.Item className="input" name="place" >
                                     <Input className="input" size='large'/>
                                 </Form.Item>
                             )}
-                            {modalState.DocumentData.approval && (
+                            {modalState?.DocumentData?.approval && (
                                 <Form.Item className="input" name="approval" >
                                     <Input className="input" size='large'/>
                                 </Form.Item>
