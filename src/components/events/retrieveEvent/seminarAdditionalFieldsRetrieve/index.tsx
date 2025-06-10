@@ -38,7 +38,7 @@ const SeminarAdditionalFieldsRetrieve: React.FC<SeminarRetrieveAdditionalFieldsP
             {event?.format && (
                 <>
                     <div className="inputs-label">
-                        <p className="label">Формат встречи</p>
+                        <p className="label">{t('tableTitles.format')} {t('tableTitles.meeting')}  </p>
                     </div>
                     <div className="form-inputs">
                         <Form.Item className="input" name="format">
@@ -50,7 +50,7 @@ const SeminarAdditionalFieldsRetrieve: React.FC<SeminarRetrieveAdditionalFieldsP
             {event.partners.length > 0  && (
                 <>
                     <div className="inputs-label">
-                        <p className="label">Партнеры</p>
+                        <p className="label">{t('tableTitles.partners')} </p>
                     </div>
                     {event.partners?.map((item: any, index: any) => (
                         <div className="form-inputs" key={item.id || index}>
@@ -66,7 +66,7 @@ const SeminarAdditionalFieldsRetrieve: React.FC<SeminarRetrieveAdditionalFieldsP
             {event.donor && (
                 <>
                     <div className="inputs-label">
-                        <p className="label">Донор</p>
+                        <p className="label">{t('tableTitles.donor')}</p>
                     </div>
                     <div className="form-inputs">
                         <SearchCountryOrOrganizationRetrieve event={event} form={form}  />

@@ -16,6 +16,7 @@ import agreementReducer from './agreements'
 import eventsReducer from './events'
 import eventsCalendarReducer from './eventsCalendar'
 import organizersReducer from './orginizer'
+import statisticsReducer from './stistics'
 
 export const store = configureStore({
   reducer: {
@@ -33,7 +34,8 @@ export const store = configureStore({
     agreement: agreementReducer,
     events: eventsReducer,
     eventsCalendar: eventsCalendarReducer,
-    organizer: organizersReducer
+    organizer: organizersReducer,
+    statistics: statisticsReducer
   },
 });
 

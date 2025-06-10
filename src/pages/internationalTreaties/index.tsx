@@ -182,16 +182,16 @@ const InternationalTreaties: React.FC = () => {
             const data = {...values, files: uploadedFileIds};
             const resultAction = await dispatch(CreateAgreementDocument(data))
             if(CreateAgreementDocument.fulfilled.match(resultAction)){
-            toast.success('Договор добавлен успешно')
+            toast.success(t('messages.contractAddedSuccess'))
             setTimeout(() => {
                 handleModal('addDocument', false);
                 window.location.reload()
             }, 1000)
             } else {
-            toast.error("Ошибка при создании договора")
+            toast.error(t('messages.contractCreateError'))
             }
         } catch (err) {
-            toast.error((err as string) || 'Ошибка сервера')
+            toast.error((err as string) || t('messages.serverError'))
         }
     }
         
@@ -203,17 +203,17 @@ const InternationalTreaties: React.FC = () => {
             console.log('resultAction', resultAction);
             
             if (UpdateAgreementDocumentRequest.fulfilled.match(resultAction)) {
-                toast.success('Договор успешно обновлен');
+                toast.success(t('messages.contractUpdatedSuccess'));
                 setTimeout(() => {
                     handleModal('editDocument', false);
                     dispatch(RetrieveAgreementDocuments(updatedData.id));
                     window.location.reload(); 
                 }, 1000); 
             } else {
-                toast.error('Ошибка при обновлении договора');
+                toast.error(t('messages.contractUpdateError'));
             }
         } catch (err) {
-            toast.error((err as string) || 'Ошибка сервера');
+            toast.error((err as string) || t('messages.serverError'));
         }
     };
 
@@ -244,15 +244,15 @@ const InternationalTreaties: React.FC = () => {
             const resultAction = await dispatch(DeleteAgreementDocument(reportId));
     
             if (DeleteAgreementDocument.fulfilled.match(resultAction)) {
-            toast.success('Договор успешно удален');
+            toast.success(t('messages.contractDeletedSuccess'));
             setTimeout(() => {
                 window.location.reload(); 
             }, 1000);
         } else {
-                toast.error('Ошибка при удалении договора');
+                toast.error(t('messages.contractDeleteError'));
             }
         } catch (error) {
-            toast.error('Ошибка при удалении договора');
+            toast.error(t('messages.serverError'));
         }
     };
 

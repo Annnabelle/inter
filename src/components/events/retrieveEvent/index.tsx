@@ -13,6 +13,7 @@ import MeetingAdditionalFieldsRetrieve from "./meetingAdditionalFieldsRetrieve";
 import SeminarAdditionalFieldsRetrieve from "./seminarAdditionalFieldsRetrieve";
 import { getUserRole } from "../../../utils/getUserRole";
 import { UserRole } from "../../../utils/roles";
+import { useTranslation } from "react-i18next";
 
 interface RetrieveEventModalProps {
   selectedEvent: Event | null;
@@ -40,6 +41,7 @@ const RetrieveEventModal: React.FC<RetrieveEventModalProps> = ({
   onEdit,
 }) => {
   const [form] = Form.useForm();
+  const {t} = useTranslation()
 
   if (!selectedEvent) return null;
 
@@ -53,7 +55,7 @@ const RetrieveEventModal: React.FC<RetrieveEventModalProps> = ({
       <FormComponent formProps={form}>
         <div className="form-inputs">
           <Form.Item name="eventType" className="input">
-            <Select className="input" size="large" disabled placeholder={selectedEvent.eventType} />
+            <Select className="input" size="large" disabled placeholder={t(`eventTypes.${selectedEvent.eventType}`)} />
           </Form.Item>
           {selectedEvent.name && (
             <Form.Item name="name" className="input">

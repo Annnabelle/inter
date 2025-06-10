@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { ErrorDto, HexString } from "../dtos/main.dto";
+import { HexString } from "../dtos/main.dto";
 import { EventFormat, EventLevel } from "../dtos/events/addEvent";
 import { EventTypeCounters } from "../dtos/events/getEventsCalendar";
 
@@ -8,9 +8,17 @@ export type Event = {
   name: string;
   comment?: string,
   eventType: EventType,
-  startDate: Date,
-  endDate: Date,
+  startDate: Date | string,
+  endDate: Date | string,
 };
+
+export type EventTableRow = {
+  eventType: string;
+  name: string;
+  startDate: string;
+  endDate: string;
+  comment?: string;
+}
 
 export type EventWithId = {
   id: HexString,
@@ -240,6 +248,6 @@ export interface CountriesInnerEventDataType {
     name: string;
     eventType: string
     comment?: string | undefined;
-    end: Date;
-    start: Date;
+    end: Date | string;
+    start: Date | string;
 }

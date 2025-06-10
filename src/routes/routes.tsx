@@ -23,7 +23,7 @@ const StatisticsOfCountryVisits = lazy(() => import("../pages/statisticsOfCountr
 const LoginPage = lazy(() => import("../pages/login"));
 const InternationalOrganizationsMain = lazy(() => import("../pages/internationalOrganizationsMain"));
 const InternationalNonGovernmentalOrganizationsMain = lazy(() => import("../pages/internationalNonGovernmentalOrganizationsMain"));
-
+const EventTypeDetails = lazy(() => import('../pages/eventStatisticsInner/EventTypeDetails'));
 const Router: React.FC = () => {
   return (
     <Suspense fallback={<div>Загрузка...</div>}>
@@ -70,6 +70,7 @@ const Router: React.FC = () => {
           <Route path="/visit-statistics-employee" element={<EventVisitsEmployee />} />
           <Route path="/event-statistics-inner" element={<EventStatisticsInner />} />
           <Route path="/statistics-of-country-visits" element={<StatisticsOfCountryVisits />} />
+          <Route path="/event-type/:eventType" element={<EventTypeDetails />} />
           <Route path="/reports" element={<Reports />} />
         </Route>
       </Routes>

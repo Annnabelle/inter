@@ -50,10 +50,10 @@ const ForeignAdditionalFields: React.FC = () => {
                       className="input"
                       rules={[{ required: true, message: "Выберите тип" }]}
                     >
-                      <Select size="large" placeholder="Выберите тип" className="input">
-                        <Select.Option value="agency">Agency</Select.Option>
-                        <Select.Option value="organization">Organization</Select.Option>
-                        <Select.Option value="other">Other</Select.Option>
+                      <Select size="large" placeholder={t("inputs.selectDonor")} className="input">
+                        <Select.Option value="agency">{t('titles.Agency')}</Select.Option>
+                        <Select.Option value="organization">{t('tableTitles.organization')}</Select.Option>
+                        <Select.Option value="other">{t('tableTitles.other')}</Select.Option>
                       </Select>
                     </Form.Item>
 
@@ -69,7 +69,7 @@ const ForeignAdditionalFields: React.FC = () => {
                               className="input"
                               rules={[{ required: true, message: "Введите значение" }]}
                             >
-                              <Input size="large" className="input" placeholder="Введите другое" />
+                              <Input size="large" className="input" placeholder={t('inputs.title')} />
                             </Form.Item>
                           );
                         }
@@ -89,7 +89,7 @@ const ForeignAdditionalFields: React.FC = () => {
                             className="input"
                             rules={[{ required: true, message: "Введите значение" }]}
                           >
-                            <Select size="large" placeholder="Выберите значение" className="input">
+                            <Select size="large" placeholder={t('tableTitles.agency')} className="input">
                               <Select.Option value={DEFAULT_AGENCY_VALUE}>Agency</Select.Option>
                             </Select>
                           </Form.Item>
@@ -98,7 +98,7 @@ const ForeignAdditionalFields: React.FC = () => {
                     </Form.Item>
                   </div>
                     <Button type="dashed" onClick={() => remove(name)}>
-                      Удалить
+                      {t('buttons.delete')}
                     </Button>
                 </div>
               ))}

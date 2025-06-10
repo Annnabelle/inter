@@ -97,17 +97,16 @@ const handleUpdateEvent = async (values: any) => {
     const resultAction = await dispatch(UpdateEventCalendar(updatedData));
 
     if (UpdateEventCalendar.fulfilled.match(resultAction)) {
-      toast.success("Мероприятие успешно обновлено");
+      toast.success(t('messages.eventUpdatedSuccess'));
       setTimeout(() => {
         onClose();
         window.location.reload();
       }, 1000);
     } else {
-      toast.error("Ошибка при обновлении мероприятия");
+      toast.error(t('messages.eventUpdateError'));
     }
   } catch (err) {
-    console.error("Ошибка в handleUpdateEvent:", err);
-    toast.error((err as string) || "Ошибка сервера");
+    toast.error((err as string) || t('messages.serverError'));
   }
 };
   if (!selectedEvent) return null;
@@ -141,7 +140,7 @@ const handleUpdateEvent = async (values: any) => {
               format="YYYY-MM-DD HH:mm"
               size="large"
               className="input"
-              placeholder="Дата начала"
+              placeholder={t('inputs.startDate')}
             />
           </Form.Item>
 
@@ -151,14 +150,14 @@ const handleUpdateEvent = async (values: any) => {
               format="YYYY-MM-DD HH:mm"
               size="large"
               className="input"
-              placeholder="Дата окончания"
+              placeholder={t('inputs.endDate')}
             />
           </Form.Item>
         </div>
 
         <div className="form-inputs">
           <Form.Item name="comment" className="input">
-            <Input className="input" size="large" placeholder="Комментарий" />
+            <Input className="input" size="large" placeholder={t('tableTitles.comment')} />
           </Form.Item>
         </div>
 

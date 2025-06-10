@@ -127,6 +127,11 @@
         flex-direction: column
         row-gap: 30px
         justify-content: space-between
+        .page-stat-partners
+            @include mix.flex-content(space-between, row)
+            column-gap: 30px
+            .input
+                width: 100%
         .cooperation-main
             &-container
                 width: 100%
@@ -157,6 +162,9 @@
                         .cooperation-main-container-item-link-text
                             color: map.get(vars.$basic, 'white')
         .page-inner
+            @include mix.flex-content(flex-start, column)
+            align-items: start
+            row-gap: 20px
             &-title
                 .title
                     +mix.typography(28px, 600, map.get(vars.$main, 'main'))
@@ -176,8 +184,13 @@
                     .title
                         +mix.typography(28px, 600, map.get(vars.$basic, "black"))
             &-statistics
-                @include mix.flex-content(space-around, row)
+                flex-wrap: wrap
+                @include mix.flex-content(center, row)
                 gap: 50px
+                width: 100%
+                .statistics-card
+                    max-width: 400px
+                    width: 100%
 
     .table
         .ant-table-thead

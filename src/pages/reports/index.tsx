@@ -156,16 +156,16 @@ const Reports: React.FC = () => {
             const data = {...values, documents: uploadedFileIds};
             const resultAction = await dispatch(CreateReport(data));
             if(CreateReport.fulfilled.match(resultAction)){
-                toast.success('Отчет добавлен успешно')
+                toast.success(t('messages.reportAddedSuccess'))
                 setTimeout(() => {
                     handleModal('addReport', false);
                     window.location.reload()
                 }, 1000)
                 } else {
-                toast.error("Ошибка при создании отчета")
+                toast.error(t('messages.reportCreateError'))
             }
         }catch (err) {
-            toast.error((err as string) || 'Ошибка сервера')
+            toast.error((err as string) || t('messages.serverError'))
         }
     }
 
@@ -178,7 +178,7 @@ const Reports: React.FC = () => {
 
             const resultAction = await dispatch(UpdateReport(updatedData));
              if (UpdateReport.fulfilled.match(resultAction)) {
-                toast.success('Отчет успешно обновлен');
+                toast.success(t('messages.reportUpdatedSuccess'));
                 setTimeout(() => {
                     handleModal('projectEdit', false);
                     dispatch(RetrieveReports(updatedData.id));
@@ -186,10 +186,10 @@ const Reports: React.FC = () => {
                 }, 1000); 
             } else {
                 
-                toast.error('Ошибка при обновлении отчета');
+                toast.error(t('messages.reportUpdateError'));
             }
         }catch (err) {
-            toast.error((err as string) || 'Ошибка сервера');
+            toast.error((err as string) || t('messages.serverError'));
         }
     }
 
@@ -220,15 +220,15 @@ const Reports: React.FC = () => {
             const resultAction = await dispatch(deleteReport(reportId));
     
             if (deleteReport.fulfilled.match(resultAction)) {
-            toast.success('Отчет успешно удален');
+            toast.success(t('messages.reportDeletedSuccess'));
             setTimeout(() => {
                 window.location.reload(); 
             }, 1000);
             } else {
-            toast.error('Ошибка при удалении отчета');
+            toast.error(t('messages.reportDeleteError'));
             }
         } catch (error) {
-            toast.error('Ошибка при удалении отчета');
+            toast.error(t('messages.serverError'));
         }
     };
 

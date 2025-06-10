@@ -125,16 +125,16 @@ const Administration: React.FC = () => {
             const resultAction = await dispatch(RegisterUser(newFormData));
           
             if (RegisterUser.fulfilled.match(resultAction)) {
-                toast.success('Юзер добавлен успешно');
+                toast.success( t('messages.userAddedSuccess'));
                 setTimeout(() => {
                     handleModal('addAdministration', false);
                     window.location.reload(); 
                 }, 1000); 
             } else {
-                toast.error('Ошибка при регистрации');
+                toast.error(t('messages.userRegisterError'));
             }
         } catch (err) {
-          toast.error((err as string) || 'Ошибка сервера');
+          toast.error((err as string) || t('messages.serverError'));
         }
       };
     
@@ -149,17 +149,17 @@ const Administration: React.FC = () => {
             const resultAction = await dispatch(updateUser(updatedData));
         
             if (updateUser.fulfilled.match(resultAction)) {
-                toast.success('Пользователь успешно обновлен');
+                toast.success(t('messages.serUpdatedSuccess'));
                 setTimeout(() => {
                     handleModal('editAdministration', false);
                     window.location.reload(); 
                     dispatch(retrieveUsers(updatedData.id));
                 }, 1000); 
             } else {
-                toast.error('Ошибка при обновлении пользователя');
+                toast.error(t('messages.userUpdateError'));
             }
         } catch (err) {
-            toast.error((err as string) || 'Ошибка сервера');
+            toast.error((err as string) || t('messages.serverError'));
         }
     };
     const handleDelete = async () => {
@@ -168,15 +168,15 @@ const Administration: React.FC = () => {
             const resultAction = await dispatch(deleteUser(userId));
     
           if (deleteUser.fulfilled.match(resultAction)) {
-            toast.success('Пользователь успешно удален');
+            toast.success(t('messages.userDeletedSuccess'));
             setTimeout(() => {
               window.location.reload(); 
             }, 1000);
           } else {
-            toast.error('Ошибка при удалении пользователя');
+            toast.error(t('messages.userDeleteError'));
           }
         } catch (error) {
-          toast.error('Ошибка при удалении пользователя');
+          toast.error(t('messages.serverError'));
         }
     };
     return (

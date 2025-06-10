@@ -97,16 +97,16 @@ const handleCreateEvent = async (values: any) => {
 
     const resultAction = await dispatch(CreateEvent(formattedValues));
     if (CreateEvent.fulfilled.match(resultAction)) {
-      toast.success('Мероприятие было добавлено успешно');
+      toast.success(t('messages.eventCreatedSuccess'));
       setTimeout(() => {
          onSuccess();
          window.location.reload()
       }, 1000)
     } else {
-      toast.error("Ошибка при добавлении мероприятия");
+      toast.error(t('messages.eventCreatedError'));
     }
   } catch (err) {
-    toast.error((err as string) || 'Ошибка сервера');
+    toast.error((err as string) || t('messages.serverError'));
   }
 };
 
@@ -142,7 +142,7 @@ const handleCreateEvent = async (values: any) => {
             format="YYYY-MM-DD HH:mm"
             size="large"
             className="input"
-            placeholder="Дата и время начала"
+            placeholder={t('inputs.startDate')}
             onChange={(date) => console.log('selected startDate:', date?.format('YYYY-MM-DD HH:mm:ss'))}
           />
         </Form.Item>
@@ -157,7 +157,7 @@ const handleCreateEvent = async (values: any) => {
           format="YYYY-MM-DD HH:mm"
           size="large"
           className="input"
-          placeholder="Дата и время окончания"
+          placeholder={t('inputs.endDate')}
           onChange={(date) => console.log('selected endDate:', date?.format('YYYY-MM-DD HH:mm:ss'))}
         />
         </Form.Item>

@@ -35,6 +35,9 @@ const UserInfo: React.FC = () => {
     window.location.href = "/";
   };
 
+  const userRoleKey = localStorage.getItem('userRole') || '';
+  const translatedRole = t(`roles.${userRoleKey}`);
+
   
   return (
     <div className="user" ref={dropdownRef}>
@@ -51,7 +54,7 @@ const UserInfo: React.FC = () => {
             <p className="user-text-container-name">{localStorage.getItem('userName')}</p>
           </div>
           <div className="user-text-container">
-            {localStorage.getItem('userRole')}
+            {translatedRole}
           </div>
         </div>
         <div className="user-arrow">

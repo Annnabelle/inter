@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { theme, Form, Input, Upload } from "antd";
 import { IoMdAdd } from 'react-icons/io';
-import { InternationalOrganizationChiefDataType, InternationalOrganizationProjectDataType } from '../../types';
+import { InternationalOrganizationChiefDataType, InternationalOrganizationChronologyOfMeetingDataType, InternationalOrganizationProjectDataType } from '../../types';
 import { InternationalOrganizationChiefColumns } from '../../tableData/internationalOrganizationChiefTable';
 import { InternationalOrganizationProjectColumns } from '../../tableData/internationalOrganizationProject';
 import { useTranslation } from 'react-i18next';
@@ -16,14 +16,15 @@ import { CreateDocument, DeleteUpload } from '../../store/uploads';
 import { normalizeUrl } from '../../utils/baseUrl';
 import { Document } from '../../types/uploads';
 import { FaTrashAlt } from 'react-icons/fa';
+import { UserRole } from '../../utils/roles';
+import { getUserRole } from '../../utils/getUserRole';
+import { InternationalOrganizationChronologyOfMeetingColumns, InternationalOrganizationChronologyOfMeetingData } from '../../tableData/internationalOgranizationChronologyOfMeeting';
 import MainLayout from '../../components/layout'
 import MainHeading from '../../components/mainHeading'
 import ModalWindow from '../../components/modalWindow';
 import Button from '../../components/button';
 import FormComponent from '../../components/form';
 import ComponentTable from '../../components/table';
-import { UserRole } from '../../utils/roles';
-import { getUserRole } from '../../utils/getUserRole';
 
 const InternationalOrganizations: React.FC = () => {
   const { t } = useTranslation();
@@ -74,6 +75,7 @@ const InternationalOrganizations: React.FC = () => {
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null)
   const [localFiles, setLocalFiles] = useState<Document[]>([]);
   const role = getUserRole();
+
   useEffect(() => {
       if (id) {
         dispatch(RetrieveOrganizationEmployees({ limit: 10, page: currentPage, id }));
@@ -216,16 +218,16 @@ const InternationalOrganizations: React.FC = () => {
       const data = {...values, organizationId: id ?? '',  documents: uploadedFileIds};
       const resultAction = await dispatch(createOrganizationsEmployees(data))
       if(createOrganizationsEmployees.fulfilled.match(resultAction)){
-        toast.success('Сотрудник добавлен успешно')
+        toast.success(t('messages.employeeCreatedSuccess'))
         setTimeout(() => {
           handleModal('chiefAdd', false);
           window.location.reload()
         }, 1000)
       } else {
-        toast.error("Ошибка при создании сотрудника")
+        toast.error(t('messages.employeeCreatedError'))
       }
     } catch (err) {
-      toast.error((err as string) || 'Ошибка сервера')
+      toast.error((err as string) || t('messages.serverError'))
     }
   }
 
@@ -242,17 +244,17 @@ const InternationalOrganizations: React.FC = () => {
       const resultAction = await dispatch(updateOrganizationsEmployees(updatedData));
       
       if (updateOrganizationsEmployees.fulfilled.match(resultAction)) {
-          toast.success('Сотрудник успешно обновлен');
+          toast.success(t('messages.employeeUpdatedSuccess'));
           setTimeout(() => {
               handleModal('chiefEdit', false);
               dispatch(RetrieveOrganizationEmployees(updatedData.id));
               window.location.reload(); 
           }, 1000); 
       } else {
-          toast.error('Ошибка при обновлении сотрудника');
+          toast.error(t('messages.employeeUpdatedError'));
       }
     } catch (err) {
-        toast.error((err as string) || 'Ошибка сервера');
+        toast.error((err as string) || t('messages.serverError'));
     }
   };
   
@@ -262,15 +264,15 @@ const InternationalOrganizations: React.FC = () => {
         const resultAction = await dispatch(deleteOrganizationsEmployees(organizationEmployeeId));
 
         if (deleteOrganizationsEmployees.fulfilled.match(resultAction)) {
-        toast.success('Сотрудник успешно удален');
+        toast.success(t('messages.employeeDeletedSuccess'));
         setTimeout(() => {
             window.location.reload(); 
         }, 1000);
         } else {
-        toast.error('Ошибка при удалении сотрудника');
+        toast.error(t('messages.employeeDeletedError'));
         }
     } catch (error) {
-        toast.error('Ошибка при удалении сотрудника');
+        toast.error(t('messages.serverError'));
     }
   };
 
@@ -287,17 +289,17 @@ const InternationalOrganizations: React.FC = () => {
       const resultAction = await dispatch(updateOrganizationsProject(updatedData));
       
       if (updateOrganizationsProject.fulfilled.match(resultAction)) {
-          toast.success('Проект успешно обновлен');
+          toast.success(t('messages.projectUpdatedSuccess'));
           setTimeout(() => {
               handleModal('projectEdit', false);
               dispatch(retrieveOrganizationsProjects(updatedData.id));
               window.location.reload(); 
           }, 1000); 
       } else {
-          toast.error('Ошибка при обновлении проекта');
+          toast.error(t('messages.projectUpdatedError'));
       }
     } catch (err) {
-        toast.error((err as string) || 'Ошибка сервера');
+        toast.error((err as string) || t('messages.serverError'));
     }
   };
 
@@ -306,16 +308,16 @@ const InternationalOrganizations: React.FC = () => {
       const data = {...values, organizationId: id ?? '', documents: uploadedFileIds};
       const resultAction = await dispatch(createOrganizationProject(data))
       if(createOrganizationProject.fulfilled.match(resultAction)){
-        toast.success('Проект добавлен успешно')
+        toast.success(t('messages.projectCreatedSuccess'))
         setTimeout(() => {
           handleModal('chiefAdd', false);
           window.location.reload()
         }, 1000)
       } else {
-        toast.error("Ошибка при создании проекта")
+        toast.error(t('messages.projectCreatedError'))
       }
     } catch (err) {
-      toast.error((err as string) || 'Ошибка сервера')
+      toast.error((err as string) || t('messages.serverError'))
     }
   }
 
@@ -325,15 +327,15 @@ const InternationalOrganizations: React.FC = () => {
         const resultAction = await dispatch(deleteOrganizationProject(organizationProjectId));
 
         if (deleteOrganizationProject.fulfilled.match(resultAction)) {
-        toast.success('Проект успешно удален');
+        toast.success(t('messages.projectDeletedSuccess'));
         setTimeout(() => {
             window.location.reload(); 
         }, 1000);
         } else {
-        toast.error('Ошибка при удалении проекта');
+        toast.error(t('messages.projectDeletedError'));
         }
     } catch (error) {
-        toast.error('Ошибка при удалении проекта');
+        toast.error(t('messages.serverError'));
     }
   };
 
@@ -350,10 +352,9 @@ const InternationalOrganizations: React.FC = () => {
           setUploadedFileIds(prev => [...prev, fileId]); 
           onSuccess();
         } else {
-          throw new Error('File ID not found in response');
+          throw new Error(t('messages.fileIdNotFound'));
         }
       } catch (error) {
-        console.error('Upload error:', error);
         onError(error);
       }
   };
@@ -372,7 +373,6 @@ const InternationalOrganizations: React.FC = () => {
         }
 
         if (!owner || !entity) {
-            console.error("Отсутствует owner или entity для удаления файла.");
             return;
         }
 
@@ -384,10 +384,10 @@ const InternationalOrganizations: React.FC = () => {
 
         if (DeleteUpload.fulfilled.match(deleteUploadedFile)) {
             setLocalFiles(prev => prev.filter(file => file.id !== id));
-            toast.success('Файл удален успешно');
+            toast.success(t('messages.fileDeletedSuccess'));
         }
     } catch (error) {
-        console.error("Ошибка при удалении файла:", error);
+        console.error(t('messages.serverError'), error);
     }
 };
 
@@ -410,7 +410,7 @@ const InternationalOrganizations: React.FC = () => {
                 </h3>
               </div>
               <div className="heading-btn">
-                <Button className="outline" onClick={() => handleModal('addChief', true)}>{t('buttons.add')} {t('crudNames.head')}<IoMdAdd/></Button>
+                <Button className="outline" onClick={() => handleModal('addChief', true)}>{t('buttons.add')} {t('crudNames.employee')}<IoMdAdd/></Button>
               </div>
             </div>
             <ComponentTable<InternationalOrganizationChiefDataType> 
@@ -447,7 +447,7 @@ const InternationalOrganizations: React.FC = () => {
                   }}
                 onRowClick={(record) => handleRowClick('project', "Retrieve", record)} data={organizationProjectsData} columns={InternationalOrganizationProjectColumns(t)}/>
             </div>
-            {/* <div className="page-inner-table-container">
+            <div className="page-inner-table-container">
                 <div className="page-inner-table-container-heading">
                     <div className="heading-title">
                         <h3 className="title">
@@ -456,7 +456,7 @@ const InternationalOrganizations: React.FC = () => {
                     </div>
                 </div>
                 <ComponentTable<InternationalOrganizationChronologyOfMeetingDataType> columns={InternationalOrganizationChronologyOfMeetingColumns(t)} data={InternationalOrganizationChronologyOfMeetingData}/>
-            </div> */}
+            </div>
             {employeeById && selectedChiefId && (
               <ModalWindow openModal={modalState.chiefRetrieve} title={t('buttons.retrieve') + " " + t('crudNames.employee')} closeModal={() => handleModal('chiefRetrieve', false)} handleEdit={() => handleEditOpen('chief')}>
                 <FormComponent>

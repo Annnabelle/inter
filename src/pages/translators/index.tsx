@@ -148,16 +148,16 @@ const Translators: React.FC = () => {
             const payload = {...values};
             const resultAction = await dispatch(createTranslator(payload));
             if (createTranslator.fulfilled.match(resultAction)) {
-                toast.success('Переводчик добавлен успешно');
+                toast.success(t('messages.translatorAddedSuccess'));
                 setTimeout(() => {
                     handleModal('addTranslator', false);
                     window.location.reload(); 
                 }, 1000); 
             } else {
-                toast.error('Ошибка при создании переводчика');
+                toast.error(t('messages.translatorCreateError'));
             }
         }catch (err) {
-            toast.error((err as string) || 'Ошибка сервера');
+            toast.error((err as string) || t('messages.serverError'));
         }
     }
     const handleUpdateTranslator = async (values: any) => {
@@ -169,17 +169,17 @@ const Translators: React.FC = () => {
             const resultAction = await dispatch(updateTranslator(updatedData));
         
             if (updateTranslator.fulfilled.match(resultAction)) {
-                toast.success('Переводчик успешно обновлен');
+                toast.success(t('messages.translatorUpdatedSuccess'));
                 setTimeout(() => {
                     handleModal('editTranslator', false);
                     dispatch(retrieveTranslators(updatedData.id));
                     window.location.reload(); 
                 }, 1000); 
             } else {
-                toast.error('Ошибка при обновлении переводчика');
+                toast.error(t('messages.translatorUpdateError'));
             }
         } catch (err) {
-            toast.error((err as string) || 'Ошибка сервера');
+            toast.error((err as string) || t('messages.serverError'));
         }
     };
     const handleDeleteTranslator = async () => {
@@ -188,15 +188,15 @@ const Translators: React.FC = () => {
             const resultAction = await dispatch(deleteTranslator(translatorId));
     
             if (deleteTranslator.fulfilled.match(resultAction)) {
-            toast.success('Переводчик успешно удален');
+            toast.success(t('messages.translatorDeletedSuccess'));
             setTimeout(() => {
                 window.location.reload(); 
             }, 1000);
             } else {
-            toast.error('Ошибка при удалении переводчика');
+            toast.error(t('messages.translatorDeleteError'));
             }
         } catch (error) {
-            toast.error('Ошибка при удалении переводчика');
+            toast.error(t('messages.serverError'));
         }
     };
     const filterOptions = [

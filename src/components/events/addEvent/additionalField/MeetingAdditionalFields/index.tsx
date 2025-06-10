@@ -26,7 +26,7 @@ const MeetingAdditionalFields: React.FC = () => {
         <>
             <div className="form-inputs">
                 <Form.Item className="input" name="place">
-                    <Input className="input" placeholder="место подписания" size="large" />
+                    <Input className="input" placeholder={t('inputs.placeOfSigning')} size="large" />
                 </Form.Item>
             </div>
             <div className="inputs-label">

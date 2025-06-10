@@ -130,7 +130,7 @@ const Experts: React.FC = () => {
 
     useEffect(() => {
         if (expertById?.files) {
-            setLocalFiles(expertById.files); // используем копию
+            setLocalFiles(expertById.files); 
         }
     }, [expertById]);
     
@@ -208,16 +208,16 @@ const Experts: React.FC = () => {
           const data = {...values,  documents: uploadedFileIds};
           const resultAction = await dispatch(CreateExpert(data))
           if(CreateExpert.fulfilled.match(resultAction)){
-            toast.success('Эксперт добавлен успешно')
+            toast.success(t('messages.expertAddedSuccess'))
             setTimeout(() => {
               handleModal('chiefAdd', false);
               window.location.reload()
             }, 1000)
           } else {
-            toast.error("Ошибка при создании эксперта")
+            toast.error(t('messages.expertCreateError'))
           }
         } catch (err) {
-          toast.error((err as string) || 'Ошибка сервера')
+          toast.error((err as string) || t('messages.serverError'))
         }
     }
 
@@ -235,17 +235,17 @@ const Experts: React.FC = () => {
             const resultAction = await dispatch(UpdateExpert(updatedData));
             
             if (UpdateExpert.fulfilled.match(resultAction)) {
-                toast.success('Эксперт успешно обновлен');
+                toast.success(t('messages.expertUpdatedSuccess'));
                 setTimeout(() => {
                     handleModal('chiefEdit', false);
                     dispatch(RetrieveExperts(updatedData.id));
                     window.location.reload(); 
                 }, 1000); 
             } else {
-                toast.error('Ошибка при обновлении эксперта');
+                toast.error(t('messages.expertUpdateError'));
             }
         } catch (err) {
-            toast.error((err as string) || 'Ошибка сервера');
+            toast.error((err as string) || t('messages.serverError'));
         }
     };
 
@@ -255,15 +255,15 @@ const Experts: React.FC = () => {
             const resultAction = await dispatch(DeleteExpert(expertId));
     
             if (DeleteExpert.fulfilled.match(resultAction)) {
-            toast.success('Эксперт успешно удален');
+            toast.success(t('messages.expertDeletedSuccess'));
             setTimeout(() => {
                 window.location.reload(); 
             }, 1000);
             } else {
-            toast.error('Ошибка при удалении эксперта');
+            toast.error(t('messages.expertDeleteError'));
             }
         } catch (error) {
-            toast.error('Ошибка при удалении эксперта');
+            toast.error(t('messages.serverError'));
         }
     };
     
@@ -278,7 +278,7 @@ const Experts: React.FC = () => {
 
             if (DeleteUpload.fulfilled.match(deleteUploadedFile)) {
                 setLocalFiles(prev => prev.filter(file => file.id !== id));
-                toast.success('Файл удален успешно');
+                toast.success(t('messages.fileDeletedSuccess'));
             }
         } catch (error) {
             console.error("Ошибка при удалении файла:", error);

@@ -20,14 +20,14 @@ const SeminarAdditionalFields: React.FC = () => {
         <>
             <div className="form-inputs">
                 <Form.Item className="input" name="organizer">
-                    <Input className="input" placeholder="Организатор"  size="large" />
+                    <Input className="input" placeholder={t('tableTitles.organizer')}  size="large" />
                 </Form.Item>
                 <Form.Item className="input" name="membersQuantity">
-                    <Input className="input" placeholder="Кол-во людей" size="large" />
+                    <Input className="input" placeholder={t('events.membersQuantity')} size="large" />
                 </Form.Item>
             </div>
             <div className="inputs-label">
-                <p className="label">Формат встречи</p>
+                <p className="label">{t('tableTitles.format')} + {t('tableTitles.meetings')}</p>
             </div>
             <div className="form-inputs">
                 <Form.Item className="input" name="format">
@@ -40,7 +40,7 @@ const SeminarAdditionalFields: React.FC = () => {
                 </Form.Item>
             </div>
             <div className="inputs-label">
-                <p className="label">Партнеры</p>
+                <p className="label">{t('tableTitles.partners')}</p>
             </div>
             {files.map((item, index) => (
                 <div className="form-inputs" key={item.id}>
@@ -53,7 +53,7 @@ const SeminarAdditionalFields: React.FC = () => {
                 </p>
             </div>
              <div className="inputs-label">
-                <p className="label">Донор</p>
+                <p className="label">{t('tableTitles.donor')}</p>
             </div>
             <div className="form-inputs">
                 <SearchCountriesOrOrganizations  fieldName="donor" />

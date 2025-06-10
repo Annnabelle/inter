@@ -65,7 +65,7 @@ const ForeignAdditionalFieldsEdit: React.FC<ForeignEditAdditionalFieldsProps> = 
                       className="input"
                       rules={[{ required: true, message: "Выберите тип" }]}
                     >
-                      <Select size="large" placeholder="Выберите тип">
+                      <Select size="large" placeholder={t('tableTitles.type')}>
                         <Select.Option value="agency">Agency</Select.Option>
                         <Select.Option value="organization">Organization</Select.Option>
                         <Select.Option value="other">Other</Select.Option>
@@ -84,7 +84,7 @@ const ForeignAdditionalFieldsEdit: React.FC<ForeignEditAdditionalFieldsProps> = 
                               rules={[{ required: true, message: "Введите значение" }]}
                               className="input"
                             >
-                              <Input size="large" placeholder="Введите другое" />
+                              <Input size="large" placeholder={t('tableTitles.name')} />
                             </Form.Item>
                           );
                         }

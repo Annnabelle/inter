@@ -7,35 +7,42 @@ import {
 import moment from "moment-timezone";
 import { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store";
-import { RetrieveEventsCalendar, RetrieveEventById, DeleteEvent, UpdateEventCalendar } from "../../store/eventsCalendar";
+import { RetrieveEventsCalendar, RetrieveEventById, DeleteEvent } from "../../store/eventsCalendar";
 import { getDateRange } from "./getRange";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 import CalendarEvent from "./calendarEvent";
 import RetrieveEventModal from "../events/retrieveEvent";
-import "moment/locale/ru";
-import "react-big-calendar/lib/css/react-big-calendar.css";
 import EditEventModal from "../events/editEvent";
-import { toast } from "react-toastify";
 import ModalWindow from "../modalWindow";
 import Button from "../button";
-import { useTranslation } from "react-i18next";
+import 'moment/locale/ru';
+import "react-big-calendar/lib/css/react-big-calendar.css";
 
 moment.locale("ru");
 
 const localizer = momentLocalizer(moment);
 
-const customFormats: Partial<Formats> = {
-  timeGutterFormat: "HH:mm",
-  eventTimeRangeFormat: (range, culture, localizer) => {
-    if (!localizer) return "";
-    return `${localizer.format(range.start, "HH:mm", culture)} — ${localizer.format(range.end, "HH:mm", culture)}`;
-  },
-};
+// const customFormats: Partial<Formats> = {
+//   timeGutterFormat: "HH:mm",
+//   eventTimeRangeFormat: (range, culture, localizer) => {
+//     if (!localizer) return "";
+//     return `${localizer.format(range.start, "HH:mm", culture)} — ${localizer.format(range.end, "HH:mm", culture)}`;
+//   },
+// };
 
 const CalendarComponent = () => {
   const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const eventsCalendar = useAppSelector((state) => state.eventsCalendar.eventsCalendar);
   const selectedEventData = useAppSelector((state) => state.eventsCalendar.selectedEvent);
+
+
+  useEffect(() => {
+    const lang = i18n.language;
+    moment.locale(lang === 'uz' ? 'uz-latn' : lang === 'en' ? 'en-gb' : 'ru');
+  }, [i18n.language]);
+
 
   const [date, setDate] = useState(new Date());
   const [currentDate, setCurrentDate] = useState<Date>(
@@ -151,12 +158,16 @@ const CalendarComponent = () => {
     });
   };
 
+const getDateRangeLabel = () => {
+  const start = moment.tz(dateRange.startDate, "Asia/Tashkent").format("DD.MM.YYYY");
+  const end = moment.tz(dateRange.endDate, "Asia/Tashkent").format("DD.MM.YYYY");
 
-  const getDateRangeLabel = () => {
-    const start = moment.tz(dateRange.startDate, "Asia/Tashkent");
-    const end = moment.tz(dateRange.endDate, "Asia/Tashkent");
-    return `${start.format("DD MMMM YYYY")} - ${end.format("DD MMMM YYYY")}`;
-  };
+  return t("calendar.dateRangeLabel", { start, end });
+};
+
+
+
+
   const eventById = selectedEventData?.event
 
   const handleDeleteEvent = async () => {
@@ -166,17 +177,53 @@ const CalendarComponent = () => {
       const resultAction = await dispatch(DeleteEvent(selectedEventId));
 
       if (DeleteEvent.fulfilled.match(resultAction)) {
-        toast.success("Мероприятие успешно удалено");
+        toast.success(t('messages.eventDeleted'));
         setTimeout(() => {
           window.location.reload();
         }, 1000);
       } else {
-        toast.error("Ошибка при удалении мероприятия");
+        toast.error(t('messages.eventDeleteError'));
       }
     } catch (error) {
-      toast.error("Ошибка при удалении мероприятия");
+      toast.error(t('messages.eventDeleteError'));
     }
   };
+
+
+  const customMessages = {
+    today: t("calendar.today"),
+    previous: t("calendar.previous"),
+    next: t("calendar.next"),
+    month: t("calendar.month"),
+    week: t("calendar.week"),
+    day: t("calendar.day"),
+    date: t("calendar.date"),
+    time: t("calendar.time"),
+    event: t("calendar.event"),
+    noEventsInRange: t("calendar.noEventsInRange"),
+    showMore: (total: number) => `+ еще ${total}`,
+    weekdays: [
+      t("calendar.sunday"),
+      t("calendar.monday"),
+      t("calendar.tuesday"),
+      t("calendar.wednesday"),
+      t("calendar.thursday"),
+      t("calendar.friday"),
+      t("calendar.saturday"),
+    ],
+  };
+
+  const customFormats: Partial<Formats> = {
+  timeGutterFormat: "HH:mm",
+  weekdayFormat: (date, culture, localizer) => {
+    const dayIndex = moment(date).day(); 
+    return customMessages.weekdays?.[dayIndex] ?? localizer?.format(date, "ddd", culture);
+  },
+  eventTimeRangeFormat: (range, culture, localizer) => {
+    if (!localizer) return "";
+    return `${localizer.format(range.start, "HH:mm", culture)} — ${localizer.format(range.end, "HH:mm", culture)}`;
+  },
+};
 
 
   return (
@@ -193,6 +240,7 @@ const CalendarComponent = () => {
         startAccessor="start"
         endAccessor="end"
         selectable
+        messages={customMessages}
         style={{ height: "100vh", background: "white", marginTop: "100px" }}
         views={["month", "week", "day"]}
         onNavigate={(date) => {

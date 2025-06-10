@@ -238,16 +238,16 @@ const CountriesInner: React.FC = () => {
             const data = {...values, files: uploadedFileIds};
             const resultAction = await dispatch(CreateInternationalDocument(data))
             if(CreateInternationalDocument.fulfilled.match(resultAction)){
-            toast.success('Документ добавлен успешно')
+            toast.success(t('messages.documentAddedSuccess'))
             setTimeout(() => {
                 handleModal('addDocument', false);
                 window.location.reload()
             }, 1000)
             } else {
-            toast.error("Ошибка при создании документа")
+            toast.error(t('messages.documentCreateError'))
             }
         } catch (err) {
-            toast.error((err as string) || 'Ошибка сервера')
+            toast.error((err as string) || t('messages.serverError'))
         }
     }
         
@@ -260,17 +260,17 @@ const CountriesInner: React.FC = () => {
             console.log('resultAction', resultAction);
             
             if (UpdateInternationalDocumentRequest.fulfilled.match(resultAction)) {
-                toast.success('Документ успешно обновлен');
+                toast.success(t('messages.documentUpdatedSuccess'));
                 setTimeout(() => {
                     handleModal('editDocument', false);
                     dispatch(RetrieveInternationalDocuments(updatedData.id));
                     window.location.reload(); 
                 }, 1000); 
             } else {
-                toast.error('Ошибка при обновлении документа');
+                toast.error(t('messages.documentUpdateError'));
             }
         } catch (err) {
-            toast.error((err as string) || 'Ошибка сервера');
+            toast.error((err as string) || t('messages.serverError'));
         }
     };
 
@@ -301,15 +301,15 @@ const CountriesInner: React.FC = () => {
             const resultAction = await dispatch(DeleteInternationalDocument(reportId));
     
             if (DeleteInternationalDocument.fulfilled.match(resultAction)) {
-            toast.success('Документ успешно удален');
+            toast.success(t('messages.documentDeletedSuccess'));
             setTimeout(() => {
                 window.location.reload(); 
             }, 1000);
             } else {
-            toast.error('Ошибка при удалении отчета');
+            toast.error(t('messages.documentDeleteError'));
             }
         } catch (error) {
-            toast.error('Ошибка при удалении отчета');
+            toast.error(t('messages.serverError'));
         }
     };
 

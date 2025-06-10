@@ -29,7 +29,7 @@ const ConferenceAdditionalFields: React.FC = () => {
         <SearchOrganizer/>
       </div>
       <div className="inputs-label">
-            <p className="label">Формат конференции</p>
+            <p className="label">{t('titles.conferenceFormat')}</p>
         </div>
       <div className="form-inputs">
         <Form.Item className="input" name="format" rules={[{ required: true, message: t('errors.required') }]}>
@@ -42,7 +42,7 @@ const ConferenceAdditionalFields: React.FC = () => {
         </Form.Item>
       </div>
         <div className="inputs-label">
-            <p className="label">Партнеры</p>
+            <p className="label">{t('tableTitles.partners')}</p>
         </div>
        {files.map((item, index) => (
             <div className="form-inputs" key={item.id}>
@@ -55,7 +55,7 @@ const ConferenceAdditionalFields: React.FC = () => {
             </p>
         </div>
         <div className="inputs-label">
-            <p className="label">Донор</p>
+            <p className="label">{t('tableTitles.donor')}</p>
         </div>
         <div className="form-inputs">
            <SearchCountriesOrOrganizations  fieldName="donor" />

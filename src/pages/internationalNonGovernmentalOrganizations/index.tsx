@@ -223,16 +223,16 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
           const data = {...values, organizationId: id ?? '', documents: uploadedFileIds};
           const resultAction = await dispatch(createOrganizationsEmployees(data))
           if(createOrganizationsEmployees.fulfilled.match(resultAction)){
-            toast.success('Сотрудник добавлен успешно')
+            toast.success(t('messages.employeeAddedSuccess'))
             setTimeout(() => {
               handleModal('chiefAdd', false);
               window.location.reload()
             }, 1000)
           } else {
-            toast.error("Ошибка при создании сотрудника")
+            toast.error(t('messages.employeeCreateError'))
           }
         } catch (err) {
-          toast.error((err as string) || 'Ошибка сервера')
+          toast.error((err as string) || t('messages.serverError'))
         }
     }
 
@@ -253,17 +253,17 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
           const resultAction = await dispatch(updateOrganizationsEmployees(updatedData));
           
           if (updateOrganizationsEmployees.fulfilled.match(resultAction)) {
-              toast.success('Сотрудник успешно обновлен');
+              toast.success(t('messages.employeeUpdatedSuccess'));
               setTimeout(() => {
                   handleModal('chiefEdit', false);
                   dispatch(RetrieveOrganizationEmployees(updatedData.id));
                   window.location.reload(); 
               }, 1000); 
           } else {
-              toast.error('Ошибка при обновлении сотрудника');
+              toast.error(t('messages.employeeUpdateError'));
           }
         } catch (err) {
-            toast.error((err as string) || 'Ошибка сервера');
+            toast.error((err as string) || t('messages.serverError'));
         }
     };
 
@@ -273,15 +273,15 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
             const resultAction = await dispatch(deleteOrganizationsEmployees(organizationEmployeeId));
 
             if (deleteOrganizationsEmployees.fulfilled.match(resultAction)) {
-            toast.success('Сотрудник успешно удален');
+            toast.success(t('messages.employeeDeletedSuccess'));
             setTimeout(() => {
                 window.location.reload(); 
             }, 1000);
             } else {
-            toast.error('Ошибка при удалении сотрудника');
+            toast.error(t('messages.employeeDeleteError'));
             }
         } catch (error) {
-            toast.error('Ошибка при удалении сотрудника');
+            toast.error(t('messages.serverError'));
         }
     };
     const handleCreateOrganizationProject = async(values: Project) => {
@@ -289,16 +289,16 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
           const data = {...values, organizationId: id ?? '', documents: uploadedFileIds};
           const resultAction = await dispatch(createOrganizationProject(data))
           if(createOrganizationProject.fulfilled.match(resultAction)){
-            toast.success('Проект добавлен успешно')
+            toast.success(t('messages.projectAddedSuccess'))
             setTimeout(() => {
               handleModal('chiefAdd', false);
               window.location.reload()
             }, 1000)
           } else {
-            toast.error("Ошибка при создании проекта")
+            toast.error(t('messages.projectCreateError'))
           }
         } catch (err) {
-          toast.error((err as string) || 'Ошибка сервера')
+          toast.error((err as string) || t('messages.serverError'))
         }
     }
     const handleUpdateOrganizationProject = async (values: any) => {
@@ -314,17 +314,17 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
           const resultAction = await dispatch(updateOrganizationsProject(updatedData));
           
           if (updateOrganizationsProject.fulfilled.match(resultAction)) {
-              toast.success('Проект успешно обновлен');
+              toast.success(t('messages.projectUpdatedSuccess'));
               setTimeout(() => {
                   handleModal('projectEdit', false);
                   dispatch(retrieveOrganizationsProjects(updatedData.id));
                   window.location.reload(); 
               }, 1000); 
           } else {
-              toast.error('Ошибка при обновлении проекта');
+              toast.error(t('messages.projectUpdatedError'));
           }
         } catch (err) {
-            toast.error((err as string) || 'Ошибка сервера');
+            toast.error((err as string) || t('messages.serverError'));
         }
       };
     const handleDeleteOrganizationProject = async () => {
@@ -333,15 +333,15 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
           const resultAction = await dispatch(deleteOrganizationProject(organizationProjectId));
   
           if (deleteOrganizationProject.fulfilled.match(resultAction)) {
-          toast.success('Проект успешно удален');
+          toast.success(t('messages.projectDeletedSuccess'));
           setTimeout(() => {
               window.location.reload(); 
           }, 1000);
           } else {
-            toast.error('Ошибка при удалении проекта');
+            toast.error(t('messages.projectDeletedError'));
           }
       } catch (error) {
-          toast.error('Ошибка при удалении проекта');
+          toast.error(t('messages.serverError'));
       }
     };
 
@@ -379,7 +379,6 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
             }
     
             if (!owner || !entity) {
-                console.error("Отсутствует owner или entity для удаления файла.");
                 return;
             }
     
@@ -391,10 +390,10 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
     
             if (DeleteUpload.fulfilled.match(deleteUploadedFile)) {
                 setLocalFiles(prev => prev.filter(file => file.id !== id));
-                toast.success('Файл удален успешно');
+                toast.success(t('messages.fileDeletedSuccess'));
             }
         } catch (error) {
-            console.error("Ошибка при удалении файла:", error);
+            console.error(t('messages.serverError'), error);
         }
     };
 
