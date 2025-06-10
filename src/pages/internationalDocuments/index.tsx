@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
-import { theme, Form, Input, Upload, DatePicker, Select, SelectProps } from "antd";
-import { Country, FileItem } from "../../types/countries";
+import { theme, Form, Input, Upload, DatePicker, Select } from "antd";
 import { InternationalDocumentsTableColumn } from "../../tableData/internationalDocuments";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
@@ -19,11 +18,15 @@ import { Document } from "../../types/uploads";
 import { normalizeUrl } from "../../utils/baseUrl";
 import { fetchCountries } from "../../store/countries";
 import { fetchOrganizationSearch } from "../../store/organizations";
-import { CreateDocument } from "../../store/uploads";
+import { CreateDocument, DeleteUpload } from "../../store/uploads";
+import { FaTrashAlt } from "react-icons/fa";
+import { getUserRole } from "../../utils/getUserRole";
+import { UserRole } from "../../utils/roles";
 
 
 const InternationalDocumentsPage: React.FC = () => {
     const { t, i18n } = useTranslation();
+    const role = getUserRole();
     const language = i18n.resolvedLanguage || 'ru';
     const {
         token: { colorBgContainer },
@@ -115,7 +118,7 @@ const InternationalDocumentsPage: React.FC = () => {
             approval: document.approval,
             comment: document.comment,
             countryId: document.countryId,
-            date: dayjs(document.date).format('YYYY-MM-DD'),
+            date: dayjs(document.date).format('DD.MM.YYYY'),
             organizationId: document.name,
             signLevel: document.signLevel
         }))
@@ -192,16 +195,16 @@ const InternationalDocumentsPage: React.FC = () => {
           const data = {...values, files: uploadedFileIds};
           const resultAction = await dispatch(CreateInternationalDocument(data))
           if(CreateInternationalDocument.fulfilled.match(resultAction)){
-            toast.success('Документ добавлен успешно')
+            toast.success(t('messages.documentAddedSuccess'))
             setTimeout(() => {
               handleModal('addDocument', false);
               window.location.reload()
             }, 1000)
           } else {
-            toast.error("Ошибка при создании документа")
+            toast.error(t('messages.documentCreateError'))
           }
         } catch (err) {
-          toast.error((err as string) || 'Ошибка сервера')
+          toast.error((err as string) || t('messages.serverError'))
         }
     }
     
@@ -214,17 +217,17 @@ const InternationalDocumentsPage: React.FC = () => {
           console.log('resultAction', resultAction);
           
           if (UpdateInternationalDocumentRequest.fulfilled.match(resultAction)) {
-              toast.success('Документ успешно обновлен');
+              toast.success(t('messages.documentUpdatedSuccess'));
               setTimeout(() => {
                   handleModal('editDocument', false);
                   dispatch(RetrieveInternationalDocuments(updatedData.id));
                   window.location.reload(); 
               }, 1000); 
           } else {
-              toast.error('Ошибка при обновлении документа');
+              toast.error(t('messages.documentUpdateError'));
           }
         } catch (err) {
-            toast.error((err as string) || 'Ошибка сервера');
+            toast.error((err as string) || t('messages.serverError'));
         }
     };
     const handleFileUpload = async (file: File, onSuccess: Function, onError: Function) => {
@@ -254,17 +257,18 @@ const InternationalDocumentsPage: React.FC = () => {
             const resultAction = await dispatch(DeleteInternationalDocument(reportId));
     
             if (DeleteInternationalDocument.fulfilled.match(resultAction)) {
-            toast.success('Документ успешно удален');
+            toast.success(t('messages.documentDeletedSuccess'));
             setTimeout(() => {
                 window.location.reload(); 
             }, 1000);
             } else {
-            toast.error('Ошибка при удалении отчета');
+            toast.error(t('messages.documentDeleteError'));
             }
         } catch (error) {
-            toast.error('Ошибка при удалении отчета');
+            toast.error(t('messages.serverError'));
         }
     };
+
     return (
         <MainLayout>
             <MainHeading title={`${t('titles.internationalDocuments')}`} subtitle="Подзаголоок">
@@ -412,7 +416,8 @@ const InternationalDocumentsPage: React.FC = () => {
                 </ModalWindow>
             )}
             {modalState.DocumentData && (
-                <ModalWindow title={t('buttons.edit') + " " + t('crudNames.document')} openModal={modalState.editDocument} closeModal={() => handleModal('editDocument', false)} handleDelete={() => handleDeleteOpen('Document')}>
+                <ModalWindow title={t('buttons.edit') + " " + t('crudNames.document')} openModal={modalState.editDocument} closeModal={() => handleModal('editDocument', false)}
+                {...(role !== UserRole.JUNIOR_INTL_OFFICER && { handleDelete: () => handleDeleteOpen('Document'),})}>
                     <FormComponent formProps={editForm} onFinish={handleUpdateDocument}>
                         <div className="form-inputs">
                             {modalState.DocumentData.name && (
@@ -465,19 +470,25 @@ const InternationalDocumentsPage: React.FC = () => {
                          {documentById?.files?.map((item: Document) => (
                             <div className="form-inputs" key={item?.id}>
                                 <Form.Item className="input" name="document">
-                                    <div className="input input-upload">
-                                    <a
-                                        href={normalizeUrl(item?.url)}
-                                        download={item?.originalName}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        📄 {item?.originalName}
-                                    </a>
+                                    <div className="input-upload-items">
+                                        <div className="input input-upload">
+                                            <a
+                                                href={normalizeUrl(item?.url)}
+                                                download={item?.originalName}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                📄 {item?.originalName}
+                                            </a>
+                                        </div>
+                                        {/* <div className="deleteUpload" onClick={() => deleteUpload(item?.id)}>
+                                            <FaTrashAlt/>
+                                        </div> */}
                                     </div>
                                 </Form.Item>
                             </div>
                         ))}
+
                         <Button type="submit">{t('buttons.edit')}</Button>
                     </FormComponent>
                 </ModalWindow>

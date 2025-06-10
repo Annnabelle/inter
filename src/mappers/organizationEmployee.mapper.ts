@@ -1,6 +1,6 @@
 import { PaginatedResponse } from "../dtos/main.dto";
 import { organizationEmployeesDto, GetOrganizationEmployeeResponseDto, OrganizationEmployeeResponseDto, UpdateOrganizationEmployeeDto, PopulatedOrganizationEmployeeResponseDto } from "../dtos/organizationEmployee";
-import { OrganizationEmployee, OrganizationEmployees, OrganizationEmployeeWithDocs } from "../types/organizationEmployee";
+import { OrganizationEmployee, OrganizationEmployees, OrganizationEmployeeUpdate, OrganizationEmployeeWithDocs } from "../types/organizationEmployee";
 
 export function CreateOrganizationEmployeeToCreateOrganizationEmployeeDto(organizationEmployee: OrganizationEmployees): organizationEmployeesDto {
     return {
@@ -52,7 +52,7 @@ export function OrganizationEmployeeResponseDtoToOrganizationEmployeeResponse(
   };
 }
 
-export function UpdateOrganizationEmployeeToUpdateOrganizationEmployeeResponseDto(organizationEmployee: OrganizationEmployeeWithDocs): UpdateOrganizationEmployeeDto{
+export function UpdateOrganizationEmployeeToUpdateOrganizationEmployeeResponseDto(organizationEmployee: OrganizationEmployeeUpdate): UpdateOrganizationEmployeeDto{
     return {
         firstName: organizationEmployee.firstName,
         lastName: organizationEmployee.lastName,
@@ -60,7 +60,7 @@ export function UpdateOrganizationEmployeeToUpdateOrganizationEmployeeResponseDt
         email: organizationEmployee.email,
         position: organizationEmployee.position,
         comment: organizationEmployee.comment,
-        documents: organizationEmployee.documents?.map((document => document.id))
+        documents: organizationEmployee.documents
     }
 }
 

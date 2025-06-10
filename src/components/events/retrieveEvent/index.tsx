@@ -1,154 +1,112 @@
-import React from 'react'
-import { Form, Input, Checkbox } from "antd";
-import { EventDetailsProps } from '../../../types/events';
-import FormComponent from '../../form';
-import { useTranslation } from 'react-i18next';
+import React from "react";
+import ModalWindow from "../../modalWindow";
+import { Event, EventType } from "../../../types/events";
+import { DatePicker, Form, Input, Select } from "antd";
+import BirthdayRetrieveAdditionalFields from "./birthdayAdditionalFields";
+import moment from "moment";
+import FormComponent from "../../form";
+import ConferenceAdditionalFieldsRetrieve from "./conferenceAdditionalFieldsRetrieve";
+import DelegationAdditionalFieldsRetrieve from "./delegationAdditionalFieldsRetrieve";
+import DiplomaticAdditionalFieldsRetrieve from "./diplomaticAdditionalFieldsRetrieve";
+import ForeignAdditionalFieldsRetrieve from "./foreignAdditionalFieldsRetrieve";
+import MeetingAdditionalFieldsRetrieve from "./meetingAdditionalFieldsRetrieve";
+import SeminarAdditionalFieldsRetrieve from "./seminarAdditionalFieldsRetrieve";
+import { getUserRole } from "../../../utils/getUserRole";
+import { UserRole } from "../../../utils/roles";
+import { useTranslation } from "react-i18next";
 
-const RetrieveEvent: React.FC<EventDetailsProps> = ({event}) => {
-    const { t } = useTranslation()
-  return (
-    <FormComponent>
-      <div className="form-inputs">
-        <Form.Item
-          name="eventName"
-          className="input"
-        >
-          <Input disabled className="input" size="large" placeholder={event.title} />
-        </Form.Item>
-        <Form.Item
-          name="organizer"
-          className="input"
-        >
-          <Input disabled className="input" size="large"  placeholder={event?.organizer}  />
-        </Form.Item>
-      </div>
-      <div className="form-inputs">
-        <Form.Item
-          name="eventType"
-          className="input"
-        >
-          <Input disabled className="input" size="large"  placeholder={event?.eventType} />
-        </Form.Item>
-        <Form.Item
-          name="countOfMembers"
-          className="input"
-        >
-          <Input disabled className="input" size="large"  placeholder={event?.countOfMembers}/>
-        </Form.Item>
-      </div>
-      <div className="form-inputs">
-        <Form.Item
-          name="partnersOptions"
-          className="input"
-        >
-          <Input disabled className="input" size="large"  placeholder={event?.partnersOptions} />
-        </Form.Item>
-        <Form.Item
-          name="donorFormat"
-          className="input"
-        >
-          <Input disabled className="input" size="large"  placeholder={event?.donorFormat} />
-        </Form.Item>
-      </div>
-      <div className="form-inputs">
-        <Form.Item
-          name="date"
-          style={{width: '100%'}}
-        >
-          <Input
-            style={{ width: "100%" }}
-            size="large"
-            disabled
-            placeholder={event?.start}
-          />
-        </Form.Item>
-        <Form.Item
-          name="date"
-          style={{width: '100%'}}
-        >
-          <Input
-            style={{ width: "100%" }}
-            size="large"
-            placeholder={event?.end}
-            disabled
-          />
-        </Form.Item>
-      </div>
-      <div className="form-inputs">
-        <div className="approval-container">
-            <div className="approval-container-items">
-               <div className="approval-container-item">
-                 <div className="approval-letter-label">
-                   <p className="label">{`${t('events.letterToMFA')}`}</p>
-                 </div>
-                 <div style={{ display: "flex", gap: 8 }}>
-                   <Input size="large"    style={{ width: "100%" }} disabled/>
-                   <Input size="large" style={{ width: "100%" }} disabled />
-                 </div>
-               </div>
-               <div className="approval-container-item">
-                 <div className="approval-letter-label">
-                   <p className="label">{t('events.MFAResponse')}</p>
-                 </div>
-                 <div style={{ display: "flex", gap: 8 }}>
-                   <Input size="large"  style={{ width: "100%" }} disabled />
-                   <Input size="large"  style={{ width: "100%" }} disabled />
-                 </div>
-               </div>  
-             </div>
-          <Checkbox checked={true} disabled>
-          {t('events.approvalFromMFA')}
-          </Checkbox>
-            <div className="approval-container-items">
-               <div className="approval-container-item">
-                 <div className="approval-letter-label">
-                   <p className="label">{t('events.letterToSSS')}</p>
-                 </div>
-                 <div style={{ display: "flex", gap: 8 }}>
-                   <Input size="large"  style={{ width: "100%" }}disabled/>
-                   <Input size="large" style={{ width: "100%" }}disabled />
-                 </div>
-               </div>
-               <div className="approval-container-item">
-                 <div className="approval-letter-label">
-                   <p className="label">{t('events.SSSResponse')}</p>
-                 </div>
-                 <div style={{ display: "flex", gap: 8 }}>
-                   <Input size="large"  style={{ width: "100%" }} disabled />
-                   <Input size="large"  style={{ width: "100%" }} disabled />
-                 </div>
-               </div>  
-             </div>
-          <Checkbox checked={true} disabled>
-          {t('events.approvalFromSSS')}
-          </Checkbox>
-            <div className="approval-container-items">
-               <div className="approval-container-item">
-                 <div className="approval-letter-label">
-                   <p className="label">{t('events.letterToAdministration')}</p>
-                 </div>
-                 <div style={{ display: "flex", gap: 8 }}>
-                   <Input size="large"    style={{ width: "100%" }} disabled/>
-                   <Input size="large"  style={{ width: "100%" }} disabled />
-                 </div>
-               </div>
-               <div className="approval-container-item">
-                 <div className="approval-letter-label">
-                   <p className="label">{t('events.administrationResponse')}</p>
-                 </div>
-                 <div style={{ display: "flex", gap: 8 }}>
-                   <Input size="large"  style={{ width: "100%" }} disabled />
-                   <Input size="large"  style={{ width: "100%" }} disabled />
-                 </div>
-               </div>  
-             </div>
-          <Checkbox checked={true} disabled>
-          {t('events.approvalFromAdministration')}
-          </Checkbox>
-        </div>
-      </div>
-    </FormComponent>
-  )
+interface RetrieveEventModalProps {
+  selectedEvent: Event | null;
+  isOpen: boolean;
+  onClose: () => void;
+  onEdit: () => void;
 }
 
-export default RetrieveEvent
+const retrieveEventFieldsStrategy: Partial<
+  Record<EventType, React.FC<{ event: Event; form: any }>>
+> = {
+  [EventType.Birthday]: BirthdayRetrieveAdditionalFields,
+  [EventType.Conference] : ConferenceAdditionalFieldsRetrieve,
+  [EventType.Delegations] : DelegationAdditionalFieldsRetrieve,
+  [EventType.Diplomatic] : DiplomaticAdditionalFieldsRetrieve,
+  [EventType.Foreign] : ForeignAdditionalFieldsRetrieve,
+  [EventType.Meeting] : MeetingAdditionalFieldsRetrieve,
+  [EventType.Seminar] : SeminarAdditionalFieldsRetrieve
+};
+
+const RetrieveEventModal: React.FC<RetrieveEventModalProps> = ({
+  selectedEvent,
+  isOpen,
+  onClose,
+  onEdit,
+}) => {
+  const [form] = Form.useForm();
+  const {t} = useTranslation()
+
+  if (!selectedEvent) return null;
+
+  const EventAdditionalFieldsComponent =
+    retrieveEventFieldsStrategy[selectedEvent.eventType];
+  const role = getUserRole();
+  return (
+    <ModalWindow openModal={isOpen} closeModal={onClose} title="Информация о событии" 
+    {...(role !== UserRole.EMPLOYEE ? { handleEdit: onEdit } : {})}
+    >
+      <FormComponent formProps={form}>
+        <div className="form-inputs">
+          <Form.Item name="eventType" className="input">
+            <Select className="input" size="large" disabled placeholder={t(`eventTypes.${selectedEvent.eventType}`)} />
+          </Form.Item>
+          {selectedEvent.name && (
+            <Form.Item name="name" className="input">
+              <Input className="input" size="large" disabled placeholder={selectedEvent.name} />
+            </Form.Item>
+          )}
+        </div>
+
+        <div className="form-inputs">
+          {selectedEvent.startDate && (
+            <Form.Item className="input" name="startDate">
+              <DatePicker
+                showTime={{ format: "HH:mm" }}
+                format="YYYY-MM-DD HH:mm"
+                size="large"
+                className="input"
+                placeholder={moment(selectedEvent.startDate).format("DD-MM-YYYY HH:mm")}
+                disabled
+              />
+            </Form.Item>
+          )}
+          {selectedEvent.endDate && (
+            <Form.Item className="input" name="endDate">
+              <DatePicker
+                showTime={{ format: "HH:mm" }}
+                format="YYYY-MM-DD HH:mm"
+                size="large"
+                className="input"
+                placeholder={moment(selectedEvent.endDate).format("DD-MM-YYYY HH:mm")}
+                disabled
+              />
+            </Form.Item>
+          )}
+        </div>
+          {selectedEvent.comment && (
+            <div className="form-inputs">
+              <Form.Item name="comment" className="input">
+                <Input className="input" size="large" disabled placeholder={selectedEvent.comment} />
+              </Form.Item>
+            </div>
+          )}
+
+        {EventAdditionalFieldsComponent && (
+          <EventAdditionalFieldsComponent event={selectedEvent} form={form} />
+        )}
+      </FormComponent>
+    </ModalWindow>
+  );
+};
+
+export default RetrieveEventModal;
+
+
+

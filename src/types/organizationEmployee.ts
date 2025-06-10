@@ -24,6 +24,18 @@ export type OrganizationEmployee = {
     documents?: HexString[]
 }
 
+export type OrganizationEmployeeUpdate = {
+    id: HexString,
+    firstName: string, 
+    lastName: string,
+    phone?: string,
+    email?: string,
+    position?: string,
+    comment?: string,
+    organizationId: HexString,
+    documents: HexString[]
+}
+
 export type OrganizationEmployeeWithDocs = {
     id: HexString,
     firstName: string, 

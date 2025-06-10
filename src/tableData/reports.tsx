@@ -27,43 +27,4 @@ export const ReportsColumns = (t: TFunction): TableProps<ReportsTableDataType>["
     key: "startDate",
     render: (text) => <p className="table-text">{text}</p>,
   },
-  // {
-  //   title: t('tableTitles.actions'),
-  //   dataIndex: "actions",
-  //   key: "actions",
-  //   render: (actions: string[]) => (
-  //       <div className="table-action">
-  //         {actions.map((action: string, index: number) => (
-  //           <p key={index} className="table-action-text">{action}</p>
-  //         ))}
-  //       </div>
-  //     )
-  // },
-];
-
-// export const ReportsData = (t: TFunction): ReportsTableDataType[] => [
-//   {
-//     key: "1",
-//     nameOfReport: "Отчет за Февраль",
-//     typeOfReport: "docx",
-//     responsibleForReport: "Ким Эдуард",
-//     dateOfCreation: "01.01.2025 ",
-//     actions: [t('buttons.edit'), t('buttons.download')]
-//   },
-//   {
-//     key: "2",
-//     nameOfReport: "Отчет за Февраль",
-//     typeOfReport: "docx",
-//     responsibleForReport: "Ким Эдуард",
-//     dateOfCreation: "01.01.2025 ",
-//     actions: [t('buttons.edit'), t('buttons.download')]
-//   },
-//   {
-//     key: "3",
-//     nameOfReport: "Отчет за Февраль",
-//     typeOfReport: "docx",
-//     responsibleForReport: "Ким Эдуард",
-//     dateOfCreation: "01.01.2025 ",
-//     actions: [t('buttons.edit'), t('buttons.download')]
-//   },
-// ];
+]

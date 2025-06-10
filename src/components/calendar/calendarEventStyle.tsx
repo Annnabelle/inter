@@ -1,8 +1,8 @@
-import { EventType } from "../../types/events";
+import { Event as RBCEvent } from "react-big-calendar";  // импортируем тип из react-big-calendar
 import moment from "moment";
 
-const CalendarEventStyle = (event: EventType) => {
-  const hour = moment(event.start).hour();
+const CalendarEventStyle = (event: RBCEvent) => {
+  const hour = moment(event.start).hour(); 
   let backgroundColor;
   let borderColor;
 
@@ -29,4 +29,4 @@ const CalendarEventStyle = (event: EventType) => {
   };
 };
 
-export default CalendarEventStyle
+export default CalendarEventStyle;

@@ -4,7 +4,8 @@
 .calendar-footer
     display: flex
     .container-items
-        @include mix.flex-content(center, row)
+        @include mix.flex-content(flex-start, row)
+        flex-wrap: wrap
         gap: 20px
         .item
             @include mix.flex-content(center, row)

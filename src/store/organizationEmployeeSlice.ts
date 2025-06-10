@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { OrganizationEmployee, OrganizationEmployees, OrganizationEmployeeWithDocs } from "../types/organizationEmployee";
+import { OrganizationEmployee, OrganizationEmployees, OrganizationEmployeeUpdate, OrganizationEmployeeWithDocs } from "../types/organizationEmployee";
 import { CreateOrganizationEmployeeResponseDto, DeleteOrganizationEmployeeDto, GetOrganizationEmployeeResponseDto, OrganizationEmployeeResponseDto, PopulatedOrganizationEmployeeResponseDto } from "../dtos/organizationEmployee";
 import { CreateOrganizationEmployeeToCreateOrganizationEmployeeDto, PaginatedOrganizationsEmployeesResponseDtoToPaginatedOrganizationsEmployeesResponse, OrganizationEmployeeResponseDtoToOrganizationEmployeeResponse, UpdateOrganizationEmployeeToUpdateOrganizationEmployeeResponseDto, OrganizationEmployeesResponseDtoToOrganizationEmployees } from "../mappers/organizationEmployee.mapper";
-import { ErrorDto, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
+import { ErrorDto, HexString, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
 import { BASE_URL } from "../utils/baseUrl";
 import axios from "axios";
 
@@ -46,7 +46,7 @@ function isSuccessResponse(
   );
 }
   
-export const RetrieveOrganizationEmployees = createAsyncThunk<PaginatedResponse<OrganizationEmployee>, {page: number, limit: number, id: string},{ rejectValue: string }>(
+export const RetrieveOrganizationEmployees = createAsyncThunk<PaginatedResponse<OrganizationEmployee>, {page: number, limit: number, id: HexString | undefined},{ rejectValue: string }>(
   "organizationsEmployees/retrieveOrganizationsEmployees",
   async ({page, limit, id}, { rejectWithValue }) => {
     try {
@@ -90,7 +90,7 @@ export const retrieveOrganizationsEmployeeById = createAsyncThunk<OrganizationEm
 
 
 
-export const updateOrganizationsEmployees = createAsyncThunk<OrganizationEmployee, OrganizationEmployeeWithDocs, { rejectValue: string }>(
+export const updateOrganizationsEmployees = createAsyncThunk<OrganizationEmployee, OrganizationEmployeeUpdate, { rejectValue: string }>(
   'organizationsEmployees/updateOrganizationsEmployees',
   async (data, { rejectWithValue }) => {
     try {

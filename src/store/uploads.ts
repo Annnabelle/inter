@@ -25,7 +25,7 @@ const initialState: UploadsState = {
 
 interface DeleteUploadArgs {
   id: string;
-  owner: string;
+  owner: string | undefined;
   entity: string;
 }
 
@@ -49,21 +49,21 @@ export const CreateDocument = createAsyncThunk(
   }
 )
 
-// export const deleteUpload = createAsyncThunk<
-//   string, 
-//   DeleteUploadArgs,
-//   { rejectValue: string }
-// >(
-//   'uploads/deleteUpload',
-//   async ({ id, owner, entity }, { rejectWithValue }) => {
-//     try {
-//       await axios.delete(`${BASE_URL}/uploads/${id}?owner=${owner}&entity=${entity}`);
-//       return id;
-//     } catch (error: any) {
-//       return rejectWithValue(error.response?.data || 'Ошибка удаления файла');
-//     }
-//   }
-// );
+export const DeleteUpload = createAsyncThunk<
+  string, 
+  DeleteUploadArgs,
+  { rejectValue: string }
+>(
+  'uploads/deleteUpload',
+  async ({ id, owner, entity }, { rejectWithValue }) => {
+    try {
+      await axios.delete(`${BASE_URL}/uploads/${id}?owner=${owner}&entity=${entity}`);
+      return id;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || 'Ошибка удаления файла');
+    }
+  }
+);
 
   
 
@@ -87,6 +87,17 @@ const uploadsSlice = createSlice({
         state.loading = false;
         state.error = typeof action.payload === 'string' ? action.payload : 'Что-то пошло не так';
       })
+      .addCase(DeleteUpload.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(DeleteUpload.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(DeleteUpload.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 

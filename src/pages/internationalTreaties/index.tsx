@@ -20,10 +20,13 @@ import MainHeading from "../../components/mainHeading";
 import ModalWindow from "../../components/modalWindow";
 import ComponentTable from "../../components/table";
 import dayjs from "dayjs";
+import { getUserRole } from "../../utils/getUserRole";
+import { UserRole } from "../../utils/roles";
 
 
 const InternationalTreaties: React.FC = () => {
     const { t, i18n } = useTranslation();
+    const role = getUserRole();
     const language = i18n.resolvedLanguage || 'ru';
     const {
         token: { colorBgContainer },
@@ -105,7 +108,7 @@ const InternationalTreaties: React.FC = () => {
             place: document.place,
             comment: document.comment,
             countryId: document.countryId,
-            date: dayjs(document.date).format('YYYY-MM-DD'),
+            date: dayjs(document.date).format('DD.MM.YYYY'),
             signLevel: document.signLevel
         }))
     }, [agreementDocuments, t])
@@ -179,16 +182,16 @@ const InternationalTreaties: React.FC = () => {
             const data = {...values, files: uploadedFileIds};
             const resultAction = await dispatch(CreateAgreementDocument(data))
             if(CreateAgreementDocument.fulfilled.match(resultAction)){
-            toast.success('Договор добавлен успешно')
+            toast.success(t('messages.contractAddedSuccess'))
             setTimeout(() => {
                 handleModal('addDocument', false);
                 window.location.reload()
             }, 1000)
             } else {
-            toast.error("Ошибка при создании договора")
+            toast.error(t('messages.contractCreateError'))
             }
         } catch (err) {
-            toast.error((err as string) || 'Ошибка сервера')
+            toast.error((err as string) || t('messages.serverError'))
         }
     }
         
@@ -200,17 +203,17 @@ const InternationalTreaties: React.FC = () => {
             console.log('resultAction', resultAction);
             
             if (UpdateAgreementDocumentRequest.fulfilled.match(resultAction)) {
-                toast.success('Договор успешно обновлен');
+                toast.success(t('messages.contractUpdatedSuccess'));
                 setTimeout(() => {
                     handleModal('editDocument', false);
                     dispatch(RetrieveAgreementDocuments(updatedData.id));
                     window.location.reload(); 
                 }, 1000); 
             } else {
-                toast.error('Ошибка при обновлении договора');
+                toast.error(t('messages.contractUpdateError'));
             }
         } catch (err) {
-            toast.error((err as string) || 'Ошибка сервера');
+            toast.error((err as string) || t('messages.serverError'));
         }
     };
 
@@ -241,15 +244,15 @@ const InternationalTreaties: React.FC = () => {
             const resultAction = await dispatch(DeleteAgreementDocument(reportId));
     
             if (DeleteAgreementDocument.fulfilled.match(resultAction)) {
-            toast.success('Договор успешно удален');
+            toast.success(t('messages.contractDeletedSuccess'));
             setTimeout(() => {
                 window.location.reload(); 
             }, 1000);
         } else {
-                toast.error('Ошибка при удалении договора');
+                toast.error(t('messages.contractDeleteError'));
             }
         } catch (error) {
-            toast.error('Ошибка при удалении договора');
+            toast.error(t('messages.serverError'));
         }
     };
 
@@ -396,7 +399,8 @@ const InternationalTreaties: React.FC = () => {
                 </ModalWindow>
             )}
             {modalState.AgreementData && (
-                <ModalWindow title={t('buttons.edit') + " " + t('crudNames.agreement')} openModal={modalState.editTreaties} closeModal={() => handleModal('editTreaties', false)} handleDelete={() => handleDeleteOpen('Treaties')}>
+                <ModalWindow title={t('buttons.edit') + " " + t('crudNames.agreement')} openModal={modalState.editTreaties} closeModal={() => handleModal('editTreaties', false)} 
+                {...(role !== UserRole.JUNIOR_INTL_OFFICER && { handleDelete: () => handleDeleteOpen('Treaties'),})}>
                     <FormComponent formProps={editForm} onFinish={handleUpdateDocument}>
                         <div className="form-inputs">
                             {modalState.AgreementData.name && (

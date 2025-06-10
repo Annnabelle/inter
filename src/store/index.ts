@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authReducer from './authSlice';
-import userReducer from './usersSlice'
 import { TypedUseSelectorHook, useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import authReducer from './authSlice';
+import userReducer from './usersSlice'
 import translatorsReducer from './translators'
 import organizationsReducer from './organizations'
 import OrganizationEmployeeReducer from './organizationEmployeeSlice'
@@ -13,6 +13,10 @@ import reportsReducer from './reports'
 import countriesReducer from './countries'
 import internationalDocumentsReducer from './internationalDocuments'
 import agreementReducer from './agreements'
+import eventsReducer from './events'
+import eventsCalendarReducer from './eventsCalendar'
+import organizersReducer from './orginizer'
+import statisticsReducer from './stistics'
 
 export const store = configureStore({
   reducer: {
@@ -27,7 +31,11 @@ export const store = configureStore({
     reports: reportsReducer,
     countries: countriesReducer,
     internationalDocuments: internationalDocumentsReducer,
-    agreement: agreementReducer
+    agreement: agreementReducer,
+    events: eventsReducer,
+    eventsCalendar: eventsCalendarReducer,
+    organizer: organizersReducer,
+    statistics: statisticsReducer
   },
 });
 

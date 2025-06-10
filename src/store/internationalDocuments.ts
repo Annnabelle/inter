@@ -53,7 +53,6 @@ export const RetrieveInternationalDocuments = createAsyncThunk<PaginatedResponse
   async ({page, limit}, { rejectWithValue }) => {
     try {
       const response = await axios.get<GetDocumentResponseDto>(`${BASE_URL}/documents?limit=${limit}&page=${page}`);
-      console.log("response", response);
       
       if (isSuccessResponse(response.data)) {
         const paginatedDocuments = PaginatedInternationalDocumentsDtoToPaginatedInternationalDocuments(response.data);
@@ -79,8 +78,7 @@ export const RetrieveInternationalDocumentById = createAsyncThunk<InternationalD
 
       if ("success" in response.data && response.data.success === true) {
         console.log("ers", response.data);
-        const data = response.data as {success: true, document: PopulatedDocumentResponseDto
-        }
+        const data = response.data as {success: true, document: PopulatedDocumentResponseDto}
         const project = InternationalDocumentResponseDtoToInternationalDocument(data.document);
         return project;
 

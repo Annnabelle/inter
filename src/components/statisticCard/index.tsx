@@ -35,7 +35,7 @@ const { t } = useTranslation()
           <p className="subtitle">{t('titles.overallStatistics')}</p>
         </div>
         <div className="statistics-title">
-          <h2 className="title">{title}</h2>
+          <h2 className="title">{t(`eventTypes.${title}`)}</h2>
         </div>
       </div>
       <div className="progress-container">

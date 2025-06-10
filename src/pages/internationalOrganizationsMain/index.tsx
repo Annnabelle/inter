@@ -52,6 +52,7 @@ const InternationalOrganizationsMain: React.FC = () => {
 
     console.log('internationalOrganizations', internationalOrganizations);
     
+    
 
     const InternationalOrganizationsData = useMemo(() => {
         return internationalOrganizations.map((organization) => ({
@@ -100,16 +101,16 @@ const InternationalOrganizationsMain: React.FC = () => {
             
             const resultAction = await dispatch(createOrganization(payload));
             if (createOrganization.fulfilled.match(resultAction)) {
-                toast.success('Организация добавлена успешно');
+                toast.success(t('messages.organizationAddedSuccess'));
                 setTimeout(() => {
                     handleModal('addOrganizations', false);
                     window.location.reload(); 
                 }, 1000); 
             } else {
-                toast.error('Ошибка при создании организации');
+                toast.error(t('messages.organizationCreateError'));
             }
         }catch (err) {
-            toast.error((err as string) || 'Ошибка сервера');
+            toast.error((err as string) || t('messages.serverError'));
         }
     }
 
@@ -145,7 +146,7 @@ const InternationalOrganizationsMain: React.FC = () => {
             setModalState((prev) => ({
                 ...prev,
                 editOrganizations: false,
-                organizationData: organization, // ✅ соответствует типу Organization
+                organizationData: organization, 
             }));
 
             setTimeout(() => {
@@ -166,18 +167,18 @@ const InternationalOrganizationsMain: React.FC = () => {
             console.log('resultAction:', resultAction);
 
             if (updateOrganization.fulfilled.match(resultAction)) {
-                toast.success('Организация успешно обновлена');
+                toast.success(t('messages.organizationUpdatedSuccess'));
                 setTimeout(() => {
                     handleModal('editOrganizations', false);
                     window.location.reload(); 
                 }, 1000); 
             } else if (resultAction.error) {
-                toast.error(resultAction.error.message || 'Ошибка при обновлении организации');
+                toast.error(resultAction.error.message || t('messages.organizationUpdateError'));
             } else {
-                toast.error('Неизвестная ошибка');
+                toast.error( t('messages.organizationUpdateError'));
             }
         } catch (err) {
-            toast.error((err as string) || 'Ошибка сервера');
+            toast.error((err as string) || t('messages.serverError'));
         }
     };
 
@@ -187,15 +188,15 @@ const InternationalOrganizationsMain: React.FC = () => {
             const resultAction = await dispatch(deleteOrganization(organizationId));
     
             if (deleteOrganization.fulfilled.match(resultAction)) {
-            toast.success('Организация успешно удалена');
+            toast.success(t('messages.organizationDeletedSuccess'));
             setTimeout(() => {
                 window.location.reload(); 
             }, 1000);
             } else {
-            toast.error('Ошибка при удалении организации');
+            toast.error(t('messages.organizationDeleteError'));
             }
         } catch (error) {
-            toast.error('Ошибка при удалении организации');
+            toast.error(t('messages.serverError'));
         }
     };
 

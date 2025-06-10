@@ -3,15 +3,18 @@
 @use '../../styles/mixins' as mix
 .events
     height: 100%
+    position: relative
     &-heading
         @include mix.flex-content(space-between, column)
         margin-bottom: 20px
+        align-items: start
         row-gap: 20px
         &-goto
             width: 100%
             @include mix.flex-content(space-between, row)
             &-content
-                @include mix.flex-content(center, row)
+                @include mix.flex-content(start, row)
+                align-items: start
                 column-gap: 50px
                 .date
                     +mix.typography(24px, 600, map.get(vars.$basic, 'black'))
@@ -34,15 +37,49 @@
     .rbc-calendar
         border: 1px solid map.get(vars.$main, 'main')
         border-radius: 6px
+        .rbc-toolbar
+            position: absolute
+            top: -3%
+            bottom: 50%
+            right: 0
+            height: 200px
+            @include mix.flex-content(center, column)
+            row-gap: 10px
+            .rbc-toolbar-label
+                display: none
+            .rbc-btn-group
+                @include mix.flex-content(center, row)
+                column-gap: 5px
+                &:nth-of-type(1)
+                    button
+                        border: none !important
+                        +mix.typography(16px, 500, map.get(vars.$basic, 'black'))
+                        transition: all 0.5s ease
+                        background: none
+                        &:hover
+                            background: transparent
+                            +mix.typography(16px, 500, map.get(vars.$main, 'main'))
+                .rbc-active
+                    background: transparent
+                    border: none
+                    box-shadow: none
+                    padding: 5px 10px
+                    border-radius: 6px
+                    background: map.get(vars.$main, 'main')
+                    +mix.typography(18px, 500, map.get(vars.$basic, 'white'))
+            button
+                border: none !important
+                background: none
+                padding: 5px 10px
+                border-radius: 6px
+                background: map.get(vars.$main, 'main')
+                +mix.typography(18px, 500, map.get(vars.$basic, 'white'))
+        .rbc-row-segment
+            margin-top: 5px
         .rbc-time-view
-            // border: 1px solid map.get(vars.$main, 'main')
             border-radius: 6px
         .rbc-label
             +mix.typography(14px, 600, map.get(vars.$basic, 'black'))
-        .rbc-time-header-cell
-            // border-bottom: 1px solid map.get(vars.$main, 'main')
-        .rbc-allday-cell
-            display: none
         .rbc-time-header.rbc-overflowing
             border-right: 1px solid map.get(vars.$main, 'main')
             .rbc-time-header-content
@@ -74,12 +111,41 @@
                     width: 100%
                     max-width: 40px
                     height: 20px
+        .rbc-event
+            background-color: transparent
+            .rbc-event-label
+                display: none
     .event-box
         @include mix.flex-content(flex-start, row)
         align-items: flex-start
         column-gap: 10px
+        border: 1px solid
         &-content
+            @include mix.flex-content(flex-start, column)
+            align-items: start
+            row-gap: 10px
             .title
+                text-transform: capitalize
                 +mix.typography(14px, 600, map.get(vars.$basic, 'black'))
+            .event-type
+                +mix.typography(16px, 500, map.get(vars.$basic, 'black'))
             .text
                 +mix.typography(12px, 400, map.get(vars.$basic, 'black'))
+    .rbc-month-view .rbc-date-cell
+        position: relative
+    .rbc-month-view .rbc-day-bg
+        overflow: hidden
+    .rbc-month-row .rbc-row-content
+        max-height: 150px
+        overflow-y: auto
+        padding: 2px
+    .rbc-allday-cell
+        .rbc-row-content
+            display: none
+    .rbc-day-slot .rbc-event-content
+        min-height: auto
+    .rbc-day-slot .rbc-event
+        border: none
+    .rbc-time-content
+        overflow-y: auto
+        max-height: 100% !important

@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { Select, theme } from "antd";
 import { CountriesTableDataType } from "../../types";
 import { CountriesTableColumns } from "../../tableData/countriesTable";
-import MainLayout from "../../components/layout";
-import MainHeading from "../../components/mainHeading";
-import ComponentTable from "../../components/table";
 import { useTranslation } from "react-i18next";
 import { RootState, useAppDispatch, useAppSelector } from "../../store";
 import { useEffect, useMemo, useState } from "react";
 import { RetrieveCountries } from "../../store/countries";
+import MainLayout from "../../components/layout";
+import MainHeading from "../../components/mainHeading";
+import ComponentTable from "../../components/table";
 
 
 const Countries: React.FC = () => {

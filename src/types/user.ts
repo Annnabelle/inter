@@ -19,6 +19,8 @@ export type AuthState = {
     error: string | null;
     status?: string | null
     success?: boolean | null
+    sessionStart?: number | null
+    isAuthenticated?: boolean
 };
 
 export type User = {

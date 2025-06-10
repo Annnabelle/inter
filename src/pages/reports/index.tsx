@@ -18,10 +18,13 @@ import ModalWindow from "../../components/modalWindow";
 import FormComponent from "../../components/form";
 import ComponentTable from "../../components/table";
 import dayjs from "dayjs";
+import { getUserRole } from "../../utils/getUserRole";
+import { UserRole } from "../../utils/roles";
 
 
 const Reports: React.FC = () => {
     const { t } = useTranslation();
+    const role = getUserRole();
     const {
         token: { colorBgContainer },
     } = theme.useToken();
@@ -75,8 +78,8 @@ const Reports: React.FC = () => {
             key: report.id,
             name: report.name,
             type: report.type,
-            startDate: dayjs(report.startDate).format('YYYY-MM-DD'),
-            endDate: dayjs(report.endDate).format('YYYY-MM-DD'),
+            startDate: dayjs(report.startDate).format('DD.MM.YYYY'),
+            endDate: dayjs(report.endDate).format('DD.MM.YYYY'),
             responsible: report.responsible,
             comment: report.comment
           }))
@@ -153,16 +156,16 @@ const Reports: React.FC = () => {
             const data = {...values, documents: uploadedFileIds};
             const resultAction = await dispatch(CreateReport(data));
             if(CreateReport.fulfilled.match(resultAction)){
-                toast.success('Отчет добавлен успешно')
+                toast.success(t('messages.reportAddedSuccess'))
                 setTimeout(() => {
                     handleModal('addReport', false);
                     window.location.reload()
                 }, 1000)
                 } else {
-                toast.error("Ошибка при создании отчета")
+                toast.error(t('messages.reportCreateError'))
             }
         }catch (err) {
-            toast.error((err as string) || 'Ошибка сервера')
+            toast.error((err as string) || t('messages.serverError'))
         }
     }
 
@@ -175,7 +178,7 @@ const Reports: React.FC = () => {
 
             const resultAction = await dispatch(UpdateReport(updatedData));
              if (UpdateReport.fulfilled.match(resultAction)) {
-                toast.success('Отчет успешно обновлен');
+                toast.success(t('messages.reportUpdatedSuccess'));
                 setTimeout(() => {
                     handleModal('projectEdit', false);
                     dispatch(RetrieveReports(updatedData.id));
@@ -183,10 +186,10 @@ const Reports: React.FC = () => {
                 }, 1000); 
             } else {
                 
-                toast.error('Ошибка при обновлении отчета');
+                toast.error(t('messages.reportUpdateError'));
             }
         }catch (err) {
-            toast.error((err as string) || 'Ошибка сервера');
+            toast.error((err as string) || t('messages.serverError'));
         }
     }
 
@@ -217,15 +220,15 @@ const Reports: React.FC = () => {
             const resultAction = await dispatch(deleteReport(reportId));
     
             if (deleteReport.fulfilled.match(resultAction)) {
-            toast.success('Отчет успешно удален');
+            toast.success(t('messages.reportDeletedSuccess'));
             setTimeout(() => {
                 window.location.reload(); 
             }, 1000);
             } else {
-            toast.error('Ошибка при удалении отчета');
+            toast.error(t('messages.reportDeleteError'));
             }
         } catch (error) {
-            toast.error('Ошибка при удалении отчета');
+            toast.error(t('messages.serverError'));
         }
     };
 
@@ -327,10 +330,10 @@ const Reports: React.FC = () => {
                         </div> 
                         <div className="form-inputs">
                             <Form.Item className="input" name="startDate" >
-                                <DatePicker disabled size="large" className="input" placeholder={dayjs(reportById.startDate).format('YYYY-MM-DD')}/>
+                                <DatePicker disabled size="large" className="input" placeholder={dayjs(reportById.startDate).format('DD.MM.YYYY')}/>
                             </Form.Item>
                             <Form.Item className="input" name="endDate" >
-                                <DatePicker disabled size="large" className="input"   placeholder={dayjs(reportById.endDate).format('YYYY-MM-DD')}/>
+                                <DatePicker disabled size="large" className="input"   placeholder={dayjs(reportById.endDate).format('DD.MM.YYYY')}/>
                             </Form.Item>
                         </div> 
                         {reportById?.documents?.map((item: Document) => (
@@ -353,7 +356,9 @@ const Reports: React.FC = () => {
                 </ModalWindow>
             )}
             {modalState.reportData && (
-                <ModalWindow title={t('buttons.edit') + " " + t('crudNames.report')} openModal={modalState.editReport} closeModal={() => handleModal('editReport', false)} handleDelete={() => handleDeleteOpen('Report')}>
+                <ModalWindow title={t('buttons.edit') + " " + t('crudNames.report')} openModal={modalState.editReport} closeModal={() => handleModal('editReport', false)} 
+                {...(role !== UserRole.JUNIOR_INTL_OFFICER && { handleDelete: () => handleDeleteOpen('Report'),})}
+                >
                     <FormComponent formProps={editForm} onFinish={handleUpdateReport}>
                         <div className="form-inputs">
                             <Form.Item className="input" name="name" >
