@@ -97,7 +97,7 @@ export interface CountriesInnerInternationalDocumentsDataType {
     files: string;
 }
 export interface ExpertsTableDataTypes{
-    key: string,
+    key?: string | null
     fullName?: string,
     phone?: string,
     email?: string,

@@ -5,7 +5,7 @@ import { ExpertsColumns } from "../../tableData/experts";
 import { ExpertsTableDataTypes } from "../../types";
 import { useTranslation } from "react-i18next";
 import { RootState, useAppDispatch, useAppSelector } from "../../store";
-import { CreateExpert, DeleteExpert, RetrieveExpertById, RetrieveExperts, UpdateExpert } from "../../store/expertsSlice";
+import { CreateExpert, DeleteExpert, RetrieveExpertById, RetrieveExperts, RetrieveSearchExpert, UpdateExpert } from "../../store/expertsSlice";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
 import Button from "../../components/button";
@@ -22,6 +22,7 @@ import { fetchCountries } from "../../store/countries";
 import { fetchOrganizationSearch } from "../../store/organizations";
 import { getUserRole } from "../../utils/getUserRole";
 import { UserRole } from "../../utils/roles";
+import SearchExpert from "../../components/searchExpert";
 
 
 const Experts: React.FC = () => {
@@ -58,6 +59,8 @@ const Experts: React.FC = () => {
     const supportedLangs = ['ru', 'en', 'uz'] as const;
     const fallbackLang: (typeof supportedLangs)[number] = 'ru';
     const [localFiles, setLocalFiles] = useState<Document[]>([]);
+    const [searchResults, setSearchResults] = useState<ExpertsTableDataTypes[] | null>(null);
+
 
     const currentLang = supportedLangs.includes(i18n.resolvedLanguage as any)
     ? (i18n.resolvedLanguage as typeof fallbackLang)
@@ -144,15 +147,20 @@ const Experts: React.FC = () => {
         setModalState((prev) => ({...prev, [modalName] : value}));
     }
 
-    const handleRowClick = (type: 'Expert', action: 'retrieve' | 'edit' | 'delete', record: ExpertsTableDataTypes) => {
+    const handleRowClick = (
+        type: 'Expert',
+        action: 'retrieve' | 'edit' | 'delete',
+        record: ExpertsTableDataTypes
+    ) => {
         console.log(`Clicked on ${type}, action: ${action}, record:`, record);
         const expertData = expertsData.find(
-        (expert) => expert.id === record.key) ?? null;
-        setSelectedExpertId(record.key)
+            (expert) => expert.id === record.key
+        ) ?? null;
+        setSelectedExpertId(record?.key ?? null);
         setModalState((prev) => ({
-        ...prev,
-        [`${action}${type}`]: true,
-        expertData: expertData,
+            ...prev,
+            [`${action}${type}`]: true,
+            expertData: expertData,
         }));
     };
 
@@ -176,12 +184,12 @@ const Experts: React.FC = () => {
         }, 10);
     };
 
-    const filterOptions = [
-        {value: 'byName',label: t('buttons.sort.byName')},
-        {value: 'byVisit',label: t('buttons.sort.byVisit')},
-        {value: 'byMeeting',label: t('buttons.sort.byMeeting')},
-        {value: 'all', label: t('buttons.sort.all')}
-    ]
+    // const filterOptions = [
+    //     {value: 'byName',label: t('buttons.sort.byName')},
+    //     {value: 'byVisit',label: t('buttons.sort.byVisit')},
+    //     {value: 'byMeeting',label: t('buttons.sort.byMeeting')},
+    //     {value: 'all', label: t('buttons.sort.all')}
+    // ]
 
 
     const handleFileUpload = async (file: File, onSuccess: Function, onError: Function) => {
@@ -283,7 +291,36 @@ const Experts: React.FC = () => {
         } catch (error) {
             console.error("Ошибка при удалении файла:", error);
         }
+
+
     };
+
+
+   const handleExpertSearch = async (query: string) => {
+    if (!query.trim()) {
+        setSearchResults(null);
+        dispatch(RetrieveExperts({ page: 1, limit }));
+        setCurrentPage(1);
+        return;
+    }
+
+    try {
+        const response = await dispatch(RetrieveSearchExpert({ query })).unwrap();
+        if (response.data.length > 0) {
+        setSearchResults(response.data); // ✅ правильно!
+        } else {
+        setSearchResults([]); // ничего не найдено
+        }
+    } catch (err) {
+        setSearchResults([]);
+        console.error('Search error:', err);
+    }
+    };
+
+
+    console.log('====================================');
+    console.log('searchResults', searchResults);
+    console.log('====================================');
 
 
 
@@ -291,7 +328,8 @@ const Experts: React.FC = () => {
         <MainLayout>
             <MainHeading title={`${t('titles.experts')}`} subtitle="Подзаголоок">
                 <div className="main-heading-dropdown">
-                    <Select options={filterOptions} size="large" className="select" placeholder={`${t('buttons.sort.sortBy')}`} />
+                    {/* <Select options={filterOptions} size="large" className="select" placeholder={`${t('buttons.sort.sortBy')}`} /> */}
+                    <SearchExpert onSearch={handleExpertSearch}/>
                 </div>
                     <Button onClick={() => handleModal('addExpert', true)}>{t('buttons.add') + " " + t('crudNames.expert')} <IoMdAdd /></Button>
             </MainHeading>
@@ -301,17 +339,21 @@ const Experts: React.FC = () => {
                 }}
                 className="layout-content-container"
             >
-               <ComponentTable<ExpertsTableDataTypes> 
-               pagination={{
+              <ComponentTable<ExpertsTableDataTypes> 
+                pagination={{
                     current: currentPage,
                     pageSize: limit,
                     total: total,
                     onChange: (page) => {
-                        setCurrentPage(page);
-                        dispatch(RetrieveExperts({ page, limit: limit }));
+                    setCurrentPage(page);
+                    dispatch(RetrieveExperts({ page, limit }));
                     },
                 }}
-               onRowClick={(record) => handleRowClick('Expert', 'retrieve', record)} data={expertData} columns={ExpertsColumns(t)}/>
+                onRowClick={(record) => handleRowClick('Expert', 'retrieve', record)}
+                data={searchResults !== null ? searchResults : expertData}
+                columns={ExpertsColumns(t)}
+                />
+
             </div>
             <ModalWindow title={t('buttons.add') + " " + t('crudNames.expert')}  openModal={modalState.addExpert} closeModal={() => handleModal('addExpert', false)}>
                 <FormComponent  onFinish={handleCreateExpert}>

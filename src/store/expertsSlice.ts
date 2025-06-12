@@ -16,7 +16,8 @@ type ExpertsState = {
   total: number,
   expertUpdate: ExpertsType | null,
   expertDelete: ExpertsType[] | null,
-  expertById: ExpertWithDocs | null
+  expertById: ExpertWithDocs | null,
+  expertSearch: Expert[]
 };
 
 const initialState: ExpertsState = {
@@ -29,7 +30,8 @@ const initialState: ExpertsState = {
   total: 0,
   expertUpdate: null,
   expertDelete: null,
-  expertById: null
+  expertById: null,
+  expertSearch: []
 };
 
 function isSuccessResponse(
@@ -143,6 +145,25 @@ export const DeleteExpert = createAsyncThunk(
     }
   }
 )
+
+
+export const RetrieveSearchExpert = createAsyncThunk<PaginatedResponse<Expert>, {query: string}, {rejectValue: string}>(
+  'experts/searchExpert',
+  async ({query}, {rejectWithValue}) => {
+    try {
+      const response = await axios.get<GetExpertsResponseDto>(`${BASE_URL}/experts/search?query=${query}`);
+      if(isSuccessResponse(response.data)){
+        const expertSearch = PaginatedExpertsDtoToPaginatedExperts(response.data)
+        return expertSearch;
+      } else {
+        const error = response.data as ErrorDto;
+        return rejectWithValue(error?.errorMessage?.ru || 'Error in search expert')
+      }
+    }catch (error: any) {
+      return rejectWithValue(error.message || 'Error on serverSide')
+    }
+  }
+)
   
 
 const expertsSlice = createSlice({
@@ -222,6 +243,20 @@ const expertsSlice = createSlice({
       .addCase(DeleteExpert.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      .addCase(RetrieveSearchExpert.pending, (state) => {
+        state.success = true
+      })
+      .addCase(RetrieveSearchExpert.fulfilled, (state, action: PayloadAction<PaginatedResponseDto<Expert>>) =>{
+        state.loading = false;
+        state.expertSearch = action.payload.data;
+        state.limit = action.payload.limit;
+        state.page = action.payload.page;
+        state.total = action.payload.total
+        state.success = true;
+      })
+      .addCase(RetrieveSearchExpert.rejected, (state) => {
+        state.success = false;
       });
   },
 });

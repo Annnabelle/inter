@@ -35,12 +35,12 @@ const Countries: React.FC = () => {
         }
     }, [dispatch, countries.length, currentPage, limit])
 
-    const filterOptions = [
-        {value: 'byName',label: t('buttons.sort.byName')},
-        {value: 'byVisit',label: t('buttons.sort.byVisit')},
-        {value: 'byMeeting',label: t('buttons.sort.byMeeting')},
-        {value: 'all', label: t('buttons.sort.all')}
-    ]
+    // const filterOptions = [
+    //     {value: 'byName',label: t('buttons.sort.byName')},
+    //     {value: 'byVisit',label: t('buttons.sort.byVisit')},
+    //     {value: 'byMeeting',label: t('buttons.sort.byMeeting')},
+    //     {value: 'all', label: t('buttons.sort.all')}
+    // ]
 
 
     const countriesData = useMemo(() => {
@@ -54,9 +54,9 @@ const Countries: React.FC = () => {
     return (
         <MainLayout>
             <MainHeading title={`${t('titles.countries')}`} subtitle="Подзаголоок">
-                <div className="main-heading-dropdown main-heading-dropdown-single-btn">
+                {/* <div className="main-heading-dropdown main-heading-dropdown-single-btn">
                     <Select options={filterOptions} size="large" className="select" placeholder={`${t('buttons.sort.sortBy')}`} />
-                </div>
+                </div> */}
             </MainHeading>
             <div
                 style={{
