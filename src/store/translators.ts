@@ -4,7 +4,7 @@ import {  mapPaginatedTranslatorsDtoToPaginatedTranslators, mapTranslatorDtoToTr
 import { CreateTranslatorRequest, Translator } from "../types/translator";
 import { CreateTranslatorResponseDto, GetTranslatorResponseDto, GetTranslatorsResponseDto, TranslatorResponseDto } from "../dtos/translators";
 import { ErrorDto, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 
 type TranslatorState = {
   translators: Translator[];
@@ -48,7 +48,7 @@ export const retrieveTranslators = createAsyncThunk<PaginatedResponse<Translator
   "translators/retrieveTranslators",
   async ({page, limit}, { rejectWithValue }) => {
     try {
-      const response = await axios.get<GetTranslatorsResponseDto>(`${BASE_URL}/translators?page=${page}&limit=${limit}`);
+      const response = await axiosInstance.get<GetTranslatorsResponseDto>(`${BASE_URL}/translators?page=${page}&limit=${limit}`);
 
       if (isSuccessResponse(response.data)) {
         const paginatedTranslators = mapPaginatedTranslatorsDtoToPaginatedTranslators(response.data);
@@ -71,7 +71,7 @@ export const retrieveTranslatorsById = createAsyncThunk<Translator, string, { re
   "translators/retrieveTranslatorsById",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axios.get<GetTranslatorResponseDto>(`${BASE_URL}/translators/${id}`);
+      const response = await axiosInstance.get<GetTranslatorResponseDto>(`${BASE_URL}/translators/${id}`);
 
       if ('translator' in response.data) { 
         const translator = mapTranslatorDtoToTranslator(response.data.translator);
@@ -92,7 +92,7 @@ export const createTranslator = createAsyncThunk(
   async (data: CreateTranslatorRequest, {rejectWithValue}) => {
     try {
       const dto = mapTranslatorToTranslatorCreateDto(data);
-      const response = await axios.post<CreateTranslatorResponseDto>(`${BASE_URL}/translators`, dto);
+      const response = await axiosInstance.post<CreateTranslatorResponseDto>(`${BASE_URL}/translators`, dto);
       if ('success' in response.data && response.data.success){
         return response.data;
       } else {
@@ -111,7 +111,7 @@ export const updateTranslator = createAsyncThunk<Translator, Translator, { rejec
   async (data, { rejectWithValue }) => {
     try {
       const dto = mapTranslatorToUpdateTranslatorDto(data);
-      const response = await axios.patch(`${BASE_URL}/translators/${data.id}`, dto);
+      const response = await axiosInstance.patch(`${BASE_URL}/translators/${data.id}`, dto);
 
       if ('success' in response.data && response.data.success) {
         return mapTranslatorToUpdateTranslatorDto(response.data.translator); 
@@ -129,7 +129,7 @@ export const deleteTranslator = createAsyncThunk(
   'translator/deleteTranslator',
   async(id: string | undefined, {rejectWithValue}) => {
     try{
-      const response = await axios.delete(`${BASE_URL}/translators/${id}`)
+      const response = await axiosInstance.delete(`${BASE_URL}/translators/${id}`)
       return response.data
     } catch(error: any){
       return rejectWithValue(error.response?.data || 'Ошибка удаления сервера')

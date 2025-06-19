@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, DatePicker, Input, Checkbox } from 'antd';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 
 type ApprovalSectionProps = {
   fieldName: string;

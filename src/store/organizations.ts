@@ -4,10 +4,7 @@ import { ErrorDto, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.
 import { CreateOrganization, Organization } from "../types/organizations";
 import { CreateOrganizationResponseDto, GetOrganizationsResponseDto, OrganizationResponseDto } from "../dtos/organizations";
 import { createOrganizationToCreateOrganizationDto, organizationResponseDtoToOrganization, paginatedOrganizationsDtoToPaginatedOrganizations, updateOrganizationsToUpdateOrganizationDto } from "../mappers/organizations.mapper";
-import axios from "axios";
-import { Organizer } from "../types/organizer";
-import { paginatedOrganizersDtoToPaginatedOrganizers } from "../mappers/organizer.mapper";
-import { GetOrganizersResponseDto } from "../dtos/organizer";
+import axiosInstance from "../utils/axiosInstance";
 
 type OrganizationsState = {
   nonGovOrganizations: Organization[];
@@ -55,7 +52,7 @@ export const retrieveNonGovOrganizations = createAsyncThunk<PaginatedResponse<Or
   "organizations/retrieveNonGovOrganizations",
   async ({page, limit}, { rejectWithValue }) => {
     try {
-      const response = await axios.get<GetOrganizationsResponseDto>(`${BASE_URL}/organizations?page=${page}&limit=${limit}&type=non_gov`);
+      const response = await axiosInstance.get<GetOrganizationsResponseDto>(`${BASE_URL}/organizations?page=${page}&limit=${limit}&type=non_gov`);
 
       if (isSuccessResponse(response.data)) {
         const paginatedOrganizations = paginatedOrganizationsDtoToPaginatedOrganizations(response.data);
@@ -74,7 +71,7 @@ export const fetchOrganizationSearch = createAsyncThunk<PaginatedResponse<Organi
   "organizations/fetchOrganizationSearch",
   async ({query}, { rejectWithValue }) => {
     try {
-      const response = await axios.get<GetOrganizationsResponseDto>(`${BASE_URL}/organizations/search?query=${query}`);
+      const response = await axiosInstance.get<GetOrganizationsResponseDto>(`${BASE_URL}/organizations/search?query=${query}`);
 
       if (isSuccessResponse(response.data)) {
         const paginatedOrganizations = paginatedOrganizationsDtoToPaginatedOrganizations(response.data);
@@ -93,7 +90,7 @@ export const retrieveInternationalOrganizations = createAsyncThunk<PaginatedResp
   "organizations/retrieveInternationalOrganizations",
   async ({page, limit}, { rejectWithValue }) => {
     try {
-      const response = await axios.get<GetOrganizationsResponseDto>(`${BASE_URL}/organizations?page=${page}&limit=${limit}&type=international`);
+      const response = await axiosInstance.get<GetOrganizationsResponseDto>(`${BASE_URL}/organizations?page=${page}&limit=${limit}&type=international`);
 
       if (isSuccessResponse(response.data)) {
         const paginatedOrganizations = paginatedOrganizationsDtoToPaginatedOrganizations(response.data);
@@ -114,7 +111,7 @@ export const updateOrganization = createAsyncThunk<Organization, Organization, {
   async (data, { rejectWithValue }) => {
     try {
       const dto = updateOrganizationsToUpdateOrganizationDto(data);
-      const response = await axios.patch(`${BASE_URL}/organizations/${data.id}`, dto);
+      const response = await axiosInstance.patch(`${BASE_URL}/organizations/${data.id}`, dto);
       if ('success' in response.data && response.data.success) {
         return organizationResponseDtoToOrganization(response.data.organization); 
       } else {
@@ -133,7 +130,7 @@ export const createOrganization = createAsyncThunk(
   async (data: CreateOrganization, {rejectWithValue}) => {
     try {
       const dto = createOrganizationToCreateOrganizationDto(data);
-      const response = await axios.post<CreateOrganizationResponseDto>(`${BASE_URL}/organizations`, dto);
+      const response = await axiosInstance.post<CreateOrganizationResponseDto>(`${BASE_URL}/organizations`, dto);
       if ('success' in response.data && response.data.success){
         return response.data;
       } else {
@@ -150,7 +147,7 @@ export const deleteOrganization = createAsyncThunk(
   'organizations/deleteOrganization',
   async(id: string | undefined, {rejectWithValue}) => {
     try{
-      const response = await axios.delete(`${BASE_URL}/organizations/${id}`)
+      const response = await axiosInstance.delete(`${BASE_URL}/organizations/${id}`)
       return response.data
     } catch(error: any){
       return rejectWithValue(error.response?.data || 'Ошибка удаления организации')

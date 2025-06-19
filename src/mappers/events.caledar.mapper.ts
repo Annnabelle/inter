@@ -1,7 +1,7 @@
 import { CreateBaseEventDto, CreateBirthdayEventDto, CreateConferenceEventDto, CreateDelegationsEventDto, CreateDiplomaticEventDto, CreateEventDto, CreateForeignEventDto, CreateMeetingEventDto, CreateSeminarEventDto } from "../dtos/events/addEvent";
 import { EventResponseDto } from "../dtos/events/getEvent";
 import { GetEventsCalendarResponseDto } from "../dtos/events/getEventsCalendar";
-import { ErrorDto, PaginatedResponse } from "../dtos/main.dto";
+import { ErrorDto } from "../dtos/main.dto";
 import { Event, EventType, GetEventsCalendar } from "../types/events";
 
 export function EventsCalendarResponseDtoToEventsCalendar(eventCalendar: EventResponseDto): Event {

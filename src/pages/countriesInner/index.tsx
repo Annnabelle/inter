@@ -38,11 +38,8 @@ const CountriesInner: React.FC = () => {
     const { token: { colorBgContainer }} = theme.useToken();
     const [files, setFiles] = useState([{ id: Date.now() }]);
     const documentById = useAppSelector((state) => state.internationalDocuments.internationalDocumentById)
-    const [dates, setDates] = useState([{ id: Date.now() }]);
     const countries = useAppSelector((state: RootState) => state.countries.countries)
     const limit = useAppSelector((state) => state.countries.limit)
-    const page = useAppSelector((state) => state.countries.page)
-    const total = useAppSelector((state) => state.countries.total)
     const eventsLimit = useAppSelector((state) => state.events.limit)
     const eventsPage = useAppSelector((state) => state.events.page)
     const eventsTotal = useAppSelector((state) => state.events.total)
@@ -71,8 +68,6 @@ const CountriesInner: React.FC = () => {
     const organizationSearch = useAppSelector((state) => state.organizations.organizationSearch)
     const [searchType, setSearchType] = useState<'country' | 'organization'>('country');
     const [options, setOptions] = useState<{ label: string; value: string }[]>([]);
-    const supportedLangs = ['ru', 'en', 'uz'] as const;
-    const fallbackLang: (typeof supportedLangs)[number] = 'ru';
     const [editForm] = Form.useForm();
     const events = useAppSelector((state) => state.events.events)
 
@@ -222,13 +217,6 @@ const CountriesInner: React.FC = () => {
         setFiles([...files, { id: files.length + 1 }]);
     };
 
-    const addDateField = () => {
-        setDates([...dates, { id: dates.length + 1}]);
-    };
-
-    const onFinish = () => {
-        console.log('hello finish');
-    }
      useEffect(() => {
         dispatch(RetrieveInternationalDocuments({ limit: 10, page: currentPage }));
     }, [dispatch, internationalDocuments.length, currentPage, limit])

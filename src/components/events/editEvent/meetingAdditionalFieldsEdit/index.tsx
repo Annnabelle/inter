@@ -9,7 +9,7 @@ interface MeetingEditAdditionalFieldsProps {
   form: any;
 }
 
-const MeetingAdditionalFieldsEdit: React.FC<MeetingEditAdditionalFieldsProps> = ({event, form}) => {
+const MeetingAdditionalFieldsEdit: React.FC<MeetingEditAdditionalFieldsProps> = ({event}) => {
     const { t } = useTranslation();
 
     const LevelOptions = [

@@ -6,22 +6,21 @@ import { ExpertsTableDataTypes } from "../../types";
 import { useTranslation } from "react-i18next";
 import { RootState, useAppDispatch, useAppSelector } from "../../store";
 import { CreateExpert, DeleteExpert, RetrieveExpertById, RetrieveExperts, RetrieveSearchExpert, UpdateExpert } from "../../store/expertsSlice";
-import MainLayout from "../../components/layout";
-import MainHeading from "../../components/mainHeading";
-import Button from "../../components/button";
-import ModalWindow from "../../components/modalWindow";
-import FormComponent from "../../components/form";
-import ComponentTable from "../../components/table";
 import { Expert, ExpertsType } from "../../types/experts.type";
 import { toast } from "react-toastify";
 import { CreateDocument, DeleteUpload } from "../../store/uploads";
 import { Document } from "../../types/uploads";
 import { normalizeUrl } from "../../utils/baseUrl";
 import { FaTrashAlt } from "react-icons/fa";
-import { fetchCountries } from "../../store/countries";
 import { fetchOrganizationSearch } from "../../store/organizations";
 import { getUserRole } from "../../utils/getUserRole";
 import { UserRole } from "../../utils/roles";
+import MainLayout from "../../components/layout";
+import MainHeading from "../../components/mainHeading";
+import Button from "../../components/button";
+import ModalWindow from "../../components/modalWindow";
+import FormComponent from "../../components/form";
+import ComponentTable from "../../components/table";
 import SearchExpert from "../../components/searchExpert";
 
 
@@ -184,14 +183,6 @@ const Experts: React.FC = () => {
         }, 10);
     };
 
-    // const filterOptions = [
-    //     {value: 'byName',label: t('buttons.sort.byName')},
-    //     {value: 'byVisit',label: t('buttons.sort.byVisit')},
-    //     {value: 'byMeeting',label: t('buttons.sort.byMeeting')},
-    //     {value: 'all', label: t('buttons.sort.all')}
-    // ]
-
-
     const handleFileUpload = async (file: File, onSuccess: Function, onError: Function) => {
         const formData = new FormData();
         formData.append('file', file);
@@ -307,9 +298,9 @@ const Experts: React.FC = () => {
     try {
         const response = await dispatch(RetrieveSearchExpert({ query })).unwrap();
         if (response.data.length > 0) {
-        setSearchResults(response.data); // ✅ правильно!
+        setSearchResults(response.data); 
         } else {
-        setSearchResults([]); // ничего не найдено
+        setSearchResults([]);
         }
     } catch (err) {
         setSearchResults([]);
@@ -318,17 +309,10 @@ const Experts: React.FC = () => {
     };
 
 
-    console.log('====================================');
-    console.log('searchResults', searchResults);
-    console.log('====================================');
-
-
-
     return (
         <MainLayout>
             <MainHeading title={`${t('titles.experts')}`} subtitle="Подзаголоок">
                 <div className="main-heading-dropdown">
-                    {/* <Select options={filterOptions} size="large" className="select" placeholder={`${t('buttons.sort.sortBy')}`} /> */}
                     <SearchExpert onSearch={handleExpertSearch}/>
                 </div>
                     <Button onClick={() => handleModal('addExpert', true)}>{t('buttons.add') + " " + t('crudNames.expert')} <IoMdAdd /></Button>

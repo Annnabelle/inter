@@ -27,7 +27,6 @@ import { UserRole } from "../../utils/roles";
 const InternationalTreaties: React.FC = () => {
     const { t, i18n } = useTranslation();
     const role = getUserRole();
-    const language = i18n.resolvedLanguage || 'ru';
     const {
         token: { colorBgContainer },
     } = theme.useToken();

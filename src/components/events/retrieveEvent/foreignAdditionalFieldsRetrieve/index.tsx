@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Form, Input, Select } from "antd";
 import { useTranslation } from "react-i18next";
-import ApprovalSection from "../../../approvalsSection";
 import SearchOrganizationRetrieve from "../../../searchOrganizationRetrieve";
 import SearchOrganizerRetrieve from "../../../organizerSearchRetrieve";
 import ApprovalSectionRetrieve from "../../../approvalsSectionRetrieve";

@@ -31,8 +31,6 @@ const SearchCountryOrOrganizationRetrieve: React.FC<SearchProps> = ({ event, for
 
   const entityData = getEntityData(event);
   const searchType = entityData?.entity || 'none';
-  const sourceName = entityData?.value?.name?.[language] || '';
-  const sourceId = entityData?.value?.id || '';
 
   useEffect(() => {
     const entityData = getEntityData(event);

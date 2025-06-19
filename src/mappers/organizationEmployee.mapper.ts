@@ -1,5 +1,5 @@
 import { PaginatedResponse } from "../dtos/main.dto";
-import { organizationEmployeesDto, GetOrganizationEmployeeResponseDto, OrganizationEmployeeResponseDto, UpdateOrganizationEmployeeDto, PopulatedOrganizationEmployeeResponseDto } from "../dtos/organizationEmployee";
+import { organizationEmployeesDto, OrganizationEmployeeResponseDto, UpdateOrganizationEmployeeDto, PopulatedOrganizationEmployeeResponseDto } from "../dtos/organizationEmployee";
 import { OrganizationEmployee, OrganizationEmployees, OrganizationEmployeeUpdate, OrganizationEmployeeWithDocs } from "../types/organizationEmployee";
 
 export function CreateOrganizationEmployeeToCreateOrganizationEmployeeDto(organizationEmployee: OrganizationEmployees): organizationEmployeesDto {

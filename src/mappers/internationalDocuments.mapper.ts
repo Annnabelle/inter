@@ -1,7 +1,5 @@
-import { CreateExpertDto, ExpertResponseDto, UpdateExpertDto } from "../dtos/experts";
 import { CreateDocumentDto, DocumentResponseDto, PopulatedDocumentResponseDto, UpdateDocumentDto } from "../dtos/internationalDocuments";
 import { PaginatedResponse } from "../dtos/main.dto";
-import { Expert, ExpertsType } from "../types/experts.type";
 import { InternationalDocument, InternationalDocuments, InternationalDocumentsWithDocs, UpdateInternationalDocument } from "../types/internationalDocuments";
 
 export function CreateInternationalDocumentToCreateInternationalDocumentDto(InternationalDocument: InternationalDocuments): CreateDocumentDto {

@@ -1,6 +1,5 @@
 import React from "react";
 import { Form, Input } from "antd";
-import { useTranslation } from "react-i18next";
 import SearchCountryOrOrganizationRetrieve from "../../../searchCoutryOrOrganizationRetrieve";
 
 interface MeetingRetrieveAdditionalFieldsProps {
@@ -9,7 +8,6 @@ interface MeetingRetrieveAdditionalFieldsProps {
 }
 
 const MeetingAdditionalFieldsRetrieve: React.FC<MeetingRetrieveAdditionalFieldsProps> = ({event, form}) => {
-    const { t } = useTranslation();
 
     return (
         <>

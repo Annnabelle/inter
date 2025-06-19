@@ -2,12 +2,12 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { BASE_URL } from "../utils/baseUrl";
 import { ErrorDto} from "../dtos/main.dto";
 import { ExpertsType, ExpertWithDocs } from "../types/experts.type";
-import { EventResponseDto, GetEventResponseDto } from "../dtos/events/getEvent";
+import { GetEventResponseDto } from "../dtos/events/getEvent";
 import { Event, EventById, GetEventsCalendar} from "../types/events";
 import { EventTypeCounters, GetEventsCalendarResponseDto } from "../dtos/events/getEventsCalendar";
 import { EventsCalendarResponseDtoToEventsCalendar, isErrorDto, RetrieveEventsCalendarDtoToRetrieveEventsCalendar, UpdateEventCalendarToUpdateEventCalendarDTO } from "../mappers/events.caledar.mapper";
 import { DeleteEventDto } from "../dtos/events/deleteEvent";
-import axios from "axios"
+import axiosInstance from "../utils/axiosInstance";
 
 type EventsState = {
   events: Event[]
@@ -41,18 +41,6 @@ const initialState: EventsState = {
   eventCounter: null
 };
 
-function isSuccessResponse(
-  data: unknown
-): data is { success: true; events: EventResponseDto[]; total: number; counters: EventTypeCounters } {
-  return (
-    typeof data === "object" &&
-    data !== null &&
-    "success" in data &&
-    (data as any).success === true &&
-    "events" in data &&
-    Array.isArray((data as any).events)
-  );
-}
 
 
 type RetrieveEventsParams = {
@@ -75,7 +63,7 @@ export const RetrieveEventsCalendar = createAsyncThunk<
       const startDateUTC = new Date(startDate).toISOString();
       const endDateUTC = new Date(endDate).toISOString();
 
-      const response = await axios.get<GetEventsCalendarResponseDto>(`${BASE_URL}/events/calendar`, {
+      const response = await axiosInstance.get<GetEventsCalendarResponseDto>(`${BASE_URL}/events/calendar`, {
         params: {
           startDate: startDateUTC,
           endDate: endDateUTC,
@@ -112,7 +100,7 @@ export const UpdateEventCalendar = createAsyncThunk<Event, Event, { rejectValue:
   async (data, { rejectWithValue }) => {
     try {
       const dto = UpdateEventCalendarToUpdateEventCalendarDTO(data);
-      const response = await axios.patch(`${BASE_URL}/events/${data.id}`, dto);
+      const response = await axiosInstance.patch(`${BASE_URL}/events/${data.id}`, dto);
       
       if ('success' in response.data && response.data.success) {
         
@@ -152,7 +140,7 @@ export const DeleteEvent = createAsyncThunk(
   'eventsCalendar/DeleteEvent',
   async(id: string | undefined, {rejectWithValue}) => {
     try{
-      const response = await axios.delete<DeleteEventDto>(`${BASE_URL}/events/${id}`)
+      const response = await axiosInstance.delete<DeleteEventDto>(`${BASE_URL}/events/${id}`)
       return response.data
     } catch(error: any){
       return rejectWithValue(error.response?.data || 'Ошибка удаления мероприятия')
@@ -164,7 +152,7 @@ export const RetrieveEventById = createAsyncThunk(
   "eventsCalendar/retrieveEventById",
   async (id, thunkAPI) => {
     try {
-      const response = await axios.get<GetEventResponseDto>(`${BASE_URL}/events/${id}`);
+      const response = await axiosInstance.get<GetEventResponseDto>(`${BASE_URL}/events/${id}`);
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.message);

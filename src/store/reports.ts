@@ -4,7 +4,7 @@ import { BASE_URL } from "../utils/baseUrl";
 import { Report, Reports, ReportsWithDocs } from "../types/reports";
 import { CreateReportResponseDto, DeleteReportDto, GetReportResponseDto, PopulatedReportResponseDto, ReportResponseDto } from "../dtos/reports";
 import { CreateReportToCreateReportDto, PaginatedReportsResponseDtoToPaginatedReportsResponse, ReportResponseDtoToReport, ReportsResponseDtoToReports, UpdateReportToUpdateReportResponseDto } from "../mappers/report.mapper";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 
 type ReportsState = {
   reports: Report[]
@@ -52,7 +52,7 @@ export const RetrieveReports = createAsyncThunk<PaginatedResponse<Report>, {page
   "reports/RetrieveReports",
   async ({page, limit}, { rejectWithValue }) => {
     try {
-      const response = await axios.get<GetReportResponseDto>(`${BASE_URL}/reports?limit=${limit}&page=${page}`);
+      const response = await axiosInstance.get<GetReportResponseDto>(`${BASE_URL}/reports?limit=${limit}&page=${page}`);
       console.log(response.data);
       
       if (isSuccessResponse(response.data)) {
@@ -72,7 +72,7 @@ export const RetrieveReportById = createAsyncThunk<ReportsWithDocs, {id: HexStri
   "reports/RetrieveReportById",
   async ({id}, { rejectWithValue }) => {
     try {
-      const response = await axios.get<GetReportResponseDto>(`${BASE_URL}/reports/${id}`);
+      const response = await axiosInstance.get<GetReportResponseDto>(`${BASE_URL}/reports/${id}`);
 
       if ("success" in response.data && response.data.success === true) {
         const data = response.data as { success: true; report: PopulatedReportResponseDto };
@@ -95,7 +95,7 @@ export const UpdateReport = createAsyncThunk<Report, ReportsWithDocs, { rejectVa
   async (data, { rejectWithValue }) => {
     try {
       const dto = UpdateReportToUpdateReportResponseDto(data);
-      const response = await axios.patch(`${BASE_URL}/reports/${data.id}`, dto);
+      const response = await axiosInstance.patch(`${BASE_URL}/reports/${data.id}`, dto);
       console.log("response.data ", response.data );
       
       if ('success' in response.data && response.data.success) {
@@ -122,7 +122,7 @@ export const CreateReport = createAsyncThunk(
   async (data: Report, {rejectWithValue}) => {
     try {
       const dto = CreateReportToCreateReportDto(data);
-      const response = await axios.post<CreateReportResponseDto>(`${BASE_URL}/reports`, dto);
+      const response = await axiosInstance.post<CreateReportResponseDto>(`${BASE_URL}/reports`, dto);
       if ('success' in response.data && response.data.success){
         return response.data;
       } else {
@@ -139,7 +139,7 @@ export const deleteReport = createAsyncThunk(
   'reports/deleteReport',
   async(id: string | undefined, {rejectWithValue}) => {
     try{
-      const response = await axios.delete<DeleteReportDto>(`${BASE_URL}/reports/${id}`)
+      const response = await axiosInstance.delete<DeleteReportDto>(`${BASE_URL}/reports/${id}`)
       return response.data
     } catch(error: any){
       return rejectWithValue(error.response?.data || 'Ошибка удаления отчета')

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Select, Form } from "antd";
 import { useTranslation } from "react-i18next";
-import { useAppDispatch, useAppSelector } from "../../store";
+import { useAppSelector } from "../../store";
 
 type Props = {
   initialValue?: { id: string; name: string };
@@ -9,7 +9,6 @@ type Props = {
 
 const SearchOrganizerRetrieve: React.FC<Props> = ({ initialValue }) => {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
   const organizerSearch = useAppSelector((state) => state.organizer.organizerSearch);
 
   const [options, setOptions] = useState<{ label: string; value: string }[]>([]);

@@ -1,13 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { BASE_URL } from "../utils/baseUrl";
 import { ErrorDto, HexString, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
-import axios from "axios";
-import { InternationalDocument, InternationalDocuments, InternationalDocumentsWithDocs, UpdateInternationalDocument } from "../types/internationalDocuments";
-import { CreateDocumentDto, CreateDocumentResponseDto, DeleteDocumentDto, DocumentResponseDto, GetDocumentResponseDto, PopulatedDocumentResponseDto } from "../dtos/internationalDocuments";
-import { CreateInternationalDocumentToCreateInternationalDocumentDto, InternationalDocumentResponseDtoToInternationalDocument, InternationalDocumentsResponseDtoToInternationalDocumentsResponse, PaginatedInternationalDocumentsDtoToPaginatedInternationalDocuments, UpdateInternationalDocumentToUpdateInternationalDocumentDto } from "../mappers/internationalDocuments.mapper";
 import { AgreementDocument, AgreementDocuments, AgreementDocumentsWithDocs, UpdateAgreementDocument } from "../types/agreements";
 import { AgreementResponseDto, CreateAgreementResponseDto, DeleteAgreementDto, GetAgreementResponseDto, PopulatedAgreementResponseDto } from "../dtos/agreements";
 import { AgreementDocumentResponseDtoToAgreementDocument, AgreementDocumentsResponseDtoToAgreementDocumentsResponse, CreateAgreementDocumentToCreateAgreementDocumentDto, PaginatedAgreementDocumentsDtoToPaginatedAgreementDocuments, UpdateAgreementDocumentToUpdateAgreementDocumentDto } from "../mappers/agreements.mapper";
+import axiosInstance from "../utils/axiosInstance";
 
 type AgreementDocumentsState = {
   agreementDocuments: AgreementDocument[]
@@ -55,7 +52,7 @@ export const RetrieveAgreementDocuments = createAsyncThunk<PaginatedResponse<Agr
   "agreements/RetrieveAgreementDocuments",
   async ({page, limit}, { rejectWithValue }) => {
     try {
-      const response = await axios.get<GetAgreementResponseDto>(`${BASE_URL}/agreements?limit=${limit}&page=${page}`);
+      const response = await axiosInstance.get<GetAgreementResponseDto>(`${BASE_URL}/agreements?limit=${limit}&page=${page}`);
       console.log("response", response);
       
       if (isSuccessResponse(response.data)) {
@@ -78,7 +75,7 @@ export const RetrieveAgreementDocumentById = createAsyncThunk<AgreementDocuments
   "agreements/RetrieveAgreementDocumentById",
   async ({id}, { rejectWithValue }) => {
     try {
-      const response = await axios.get<GetAgreementResponseDto>(`${BASE_URL}/agreements/${id}`);
+      const response = await axiosInstance.get<GetAgreementResponseDto>(`${BASE_URL}/agreements/${id}`);
 
       if ("success" in response.data && response.data.success === true) {
         console.log("ers", response.data);
@@ -105,7 +102,7 @@ export const UpdateAgreementDocumentRequest = createAsyncThunk<AgreementDocument
   async (data, { rejectWithValue }) => {
     try {
       const dto = UpdateAgreementDocumentToUpdateAgreementDocumentDto(data);
-      const response = await axios.patch(`${BASE_URL}/agreements/${data.id}`, dto);
+      const response = await axiosInstance.patch(`${BASE_URL}/agreements/${data.id}`, dto);
       console.log("response.data ", response.data );
       
       if ('success' in response.data && response.data.success) {
@@ -130,7 +127,7 @@ export const CreateAgreementDocument = createAsyncThunk(
   async (data: AgreementDocuments, {rejectWithValue}) => {
     try {
       const dto = CreateAgreementDocumentToCreateAgreementDocumentDto(data);
-      const response = await axios.post<CreateAgreementResponseDto>(`${BASE_URL}/agreements`, dto);
+      const response = await axiosInstance.post<CreateAgreementResponseDto>(`${BASE_URL}/agreements`, dto);
       if ('success' in response.data && response.data.success){
         return response.data;
       } else {
@@ -147,7 +144,7 @@ export const DeleteAgreementDocument = createAsyncThunk(
   'agreements/DeleteAgreementDocument',
   async(id: string | undefined, {rejectWithValue}) => {
     try{
-      const response = await axios.delete<DeleteAgreementDto>(`${BASE_URL}/agreements/${id}`)
+      const response = await axiosInstance.delete<DeleteAgreementDto>(`${BASE_URL}/agreements/${id}`)
       return response.data
     } catch(error: any){
       return rejectWithValue(error.response?.data || 'Ошибка удаления договора')

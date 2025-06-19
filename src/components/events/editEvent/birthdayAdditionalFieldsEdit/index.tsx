@@ -7,7 +7,7 @@ interface BirthdayEditAdditionalFieldsProps {
   form: any;
 }
 
-const BirthdayAdditionalFieldsEdit: React.FC<BirthdayEditAdditionalFieldsProps> = ({event, form}) => {
+const BirthdayAdditionalFieldsEdit: React.FC<BirthdayEditAdditionalFieldsProps> = ({event}) => {
 
   return (
     <>

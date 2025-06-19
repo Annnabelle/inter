@@ -1,14 +1,13 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { BASE_URL } from "../utils/baseUrl";
 import { isErrorDto } from "../mappers/events.caledar.mapper";
-import axios from "axios"
 import { StatisticByPartners, StatisticsByLevel, StatisticsByOrganizers, SuccessResponse } from "../types/statistics";
-import { mapStatisticsByLevelRetrieveDtoToStatisticsByLevel, mapStatisticsOrganizersRetrieveDtoToStatisticsOrganizers, PaginatedStatEventsByPartnerDtoToPaginatedStatEventsByPartner, StatisticsOrganizersResponseDtoToStatisticsOrganizers } from "../mappers/statistics.mapper";
+import { mapStatisticsByLevelRetrieveDtoToStatisticsByLevel, mapStatisticsOrganizersRetrieveDtoToStatisticsOrganizers, PaginatedStatEventsByPartnerDtoToPaginatedStatEventsByPartner } from "../mappers/statistics.mapper";
 import { GetStatsByOrganizersResponseDto } from "../dtos/statistics/getStatsByOrg";
 import { GetStatsByLevelResponseDto } from "../dtos/statistics/getStatByLvl";
-import { GetEventsByPartnerDto, GetEventsByPartnerParams } from "../dtos/statistics/getStatByPartners";
 import { GetEventsResponseDto } from "../dtos/events/getEvents";
 import { PaginatedResponse } from "../dtos/main.dto";
+import axiosInstance from "../utils/axiosInstance";
 
 type EventsState = {
   statisticByOrg: StatisticsByOrganizers[],
@@ -60,7 +59,7 @@ export const RetrieveStatisticByOrganizer = createAsyncThunk<
       const startDateUTC = new Date(startDate).toISOString();
       const endDateUTC = new Date(endDate).toISOString();
 
-      const response = await axios.get<GetStatsByOrganizersResponseDto>(`${BASE_URL}/stats/organizers`, {
+      const response = await axiosInstance.get<GetStatsByOrganizersResponseDto>(`${BASE_URL}/stats/organizers`, {
         params: {
           startDate: startDateUTC,
           endDate: endDateUTC,
@@ -92,7 +91,7 @@ export const RetrieveStatisticByLevel = createAsyncThunk<
       const startDateUTC = new Date(startDate).toISOString();
       const endDateUTC = new Date(endDate).toISOString();
 
-      const response = await axios.get<GetStatsByLevelResponseDto>(`${BASE_URL}/stats/level`, {
+      const response = await axiosInstance.get<GetStatsByLevelResponseDto>(`${BASE_URL}/stats/level`, {
         params: {
           startDate: startDateUTC,
           endDate: endDateUTC,
@@ -121,7 +120,7 @@ export const RetrieveStatisticByPartners = createAsyncThunk<
   async ({ partnerId, page = 1, sortBy = 'startDate', sortOrder = 'asc', limit = 10 }, { rejectWithValue }) => {
     try {
 
-      const response = await axios.get<GetEventsResponseDto>(`${BASE_URL}/stats/events`, {
+      const response = await axiosInstance.get<GetEventsResponseDto>(`${BASE_URL}/stats/events`, {
         params: {
           partnerId,
           page,

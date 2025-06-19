@@ -8,7 +8,7 @@ interface DiplomaticEditAdditionalFieldsProps {
   form: any;
 }
 
-const DiplomaticAdditionalFieldsEdit: React.FC<DiplomaticEditAdditionalFieldsProps> = ({event, form}) => {
+const DiplomaticAdditionalFieldsEdit: React.FC<DiplomaticEditAdditionalFieldsProps> = ({event}) => {
     const { t } = useTranslation();
     return (
         <>

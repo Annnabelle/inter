@@ -1,4 +1,4 @@
-import { CreateUploadDto, DeleteUploadQueryDto } from "../dtos/uploads";
+import { CreateUploadDto } from "../dtos/uploads";
 import { Upload } from "../types/uploads";
 
 export function createExpertToCreateExpertDto(document: Upload): CreateUploadDto {

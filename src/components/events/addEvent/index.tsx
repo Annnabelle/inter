@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, Select, DatePicker, Input } from "antd";
-import { Event, EventType } from "../../../types/events";
+import { EventType } from "../../../types/events";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch } from "../../../store";
 import { CreateEvent } from "../../../store/events";
@@ -27,7 +27,6 @@ const createEventFieldsStrategy: Partial<Record<EventType, React.FC>> = {
 
 const AddEventForm = ({ onSuccess }: { onSuccess: () => void}) => {
   const { t } = useTranslation();
-  const [form] = Form.useForm<Event>();
   const dispatch = useAppDispatch()
   const [selectedEventType, setSelectedEventType] = useState<EventType | null>(null);
 

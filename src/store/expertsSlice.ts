@@ -4,7 +4,7 @@ import { ErrorDto, HexString, PaginatedResponse, PaginatedResponseDto } from "..
 import { Expert, ExpertsType, ExpertWithDocs } from "../types/experts.type";
 import { CreateExpertResponseDto, DeleteExpertDto, ExpertResponseDto, GetExpertResponseDto, GetExpertsResponseDto, PopulatedExpertResponseDto } from "../dtos/experts";
 import { CreateExpertToCreateExpertDto, ExpertResponseDtoToExpert, ExpertsResponseDtoToExperts, PaginatedExpertsDtoToPaginatedExperts, UpdateExpertToUpdateExpertDto } from "../mappers/experts.mapper";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 
 type ExpertsState = {
   experts: Expert[]
@@ -54,7 +54,7 @@ export const RetrieveExperts = createAsyncThunk<PaginatedResponse<Expert>, {page
   "experts/retrieveExperts",
   async ({page, limit}, { rejectWithValue }) => {
     try {
-      const response = await axios.get<GetExpertsResponseDto>(`${BASE_URL}/experts?limit=${limit}&page=${page}`);
+      const response = await axiosInstance.get<GetExpertsResponseDto>(`${BASE_URL}/experts?limit=${limit}&page=${page}`);
 
       if (isSuccessResponse(response.data)) {
         const paginatedOrganizationProjects = PaginatedExpertsDtoToPaginatedExperts(response.data);
@@ -73,7 +73,7 @@ export const RetrieveExpertById = createAsyncThunk<ExpertWithDocs, {id: HexStrin
   "experts/RetrieveExpertById",
   async ({id}, {rejectWithValue}) => {
     try { 
-      const response = await axios.get<GetExpertResponseDto>(`${BASE_URL}/experts/${id}`);
+      const response = await axiosInstance.get<GetExpertResponseDto>(`${BASE_URL}/experts/${id}`);
       if ('success' in response.data && response.data.success === true) {
         const data = response.data as {success: true, expert: PopulatedExpertResponseDto}
         const expert = ExpertResponseDtoToExpert(data.expert)
@@ -96,7 +96,7 @@ export const UpdateExpert = createAsyncThunk<ExpertsType, Expert, { rejectValue:
   async (data, { rejectWithValue }) => {
     try {
       const dto = UpdateExpertToUpdateExpertDto(data);
-      const response = await axios.patch(`${BASE_URL}/experts/${data.id}`, dto);
+      const response = await axiosInstance.patch(`${BASE_URL}/experts/${data.id}`, dto);
       console.log("response.data ", response.data );
       
       if ('success' in response.data && response.data.success) {
@@ -121,7 +121,7 @@ export const CreateExpert = createAsyncThunk(
   async (data: ExpertsType, {rejectWithValue}) => {
     try {
       const dto = CreateExpertToCreateExpertDto(data);
-      const response = await axios.post<CreateExpertResponseDto>(`${BASE_URL}/experts`, dto);
+      const response = await axiosInstance.post<CreateExpertResponseDto>(`${BASE_URL}/experts`, dto);
       if ('success' in response.data && response.data.success){
         return response.data;
       } else {
@@ -138,7 +138,7 @@ export const DeleteExpert = createAsyncThunk(
   'experts/deleteExpert',
   async(id: string | undefined, {rejectWithValue}) => {
     try{
-      const response = await axios.delete<DeleteExpertDto>(`${BASE_URL}/experts/${id}`)
+      const response = await axiosInstance.delete<DeleteExpertDto>(`${BASE_URL}/experts/${id}`)
       return response.data
     } catch(error: any){
       return rejectWithValue(error.response?.data || 'Ошибка удаления эксперта')
@@ -151,7 +151,7 @@ export const RetrieveSearchExpert = createAsyncThunk<PaginatedResponse<Expert>, 
   'experts/searchExpert',
   async ({query}, {rejectWithValue}) => {
     try {
-      const response = await axios.get<GetExpertsResponseDto>(`${BASE_URL}/experts/search?query=${query}`);
+      const response = await axiosInstance.get<GetExpertsResponseDto>(`${BASE_URL}/experts/search?query=${query}`);
       if(isSuccessResponse(response.data)){
         const expertSearch = PaginatedExpertsDtoToPaginatedExperts(response.data)
         return expertSearch;

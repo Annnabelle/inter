@@ -139,7 +139,7 @@ const Translators: React.FC = () => {
             setModalState((prev) => ({ ...prev, [`delete${type}`]: true }));
         }, 10);
     };
-    const languageOption = Object.entries(TranslatorLanguage).map(([code, name]) => ({
+    const languageOption = Object.entries(TranslatorLanguage).map(([ name]) => ({
         value: name,
         label: name,
     }));
@@ -251,31 +251,36 @@ const Translators: React.FC = () => {
                             <Input className="input" size='large' placeholder={`${t('inputs.email')}`}/>
                         </Form.Item>
                     </div>
-                    {languages.map((item, index) => (
-                        <div className="form-inputs" key={index}>
-                            <Form.Item
-                                className="input"
-                                name={['languages', index, 'language']}
-                            >
-                            <Select
-                                className="input"
-                                size="large"
-                                options={languageOption}
-                                placeholder={t('inputs.selectLanguage')}
-                            />
-                            </Form.Item>
-                            <Form.Item
-                                className="input"
-                                name={['languages', index, 'rating']}
-                            >
-                                <InputNumber
-                                className="input"
-                                size="large"
-                                placeholder={t('inputs.points')}
-                            />
-                            </Form.Item>
-                        </div>
-                        ))}
+                  {languages.map((item, index) => {
+                        console.log('item:', item); // Логируем item
+
+                        return (
+                            <div className="form-inputs" key={index}>
+                                <Form.Item
+                                    className="input"
+                                    name={['languages', index, 'language']}
+                                >
+                                    <Select
+                                        className="input"
+                                        size="large"
+                                        options={languageOption}
+                                        placeholder={t('inputs.selectLanguage')}
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    className="input"
+                                    name={['languages', index, 'rating']}
+                                >
+                                    <InputNumber
+                                        className="input"
+                                        size="large"
+                                        placeholder={t('inputs.points')}
+                                    />
+                                </Form.Item>
+                            </div>
+                        );
+                    })}
+
                     <div className="form-btn-new">
                         <p className="form-btn-new-text" onClick={addLanguagesField}>{t('buttons.addLang')}</p>
                     </div>

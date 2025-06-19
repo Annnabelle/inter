@@ -1,7 +1,10 @@
 import React from "react";
-import ModalWindow from "../../modalWindow";
 import { Event, EventType } from "../../../types/events";
 import { DatePicker, Form, Input, Select } from "antd";
+import { getUserRole } from "../../../utils/getUserRole";
+import { UserRole } from "../../../utils/roles";
+import { useTranslation } from "react-i18next";
+import ModalWindow from "../../modalWindow";
 import BirthdayRetrieveAdditionalFields from "./birthdayAdditionalFields";
 import moment from "moment";
 import FormComponent from "../../form";
@@ -11,9 +14,6 @@ import DiplomaticAdditionalFieldsRetrieve from "./diplomaticAdditionalFieldsRetr
 import ForeignAdditionalFieldsRetrieve from "./foreignAdditionalFieldsRetrieve";
 import MeetingAdditionalFieldsRetrieve from "./meetingAdditionalFieldsRetrieve";
 import SeminarAdditionalFieldsRetrieve from "./seminarAdditionalFieldsRetrieve";
-import { getUserRole } from "../../../utils/getUserRole";
-import { UserRole } from "../../../utils/roles";
-import { useTranslation } from "react-i18next";
 
 interface RetrieveEventModalProps {
   selectedEvent: Event | null;

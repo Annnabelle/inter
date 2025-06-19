@@ -1,5 +1,5 @@
-import { PaginatedDto } from "../internationalDocuments";
-import { ErrorDto, HexString, MultilingualStringDto, PaginatedResponseDto } from "../main.dto";
+
+import { ErrorDto, HexString, MultilingualStringDto, PaginatedDto, PaginatedResponseDto } from "../main.dto";
 
 export type CountryResponseDto = {
   id: HexString,

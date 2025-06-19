@@ -2,11 +2,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { AuthState } from '../types/user';
 import { BASE_URL } from '../utils/baseUrl';
 import { mapLoginFormToDto } from '../mappers/auth.mapper';
-import { LoginRequestDto, LoginResponseDto, UserRegisterRequestDto, UserResponseDto } from '../dtos/users';
+import { LoginRequestDto, LoginResponseDto, UserRegisterRequestDto } from '../dtos/users';
 import { ErrorDto } from '../dtos/main.dto';
 import { mapUserRegisterToUserRegisterDto } from '../mappers/user.mapper';
-import axios from 'axios';
 import { RegisterForm } from '../types/auth.types';
+import axios from 'axios';
 
 export const Login = createAsyncThunk(
   'auth/login',

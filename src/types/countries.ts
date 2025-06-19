@@ -1,6 +1,6 @@
 import type { UploadFile } from "antd/es/upload/interface";
 import type { Dayjs } from "dayjs";
-import { HexString, MultilingualStringDto } from "../dtos/main.dto";
+import { HexString } from "../dtos/main.dto";
 
 export interface FileItem {
     id: number;

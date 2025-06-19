@@ -1,6 +1,6 @@
 
 import { useNavigate } from "react-router-dom";
-import { Select, theme } from "antd";
+import { theme } from "antd";
 import { CountriesTableDataType } from "../../types";
 import { CountriesTableColumns } from "../../tableData/countriesTable";
 import { useTranslation } from "react-i18next";

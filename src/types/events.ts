@@ -8,8 +8,8 @@ export type Event = {
   name: string;
   comment?: string,
   eventType: EventType,
-  startDate: Date | string,
-  endDate: Date | string,
+  startDate: Date ,
+  endDate: Date ,
 };
 
 export type EventTableRow = {

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import ModalWindow from "../../modalWindow";
-import { ApprovalsDto, Event, EventType, UpdateEvent } from "../../../types/events";
+import { Event, EventType, UpdateEvent } from "../../../types/events";
 import { DatePicker, Form, Input, Select } from "antd";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";

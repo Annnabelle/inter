@@ -9,7 +9,7 @@ import { Event, EventSortField, EventType } from "../types/events";
 import { mapEventToCreateEventDto } from "../mappers/events.caledar.mapper";
 import { CreateEventResponseDto } from "../dtos/events/addEvent";
 import qs from "qs"
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 
 type EventsState = {
   events: Event[]
@@ -86,7 +86,7 @@ export const RetrieveEvents = createAsyncThunk<
           type: eventTypes && Array.isArray(eventTypes) ? eventTypes : undefined,
       }
 
-      const response = await axios.get<GetEventsDto>(`${BASE_URL}/events`, {
+      const response = await axiosInstance.get<GetEventsDto>(`${BASE_URL}/events`, {
         params: requestParams,
         paramsSerializer: params => qs.stringify(params, { arrayFormat: 'repeat' })
       });
@@ -160,7 +160,7 @@ export const CreateEvent = createAsyncThunk(
   async (data: Event, {rejectWithValue}) => {
     try {
       const dto = mapEventToCreateEventDto(data);
-      const response = await axios.post<CreateEventResponseDto>(`${BASE_URL}/events`, dto);
+      const response = await axiosInstance.post<CreateEventResponseDto>(`${BASE_URL}/events`, dto);
       if ('success' in response.data && response.data.success){
         return response.data;
       } else {

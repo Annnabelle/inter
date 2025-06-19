@@ -2,7 +2,6 @@
 import { LoginRequestDto, UserResponseDto } from "../dtos/users";
 import { LoginForm } from "../types/auth.types";
 import { User } from "../types/user";
-import { UserRole } from "../utils/roles";
 
 export function mapLoginFormToDto(data: LoginForm) : LoginRequestDto { 
   return {

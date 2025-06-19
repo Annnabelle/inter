@@ -29,7 +29,7 @@ const Reports: React.FC = () => {
         token: { colorBgContainer },
     } = theme.useToken();
     const [isActionOpen, setActionOpen] = useState<boolean>(false);
-    const [files, setFiles] = useState([{ id: Date.now() }]);
+    const [files] = useState([{ id: Date.now() }]);
     const [modalState, setModalState] = useState<{
         addReport: boolean,
         editReport: boolean,

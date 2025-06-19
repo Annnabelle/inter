@@ -13,7 +13,6 @@ const SearchCountry: React.FC<Props> = ({ fieldName = 'source' }) => {
   const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const countrySearch = useAppSelector((state) => state.countries.countriesSearch);
-  const [searchType] = useState<'country'>('country');
   const [options, setOptions] = useState<{ label: string; value: string }[]>([]);
 
   const handleSearch = (value: string) => {

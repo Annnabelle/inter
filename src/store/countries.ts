@@ -4,7 +4,7 @@ import { ErrorDto, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.
 import { Country } from "../types/countries";
 import { CountryResponseDto, GetCountriesResponseDto } from "../dtos/countries";
 import { paginatedCountriesDtoToPaginatedCountries } from "../mappers/countries.mapper";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 
 type CountriesState = {
   countries: Country[]
@@ -49,7 +49,7 @@ export const RetrieveCountries = createAsyncThunk<PaginatedResponse<Country>, {p
   "countries/RetrieveCountries",
   async ({page, limit}, { rejectWithValue }) => {
     try {
-      const response = await axios.get<GetCountriesResponseDto>(`${BASE_URL}/countries?limit=${limit}&page=${page}&sortOrder=asc`);
+      const response = await axiosInstance.get<GetCountriesResponseDto>(`${BASE_URL}/countries?limit=${limit}&page=${page}&sortOrder=asc`);
 
       if (isSuccessResponse(response.data)) {
         const paginatedCountries = paginatedCountriesDtoToPaginatedCountries(response.data);
@@ -68,7 +68,7 @@ export const fetchCountries = createAsyncThunk<PaginatedResponse<Country>, {quer
   "countries/searchCountries",
   async ({query}, { rejectWithValue }) => {
     try {
-      const response = await axios.get<GetCountriesResponseDto>(`${BASE_URL}/countries/search?query=${query}`);
+      const response = await axiosInstance.get<GetCountriesResponseDto>(`${BASE_URL}/countries/search?query=${query}`);
     console.log('q2', query);
       if (isSuccessResponse(response.data)) {
         const countriesSearch = paginatedCountriesDtoToPaginatedCountries(response.data);

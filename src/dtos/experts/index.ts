@@ -1,6 +1,5 @@
 import { ErrorDto, HexString, PaginatedResponseDto } from "../main.dto";
 import { OrganizationResponseDto } from "../organizations";
-import { ProjectResponseDto } from "../projects";
 import { UploadResponseDto } from "../uploads";
 
 export type CreateExpertDto = {

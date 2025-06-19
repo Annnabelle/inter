@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { Button, Form, Input, Select } from "antd";
 import { useTranslation } from "react-i18next";
 import { EventLevel } from "../../../../dtos/events/addEvent";
-import ApprovalSection from "../../../approvalsSection";
 import SearchOrganizerEdit from "../../../searchOrganizerSearchEdit";
 import SearchOrganizationEdit from "../../../searchOrganizationEdit";
 import ApprovalSectionEdit from "../../../approvalsSectionEdit";

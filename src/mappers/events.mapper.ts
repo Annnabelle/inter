@@ -1,5 +1,4 @@
 import { EventResponseDto } from "../dtos/events/getEvent";
-import { PopulatedEventResponseDto } from "../dtos/events/getEvents";
 import { PaginatedResponse } from "../dtos/main.dto";
 import { Event } from "../types/events";
 

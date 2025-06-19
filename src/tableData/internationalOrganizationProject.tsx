@@ -19,6 +19,6 @@ export const InternationalOrganizationProjectColumns = (t: TFunction): TableProp
       title:  t('tableTitles.files'),
       dataIndex: "document",
       key: "document",
-      render: (text) => <p className="table-text">{t('buttons.retrieve')}</p>,
+      render: () => <p className="table-text">{t('buttons.retrieve')}</p>,
     },
   ];

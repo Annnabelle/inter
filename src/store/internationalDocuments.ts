@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { BASE_URL } from "../utils/baseUrl";
 import { ErrorDto, HexString, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
-import axios from "axios";
 import { InternationalDocument, InternationalDocuments, InternationalDocumentsWithDocs, UpdateInternationalDocument } from "../types/internationalDocuments";
-import { CreateDocumentDto, CreateDocumentResponseDto, DeleteDocumentDto, DocumentResponseDto, GetDocumentResponseDto, PopulatedDocumentResponseDto } from "../dtos/internationalDocuments";
+import { CreateDocumentResponseDto, DeleteDocumentDto, DocumentResponseDto, GetDocumentResponseDto, PopulatedDocumentResponseDto } from "../dtos/internationalDocuments";
 import { CreateInternationalDocumentToCreateInternationalDocumentDto, InternationalDocumentResponseDtoToInternationalDocument, InternationalDocumentsResponseDtoToInternationalDocumentsResponse, PaginatedInternationalDocumentsDtoToPaginatedInternationalDocuments, UpdateInternationalDocumentToUpdateInternationalDocumentDto } from "../mappers/internationalDocuments.mapper";
+import axiosInstance from "../utils/axiosInstance";
 
 type InternationalDocumentsState = {
   internationalDocuments: InternationalDocument[]
@@ -52,7 +52,7 @@ export const RetrieveInternationalDocuments = createAsyncThunk<PaginatedResponse
   "internationalDocuments/RetrieveInternationalDocuments",
   async ({page, limit}, { rejectWithValue }) => {
     try {
-      const response = await axios.get<GetDocumentResponseDto>(`${BASE_URL}/documents?limit=${limit}&page=${page}`);
+      const response = await axiosInstance.get<GetDocumentResponseDto>(`${BASE_URL}/documents?limit=${limit}&page=${page}`);
       
       if (isSuccessResponse(response.data)) {
         const paginatedDocuments = PaginatedInternationalDocumentsDtoToPaginatedInternationalDocuments(response.data);
@@ -74,7 +74,7 @@ export const RetrieveInternationalDocumentById = createAsyncThunk<InternationalD
   "internationalDocuments/RetrieveInternationalDocumentById",
   async ({id}, { rejectWithValue }) => {
     try {
-      const response = await axios.get<GetDocumentResponseDto>(`${BASE_URL}/documents/${id}`);
+      const response = await axiosInstance.get<GetDocumentResponseDto>(`${BASE_URL}/documents/${id}`);
 
       if ("success" in response.data && response.data.success === true) {
         console.log("ers", response.data);
@@ -100,7 +100,7 @@ export const UpdateInternationalDocumentRequest = createAsyncThunk<International
   async (data, { rejectWithValue }) => {
     try {
       const dto = UpdateInternationalDocumentToUpdateInternationalDocumentDto(data);
-      const response = await axios.patch(`${BASE_URL}/documents/${data.id}`, dto);
+      const response = await axiosInstance.patch(`${BASE_URL}/documents/${data.id}`, dto);
       console.log("response.data ", response.data );
       
       if ('success' in response.data && response.data.success) {
@@ -125,7 +125,7 @@ export const CreateInternationalDocument = createAsyncThunk(
   async (data: InternationalDocuments, {rejectWithValue}) => {
     try {
       const dto = CreateInternationalDocumentToCreateInternationalDocumentDto(data);
-      const response = await axios.post<CreateDocumentResponseDto>(`${BASE_URL}/documents`, dto);
+      const response = await axiosInstance.post<CreateDocumentResponseDto>(`${BASE_URL}/documents`, dto);
       if ('success' in response.data && response.data.success){
         return response.data;
       } else {
@@ -142,7 +142,7 @@ export const DeleteInternationalDocument = createAsyncThunk(
   'internationalDocuments/DeleteInternationalDocument',
   async(id: string | undefined, {rejectWithValue}) => {
     try{
-      const response = await axios.delete<DeleteDocumentDto>(`${BASE_URL}/documents/${id}`)
+      const response = await axiosInstance.delete<DeleteDocumentDto>(`${BASE_URL}/documents/${id}`)
       return response.data
     } catch(error: any){
       return rejectWithValue(error.response?.data || 'Ошибка удаления международного документа')

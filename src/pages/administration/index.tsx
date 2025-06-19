@@ -14,7 +14,7 @@ import Button from "../../components/button";
 import ModalWindow from "../../components/modalWindow";
 import FormComponent from "../../components/form";
 import ComponentTable from "../../components/table";
-import { formatDateTime, FormatPhone } from "../../utils/consts";
+import { formatDateTime } from "../../utils/consts";
 import { AdministrationDataType } from "../../types";
 import { RegisterForm } from "../../types/auth.types";
 

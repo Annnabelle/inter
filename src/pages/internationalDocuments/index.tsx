@@ -18,8 +18,7 @@ import { Document } from "../../types/uploads";
 import { normalizeUrl } from "../../utils/baseUrl";
 import { fetchCountries } from "../../store/countries";
 import { fetchOrganizationSearch } from "../../store/organizations";
-import { CreateDocument, DeleteUpload } from "../../store/uploads";
-import { FaTrashAlt } from "react-icons/fa";
+import { CreateDocument } from "../../store/uploads";
 import { getUserRole } from "../../utils/getUserRole";
 import { UserRole } from "../../utils/roles";
 
@@ -27,7 +26,6 @@ import { UserRole } from "../../utils/roles";
 const InternationalDocumentsPage: React.FC = () => {
     const { t, i18n } = useTranslation();
     const role = getUserRole();
-    const language = i18n.resolvedLanguage || 'ru';
     const {
         token: { colorBgContainer },
     } = theme.useToken();

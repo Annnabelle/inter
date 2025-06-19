@@ -1,4 +1,4 @@
-import { CountryResponseDto, SearchCountriesDto } from "../dtos/countries";
+import { CountryResponseDto } from "../dtos/countries";
 import { PaginatedResponse } from "../dtos/main.dto";
 import { Country } from "../types/countries";
 

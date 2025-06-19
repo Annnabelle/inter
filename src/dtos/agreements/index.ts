@@ -1,6 +1,5 @@
 import { CountryResponseDto } from "../countries";
-import { PaginatedDto } from "../internationalDocuments";
-import { ErrorDto, HexString, PaginatedResponseDto } from "../main.dto";
+import { ErrorDto, HexString, PaginatedDto, PaginatedResponseDto } from "../main.dto";
 import { UploadResponseDto } from "../uploads";
 
 export const AgreementSortField = {

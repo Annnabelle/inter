@@ -1,5 +1,5 @@
 import React from "react";
-import { Checkbox, Form, Input, Select } from "antd";
+import { Form, Input, Select } from "antd";
 import { useTranslation } from "react-i18next";
 import { EventLevel } from "../../../../../dtos/events/addEvent";
 import SearchCountriesOrOrganizations from "../../../../searchCountriesOrOrganizations";

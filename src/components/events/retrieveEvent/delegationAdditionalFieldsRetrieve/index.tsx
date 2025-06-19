@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
-import { Checkbox, Form, Input } from "antd";
+import { Form, Input } from "antd";
 import { useTranslation } from "react-i18next";
-import ApprovalSection from "../../../approvalsSection";
 import SearchCountryOrOrganizationRetrieve from "../../../searchCoutryOrOrganizationRetrieve";
 import ApprovalSectionRetrieve from "../../../approvalsSectionRetrieve";
 

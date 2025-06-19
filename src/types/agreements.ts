@@ -1,6 +1,5 @@
 import { CountryResponseDto } from "../dtos/countries";
 import { HexString } from "../dtos/main.dto"
-import { OrganizationResponseDto } from "../dtos/organizations";
 import { Document } from "./uploads";
 
 export type AgreementDocument = {

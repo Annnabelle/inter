@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { BASE_URL } from "../utils/baseUrl";
 import { ErrorDto, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
-import axios from "axios";
 import { Organizer } from "../types/organizer";
 import { paginatedOrganizersDtoToPaginatedOrganizers } from "../mappers/organizer.mapper";
 import { GetOrganizersResponseDto, OrganizerResponseDto } from "../dtos/organizer";
+import axiosInstance from "../utils/axiosInstance";
 
 type OrganizersState = {
   loading: boolean;
@@ -46,7 +46,7 @@ export const fetchOrganizerSearch = createAsyncThunk<PaginatedResponse<Organizer
   "organizer/fetchOrganizerSearch",
   async ({query}, { rejectWithValue }) => {
     try {
-      const response = await axios.get<GetOrganizersResponseDto>(`${BASE_URL}/organizers/search?query=${query}`);
+      const response = await axiosInstance.get<GetOrganizersResponseDto>(`${BASE_URL}/organizers/search?query=${query}`);
 
       if (isSuccessResponse(response.data)) {
         const paginatedOrganizers = paginatedOrganizersDtoToPaginatedOrganizers(response.data);

@@ -22,12 +22,8 @@ const ApprovalSectionRetrieve: React.FC<ApprovalSectionProps> = ({
       {({ getFieldValue, setFieldsValue }) => {
         const requestDate = getFieldValue(['approvals', fieldName, 'request', 'date']);
         const requestDoc = getFieldValue(['approvals', fieldName, 'request', 'document']);
-        const responseDate = getFieldValue(['approvals', fieldName, 'response', 'date']);
-        const responseDoc = getFieldValue(['approvals', fieldName, 'response', 'document']);
 
         const isRequestFilled = requestDate && requestDoc;
-        const isResponseFilled = responseDate && responseDoc;
-        const isFormReady = isRequestFilled && isResponseFilled;
 
         const currentStatus = getFieldValue(['approvals', fieldName, 'status']);
         if (!currentStatus) {

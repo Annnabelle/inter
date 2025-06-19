@@ -4,7 +4,7 @@ import { ErrorDto, HexString, PaginatedResponse, PaginatedResponseDto } from "..
 import { CreateProjectResponseDto, DeleteProjectDto, GetProjectResponseDto, GetProjectsResponseDto, PopulatedProjectResponseDto, ProjectResponseDto } from "../dtos/projects";
 import { createOrganizationProjectToCreateOrganizationProjectDto, organizationProjectResponseDtoToOrganizationProject, paginatedOrganizationsProjectsDtoToPaginatedOrganizationsProjects, RetrieveProjectDtoToRetrieveProject, updateOrganizationsProjectToUpdateOrganizationProjectDto } from "../mappers/projects.mapper";
 import { Project, Projects, ProjectWithDocs } from "../types/projects";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 
 type ProjectsState = {
   organizationProjects: Projects[]
@@ -52,7 +52,7 @@ export const retrieveOrganizationsProjects = createAsyncThunk<PaginatedResponse<
   "organizationsProjects/retrieveOrganizationsProjects",
   async ({page, limit, id}, { rejectWithValue }) => {
     try {
-      const response = await axios.get<GetProjectsResponseDto>(`${BASE_URL}/projects?limit=${limit}&page=${page}&organizationId=${id}`);
+      const response = await axiosInstance.get<GetProjectsResponseDto>(`${BASE_URL}/projects?limit=${limit}&page=${page}&organizationId=${id}`);
 
       if (isSuccessResponse(response.data)) {
         console.log("ers", response.data);
@@ -75,7 +75,7 @@ export const retrieveOrganizationProjectById = createAsyncThunk<ProjectWithDocs,
   "organizationsProjects/retrieveOrganizationProjectById",
   async ({id}, { rejectWithValue }) => {
     try {
-      const response = await axios.get<GetProjectResponseDto>(`${BASE_URL}/projects/${id}`);
+      const response = await axiosInstance.get<GetProjectResponseDto>(`${BASE_URL}/projects/${id}`);
 
       if ("success" in response.data && response.data.success === true) {
         console.log("ers", response.data);
@@ -101,7 +101,7 @@ export const updateOrganizationsProject = createAsyncThunk<Projects, Projects, {
   async (data, { rejectWithValue }) => {
     try {
       const dto = updateOrganizationsProjectToUpdateOrganizationProjectDto(data);
-      const response = await axios.patch(`${BASE_URL}/projects/${data.id}`, dto);
+      const response = await axiosInstance.patch(`${BASE_URL}/projects/${data.id}`, dto);
       console.log("response.data ", response.data );
       
       if ('success' in response.data && response.data.success) {
@@ -125,7 +125,7 @@ export const createOrganizationProject = createAsyncThunk(
   async (data: Project, {rejectWithValue}) => {
     try {
       const dto = createOrganizationProjectToCreateOrganizationProjectDto(data);
-      const response = await axios.post<CreateProjectResponseDto>(`${BASE_URL}/projects`, dto);
+      const response = await axiosInstance.post<CreateProjectResponseDto>(`${BASE_URL}/projects`, dto);
       if ('success' in response.data && response.data.success){
         return response.data;
       } else {
@@ -142,7 +142,7 @@ export const deleteOrganizationProject = createAsyncThunk(
   'organizationsProjects/deleteOrganizationProject',
   async(id: string | undefined, {rejectWithValue}) => {
     try{
-      const response = await axios.delete<DeleteProjectDto>(`${BASE_URL}/projects/${id}`)
+      const response = await axiosInstance.delete<DeleteProjectDto>(`${BASE_URL}/projects/${id}`)
       return response.data
     } catch(error: any){
       return rejectWithValue(error.response?.data || 'Ошибка удаления проекта')

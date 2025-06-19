@@ -2,9 +2,9 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "../types/user";
 import { mapUserDtoToUser, mapUserUpdateToUpdateUserDto } from "../mappers/user.mapper";
 import { BASE_URL } from "../utils/baseUrl";
-import axios from "axios";
 import { GetUsersResponseDto, UserResponseDto } from "../dtos/users";
 import { ErrorDto, PaginatedResponseDto } from "../dtos/main.dto";
+import axiosInstance from "../utils/axiosInstance";
 
 type UserState = {
   users: User[];
@@ -63,7 +63,7 @@ export const retrieveUsers = createAsyncThunk<RetrieveUsersResult, { page: numbe
     "users/retrieveUsers",
     async ({page, limit}, { rejectWithValue }) => {
       try {
-        const response = await axios.get<GetUsersResponseDto>(`${BASE_URL}/users?page=${page}&limit=${limit}`);
+        const response = await axiosInstance.get<GetUsersResponseDto>(`${BASE_URL}/users?page=${page}&limit=${limit}`);
         
         if (isSuccessResponse(response.data)) {
           const users = response.data.data.map(mapUserDtoToUser);
@@ -89,7 +89,7 @@ export const retrieveUsers = createAsyncThunk<RetrieveUsersResult, { page: numbe
     async (data, { rejectWithValue }) => {
       try {
         const dto = mapUserUpdateToUpdateUserDto(data);
-        const response = await axios.patch(`${BASE_URL}/users/${data.id}`, dto);
+        const response = await axiosInstance.patch(`${BASE_URL}/users/${data.id}`, dto);
   
         if ('success' in response.data && response.data.success) {
           return mapUserDtoToUser(response.data.user); 
@@ -108,7 +108,7 @@ export const retrieveUsers = createAsyncThunk<RetrieveUsersResult, { page: numbe
     'users/deleteUser',
     async (id: string | undefined, { rejectWithValue }) => {
       try {
-        const response = await axios.delete(`${BASE_URL}/users/${id}`);
+        const response = await axiosInstance.delete(`${BASE_URL}/users/${id}`);
         return response.data;
       } catch (error: any) {
         return rejectWithValue(error.response?.data || 'Ошибка удаления');

@@ -3,17 +3,13 @@ import { Avatar } from "antd";
 import { LuUserRound } from "react-icons/lu";
 import { IoIosArrowDown } from "react-icons/io";
 import { useTranslation } from "react-i18next";
-import { RootState, useAppSelector } from "../../store";
 import Button from "../button";
 import "./styles.sass";
 
 const UserInfo: React.FC = () => {
-  const { t, i18n } = useTranslation();
-  type Lang = 'ru' | 'uz' | 'en';
-  const currentLang = i18n.language as Lang;
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const user = useAppSelector((state: RootState) => state.auth.user)
   const handleClickOutside = useCallback((event: MouseEvent) => {
     if (isOpen && dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
       setIsOpen(false);

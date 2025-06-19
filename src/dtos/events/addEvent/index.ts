@@ -1,4 +1,3 @@
-import { Country } from "../../../types/countries";
 import { EventType } from "../../../types/events";
 import { ErrorDto, HexString } from "../../main.dto";
 import { EventResponseDto } from "../getEvent";

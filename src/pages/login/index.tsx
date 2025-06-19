@@ -49,10 +49,13 @@ const WaveBackground: React.FC = () => {
 const LoginPage: React.FC = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { isLoading, error } = useSelector((state: RootState) => state.auth);
+  const { error } = useSelector((state: RootState) => state.auth);
   const onFinish = async (values: LoginForm) => {
     try {
       const result = await dispatch(Login(values)).unwrap();
+      console.log('====================================');
+      console.log("result", result);
+      console.log('====================================');
       toast.success('Успешный вход!');
       navigate('/main');
     } catch (err) {

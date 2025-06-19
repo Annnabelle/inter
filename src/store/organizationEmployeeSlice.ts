@@ -4,7 +4,7 @@ import { CreateOrganizationEmployeeResponseDto, DeleteOrganizationEmployeeDto, G
 import { CreateOrganizationEmployeeToCreateOrganizationEmployeeDto, PaginatedOrganizationsEmployeesResponseDtoToPaginatedOrganizationsEmployeesResponse, OrganizationEmployeeResponseDtoToOrganizationEmployeeResponse, UpdateOrganizationEmployeeToUpdateOrganizationEmployeeResponseDto, OrganizationEmployeesResponseDtoToOrganizationEmployees } from "../mappers/organizationEmployee.mapper";
 import { ErrorDto, HexString, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
 import { BASE_URL } from "../utils/baseUrl";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 
 type OrganizationsEmployeesState = {
   organizationsEmployees: OrganizationEmployee[]
@@ -50,7 +50,7 @@ export const RetrieveOrganizationEmployees = createAsyncThunk<PaginatedResponse<
   "organizationsEmployees/retrieveOrganizationsEmployees",
   async ({page, limit, id}, { rejectWithValue }) => {
     try {
-      const response = await axios.get<GetOrganizationEmployeeResponseDto>(`${BASE_URL}/organization-employees?limit=${limit}&page=${page}&organizationId=${id}`);
+      const response = await axiosInstance.get<GetOrganizationEmployeeResponseDto>(`${BASE_URL}/organization-employees?limit=${limit}&page=${page}&organizationId=${id}`);
       console.log(response.data);
       
       if (isSuccessResponse(response.data)) {
@@ -70,7 +70,7 @@ export const retrieveOrganizationsEmployeeById = createAsyncThunk<OrganizationEm
   "organizationsEmployees/retrieveOrganizationsEmployeeById",
   async ({id}, { rejectWithValue }) => {
     try {
-      const response = await axios.get<GetOrganizationEmployeeResponseDto>(`${BASE_URL}/organization-employees/${id}`);
+      const response = await axiosInstance.get<GetOrganizationEmployeeResponseDto>(`${BASE_URL}/organization-employees/${id}`);
 
       if ("success" in response.data && response.data.success === true) {
         const data = response.data as { success: true; employee: PopulatedOrganizationEmployeeResponseDto };
@@ -95,7 +95,7 @@ export const updateOrganizationsEmployees = createAsyncThunk<OrganizationEmploye
   async (data, { rejectWithValue }) => {
     try {
       const dto = UpdateOrganizationEmployeeToUpdateOrganizationEmployeeResponseDto(data);
-      const response = await axios.patch(`${BASE_URL}/organization-employees/${data.id}`, dto);
+      const response = await axiosInstance.patch(`${BASE_URL}/organization-employees/${data.id}`, dto);
       console.log("response.data ", response.data );
       
       if ('success' in response.data && response.data.success) {
@@ -120,7 +120,7 @@ export const createOrganizationsEmployees = createAsyncThunk(
   async (data: OrganizationEmployees, {rejectWithValue}) => {
     try {
       const dto = CreateOrganizationEmployeeToCreateOrganizationEmployeeDto(data);
-      const response = await axios.post<CreateOrganizationEmployeeResponseDto>(`${BASE_URL}/organization-employees`, dto);
+      const response = await axiosInstance.post<CreateOrganizationEmployeeResponseDto>(`${BASE_URL}/organization-employees`, dto);
       if ('success' in response.data && response.data.success){
         return response.data;
       } else {
@@ -137,7 +137,7 @@ export const deleteOrganizationsEmployees = createAsyncThunk(
   'organizationsEmployees/deleteOrganizationsEmployees',
   async(id: string | undefined, {rejectWithValue}) => {
     try{
-      const response = await axios.delete<DeleteOrganizationEmployeeDto>(`${BASE_URL}/organization-employees/${id}`)
+      const response = await axiosInstance.delete<DeleteOrganizationEmployeeDto>(`${BASE_URL}/organization-employees/${id}`)
       return response.data
     } catch(error: any){
       return rejectWithValue(error.response?.data || 'Ошибка удаления сотрудников')
