@@ -3,5 +3,6 @@ export enum UserRole {
   INTL_OFFICER = 'intl_officer',
   JUNIOR_INTL_OFFICER = 'junior_intl_officer',
   MANAGER = 'manager',
-  EMPLOYEE = 'employee'
+  EMPLOYEE = 'employee',
+  SUPERADMIN = 'Superadmin',
 }

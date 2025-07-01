@@ -24,6 +24,7 @@ const LoginPage = lazy(() => import("../pages/login"));
 const InternationalOrganizationsMain = lazy(() => import("../pages/internationalOrganizationsMain"));
 const InternationalNonGovernmentalOrganizationsMain = lazy(() => import("../pages/internationalNonGovernmentalOrganizationsMain"));
 const EventTypeDetails = lazy(() => import('../pages/eventStatisticsInner/EventTypeDetails'));
+
 const Router: React.FC = () => {
   return (
     <Suspense fallback={<div>Загрузка...</div>}>
@@ -39,6 +40,7 @@ const Router: React.FC = () => {
             <ProtectedRoute
               allowedRoles={[
                 UserRole.ADMIN,
+                UserRole.SUPERADMIN
               ]}
             />
           }
@@ -50,7 +52,7 @@ const Router: React.FC = () => {
           element={
             <ProtectedRoute
               allowedRoles={[
-                UserRole.ADMIN, UserRole.INTL_OFFICER, UserRole.JUNIOR_INTL_OFFICER, UserRole.MANAGER
+                UserRole.ADMIN, UserRole.INTL_OFFICER, UserRole.JUNIOR_INTL_OFFICER, UserRole.MANAGER, UserRole.SUPERADMIN
               ]}
             />
           }
