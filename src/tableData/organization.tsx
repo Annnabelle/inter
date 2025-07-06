@@ -17,14 +17,8 @@ export const OrganizationsTableColumns = (
     title: t('tableTitles.typeOfOrganization'),
     dataIndex: 'organizationType',
     key: 'organizationType',
-    render: (text) => <p className="table-text">{text}</p>,
-  },
-  {
-    title: t('tableTitles.comment'),
-    dataIndex: "comment",
-    key: 'comment',
-    render: (text) => <p className="table-text">{text}</p>,
-  },    
+    render: (text) => <p className="table-text">{t(`organization.${text}`)}</p>,
+  }, 
   {
     title: t('tableTitles.actions'),
     key: "action",

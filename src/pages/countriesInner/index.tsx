@@ -2,8 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { theme, Form, Input, Upload, DatePicker, Select } from "antd";
 import { Country } from "../../types/countries";
 import { CountriesEventTableColumns } from "../../tableData/countriesInnerEvent";
-import { CountriesInnerVisitsColumns, CountriesInnerVisitsData } from "../../tableData/countriesInnerVisitTable";
-import { CountriesInnerVisitsDataType } from "../../types";
+import { CountriesInnerVisitsColumns } from "../../tableData/countriesInnerVisitTable";
 import { useTranslation } from "react-i18next";
 import { RootState, useAppDispatch, useAppSelector } from "../../store";
 import { fetchCountries, RetrieveCountries } from "../../store/countries";
@@ -19,6 +18,8 @@ import { Document } from "../../types/uploads";
 import { IoMdAdd } from "react-icons/io";
 import { RetrieveEvents } from "../../store/events";
 import { CountriesInnerEventDataType } from "../../types/events";
+import { UserRole } from "../../utils/roles";
+import { getUserRole } from "../../utils/getUserRole";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
 import Button from "../../components/button";
@@ -26,8 +27,6 @@ import ModalWindow from "../../components/modalWindow";
 import FormComponent from "../../components/form";
 import ComponentTable from "../../components/table";
 import dayjs from "dayjs";
-import { UserRole } from "../../utils/roles";
-import { getUserRole } from "../../utils/getUserRole";
 
 const CountriesInner: React.FC = () => {
     const { t, i18n } = useTranslation();
@@ -70,6 +69,7 @@ const CountriesInner: React.FC = () => {
     const [options, setOptions] = useState<{ label: string; value: string }[]>([]);
     const [editForm] = Form.useForm();
     const events = useAppSelector((state) => state.events.events)
+    const visits = useAppSelector((state) => state.events.delegations);
 
 
     const handleTypeChange = (value: 'country' | 'organization') => {
@@ -109,24 +109,37 @@ const CountriesInner: React.FC = () => {
 
     useEffect(() => {
         if(events.length === 0){
-            dispatch(RetrieveEvents({page: currentEventPage, limit: eventsLimit, sortOrder:'desc', countryId: id}))
+            dispatch(RetrieveEvents({page: currentEventPage, limit: 10, sortOrder:'desc', countryId: id}))
         }
     }, [events.length, dispatch, limit])
 
-    console.log("events", events);
-
+    useEffect(() => {
+        if(visits.length === 0){
+            dispatch(RetrieveEvents({limit: 10, page: currentEventPage, eventTypes: 'delegations', countryId: id}))
+        }
+    }, [visits.length, dispatch, limit, currentEventPage, id])
 
     const eventsData = useMemo(() => {
         return events.map((event, index) => ({
             key: index + 1,
             name: event.name,
             eventType: event.eventType,
-            start: event.startDate,
-            end: event.endDate,
+            start: dayjs(event.startDate).format('DD.MM.YYYY'),
+            end: dayjs(event.endDate).format('DD.MM.YYYY'),
             comment: event?.comment
         }))
     }, [events, t])
-    
+
+    const DelegationsData = useMemo(() => {
+        return visits.map((event, index) => ({
+                key: index + 1,
+                name: event.name,
+                eventType: event.eventType,
+                start: dayjs(event.startDate).format('DD.MM.YYYY'),
+                end: dayjs(event.endDate).format('DD.MM.YYYY'),
+                comment: event?.comment
+            }));
+    }, [visits, t]);    
 
     const internationalDocumentData = useMemo(() => {
         return internationalDocuments
@@ -316,14 +329,14 @@ const CountriesInner: React.FC = () => {
                     <div className="page-inner-title">
                         <h1 className="title">{t('tableTitles.countries')}: {countryName?.name?.[currentLang]} </h1>
                     </div>
-                    <div className="page-inner-content">
+                    {/* <div className="page-inner-content">
                         <div className="page-inner-content-title">
                             <h2 className="title">Test Name</h2>
                         </div>
                         <div className="page-inner-content-subtitle">
                             <p className="subtitle">Тестовый текст который будет написан в таком формате</p>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="page-inner-table-container">
                     <div className="page-inner-table-container-heading">
@@ -350,8 +363,17 @@ const CountriesInner: React.FC = () => {
                             {t('tablesName.visits')}
                         </h3>
                     </div>
-                    <ComponentTable<CountriesInnerVisitsDataType> 
-                    data={CountriesInnerVisitsData} columns={CountriesInnerVisitsColumns(t)}/>
+                    <ComponentTable<CountriesInnerEventDataType> 
+                        pagination={{
+                            current: currentEventPage,
+                            pageSize: eventsLimit,
+                            total: eventsTotal,
+                            onChange: (page) => {
+                                setCurrentEventPage(page);
+                                dispatch(RetrieveEvents({ page, limit: eventsLimit, countryId: id }));
+                            },
+                        }}
+                        data={DelegationsData} columns={CountriesEventTableColumns(t)}/>
                 </div>
                 <div className="page-inner-table-container">
                     <div className="page-inner-table-container-heading">

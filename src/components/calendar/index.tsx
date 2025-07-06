@@ -43,11 +43,10 @@ const CalendarComponent = () => {
     moment.locale(lang === 'uz' ? 'uz-latn' : lang === 'en' ? 'en-gb' : 'ru');
   }, [i18n.language]);
 
+  const nowInTashkent = moment.tz("Asia/Tashkent").toDate();
 
-  const [date, setDate] = useState(new Date());
-  const [currentDate, setCurrentDate] = useState<Date>(
-    moment.tz("Asia/Tashkent").toDate()
-  );
+  const [date, setDate] = useState(nowInTashkent);
+  const [currentDate, setCurrentDate] = useState<Date>(nowInTashkent);
   const [currentView, setCurrentView] = useState<View>("month");
   const [events, setEvents] = useState<any[]>([]);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
@@ -114,11 +113,11 @@ const CalendarComponent = () => {
             start: originalStart.clone().tz("Asia/Tashkent").toDate(),
             end: originalEnd.clone().tz("Asia/Tashkent").toDate(),
             comment: ev.comment ?? "",
-            eventType: ev.eventType,
+            eventType:  t(`eventCalendar.${ev.eventType}`),
           }];
         }
 
-        const eventsByDay = [];
+        const eventsByDay: any = [];
         for (let i = 0; i < daysCount; i++) {
           const currentDay = start.clone().add(i, "days");
           const isFirstDay = i === 0;
@@ -139,7 +138,7 @@ const CalendarComponent = () => {
             start: eventStart.toDate(),
             end: eventEnd.toDate(),
             comment: ev.comment ?? "",
-            eventType: ev.eventType,
+            eventType:  t(`event.${ev.eventType}`),
           });
         }
 
@@ -159,14 +158,12 @@ const CalendarComponent = () => {
   };
 
 const getDateRangeLabel = () => {
-  const start = moment.tz(dateRange.startDate, "Asia/Tashkent").format("DD.MM.YYYY");
-  const end = moment.tz(dateRange.endDate, "Asia/Tashkent").format("DD.MM.YYYY");
+  const currentMonthDate = moment(dateRange.startDate); // можно также передать selectedDate или date
+  const start = currentMonthDate.clone().startOf("month").tz("Asia/Tashkent").format("DD.MM.YYYY");
+  const end = currentMonthDate.clone().endOf("month").tz("Asia/Tashkent").format("DD.MM.YYYY");
 
   return t("calendar.dateRangeLabel", { start, end });
 };
-
-
-
 
   const eventById = selectedEventData?.event
 
@@ -225,6 +222,8 @@ const getDateRangeLabel = () => {
   },
 };
 
+console.log('Events for calendar:', events);
+
 
   return (
     <div className="events">
@@ -248,7 +247,7 @@ const getDateRangeLabel = () => {
           setCurrentDate(tzDate);
           setDate(tzDate);
         }}
-        defaultView="week"
+        defaultView="month"
         onView={(view) => setCurrentView(view)}
         view={currentView}
         date={date}

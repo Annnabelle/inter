@@ -27,11 +27,10 @@ const SearchExpert: React.FC<SearchExpertProps> = ({ onSearch }) => {
       <Form.Item
         className="input"
         name="searchExpert"
-        label={t('inputs.searchExpert')}
       >
         <Input
           size="large"
-          placeholder={t('inputs.search')}
+          placeholder={t('inputs.searchExpert')}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           allowClear

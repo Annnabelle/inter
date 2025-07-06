@@ -10,6 +10,7 @@ import { RetrieveCountries } from "../../store/countries";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
 import ComponentTable from "../../components/table";
+import { RetrieveEvents } from "../../store/events";
 
 
 const Countries: React.FC = () => {
@@ -25,6 +26,7 @@ const Countries: React.FC = () => {
     const page = useAppSelector((state) => state.countries.page)
     const total = useAppSelector((state) => state.countries.total)
     const [currentPage, setCurrentPage] = useState(page);
+
     const handleRowClick = (record: { key: string }) => {
         navigate(`/countries/${record.key}`)
     }
@@ -35,25 +37,19 @@ const Countries: React.FC = () => {
         }
     }, [dispatch, countries.length, currentPage, limit])
 
-    // const filterOptions = [
-    //     {value: 'byName',label: t('buttons.sort.byName')},
-    //     {value: 'byVisit',label: t('buttons.sort.byVisit')},
-    //     {value: 'byMeeting',label: t('buttons.sort.byMeeting')},
-    //     {value: 'all', label: t('buttons.sort.all')}
-    // ]
-
 
     const countriesData = useMemo(() => {
         return countries.map((country) => ({
             key: country.id,
             name: country.name,
-            comment: country.comment
+            comment: country.comment,
+            action: t('buttons.retrieve'),
         }))
     }, [countries, t])
     
     return (
         <MainLayout>
-            <MainHeading title={`${t('titles.countries')}`} subtitle="Подзаголоок">
+            <MainHeading title={`${t('titles.countries')}`} subtitle="Подзаголовок">
                 {/* <div className="main-heading-dropdown main-heading-dropdown-single-btn">
                     <Select options={filterOptions} size="large" className="select" placeholder={`${t('buttons.sort.sortBy')}`} />
                 </div> */}

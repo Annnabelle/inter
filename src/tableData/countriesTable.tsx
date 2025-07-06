@@ -10,15 +10,9 @@ export const CountriesTableColumns =  (t: TFunction, currentLang: string): Table
     render: (text) => <h1 className="table-title">{text}</h1>,
   },
   {
-    title: t('tableTitles.meetings'),
-    dataIndex: "comment",
-    key: "comment",
-    render: (text) => <p className="table-text">{text}</p>,
+    title: t('tableTitles.actions'),
+    dataIndex: "action",
+    key: "action",
+    render: (text) => <div className="table-action"><p className="table-action-text">{text}</p></div>
   },
-  // {
-  //   title: t('tableTitles.visits'),
-  //   dataIndex: "visits",
-  //   key: "visits",
-  //   render: (text) => <p className="table-text">{text}</p>,
-  // },
 ];

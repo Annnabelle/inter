@@ -89,12 +89,6 @@ export const RetrieveEventsCalendar = createAsyncThunk<
 );
 
 
-
-
-
-
-
-
 export const UpdateEventCalendar = createAsyncThunk<Event, Event, { rejectValue: string }>(
   'events/UpdateEventCalendar',
   async (data, { rejectWithValue }) => {
@@ -117,24 +111,6 @@ export const UpdateEventCalendar = createAsyncThunk<Event, Event, { rejectValue:
   }
 );
 
-
-// export const CreateExpert = createAsyncThunk(
-//   'events/createExpert',
-//   async (data: ExpertsType, {rejectWithValue}) => {
-//     try {
-//       const dto = CreateExpertToCreateExpertDto(data);
-//       const response = await axios.post<CreateExpertResponseDto>(`${BASE_URL}/experts`, dto);
-//       if ('success' in response.data && response.data.success){
-//         return response.data;
-//       } else {
-//         const error = response.data as ErrorDto;
-//         return rejectWithValue(error.errorMessage?.ru || 'Ошибка добавления эксперта')
-//       }
-//     }catch (error: any){
-//       return rejectWithValue(error.response?.data?.message || 'Ошибка сервера');
-//     }
-//   }
-// )
 
 export const DeleteEvent = createAsyncThunk(
   'eventsCalendar/DeleteEvent',

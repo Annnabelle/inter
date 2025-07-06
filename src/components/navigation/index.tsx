@@ -56,8 +56,8 @@ const Navigation: React.FC = () => {
           icon: <IoIosArrowForward />,
           className: 'sub-dropdown-short',
           subDropdown: [
-            { to: '/statistics-of-country-visits', text: t('navigation.countries') },
-            { to: '/visit-statistics-employee', text: t('navigation.employees') },
+            { to: '/countries', text: t('navigation.countries') },
+            // { to: '/visit-statistics-employee', text: t('navigation.employees') },
           ],
         },
       ],

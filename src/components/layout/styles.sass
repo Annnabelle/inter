@@ -42,13 +42,17 @@
                                     color: map.get(vars.$main, 'main')
                         .sub-dropdown
                             position: absolute
-                            top: 50%
-                            right: -85%
+                            top: 0
+                            left: 100%
+                            margin-left: 5px
                             display: flex
                             flex-direction: column
                             background: map.get(vars.$basic, 'white')
                             border: 1px solid map.get(vars.$main, 'grey')
                             border-radius: 6px
+                            z-index: 15
+                            min-width: auto // или auto
+                            white-space: nowrap
                             &-item
                                 width: 100%
                                 padding: 20px
@@ -63,8 +67,6 @@
                                     color: map.get(vars.$main, 'main')
                             &-item:not(:last-child)
                                 border-bottom: 1px solid map.get(vars.$main, 'grey')
-                        .sub-dropdown-short
-                            right: -45%
                         .cooperation-dropdown
                             position: absolute
                             display: none
@@ -76,6 +78,8 @@
                             transition: all 0.5s ease
                             z-index: 10
                             &-item
+                                position: relative
+                                right: 0
                                 width: 100%
                                 padding: 20px
                                 background: map.get(vars.$basic, 'white')
@@ -95,6 +99,7 @@
                                 &:hover
                                     .cooperation-dropdown-item-link
                                         color: map.get(vars.$main, 'main')
+
                                     .cooperation-dropdown-icon
                                         svg
                                             color: map.get(vars.$main, 'main')
@@ -132,6 +137,7 @@
             column-gap: 30px
             .input
                 width: 100%
+
         .cooperation-main
             &-container
                 width: 100%
@@ -167,12 +173,12 @@
             row-gap: 20px
             &-title
                 .title
-                    +mix.typography(28px, 600, map.get(vars.$main, 'main'))
+                    +mix.typography(26px, 600, map.get(vars.$main, 'main'))
             &-content
                 margin-top: 40px
                 &-title
                     .title
-                        +mix.typography(28px, 600, map.get(vars.$basic, "black"))
+                        +mix.typography(26px, 600, map.get(vars.$basic, "black"))
                 &-subtitle
                     .subtitle
                         +mix.typography(20px, 600, map.get(vars.$main, "grey"))
@@ -206,17 +212,17 @@
             .ant-table-cell:last-child
                 border-right: 1px solid map.get(vars.$main, 'main')
         &-title
-            +mix.typography(20px, 700, map.get(vars.$basic, 'black'))
+            +mix.typography(16px, 700, map.get(vars.$basic, 'black'))
         &-text
-            +mix.typography(20px, 400, map.get(vars.$basic, 'black'))
+            +mix.typography(16px, 400, map.get(vars.$basic, 'black'))
         &-tag
             padding: 5px
             &-active
                 border: 1px solid map.get(vars.$events, 'green')
-                +mix.typography(20px, 400, map.get(vars.$events, 'green'))
+                +mix.typography(16px, 400, map.get(vars.$events, 'green'))
             &-not-active
                 border: 1px solid map.get(vars.$main, 'red')
-                +mix.typography(20px, 400, map.get(vars.$main, 'red'))
+                +mix.typography(16px, 400, map.get(vars.$main, 'red'))
         &-actions
             +mix.flex-content(flex-start, row)
             column-gap: 10px
@@ -226,14 +232,14 @@
             &-text
                 z-index: 1000
                 padding: 10px
-                +mix.typography(20px, 400, map.get(vars.$main, 'grey'))
+                +mix.typography(16px, 600, map.get(vars.$main, 'main'))
                 transition: all 0.5s ease
                 &:hover
                     color: map.get(vars.$main, "main")
             &-danger
                 z-index: 1000
                 padding: 10px
-                +mix.typography(20px, 400, map.get(vars.$main, 'grey'))
+                +mix.typography(16px, 400, map.get(vars.$main, 'grey'))
                 transition: all 0.5s ease
                 &:hover
                     color: map.get(vars.$main, 'red')

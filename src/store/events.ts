@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction, AnyAction } from "@reduxjs/toolkit";
 import { BASE_URL } from "../utils/baseUrl";
 import { ErrorDto, HexString, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
 import { ExpertsType, ExpertWithDocs } from "../types/experts.type";
@@ -14,6 +14,7 @@ import axiosInstance from "../utils/axiosInstance";
 type EventsState = {
   events: Event[]
   eventsCalendar: Event[]
+  delegations: Event[];
   loading: boolean;
   error: string | null;
   success: boolean;
@@ -29,6 +30,7 @@ type EventsState = {
 const initialState: EventsState = {
   events: [],
   eventsCalendar: [],
+  delegations: [],
   loading: false,
   error: null,
   success: false,
@@ -62,29 +64,28 @@ type RetrieveEventsParams = {
   limit: number,
   organizationId?: HexString,
   countryId?: HexString,
-  eventTypes?: EventType[],
+  eventTypes?: EventType,
   sortBy?: EventSortField,
   sortOrder?: 'asc' | 'desc',
 }
-  
+
 export const RetrieveEvents = createAsyncThunk<
   PaginatedResponse<Event>,
   RetrieveEventsParams,
   { rejectValue: string }
 >(
   "events/RetrieveEvents",
-  async ({ page, limit, organizationId, countryId, eventTypes, sortBy, sortOrder}, { rejectWithValue }) => {
+  async ({ page, limit, organizationId, countryId, eventTypes, sortBy, sortOrder }, { rejectWithValue }) => {
     try {
-
       const requestParams: any = {
-          limit,
-          page,
-          sortBy: sortBy ?? 'startDate',
-          sortOrder: sortOrder ?? 'asc',
-          organizationId: organizationId || undefined,
-          countryId: countryId || undefined,
-          type: eventTypes && Array.isArray(eventTypes) ? eventTypes : undefined,
-      }
+        limit,
+        page,
+        ...(eventTypes && { type: eventTypes }),
+        sortBy: sortBy ?? 'startDate',
+        sortOrder: sortOrder ?? 'asc',
+        ...(organizationId && { organizationId }),
+        ...(countryId && { countryId }),
+      };
 
       const response = await axiosInstance.get<GetEventsDto>(`${BASE_URL}/events`, {
         params: requestParams,
@@ -107,90 +108,28 @@ export const RetrieveEvents = createAsyncThunk<
 );
 
 
-
-// export const RetrieveExpertById = createAsyncThunk<ExpertWithDocs, {id: HexString}, {rejectValue: string}>(
-//   "events/RetrieveExpertById",
-//   async ({id}, {rejectWithValue}) => {
-//     try {
-//       const response = await axios.get<GetExpertResponseDto>(`${BASE_URL}/experts/${id}`);
-//       if ('success' in response.data && response.data.success === true) {
-//         const data = response.data as {success: true, expert: PopulatedExpertResponseDto}
-//         const expert = ExpertResponseDtoToExpert(data.expert)
-//         return expert
-//       } else {
-//         const error = response.data as ErrorDto
-//         return rejectWithValue(error.errorMessage?.ru || "Ошибка получения эксперта")
-//       }
-//     } catch (error: any) {
-//         console.log(error);
-//         return rejectWithValue(error.message || "Произошла ошибка")
-//     }
-//   }
-// )
-
-
-
-// export const UpdateExpert = createAsyncThunk<ExpertsType, Expert, { rejectValue: string }>(
-//   'events/updateExpert',
-//   async (data, { rejectWithValue }) => {
-//     try {
-//       const dto = UpdateExpertToUpdateExpertDto(data);
-//       const response = await axios.patch(`${BASE_URL}/experts/${data.id}`, dto);
-//       console.log("response.data ", response.data );
-      
-//       if ('success' in response.data && response.data.success) {
-//         console.log(response.data);
-        
-//         return ExpertsResponseDtoToExperts(response.data.employee); 
-//       } else {
-//         const error = response.data as ErrorDto;
-//         return rejectWithValue(error.errorMessage?.ru || 'Ошибка обновления эксперта');
-//       }
-//     } catch (error: any) {
-//       console.log(error);
-      
-//       return rejectWithValue(error.response?.data?.message || 'Ошибка сервера');
-//     }
-//   }
-// );
-
-
 export const CreateEvent = createAsyncThunk(
   'events/CreateEvent',
-  async (data: Event, {rejectWithValue}) => {
+  async (data: Event, { rejectWithValue }) => {
     try {
       const dto = mapEventToCreateEventDto(data);
       const response = await axiosInstance.post<CreateEventResponseDto>(`${BASE_URL}/events`, dto);
-      if ('success' in response.data && response.data.success){
+      
+      if (response.data?.success) {
         return response.data;
-      } else {
-        
-        const error = response.data as ErrorDto;
-        console.log('error2', error);
-        return rejectWithValue(error.errorMessage?.ru || 'Ошибка добавления мероприятия')
       }
-    }catch (error: any){
-      console.log('====================================');
-      console.log('error1', error);
-      console.log('====================================');
+
+      // логируем ответ, если он неуспешный
+      console.warn('Invalid response from server:', response.data);
+
+      return rejectWithValue('Ошибка добавления мероприятия'); // <-- безопасная дефолтная ошибка
+    } catch (error: any) {
+      console.error('Request failed', error);
       return rejectWithValue(error.response?.data?.message || 'Ошибка сервера');
     }
   }
-)
+);
 
-
-// export const DeleteExpert = createAsyncThunk(
-//   'events/deleteExpert',
-//   async(id: string | undefined, {rejectWithValue}) => {
-//     try{
-//       const response = await axios.delete<DeleteExpertDto>(`${BASE_URL}/experts/${id}`)
-//       return response.data
-//     } catch(error: any){
-//       return rejectWithValue(error.response?.data || 'Ошибка удаления эксперта')
-//     }
-//   }
-// )
-  
 
 const eventsSlice = createSlice({
   name: "events",
@@ -204,15 +143,18 @@ const eventsSlice = createSlice({
         state.error = null;
         state.success = false;
       })
-      .addCase( RetrieveEvents.fulfilled, (state, action: PayloadAction<PaginatedResponseDto<Event>>) => {
-          state.loading = false;
-          state.eventsCalendar = action.payload.data;
-          state.limit = action.payload.limit;
-          state.page = action.payload.page;
-          state.total = action.payload.total
-          state.success = true;
+      .addCase(RetrieveEvents.fulfilled, (state, action: AnyAction) => {
+        state.loading = false;
+        if (action.meta.arg.eventTypes === 'delegations') {
+          state.delegations = action.payload.data;
+        } else {
+          state.events = action.payload.data;
         }
-      )
+        state.limit = action.payload.limit;
+        state.page = action.payload.page;
+        state.total = action.payload.total;
+        state.success = true;
+      })
       .addCase(RetrieveEvents.rejected, (state, action) => {
         state.loading = false;
         state.error = typeof action.payload === 'string' ? action.payload : 'Что-то пошло не так';

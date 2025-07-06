@@ -15,7 +15,7 @@ const ConferenceAdditionalFields: React.FC = () => {
     };
 
   const FormatOptions = [
-    { value: EventFormat.Personal, label: t('events.personal') },
+    { value: EventFormat.Personal, label: t('events.offline') },
     { value: EventFormat.Online, label: t('events.online') },
     { value: EventFormat.Hybrid, label: t('events.hybrid') }
   ];
