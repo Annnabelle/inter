@@ -10,7 +10,6 @@ import { RetrieveCountries } from "../../store/countries";
 import MainLayout from "../../components/layout";
 import MainHeading from "../../components/mainHeading";
 import ComponentTable from "../../components/table";
-import { RetrieveEvents } from "../../store/events";
 
 
 const Countries: React.FC = () => {

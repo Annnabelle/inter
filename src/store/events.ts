@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction, AnyAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, AnyAction } from "@reduxjs/toolkit";
 import { BASE_URL } from "../utils/baseUrl";
 import { ErrorDto, HexString, PaginatedResponse, PaginatedResponseDto } from "../dtos/main.dto";
 import { ExpertsType, ExpertWithDocs } from "../types/experts.type";
@@ -64,7 +64,7 @@ type RetrieveEventsParams = {
   limit: number,
   organizationId?: HexString,
   countryId?: HexString,
-  eventTypes?: EventType,
+  eventTypes?: EventType | EventType[], 
   sortBy?: EventSortField,
   sortOrder?: 'asc' | 'desc',
 }

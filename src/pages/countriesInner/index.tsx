@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { theme, Form, Input, Upload, DatePicker, Select } from "antd";
 import { Country } from "../../types/countries";
 import { CountriesEventTableColumns } from "../../tableData/countriesInnerEvent";
-import { CountriesInnerVisitsColumns } from "../../tableData/countriesInnerVisitTable";
 import { useTranslation } from "react-i18next";
 import { RootState, useAppDispatch, useAppSelector } from "../../store";
 import { fetchCountries, RetrieveCountries } from "../../store/countries";
