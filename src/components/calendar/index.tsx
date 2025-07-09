@@ -138,7 +138,7 @@ const CalendarComponent = () => {
             start: eventStart.toDate(),
             end: eventEnd.toDate(),
             comment: ev.comment ?? "",
-            eventType:  t(`event.${ev.eventType}`),
+            eventType:  t(`eventCalendar.${ev.eventType}`),
           });
         }
 

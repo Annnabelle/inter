@@ -129,6 +129,7 @@ export const RetrieveEventById = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       const response = await axiosInstance.get<GetEventResponseDto>(`${BASE_URL}/events/${id}`);
+      
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.message);
