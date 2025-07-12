@@ -7,7 +7,11 @@ import {
 import moment from "moment-timezone";
 import { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store";
-import { RetrieveEventsCalendar, RetrieveEventById, DeleteEvent } from "../../store/eventsCalendar";
+import {
+  RetrieveEventsCalendar,
+  RetrieveEventById,
+  DeleteEvent,
+} from "../../store/eventsCalendar";
 import { getDateRange } from "./getRange";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
@@ -16,37 +20,26 @@ import RetrieveEventModal from "../events/retrieveEvent";
 import EditEventModal from "../events/editEvent";
 import ModalWindow from "../modalWindow";
 import Button from "../button";
-import 'moment/locale/ru';
+import "moment/locale/ru";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
 moment.locale("ru");
-
 const localizer = momentLocalizer(moment);
-
-// const customFormats: Partial<Formats> = {
-//   timeGutterFormat: "HH:mm",
-//   eventTimeRangeFormat: (range, culture, localizer) => {
-//     if (!localizer) return "";
-//     return `${localizer.format(range.start, "HH:mm", culture)} — ${localizer.format(range.end, "HH:mm", culture)}`;
-//   },
-// };
 
 const CalendarComponent = () => {
   const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
-  const eventsCalendar = useAppSelector((state) => state.eventsCalendar.eventsCalendar);
-  const selectedEventData = useAppSelector((state) => state.eventsCalendar.selectedEvent);
+  const eventsCalendar = useAppSelector(
+    (state) => state.eventsCalendar.eventsCalendar
+  );
+  const selectedEventData = useAppSelector(
+    (state) => state.eventsCalendar.selectedEvent
+  );
 
-
-  useEffect(() => {
-    const lang = i18n.language;
-    moment.locale(lang === 'uz' ? 'uz-latn' : lang === 'en' ? 'en-gb' : 'ru');
-  }, [i18n.language]);
-
-  const nowInTashkent = moment.tz("Asia/Tashkent").toDate();
-
-  const [date, setDate] = useState(nowInTashkent);
-  const [currentDate, setCurrentDate] = useState<Date>(nowInTashkent);
+  const [date, setDate] = useState(() => moment.tz("Asia/Tashkent").toDate());
+  const [currentDate, setCurrentDate] = useState(() =>
+    moment.tz("Asia/Tashkent").toDate()
+  );
   const [currentView, setCurrentView] = useState<View>("month");
   const [events, setEvents] = useState<any[]>([]);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
@@ -56,25 +49,30 @@ const CalendarComponent = () => {
     deleteEvent: false,
   });
 
+  useEffect(() => {
+    const lang = i18n.language;
+    moment.locale(lang === "uz" ? "uz-latn" : lang === "en" ? "en-gb" : "ru");
+  }, [i18n.language]);
+
+  useEffect(() => {
+    const now = moment.tz("Asia/Tashkent").toDate();
+    setDate(now);
+    setCurrentDate(now);
+  }, []);
+
   const handleModal = (modalName: string, value: boolean) => {
     setModalState((prev) => ({ ...prev, [modalName]: value }));
   };
 
   const handleEditOpen = () => {
-    setModalState((prev) => ({
-      ...prev,
-      retrieveEvents: false,
-    }));
+    setModalState((prev) => ({ ...prev, retrieveEvents: false }));
     setTimeout(() => {
       setModalState((prev) => ({ ...prev, editEvent: true }));
     }, 10);
   };
 
   const handleDeleteOpen = () => {
-    setModalState((prev) => ({
-      ...prev,
-      editEvent: false,
-    }));
+    setModalState((prev) => ({ ...prev, editEvent: false }));
     setTimeout(() => {
       setModalState((prev) => ({ ...prev, deleteEvent: true }));
     }, 10);
@@ -106,15 +104,17 @@ const CalendarComponent = () => {
         const daysCount = end.diff(start, "days") + 1;
 
         if (daysCount === 1) {
-          return [{
-            id: `${ev.id}`,
-            originalId: ev.id,
-            title: ev.name,
-            start: originalStart.clone().tz("Asia/Tashkent").toDate(),
-            end: originalEnd.clone().tz("Asia/Tashkent").toDate(),
-            comment: ev.comment ?? "",
-            eventType:  t(`eventCalendar.${ev.eventType}`),
-          }];
+          return [
+            {
+              id: `${ev.id}`,
+              originalId: ev.id,
+              title: ev.name,
+              start: originalStart.clone().tz("Asia/Tashkent").toDate(),
+              end: originalEnd.clone().tz("Asia/Tashkent").toDate(),
+              comment: ev.comment ?? "",
+              eventType: t(`eventCalendar.${ev.eventType}`),
+            },
+          ];
         }
 
         const eventsByDay: any = [];
@@ -138,7 +138,7 @@ const CalendarComponent = () => {
             start: eventStart.toDate(),
             end: eventEnd.toDate(),
             comment: ev.comment ?? "",
-            eventType:  t(`eventCalendar.${ev.eventType}`),
+            eventType: t(`eventCalendar.${ev.eventType}`),
           });
         }
 
@@ -157,15 +157,14 @@ const CalendarComponent = () => {
     });
   };
 
-const getDateRangeLabel = () => {
-  const currentMonthDate = moment(dateRange.startDate); // можно также передать selectedDate или date
-  const start = currentMonthDate.clone().startOf("month").tz("Asia/Tashkent").format("DD.MM.YYYY");
-  const end = currentMonthDate.clone().endOf("month").tz("Asia/Tashkent").format("DD.MM.YYYY");
+  const getDateRangeLabel = () => {
+    const currentMonthDate = moment(date).tz("Asia/Tashkent");
+    const start = currentMonthDate.clone().startOf("month").format("DD.MM.YYYY");
+    const end = currentMonthDate.clone().endOf("month").format("DD.MM.YYYY");
 
-  return t("calendar.dateRangeLabel", { start, end });
-};
+    return t("calendar.dateRangeLabel", { start, end });
+  };
 
-  const eventById = selectedEventData?.event
 
   const handleDeleteEvent = async () => {
     if (!selectedEventId) return;
@@ -174,18 +173,19 @@ const getDateRangeLabel = () => {
       const resultAction = await dispatch(DeleteEvent(selectedEventId));
 
       if (DeleteEvent.fulfilled.match(resultAction)) {
-        toast.success(t('messages.eventDeleted'));
+        toast.success(t("messages.eventDeleted"));
         setTimeout(() => {
           window.location.reload();
         }, 1000);
       } else {
-        toast.error(t('messages.eventDeleteError'));
+        toast.error(t("messages.eventDeleteError"));
       }
     } catch (error) {
-      toast.error(t('messages.eventDeleteError'));
+      toast.error(t("messages.eventDeleteError"));
     }
   };
 
+  const eventById = selectedEventData?.event;
 
   const customMessages = {
     today: t("calendar.today"),
@@ -211,19 +211,23 @@ const getDateRangeLabel = () => {
   };
 
   const customFormats: Partial<Formats> = {
-  timeGutterFormat: "HH:mm",
-  weekdayFormat: (date, culture, localizer) => {
-    const dayIndex = moment(date).day(); 
-    return customMessages.weekdays?.[dayIndex] ?? localizer?.format(date, "ddd", culture);
-  },
-  eventTimeRangeFormat: (range, culture, localizer) => {
-    if (!localizer) return "";
-    return `${localizer.format(range.start, "HH:mm", culture)} — ${localizer.format(range.end, "HH:mm", culture)}`;
-  },
-};
-
-console.log('Events for calendar:', events);
-
+    timeGutterFormat: "HH:mm",
+    weekdayFormat: (date, culture, localizer) => {
+      const dayIndex = moment(date).day();
+      return (
+        customMessages.weekdays?.[dayIndex] ??
+        localizer?.format(date, "ddd", culture)
+      );
+    },
+    eventTimeRangeFormat: (range, culture, localizer) => {
+      if (!localizer) return "";
+      return `${localizer.format(range.start, "HH:mm", culture)} — ${localizer.format(
+        range.end,
+        "HH:mm",
+        culture
+      )}`;
+    },
+  };
 
   return (
     <div className="events">
@@ -261,21 +265,30 @@ console.log('Events for calendar:', events);
       />
 
       <RetrieveEventModal
-        selectedEvent={eventById ? eventById : null}
+        selectedEvent={eventById ?? null}
         isOpen={modalState.retrieveEvents}
         onClose={() => handleModal("retrieveEvents", false)}
         onEdit={handleEditOpen}
       />
       <EditEventModal
-        selectedEvent={eventById ? eventById : null}
+        selectedEvent={eventById ?? null}
         isOpen={modalState.editEvent}
         onClose={() => handleModal("editEvent", false)}
         onDelete={handleDeleteOpen}
       />
-      <ModalWindow openModal={modalState.deleteEvent} title={`${t('titles.areYouSure')} ${t('crudNames.event')} ?`} className="modal-tight" closeModal={() => handleModal('deleteExpert', false)}>
+      <ModalWindow
+        openModal={modalState.deleteEvent}
+        title={`${t("titles.areYouSure")} ${t("crudNames.event")} ?`}
+        className="modal-tight"
+        closeModal={() => handleModal("deleteEvent", false)}
+      >
         <div className="modal-tight-container">
-            <Button onClick={() => handleModal('deleteEvent', false)} className="outline">{t('buttons.cancel')}</Button>
-            <Button onClick={() => handleDeleteEvent()} className="danger">{t('buttons.delete')}</Button>
+          <Button onClick={() => handleModal("deleteEvent", false)} className="outline">
+            {t("buttons.cancel")}
+          </Button>
+          <Button onClick={handleDeleteEvent} className="danger">
+            {t("buttons.delete")}
+          </Button>
         </div>
       </ModalWindow>
     </div>
@@ -283,6 +296,7 @@ console.log('Events for calendar:', events);
 };
 
 export default CalendarComponent;
+
 
 
 
