@@ -61,8 +61,8 @@ const ConferenceAdditionalFields: React.FC = () => {
            <SearchCountriesOrOrganizations  fieldName="donor" />
         </div>
       <div className="form-inputs">
-        <Form.Item className="input" name='membersQuantity'>
-          <Input className="input" placeholder={t('events.membersQuantity')} size="large" />
+        <Form.Item className="input" name='membersQuantity' rules={[{ required: true, message: t('errors.required') }]}>
+          <Input className="input" placeholder={t('events.membersQuantity')} size="large"  />
         </Form.Item>
       </div>
      <ApprovalSection

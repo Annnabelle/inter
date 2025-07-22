@@ -32,7 +32,7 @@ const DelegationAdditionalFields: React.FC = () => {
                     />
                 </Form.Item>
                 <Form.Item className="input" name="membersQuantity">
-                    <Input className="input" placeholder={t('events.membersQuantity')}  size="large"/>
+                    <Input className="input" placeholder={t('events.membersQuantity')}  size="large" />
                 </Form.Item>
             </div>
 

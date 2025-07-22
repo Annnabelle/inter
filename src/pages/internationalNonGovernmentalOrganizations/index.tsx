@@ -24,6 +24,10 @@ import { normalizeUrl } from '../../utils/baseUrl';
 import { FaTrashAlt } from 'react-icons/fa';
 import { UserRole } from '../../utils/roles';
 import { getUserRole } from '../../utils/getUserRole';
+import { RetrieveEvents } from '../../store/events';
+import dayjs from 'dayjs';
+import { CountriesInnerEventDataType } from '../../types/events';
+import { CountriesEventTableColumns } from '../../tableData/countriesInnerEvent';
 
 const InternationalNonGovernmentalOrganizations: React.FC = () => {
     const { t } = useTranslation();
@@ -74,7 +78,9 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
     const [selectedChiefId, setSelectedChiefId] = useState<string | null>(null);
     const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null)
     const [localFiles, setLocalFiles] = useState<Document[]>([]);
-
+    const meetings = useAppSelector((state) => state.events.delegations);
+    const eventsPage = useAppSelector((state) => state.events.page)
+    const [currentEventPage, setCurrentEventPage] = useState(eventsPage);
     useEffect(() => {
         if (organizationEmployees.length === 0) {
             dispatch(RetrieveOrganizationEmployees({ limit: 10, page: currentPage, id }));
@@ -87,7 +93,23 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
           }
       }, [dispatch, organizationProjects.length, currentProjectPage, limit, id])
 
+    useEffect(() => {
+      if(meetings.length === 0){
+          dispatch(RetrieveEvents({limit: 10, page: currentEventPage, eventTypes: 'meeting', organizationId: id}))
+      }
+    }, [meetings.length, dispatch, limit, currentEventPage, id])
      
+    const MeetingsData = useMemo(() => {
+      return meetings.map((event, index) => ({
+          key: index + 1,
+          name: event.name,
+          eventType: event.eventType,
+          start: dayjs(event.startDate).format('DD.MM.YYYY'),
+          end: dayjs(event.endDate).format('DD.MM.YYYY'),
+          comment: event?.comment
+      }));
+    }, [meetings, t]);  
+
      useEffect(() => {
         if (employeeById) {
             editForm.resetFields(); 
@@ -452,7 +474,7 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                   }}
               onRowClick={(record) => handleRowClick('project', "Retrieve", record)} data={organizationProjectsData} columns={InternationalOrganizationProjectColumns(t)}/>
             </div>
-            {/* <div className="page-inner-table-container">
+           <div className="page-inner-table-container">
                 <div className="page-inner-table-container-heading">
                     <div className="heading-title">
                         <h3 className="title">
@@ -460,8 +482,8 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
                         </h3>
                     </div>
                 </div>
-                <ComponentTable<InternationalNonGovernmentOrganizationsChronologyOfMeetingDataType> data={InternationalNonGovernmentOrganizationsChronologyOfMeetingData} columns={InternationalNonGovernmentOrganizationsChronologyOfMeetingColumns} />
-            </div> */}
+                <ComponentTable<CountriesInnerEventDataType> columns={CountriesEventTableColumns(t)} data={MeetingsData}/>
+            </div>
              <ModalWindow title={t('buttons.add') + " " + t('crudNames.employee')} openModal={modalState.addChief} closeModal={() => handleModal("addChief", false)}>
                 <FormComponent onFinish={handleCreateOrganizationEmployee}>
                    <div className="form-inputs">

@@ -68,6 +68,7 @@ const SearchOrganizer: React.FC<Props> = ({ fieldName, initialValue }) => {
         name={formItemName}
         className="input"
         initialValue={initialValue?.id} 
+        rules={[{ required: true, message: t('errors.required') }]}
       >
         <Select
           showSearch

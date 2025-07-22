@@ -27,7 +27,7 @@ const SeminarAdditionalFields: React.FC = () => {
                 </Form.Item>
             </div>
             <div className="inputs-label">
-                <p className="label">{t('tableTitles.format')} + {t('tableTitles.meetings')}</p>
+                <p className="label">{t('tableTitles.format')}  {t('tableTitles.meetings').toLocaleLowerCase()}</p>
             </div>
             <div className="form-inputs">
                 <Form.Item className="input" name="format">

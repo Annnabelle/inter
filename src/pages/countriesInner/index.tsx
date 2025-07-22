@@ -193,7 +193,7 @@ const CountriesInner: React.FC = () => {
     }
 
     const handleRowClick = (type: 'Document', action: 'retrieve' | 'edit' | 'delete', record: InternationalDocumentsTableDataType) => {
-        console.log(`Clicked on ${type}, action: ${action}, record:`, record);
+
         if (type === 'Document'){
             const documentData = internationalDocuments.find((document) => document.id === record.key) ?? null
             setSelectedDocumentId(record.key)
@@ -257,7 +257,6 @@ const CountriesInner: React.FC = () => {
             countryId: values.countryId?.value || documentById?.countryId,
             organizationId: values.organizationId?.value || documentById?.organizationId,};
             const resultAction = await dispatch(UpdateInternationalDocumentRequest(updatedData));
-            console.log('resultAction', resultAction);
             
             if (UpdateInternationalDocumentRequest.fulfilled.match(resultAction)) {
                 toast.success(t('messages.documentUpdatedSuccess'));

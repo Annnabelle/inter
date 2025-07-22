@@ -25,6 +25,10 @@ import ModalWindow from '../../components/modalWindow';
 import Button from '../../components/button';
 import FormComponent from '../../components/form';
 import ComponentTable from '../../components/table';
+import { RetrieveEvents } from '../../store/events';
+import dayjs from 'dayjs';
+import { CountriesInnerEventDataType } from '../../types/events';
+import { CountriesEventTableColumns } from '../../tableData/countriesInnerEvent';
 
 const InternationalOrganizations: React.FC = () => {
   const { t } = useTranslation();
@@ -75,6 +79,9 @@ const InternationalOrganizations: React.FC = () => {
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null)
   const [localFiles, setLocalFiles] = useState<Document[]>([]);
   const role = getUserRole();
+  const meetings = useAppSelector((state) => state.events.delegations);
+  const eventsPage = useAppSelector((state) => state.events.page)
+  const [currentEventPage, setCurrentEventPage] = useState(eventsPage);
 
   useEffect(() => {
       if (id) {
@@ -145,7 +152,6 @@ const InternationalOrganizations: React.FC = () => {
     action: 'Retrieve' | 'Edit' | 'Delete',
     record: InternationalOrganizationChiefDataType | InternationalOrganizationProjectDataType
   ) => {
-    console.log(`Clicked on ${type}, action: ${action}, record:`, record);
 
     if (type === 'chief') {
       const organizationEmployeeData = organizationEmployees.find(
@@ -185,12 +191,30 @@ const InternationalOrganizations: React.FC = () => {
   }, [dispatch, selectedProjectId]);
 
    useEffect(() => {
-        if (projectById?.documents) {
-            setLocalFiles(projectById.documents);
-        } else if (employeeById?.documents) {
-            setLocalFiles(employeeById?.documents)
-        }
-    }, [projectById]);
+      if (projectById?.documents) {
+          setLocalFiles(projectById.documents);
+      } else if (employeeById?.documents) {
+          setLocalFiles(employeeById?.documents)
+      }
+  }, [projectById]);
+
+  useEffect(() => {
+    if(meetings.length === 0){
+        dispatch(RetrieveEvents({limit: 10, page: currentEventPage, eventTypes: 'meeting', organizationId: id}))
+    }
+  }, [meetings.length, dispatch, limit, currentEventPage, id])
+
+
+  const MeetingsData = useMemo(() => {
+    return meetings.map((event, index) => ({
+        key: index + 1,
+        name: event.name,
+        eventType: event.eventType,
+        start: dayjs(event.startDate).format('DD.MM.YYYY'),
+        end: dayjs(event.endDate).format('DD.MM.YYYY'),
+        comment: event?.comment
+    }));
+  }, [meetings, t]);  
 
     
   const handleEditOpen = (type: 'chief' | 'project') => {
@@ -455,7 +479,7 @@ const InternationalOrganizations: React.FC = () => {
                         </h3>
                     </div>
                 </div>
-                <ComponentTable<InternationalOrganizationChronologyOfMeetingDataType> columns={InternationalOrganizationChronologyOfMeetingColumns(t)} data={InternationalOrganizationChronologyOfMeetingData}/>
+                <ComponentTable<CountriesInnerEventDataType> columns={CountriesEventTableColumns(t)} data={MeetingsData}/>
             </div>
             {employeeById && selectedChiefId && (
               <ModalWindow openModal={modalState.chiefRetrieve} title={t('buttons.retrieve') + " " + t('crudNames.employee')} closeModal={() => handleModal('chiefRetrieve', false)} handleEdit={() => handleEditOpen('chief')}>

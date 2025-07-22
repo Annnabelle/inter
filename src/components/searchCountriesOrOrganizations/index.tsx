@@ -69,7 +69,7 @@ const SearchCountriesOrOrganizations: React.FC<Props> = ({ fieldName }) => {
 
   return (
     <>
-      <Form.Item name={nameEntity} className="input" initialValue="none">
+      <Form.Item name={nameEntity} className="input" initialValue="none" rules={[{ required: true, message: t('errors.required') }]}>
         <Select
           size="large"
           value={searchType}
@@ -85,7 +85,7 @@ const SearchCountriesOrOrganizations: React.FC<Props> = ({ fieldName }) => {
         />
       </Form.Item>
 
-      <Form.Item name={nameValue} className="input">
+      <Form.Item name={nameValue} className="input" rules={[{ required: true, message: t('errors.required') }]}>
         <Select
           showSearch
           placeholder={t('inputs.search')}
