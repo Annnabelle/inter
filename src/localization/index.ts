@@ -106,9 +106,14 @@ export const resources = {
             visits: 'Visits',
             reports: 'Reports',
             administrations: 'Administration',
-            employees: 'Employees'
+            employees: 'Employees',
+            topFrequentTravels: 'Top Frequent Travelers',
+            topInfrequentTravelers: 'Top Infrequent Travelers'
         },
         titles: {
+            traveledLessFrequently: 'Traveled less frequently',
+            traveledMoreFrequently: 'Traveled more frequently',
+            employeeVisitStatistics: 'Employee visit statistics: ',
             main: 'Home',
             administration: 'Administration',
             cooperation: 'Cooperation',
@@ -258,15 +263,15 @@ export const resources = {
             searchExpert: 'Search expert'
         },
         eventTypes: {
-            conference: "Conference",
-            seminar: "Seminar",
-            meeting: "Meeting",
-            foreign: "Foreign event",
-            diplomatic: "Diplomatic event",
-            delegations: "Delegations",
-            birthday: "Birthday",
-            significant: "Significant date",
-            personal: "Personal event"
+            conference: "Conferences and Forums",
+            seminar: "Seminars and Trainings",
+            meeting: "Meetings",
+            foreign: "Foreign Visits",
+            diplomatic: "Diplomatic Receptions",
+            delegations: "Delegation Receptions",
+            birthday: "Birthdays",
+            significant: "Significant Events",
+            personal: "Personal Matters"
         },
         crudNames: {
             event: 'event',
@@ -491,9 +496,14 @@ export const resources = {
             visits: 'Визиты',
             reports: 'Отчеты',
             administrations: 'Администрирование',
-            employees: 'Сотрудники'
+            employees: 'Сотрудники',
+            topFrequentTravels: 'Топ частых выездов',
+            topInfrequentTravelers: 'Топ редких выездов'
         },
         titles: {
+            traveledLessFrequently: 'Выезжали реже',
+            traveledMoreFrequently: 'Выезжали чаще',
+            employeeVisitStatistics: 'Статистика визитов сотрудника:',
             main: 'Главная',
             administration: 'Администрирование',
             cooperation: 'Сотрудничество',
@@ -635,8 +645,8 @@ export const resources = {
             password: 'Пароль',
             nameOfTheOrganization: 'Название организации',
             search: 'Поиск',
-            startDate: 'Начало даты',
-            endDate: 'Конец даты',
+            startDate: 'Дата начала',
+            endDate: 'Дата конца',
             mainGuest: 'Главный гость',
             additionalMembers: 'дополнительные участники',
             notSelected: "Не выбрано",
@@ -707,15 +717,15 @@ export const resources = {
             eventType: 'Тип мероприятия',
         },
         eventTypes: {
-            conference: "Конференция",
-            seminar: "Семинар",
-            meeting: "Встреча",
-            foreign: "Зарубежное мероприятие",
-            diplomatic: "Дипломатическое мероприятие",
-            delegations: "Делегации",
-            birthday: "День рождения",
-            significant: "Значимая дата",
-            personal: "Личное мероприятие"
+            conference: "Конференции и форумы",
+            seminar: "Семинары и тренинги",
+            meeting: "Встречи",
+            foreign: "Зарубежные визиты",
+            diplomatic: "Дипломатические приемы",
+            delegations: "Прием делегаций",
+            birthday: "Дни рождения",
+            significant: "Значимые события",
+            personal: "Личные вопросы"
         },
         tablesName: {
             events: 'Мероприятия',
@@ -875,9 +885,14 @@ export const resources = {
                 events: 'Tashriflar',
                 reports: 'Hisobotlar',
                 administrations: 'Ma’muriyat',
-                employees: 'Hodimlar'
+                employees: 'Hodimlar',
+                topFrequentTravels: 'Eng ko‘p safarga chiqqanlar reytingi',
+            topInfrequentTravelers: 'Kam safarga chiqqanlar reytingi'
             },
             titles: {
+                traveledLessFrequently: 'Kamroq safarga chiqqan',
+                traveledMoreFrequently: 'Ko‘proq safarga chiqqan',
+                employeeVisitStatistics: 'Hodim tashriflari statistikasi: ',
                 main: 'Bosh sahifa',
                 administration: 'Ma’muriyat',
                 cooperation: 'Hamkorlik',
@@ -1090,15 +1105,15 @@ export const resources = {
                 eventType: 'Tadbir turi',
             },
             eventTypes: {
-                conference: "Konferensiya",
-                seminar: "Seminar",
-                meeting: "Uchrashuv",
-                foreign: "Xorijiy tadbir",
-                diplomatic: "Diplomatik tadbir",
-                delegations: "Delegatsiyalar",
-                birthday: "Tug‘ilgan kun",
-                significant: "Muhim sana",
-                personal: "Shaxsiy tadbir"
+                conference: "Konferensiyalar va forumlar",
+                seminar: "Seminarlar va treninglar",
+                meeting: "Uchrashuvlar",
+                foreign: "Chet el safarlari",
+                diplomatic: "Diplomatik qabullar",
+                delegations: "Delegatsiyalarni qabul qilish",
+                birthday: "Tug‘ilgan kunlar",
+                significant: "Muhim voqealar",
+                personal: "Shaxsiy masalalar"
             },
             tablesName: {
                 events: 'Tadbirlar',

@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux';
 import { logout } from '../store/authSlice';
 import { useNavigate } from 'react-router-dom';
 
-const SESSION_DURATION_MS = 3 * 60 * 60 * 1000; // 3 часа
-const WARNING_DURATION_MS = 5 * 60 * 1000; // 5 минут
+const SESSION_DURATION_MS = 30 * 60 * 1000; // 30 минут
+const WARNING_DURATION_MS = 5 * 60 * 1000; // 5 минут (можно оставить как есть)
 
 export function useSessionTimeout(setShowWarning: (v: boolean) => void) {
   const dispatch = useDispatch();

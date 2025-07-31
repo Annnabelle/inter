@@ -1,4 +1,4 @@
-import { HexString } from "../dtos/main.dto";
+import { HexString, PaginatedDto } from "../dtos/main.dto";
 import { UserResponseDto } from "../dtos/users";
 
 export type AuthTokens = {
@@ -53,6 +53,17 @@ export type UserRegister = {
   role: string;
   password: string;
   language: string;
+}
+
+export type GetUsersByVisits = PaginatedDto &{
+  startDate: Date;
+  endDate: Date;
+}
+
+export type GetUserByVisits = {
+  startDate: Date;
+  endDate: Date;
+  eventsSortOrder: 'asc' | 'desc';
 }
 
 

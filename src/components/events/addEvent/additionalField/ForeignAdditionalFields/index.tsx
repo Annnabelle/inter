@@ -6,6 +6,7 @@ import { DEFAULT_AGENCY_VALUE } from "../../../../../utils/consts";
 import SearchOrganization from "../../../../organizationSearch";
 import ApprovalSection from "../../../../approvalsSection";
 import SearchOrganizer from "../../../../organizaerSearch";
+import UserSearch from "../../../../serachUsers";
 
 const ForeignAdditionalFields: React.FC = () => {
     const { t } = useTranslation();
@@ -19,6 +20,9 @@ const ForeignAdditionalFields: React.FC = () => {
 
     return (
     <>
+        <div className="form-inputs">
+          <UserSearch />
+        </div>
         <div className="inputs-label">
             <p className="label">{t('titles.roles.organizer')}</p>
         </div>
@@ -26,7 +30,7 @@ const ForeignAdditionalFields: React.FC = () => {
             <SearchOrganizer fieldName="organizer"/>
         </div>
         <div className="form-inputs">
-            <Form.Item className="input" name="level" >
+            <Form.Item className="input" name="level"  rules={[{ required: true, message: "Выберите уровень" }]} >
                 <Select
                     className="input"
                     size="large"

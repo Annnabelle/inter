@@ -62,6 +62,7 @@ export type CreateForeignEventDto = CreateBaseEventDto & {
   donors: ForeignDonorDto[],
   approvals: ApprovalsDto,
   additionalMembers?: string,
+  agencyEmployees: HexString[],
 };
 
 

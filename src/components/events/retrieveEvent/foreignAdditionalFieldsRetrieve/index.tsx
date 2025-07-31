@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import SearchOrganizationRetrieve from "../../../searchOrganizationRetrieve";
 import SearchOrganizerRetrieve from "../../../organizerSearchRetrieve";
 import ApprovalSectionRetrieve from "../../../approvalsSectionRetrieve";
+import RetrieveUserSearch from "../../../retrieveSearchUser";
 
 interface ForeignRetrieveAdditionalFieldsProps {
   event: any;
@@ -19,6 +20,10 @@ const ForeignAdditionalFieldsRetrieve: React.FC<ForeignRetrieveAdditionalFieldsP
         });
         }
     }, [event, form]);
+
+    console.log('====================================');
+    console.log(event);
+    console.log('====================================');
     return (
     <>
         <div className="inputs-label">
@@ -34,6 +39,12 @@ const ForeignAdditionalFieldsRetrieve: React.FC<ForeignRetrieveAdditionalFieldsP
                     }
                     : undefined
                 }
+            />
+        </div>
+        <div className="form-inputs">
+           <RetrieveUserSearch
+            initialValue={event?.agencyEmployees}
+            readonly={true}
             />
         </div>
 

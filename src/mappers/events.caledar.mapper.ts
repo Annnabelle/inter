@@ -95,7 +95,8 @@ function mapForeignSpecifics(params: CreateForeignEventDto) : CreateForeignEvent
     level: params.level,
     donors: params.donors,
     approvals: params.approvals,
-    additionalMembers: params.additionalMembers
+    additionalMembers: params.additionalMembers,
+    agencyEmployees: params.agencyEmployees
   }
 }
 

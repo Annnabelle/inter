@@ -57,7 +57,7 @@ const Navigation: React.FC = () => {
           className: 'sub-dropdown-short',
           subDropdown: [
             { to: '/countries', text: t('navigation.countries') },
-            // { to: '/visit-statistics-employee', text: t('navigation.employees') },
+            { to: '/visit-statistics-employee', text: t('navigation.employees') },
           ],
         },
       ],

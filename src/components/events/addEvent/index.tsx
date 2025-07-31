@@ -92,6 +92,9 @@ const handleCreateEvent = async (values: any) => {
       formattedValues.approvals = formattedApprovals;
     }
 
+    console.log('====================================');
+    console.log('value', values);
+    console.log('====================================');
     console.log('formattedValues', formattedValues);
 
     const resultAction = await dispatch(CreateEvent(formattedValues));

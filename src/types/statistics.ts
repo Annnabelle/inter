@@ -25,6 +25,12 @@ export type SuccessResponse<T> = {
     data: T[];
 }
 
+export type SuccessObjResponse<T> = {
+  success: boolean;
+  data: T;
+};
+
+
 export type StatisticByPartners = {
   id?: HexString,
   name: string;

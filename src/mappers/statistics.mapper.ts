@@ -2,7 +2,8 @@ import { EventResponseDto } from "../dtos/events/getEvent";
 import { PaginatedResponse } from "../dtos/main.dto";
 import { StatsByLevel } from "../dtos/statistics/getStatByLvl";
 import { StatsByOrganizers } from "../dtos/statistics/getStatsByOrg";
-import { StatisticByPartners, StatisticsByLevel, StatisticsByOrganizers, SuccessResponse } from "../types/statistics";
+import { UserWithEventsResponseDto } from "../dtos/users";
+import { StatisticByPartners, StatisticsByLevel, StatisticsByOrganizers, SuccessObjResponse, SuccessResponse } from "../types/statistics";
 
 export function StatisticsOrganizersResponseDtoToStatisticsOrganizers(params: StatsByOrganizers): StatisticsByOrganizers {
   return {
@@ -66,3 +67,61 @@ export function PaginatedStatEventsByPartnerDtoToPaginatedStatEventsByPartner(pa
         })
     }
 }
+
+export function StatisticsByUsersDtoToStatisticsByUsers(params: PaginatedResponse<UserWithEventsResponseDto>): PaginatedResponse<UserWithEventsResponseDto> {
+  return {
+    total: params.total,
+    page: params.page,
+    limit: params.limit,
+    data: params.data.map(user => ({
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      phone: user.phone,
+      foreignVisitsCount: user.foreignVisitsCount,
+      foreignVisits: user.foreignVisits.map(event => ({
+        id: event.id,
+        name: event.name,
+        comment: event.comment,
+        eventType: event.eventType,
+        startDate: event.startDate,
+        endDate: event.endDate
+      }))
+    }))
+  };
+}
+
+export function StatisticsByUserDtoToStatisticsByUser(
+  params: { success: boolean; user: UserWithEventsResponseDto | null }
+): SuccessObjResponse<UserWithEventsResponseDto | null> {
+  if (!params.user) {
+    return {
+      success: params.success,
+      data: null,
+    };
+  }
+
+  const mappedUser: UserWithEventsResponseDto = {
+    id: params.user.id,
+    firstName: params.user.firstName,
+    lastName: params.user.lastName,
+    email: params.user.email,
+    phone: params.user.phone,
+    foreignVisitsCount: params.user.foreignVisitsCount,
+    foreignVisits: params.user.foreignVisits.map((event) => ({
+      id: event.id,
+      name: event.name,
+      comment: event.comment,
+      eventType: event.eventType,
+      startDate: event.startDate,
+      endDate: event.endDate,
+    })),
+  };
+
+  return {
+    success: params.success,
+    data: mappedUser,
+  };
+}
+

@@ -5,8 +5,8 @@ import { TFunction } from "i18next";
 export const VisitStatisticsEmployeesColumns  = (t: TFunction): TableProps<VisitStatisticsEmployeesDataTypes>["columns"] => [
     {
         title: "№",
-        dataIndex: "number",
-        key: "number",
+        dataIndex: "key",
+        key: "key",
         render: (text) => <h1 className="table-title">{text}</h1>,
     },
     {
@@ -17,47 +17,20 @@ export const VisitStatisticsEmployeesColumns  = (t: TFunction): TableProps<Visit
     },
     {
         title:  t('tableTitles.numberOfVisits'),
-        dataIndex: "visitsAmount",
-        key: "visitsAmount",
+        dataIndex: "foreignVisitsCount",
+        key: "foreignVisitsCount",
         render: (text) => <p className="table-text">{text}</p>,
     },
     {
-        title:  t('tableTitles.agency'),
-        dataIndex: "agency",
-        key: "agency",
+        title:  t('inputs.phone'),
+        dataIndex: "phone",
+        key: "phone",
         render: (text) => <p className="table-text">{text}</p>,
     },
     {
-        title:  t('tableTitles.otherOrganizer'),
-        dataIndex: "otherOrganizer",
-        key: "otherOrganizer",
+        title:  t('inputs.email'),
+        dataIndex: "email",
+        key: "email",
         render: (text) => <p className="table-text">{text}</p>,
     },
-];
-
-export const VisitStatisticsEmployeesData: VisitStatisticsEmployeesDataTypes[] = [
-  {
-    key: "1",
-    number: '1',
-    name: "Фамилия имя отчетво",
-    visitsAmount: "10",
-    agency: "Test name",
-    otherOrganizer: 'test organizer'
-  },
-  {
-    key: "2",
-    number: '2',
-    name: "Фамилия имя отчетво",
-    visitsAmount: "10",
-    agency: "Test name",
-    otherOrganizer: 'test organizer'
-  },
-  {
-    key: "3",
-    number: '3',
-    name: "Фамилия имя отчетво",
-    visitsAmount: "10",
-    agency: "Test name",
-    otherOrganizer: 'test organizer'
-  },
 ];

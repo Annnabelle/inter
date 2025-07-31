@@ -62,6 +62,7 @@ export type UpdateForeignDto = UpdateBaseEventDto & {
   donors?: ForeignDonorDto[],
   approvals?: ApprovalsDto,
   additionalMembers?: string,
+  agencyEmployees: HexString[];
 };
 
 

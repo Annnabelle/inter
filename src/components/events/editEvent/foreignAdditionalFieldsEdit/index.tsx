@@ -5,6 +5,7 @@ import { EventLevel } from "../../../../dtos/events/addEvent";
 import SearchOrganizerEdit from "../../../searchOrganizerSearchEdit";
 import SearchOrganizationEdit from "../../../searchOrganizationEdit";
 import ApprovalSectionEdit from "../../../approvalsSectionEdit";
+import RetrieveUserSearch from "../../../retrieveSearchUser";
 
 interface ForeignEditAdditionalFieldsProps {
   event: any;
@@ -35,6 +36,12 @@ const ForeignAdditionalFieldsEdit: React.FC<ForeignEditAdditionalFieldsProps> = 
         </div>
         <div className="form-inputs">
              <SearchOrganizerEdit initialValue={event?.organizer} />
+        </div>
+         <div className="form-inputs">
+           <RetrieveUserSearch
+            initialValue={event?.agencyEmployees}
+            readonly={false}
+            />
         </div>
         <div className="form-inputs">
             <Form.Item className="input" name="level" initialValue={event?.level}>

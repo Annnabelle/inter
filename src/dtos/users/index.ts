@@ -1,8 +1,20 @@
-import { ErrorDto, HexString, PaginatedResponseDto } from "../main.dto";
+import { EventResponseDto } from "../events/getEvent";
+import { ErrorDto, HexString, PaginatedDto, PaginatedResponseDto } from "../main.dto";
 
 export type LoginRequestDto = {
     email: string,
     password: string,
+}
+
+export type GetUsersByVisitsDto = PaginatedDto &{
+  startDate: Date;
+  endDate: Date;
+}
+
+export type GetUserByVisitsDto = {
+  startDate: Date;
+  endDate: Date;
+  eventsSortOrder: 'asc' | 'desc';
 }
   
 export type UserResponseDto = {
@@ -76,3 +88,23 @@ export type UserRequestUpdateDto = {
   email: string,
   language: string,
 } | ErrorDto
+
+
+export type UserWithEventsResponseDto = {
+  id: HexString,
+  firstName: string,
+  lastName: string,
+  email: string,
+  phone: string,
+  foreignVisitsCount: number,
+  foreignVisits: EventResponseDto[],
+};
+
+export type GetStatsByUsersResponseDto = {
+  success: boolean,
+}  & PaginatedResponseDto<UserWithEventsResponseDto>| ErrorDto;
+
+export type GetStatsByUserResponseDto = {
+  success: boolean,
+  user: UserWithEventsResponseDto | null,
+} | ErrorDto;

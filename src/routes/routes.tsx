@@ -24,6 +24,7 @@ const LoginPage = lazy(() => import("../pages/login"));
 const InternationalOrganizationsMain = lazy(() => import("../pages/internationalOrganizationsMain"));
 const InternationalNonGovernmentalOrganizationsMain = lazy(() => import("../pages/internationalNonGovernmentalOrganizationsMain"));
 const EventTypeDetails = lazy(() => import('../pages/eventStatisticsInner/EventTypeDetails'));
+const VisitsEmployeeInner = lazy(() => import ("../pages/visits-employee-inner"))
 
 const Router: React.FC = () => {
   return (
@@ -70,6 +71,7 @@ const Router: React.FC = () => {
           <Route path="/international-documents" element={<InternationalDocuments />} />
           <Route path="/event-statistics" element={<EventStatistics />} />
           <Route path="/visit-statistics-employee" element={<EventVisitsEmployee />} />
+          <Route path='/visits-employee/:id' element={<VisitsEmployeeInner />} />
           <Route path="/event-statistics-inner" element={<EventStatisticsInner />} />
           <Route path="/statistics-of-country-visits" element={<StatisticsOfCountryVisits />} />
           <Route path="/event-type/:eventType" element={<EventTypeDetails />} />

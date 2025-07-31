@@ -198,14 +198,23 @@ export interface DiplomaticReceptionsDataType{
 }
 
 export interface VisitStatisticsEmployeesDataTypes {
+    id?: string,
     key: string,
-    number: string,
     name: string,
-    visitsAmount: string,
-    agency: string,
-    otherOrganizer: string
+    foreignVisitsCount: number,
+    email: string,
+    phone: string
 }
 
+
+export interface VisitStatisticsEmployeeDataTypes {
+  key: string;
+  visitName: string;
+  comment: string;
+  startDate: string;
+  endDate: string;
+  eventType: string;
+}
 export interface VisitCountryStatisticsDataTypes {
     key: string,
     number: string,

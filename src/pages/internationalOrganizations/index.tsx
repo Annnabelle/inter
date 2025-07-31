@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { theme, Form, Input, Upload } from "antd";
 import { IoMdAdd } from 'react-icons/io';
-import { InternationalOrganizationChiefDataType, InternationalOrganizationChronologyOfMeetingDataType, InternationalOrganizationProjectDataType } from '../../types';
+import { InternationalOrganizationChiefDataType, InternationalOrganizationProjectDataType } from '../../types';
 import { InternationalOrganizationChiefColumns } from '../../tableData/internationalOrganizationChiefTable';
 import { InternationalOrganizationProjectColumns } from '../../tableData/internationalOrganizationProject';
 import { useTranslation } from 'react-i18next';
@@ -18,7 +18,6 @@ import { Document } from '../../types/uploads';
 import { FaTrashAlt } from 'react-icons/fa';
 import { UserRole } from '../../utils/roles';
 import { getUserRole } from '../../utils/getUserRole';
-import { InternationalOrganizationChronologyOfMeetingColumns, InternationalOrganizationChronologyOfMeetingData } from '../../tableData/internationalOgranizationChronologyOfMeeting';
 import MainLayout from '../../components/layout'
 import MainHeading from '../../components/mainHeading'
 import ModalWindow from '../../components/modalWindow';
@@ -81,7 +80,7 @@ const InternationalOrganizations: React.FC = () => {
   const role = getUserRole();
   const meetings = useAppSelector((state) => state.events.delegations);
   const eventsPage = useAppSelector((state) => state.events.page)
-  const [currentEventPage, setCurrentEventPage] = useState(eventsPage);
+  const [currentEventPage] = useState(eventsPage);
 
   useEffect(() => {
       if (id) {

@@ -80,7 +80,7 @@ const InternationalNonGovernmentalOrganizations: React.FC = () => {
     const [localFiles, setLocalFiles] = useState<Document[]>([]);
     const meetings = useAppSelector((state) => state.events.delegations);
     const eventsPage = useAppSelector((state) => state.events.page)
-    const [currentEventPage, setCurrentEventPage] = useState(eventsPage);
+    const [currentEventPage] = useState(eventsPage);
     useEffect(() => {
         if (organizationEmployees.length === 0) {
             dispatch(RetrieveOrganizationEmployees({ limit: 10, page: currentPage, id }));
