@@ -32,8 +32,22 @@ const Router: React.FC = () => {
       <Routes>
         <Route path='/' element={<LoginPage />} />
 
-        <Route path="/main" element={<MainEventsPage />}>
-          <Route index element={<Home />} />
+        <Route
+          element={
+            <ProtectedRoute
+              allowedRoles={[
+                UserRole.ADMIN,
+                UserRole.INTL_OFFICER,
+                UserRole.JUNIOR_INTL_OFFICER,
+                UserRole.MANAGER,
+                UserRole.SUPERADMIN,
+              ]}
+            />
+          }
+        >
+          <Route path="/main" element={<MainEventsPage />}>
+            <Route index element={<Home />} />
+          </Route>
         </Route>
 
         <Route

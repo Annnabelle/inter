@@ -2,8 +2,13 @@ import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { UserRole } from './roles';
 
-const getUserRole = (): UserRole => {
-  return localStorage.getItem('userRole') as UserRole;
+const isAuthenticated = (): boolean => {
+  const token = localStorage.getItem('accessToken');
+  return !!token; 
+};
+
+const getUserRole = (): UserRole | null => {
+  return localStorage.getItem('userRole') as UserRole | null;
 };
 
 interface ProtectedRouteProps {
@@ -13,7 +18,16 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
   const userRole = getUserRole();
 
-  return allowedRoles.includes(userRole) ? <Outlet /> : <Navigate to="/main" replace />;
+  if (!isAuthenticated() || !userRole) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (!allowedRoles.includes(userRole)) {
+    return <Navigate to="/main" replace />;
+  }
+
+  return <Outlet />;
 };
 
 export default ProtectedRoute;
+
