@@ -33,7 +33,7 @@ const Navigation: React.FC = () => {
         { to: '/international-organizations', text: t('navigation.internationalOrganizations') },
         { to: '/international-non-governmental-organizations', text: t('navigation.internationalNonGovernmentalOrganizations') },
         {
-          to: '/',
+          to: '',
           text: t('navigation.internationalDocuments'),
           icon: <IoIosArrowForward />,
           subDropdown: [

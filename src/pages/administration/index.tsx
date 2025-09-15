@@ -60,15 +60,15 @@ const Administration: React.FC = () => {
       
 
     const UsersData = useMemo(() => {
-            return users.map((user) => ({
-                key: user.id,
-                name: user.firstName + " " + user.lastName,
-                lastLoggedInAt: formatDateTime(user.lastLoggedInAt),
-                status: user.status,
-                role: user.role.name?.[currentLang] || user.role.name?.[fallbackLang],
-                action: t('buttons.retrieve'),
-            }));
-        }, [users]);
+        return users.map((user) => ({
+            key: user.id,
+            name: user.firstName + " " + user.lastName,
+            lastLoggedInAt: formatDateTime(user.lastLoggedInAt),
+            status: user.status,
+            role: user.role.name?.[currentLang] || user.role.name?.[fallbackLang],
+            action: t('buttons.retrieve'),
+        }));
+    }, [users]);
     
     const handleModal = (modalName: string, value: boolean) => {
         setModalState((prev) => ({...prev, [modalName] : value}));

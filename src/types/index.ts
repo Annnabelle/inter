@@ -132,14 +132,14 @@ export interface ReportsTableDataType {
     comment?: string
 }
 
-export interface AdministrationDataType {
-    key: string,
-    name: string, 
-    role: string | undefined, 
-    status: string,
-    lastLoggedInAt: string,
-    action: string
-}
+    export interface AdministrationDataType {
+        key: string,
+        name: string, 
+        role: string | undefined, 
+        status: string,
+        lastLoggedInAt: string,
+        action: string
+    }
 
 export interface EventSeminarDataType {
     key: string,
