@@ -71,7 +71,7 @@ const eventTypeMap: Record<string, string> = {
   Foreign: "foreign",
 
   // delegations
-  "Делегации": "delegations",
+  "Прием делегаций": "delegations",
   Delegations: "delegations",
 
   // conference
@@ -80,7 +80,7 @@ const eventTypeMap: Record<string, string> = {
   Conference: "conference",
 
   // diplomatic
-  "Дипломатические": "diplomatic",
+  "Дипломатические приемы": "diplomatic",
   Diplomatik: "diplomatic",
   Diplomatic: "diplomatic",
 
@@ -95,7 +95,7 @@ const eventTypeMap: Record<string, string> = {
   Personal: "personal",
 
   // seminar
-  "Семинары": "seminar",
+  "Семинары и тренинги": "seminar",
   Seminarlar: "seminar",
   Seminar: "seminar",
 
