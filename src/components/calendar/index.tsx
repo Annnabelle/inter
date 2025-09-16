@@ -112,7 +112,7 @@ const CalendarComponent = () => {
               start: originalStart.clone().tz("Asia/Tashkent").toDate(),
               end: originalEnd.clone().tz("Asia/Tashkent").toDate(),
               comment: ev.comment ?? "",
-              eventType: t(`eventCalendar.${ev.eventType}`),
+              eventType: ev.eventType,
             },
           ];
         }
@@ -138,7 +138,7 @@ const CalendarComponent = () => {
             start: eventStart.toDate(),
             end: eventEnd.toDate(),
             comment: ev.comment ?? "",
-            eventType: t(`eventCalendar.${ev.eventType}`),
+            eventType: ev.eventType,
           });
         }
 
