@@ -111,6 +111,7 @@ export const resources = {
             topInfrequentTravelers: 'Top Infrequent Travelers'
         },
         titles: {
+            selectedEmployees: "Selected Employees",
             traveledLessFrequently: 'Traveled less frequently',
             traveledMoreFrequently: 'Traveled more frequently',
             employeeVisitStatistics: 'Employee visit statistics: ',
@@ -501,6 +502,7 @@ export const resources = {
             topInfrequentTravelers: 'Топ редких выездов'
         },
         titles: {
+            selectedEmployees: "Выбранные сотрудники",
             traveledLessFrequently: 'Выезжали реже',
             traveledMoreFrequently: 'Выезжали чаще',
             employeeVisitStatistics: 'Статистика визитов сотрудника:',
@@ -890,6 +892,7 @@ export const resources = {
             topInfrequentTravelers: 'Kam safarga chiqqanlar reytingi'
             },
             titles: {
+                selectedEmployees: 'Tanlangan xodimlar',
                 traveledLessFrequently: 'Kamroq safarga chiqqan',
                 traveledMoreFrequently: 'Ko‘proq safarga chiqqan',
                 employeeVisitStatistics: 'Hodim tashriflari statistikasi: ',

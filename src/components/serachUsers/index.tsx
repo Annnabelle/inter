@@ -3,18 +3,23 @@ import { Input, List, Tag, Spin, Form } from "antd";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { searchUsers } from "../../store/usersSlice";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import { useTranslation } from "react-i18next";
 
 const UserSearch: React.FC = () => {
+  const {t} = useTranslation();
   const dispatch = useAppDispatch();
-  const form = useFormInstance(); // получаем форму из контекста
+  const form = useFormInstance(); 
 
   const [query, setQuery] = useState("");
-  const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<
+    { id: string; firstName: string; lastName: string }[]
+  >([]);
   const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
 
   const users = useAppSelector((state) => state.users.usersSearch);
   const loading = useAppSelector((state) => state.users.loading);
 
+  // Поиск пользователей с debounce
   useEffect(() => {
     if (query.trim() === "") return;
 
@@ -26,20 +31,22 @@ const UserSearch: React.FC = () => {
 
     setDebounceTimer(timer);
     return () => clearTimeout(timer);
-  }, [query]);
+  }, [query, dispatch]);
 
+  // Передача ID выбранных сотрудников в форму
   useEffect(() => {
-    form.setFieldValue("agencyEmployees", selectedUserIds);
-  }, [selectedUserIds]);
+    form.setFieldValue("agencyEmployees", selectedUsers.map((u) => u.id));
+  }, [selectedUsers, form]);
 
-  const handleSelectUser = (userId: string) => {
-    if (!selectedUserIds.includes(userId)) {
-      setSelectedUserIds((prev) => [...prev, userId]);
+  const handleSelectUser = (user: { id: string; firstName: string; lastName: string }) => {
+    if (!selectedUsers.some((u) => u.id === user.id)) {
+      setSelectedUsers((prev) => [...prev, user]);
+      setQuery(""); // очистка поля после выбора
     }
   };
 
   const handleRemoveUser = (userId: string) => {
-    setSelectedUserIds((prev) => prev.filter((id) => id !== userId));
+    setSelectedUsers((prev) => prev.filter((u) => u.id !== userId));
   };
 
   return (
@@ -49,7 +56,7 @@ const UserSearch: React.FC = () => {
         hidden
         rules={[{ required: true, message: "Выберите хотя бы одного сотрудника" }]}
       >
-        <Input className="input" size="large" />
+        <Input />
       </Form.Item>
 
       <Input
@@ -57,49 +64,58 @@ const UserSearch: React.FC = () => {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         allowClear
-        className="input" size="large"
+        size="large"
       />
 
-    {loading ? (
-        <Spin />
-        ) : (
-        <div style={{ maxHeight: 200, overflowY: "auto" }}>
-            <List
-            size="small"
-            bordered
-            dataSource={users?.filter((user) => !selectedUserIds.includes(user.id)) || []}
-            renderItem={(user) => (
-                <List.Item
-                onClick={() => handleSelectUser(user.id)}
-                style={{ cursor: "pointer" }}
-                >
-                {user.firstName} {user.lastName}
-                </List.Item>
-            )}
-            />
+      {loading ? (
+        <div style={{ textAlign: "center", marginTop: 10 }}>
+          <Spin />
         </div>
-    )}
-
-
-      {selectedUserIds.length > 0 && (
-        <>
-          <div className="inputs-label" style={{marginTop: "20px"}}>
-                <p className="label">Выбранные сотрудники</p>
-            </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 25 }}>
-            {selectedUserIds.map((id) => {
-              const user = users?.find((u) => u.id === id);
-              return (
-                <Tag
-                  key={id}
-                  closable
-                  onClose={() => handleRemoveUser(id)}
-                  color="blue"
+      ) : (
+        query.trim() !== "" && (
+          <div style={{ maxHeight: 200, overflowY: "auto", marginTop: 8 }}>
+            <List
+              size="small"
+              bordered
+              dataSource={
+                users?.filter((user) => !selectedUsers.some((u) => u.id === user.id)) || []
+              }
+              renderItem={(user) => (
+                <List.Item
+                  onClick={() => handleSelectUser(user)}
+                  style={{ cursor: "pointer" }}
                 >
-                  {user?.firstName} {user?.lastName}
-                </Tag>
-              );
-            })}
+                  {user.firstName} {user.lastName}
+                </List.Item>
+              )}
+            />
+          </div>
+        )
+      )}
+
+      {selectedUsers.length > 0 && (
+        <>
+          <div className="inputs-label" style={{ marginTop: "20px" }}>
+            <p className="label">{t("titles.selectedEmployees")}</p>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 8,
+              marginTop: 20,
+            }}
+          >
+            {selectedUsers.map((user) => (
+              <Tag
+                key={user.id}
+                closable
+                onClose={() => handleRemoveUser(user.id)}
+                color="blue"
+              >
+                {user.firstName} {user.lastName}
+              </Tag>
+            ))}
           </div>
         </>
       )}
@@ -108,5 +124,6 @@ const UserSearch: React.FC = () => {
 };
 
 export default UserSearch;
+
 
 

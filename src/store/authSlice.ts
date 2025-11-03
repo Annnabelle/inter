@@ -7,6 +7,7 @@ import { ErrorDto } from '../dtos/main.dto';
 import { mapUserRegisterToUserRegisterDto } from '../mappers/user.mapper';
 import { RegisterForm } from '../types/auth.types';
 import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance';
 
 export const Login = createAsyncThunk(
   'auth/login',
@@ -40,7 +41,7 @@ export const RegisterUser = createAsyncThunk(
   async (data: RegisterForm, {rejectWithValue}) => {
     try {
       const dto = mapUserRegisterToUserRegisterDto(data);
-      const response = await axios.post<UserRegisterRequestDto>(`${BASE_URL}/users/register`, dto);
+      const response = await axiosInstance.post<UserRegisterRequestDto>(`${BASE_URL}/users/register`, dto);
       if ('success' in response.data && response.data.success){
         return response.data;
       } else {

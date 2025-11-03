@@ -323,19 +323,19 @@ const Experts: React.FC = () => {
                 }}
                 className="layout-content-container"
             >
-              <ComponentTable<ExpertsTableDataTypes> 
-                pagination={{
-                    current: currentPage,
-                    pageSize: limit,
-                    total: total,
-                    onChange: (page) => {
-                    setCurrentPage(page);
-                    dispatch(RetrieveExperts({ page, limit }));
-                    },
-                }}
-                onRowClick={(record) => handleRowClick('Expert', 'retrieve', record)}
-                data={searchResults !== null ? searchResults : expertData}
-                columns={ExpertsColumns(t)}
+                <ComponentTable<ExpertsTableDataTypes> 
+                    pagination={{
+                        current: currentPage,
+                        pageSize: limit,
+                        total: total,
+                        onChange: (page) => {
+                            setCurrentPage(page);
+                            dispatch(RetrieveExperts({ page, limit }));
+                        },
+                    }}
+                    onRowClick={(record) => handleRowClick('Expert', 'retrieve', record)}
+                    data={searchResults !== null ? searchResults : expertData}
+                    columns={ExpertsColumns(t)}
                 />
 
             </div>
